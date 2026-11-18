@@ -1,0 +1,13 @@
+{
+  "android": [
+    "package: name='local.family.alice_companions' versionCode='8' versionName='0.11.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+    "application-label:'小小伙伴'",
+    "native-code: 'arm64-v8a' 'armeabi-v7a' 'x86_64'"
+  ],
+  "verified_signer_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+  "previous_family_signer_matches": true,
+  "zipalign_16k": true,
+  "filename": "alice-0.11.0-android.apk",
+  "bytes": 68734394,
+  "sha256": "e44fba0955052fac5c404ad8d9c3c036b465a49025d75ca680703a6ec60fdb9c"
+}

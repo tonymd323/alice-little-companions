@@ -1,0 +1,5 @@
+PASS Before the direct update, the second emulator has the accepted family APK 0.10.0: 5e0a4e7d4edee28445b178ac8a0fff5aad02fef50b872b688fe56462c155539c.
+PASS In the accepted 0.10.0 release, the offline household had the cat and a saved flower-vase wish before updating.
+PASS Direct 0.10.0 → 0.11.0 install -r, same package, UID and first-install time. Installed final APK SHA-256 e44fba0955052fac5c404ad8d9c3c036b465a49025d75ca680703a6ec60fdb9c.
+PASS Preserved the household, cat and the child’s wish for the flower vase. Math used its cat in the dialogue and veranda, saved the second page after a cold launch and returned to the same home with zero points in airplane mode.
+PASS The upgraded Android installation contains only local.family.alice_companions. Its installed bytes match the GitHub APK; the standalone math preview is absent.

@@ -37,6 +37,6 @@ Alice 在飞行模式下打开家园，免费选择银杏狐、月牙耳兔或�
 
 ## 交付状态
 
-当前 Android 视觉体验版为 0.10.0+7，沿用 C 版手绘家园。庭院和暖廊可切换，三位伙伴支持触摸和抚摸，原有家具在暖廊可继续布置。0.9.0+6 保留为第一份离线家庭闭环候选。iOS/iPadOS 签名安装和双向真机迁移需接入 Mac、Apple Team 与两台家庭设备。[交付说明](docs/DELIVERY.md) · [备份与换机](docs/BACKUP_MIGRATION.md) · [逐项实测记录](docs/evidence/acceptance.csv)
+Android 家庭版 0.11.0+8 可覆盖安装到 0.10.0。打开「小小伙伴」，在「银杏家园」点「数学 · 暖廊的彩窗」，就能和当前伙伴一起解题。章节进度与选定的窗花保存在家庭存档内。iPad 签名安装和双向真机迁移仍需 Mac、Apple Team 与两台家庭设备。[下载安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.11.0-android.apk?raw=true) · [数学章节实测](docs/evidence/math-family/README.md) · [备份与换机](docs/BACKUP_MIGRATION.md)
 
 重跑准备检查，在本目录执行 `python3 tools/validate_devpack.py`。开工包的 `MANIFEST.json` 对应 `devpack-v2.0`。原生运行素材的摘要以 `design/asset_manifest.json`、各阶段构建摘要和 Git 标签为准。
