@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 302 项通过。下面列出逐项结果。
+- 本次准备检查 314 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -32,9 +32,8 @@
 - 内部链接有效：README.md → AGENTS.md
 - 内部链接有效：README.md → DOCS_CHECK.md
 - 内部链接有效：README.md → MANIFEST.json
-- 内部链接有效：README.md → docs/DELIVERY.md
+- 内部链接有效：README.md → docs/evidence/math-family/README.md
 - 内部链接有效：README.md → docs/BACKUP_MIGRATION.md
-- 内部链接有效：README.md → docs/evidence/acceptance.csv
 - 内部链接有效：design/ART_PROMPTS.md → references/pet-stages.png
 - 内部链接有效：design/ART_PROMPTS.md → references/garden-color.png
 - 内部链接有效：design/ART_PROMPTS.md → asset_manifest.json
@@ -66,6 +65,7 @@
 - 内部链接有效：docs/PLAN.md → evidence/acceptance.csv
 - 内部链接有效：docs/PLAN.md → DELIVERY.md
 - 内部链接有效：docs/PLAN.md → RULES.md
+- 内部链接有效：docs/PLAN.md → evidence/math-family/README.md
 - 内部链接有效：docs/PLAN.md → evidence/math-preview/README.md
 - 内部链接有效：docs/evidence/M0/README.md → flutter-version.json
 - 内部链接有效：docs/evidence/M0/README.md → SHA256SUMS
@@ -152,6 +152,18 @@
 - 内部链接有效：docs/evidence/M6/README.md → preflight.json
 - 内部链接有效：docs/evidence/M6/README.md → ../acceptance.csv
 - 内部链接有效：docs/evidence/M6/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/math-family/README.md → home.png
+- 内部链接有效：docs/evidence/math-family/README.md → chapter.png
+- 内部链接有效：docs/evidence/math-family/README.md → finished.png
+- 内部链接有效：docs/evidence/math-family/README.md → installation.json
+- 内部链接有效：docs/evidence/math-family/README.md → direct-upgrade.log
+- 内部链接有效：docs/evidence/math-family/README.md → android-upgrade.log
+- 内部链接有效：docs/evidence/math-family/README.md → ../../../apps/mobile/test/backup_test.dart
+- 内部链接有效：docs/evidence/math-family/README.md → analyze.log
+- 内部链接有效：docs/evidence/math-family/README.md → full-tests.log
+- 内部链接有效：docs/evidence/math-family/README.md → github-download.json
+- 内部链接有效：docs/evidence/math-family/README.md → android-build.log
+- 内部链接有效：docs/evidence/math-family/README.md → ../../BACKUP_MIGRATION.md
 - 内部链接有效：docs/evidence/math-preview/README.md → installation.json
 - 内部链接有效：docs/evidence/math-preview/README.md → ../../RULES.md
 - 内部链接有效：docs/evidence/math-preview/README.md → opening.png
