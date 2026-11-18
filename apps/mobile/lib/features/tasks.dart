@@ -6,6 +6,7 @@ import '../domain/rules.dart';
 import 'backup_pages.dart';
 import 'common.dart';
 import 'garden.dart';
+import 'spaces.dart' show outfitFiles;
 import 'parent_access.dart';
 import 'rewards.dart';
 import 'task_editor.dart';
@@ -514,42 +515,50 @@ class _ApprovePageState extends State<ApprovePage> {
               );
               await widget.controller.refresh();
               if (!context.mounted) return;
-              await showDialog<void>(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('成果已确认'),
-                  scrollable: true,
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.task.title,
-                        style: const TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                      if (feedback.text.trim().isNotEmpty)
-                        Text(feedback.text.trim()),
-                      const SizedBox(height: 8),
-                      Text('发生日期 $date · +${result['delta']} 分'),
-                      if (result['new_stage'] == true) ...[
-                        const SizedBox(height: 12),
-                        GardenScene(
-                          companion: widget.controller.family!.companion,
-                          stage: result['stage'] as int,
-                          reveal: true,
-                          label: '伙伴长大了',
+              if (result['new_stage'] == true) {
+                await showEvolution(
+                  context,
+                  widget.controller.family!.companion,
+                  result['previous_stage'] as int,
+                  result['stage'] as int,
+                  receipt: [
+                    widget.task.title,
+                    '+${result['delta']} 分 · +1 经验',
+                    if (feedback.text.trim().isNotEmpty) feedback.text.trim(),
+                  ].join('\n'),
+                  outfit: outfitFiles(widget.controller.outfit),
+                );
+              } else {
+                await showDialog<void>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('成果已确认'),
+                    scrollable: true,
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.task.title,
+                          style: const TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        if (feedback.text.trim().isNotEmpty)
+                          Text(feedback.text.trim()),
+                        const SizedBox(height: 8),
+                        Text(
+                          '发生日期 $date · +${result['delta']} 分 · +${result['experience_delta'] ?? 0} 经验',
                         ),
                       ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('完成'),
+                      ),
                     ],
                   ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('完成'),
-                    ),
-                  ],
-                ),
-              );
+                );
+              }
               if (context.mounted) Navigator.pop(context);
             },
           ),

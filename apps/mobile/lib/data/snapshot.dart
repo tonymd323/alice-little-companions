@@ -87,6 +87,9 @@ Snapshot _check(
       throw const UserError('此存档结构需要兼容版本的 App。');
     }
     final expected = schema
+        .where(
+          (row) => version >= 5 || row['tbl_name'] != 'window_story_milestones',
+        )
         .where((row) => version != 1 || !v2Indexes.contains(row['name']))
         .where(
           (row) => version >= 3 || row['tbl_name'] != 'window_math_bookmarks',
@@ -310,17 +313,21 @@ Snapshot _check(
         throw const UserError('备份的伙伴成长有误。');
       }
     }
+    final experience =
+        scalar('SELECT COUNT(*) FROM completions WHERE is_valid = 1') as int;
+    final recordedStage = 1 + growth.length;
+    final earned = rules.earnedStage(experience);
     final summary = {
       'balance': balance,
       'ledger_count': ledgerCount,
-      'valid_completion_count': scalar(
-        'SELECT COUNT(*) FROM completions WHERE is_valid = 1',
-      ),
+      'valid_completion_count': experience,
       'owned_item_count': scalar(
         'SELECT COUNT(*) FROM entitlements WHERE revoked = 0',
       ),
       'space_count': scalar('SELECT COUNT(*) FROM spaces'),
-      'max_growth_stage': 1 + growth.length,
+      'max_growth_stage': version >= 4 && earned > recordedStage
+          ? earned
+          : recordedStage,
     };
 
     // Feed each table row separately so comparing a large family needs no second full database in memory.
@@ -330,7 +337,9 @@ Snapshot _check(
       final table = row['name'] as String;
       final records = db.select('SELECT * FROM "$table" ORDER BY rowid');
       if (records.isEmpty &&
-          (table == 'base_furnishings' || table == 'window_math_bookmarks')) {
+          (table == 'base_furnishings' ||
+              table == 'window_math_bookmarks' ||
+              table == 'window_story_milestones')) {
         continue;
       }
       content.add(utf8.encode('$table\n'));

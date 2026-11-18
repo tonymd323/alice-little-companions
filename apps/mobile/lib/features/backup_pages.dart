@@ -515,6 +515,10 @@ class _RestorePageState extends State<RestorePage> {
     final data = preview!;
     final summary = data.info.summary;
     final current = controller.family;
+    final experience = summary['valid_completion_count'] as int;
+    final originalStage = summary['max_growth_stage'] as int;
+    final earned = controller.rules.earnedStage(experience);
+    final restoredStage = earned > originalStage ? earned : originalStage;
     final time = data.manifest['created_at_utc'] as String?;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -538,7 +542,7 @@ class _RestorePageState extends State<RestorePage> {
                     '${summary['ledger_count']} 条流水 · ${summary['owned_item_count']} 件物品',
                   ),
                   Text(
-                    '${summary['space_count']} 个空间 · 伙伴阶段 ${summary['max_growth_stage']}',
+                    '${summary['space_count']} 个空间 · $experience 经验 · 恢复后第 $restoredStage 阶段',
                   ),
                 ],
               ),
@@ -553,7 +557,7 @@ class _RestorePageState extends State<RestorePage> {
                   Text(
                     '${current.balance} 分 · ${controller.tasks.where((t) => t.state == 'APPROVED').length} 份有效成果',
                   ),
-                  Text('伙伴阶段 ${current.stage}'),
+                  Text('${current.experience} 经验 · 伙伴阶段 ${current.stage}'),
                 ],
               ),
             );

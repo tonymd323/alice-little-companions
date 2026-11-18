@@ -242,3 +242,8 @@ CREATE TABLE base_furnishings (
   flipped INTEGER NOT NULL DEFAULT 0 CHECK (flipped IN (0, 1)),
   z INTEGER NOT NULL
 );
+
+-- A completed story stays visible in the veranda during chapter replays.
+CREATE TABLE window_story_milestones (
+  child_id TEXT NOT NULL PRIMARY KEY REFERENCES child_profiles(id)
+);

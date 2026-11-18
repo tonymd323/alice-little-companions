@@ -37,6 +37,10 @@ Alice 在飞行模式下打开家园，免费选择银杏狐、月牙耳兔或�
 
 ## 交付状态
 
-Android 家庭版 0.12.0+9 可覆盖安装到旧家庭版。小家的「家具」可以先看摆好效果，「衣橱」可以让当前伙伴试穿。确认兑换后家具出现在房间，衣服穿到选定伙伴身上。「数学 · 暖廊的彩窗」沿用原家庭和书签。iPad 安装与双向真机迁移仍需实际设备、Mac 和 Apple Team。[下载安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.12.0-android.apk?raw=true) · [家具与衣橱实测](docs/evidence/furnishings/README.md) · [数学章节实测](docs/evidence/math-family/README.md) · [备份与换机](docs/BACKUP_MIGRATION.md)
+Android 家庭日用版 0.13.0+10 可以直接覆盖已有家庭版。呼唤、摸摸或长按伙伴，点专属技能查看它跃起；到「成长」查看经验、回看进化和阅读《银杏家园手记》。从「主线 · 暖廊的彩窗」出发赴约，完成数学挑战后，修好的窗花会留在小家里。0.12.0 保留供单独验收。
+
+[下载 0.13.0 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.13.0-android.apk?raw=true) · [下载 0.12.0 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.12.0-android.apk?raw=true) · [日用版记录](docs/evidence/daily/README.md) · [世界观与伙伴](docs/WORLD_AND_COMPANIONS.md) · [备份与换机](docs/BACKUP_MIGRATION.md)
+
+真机 iPad 安装、设备性能与双向实机迁移需要匹配的 Mac、Apple Team 及家庭设备。开发顺序与逐项验收条件见[开发计划](docs/PLAN.md)。
 
 重跑准备检查，在本目录执行 `python3 tools/validate_devpack.py`。开工包的 `MANIFEST.json` 对应 `devpack-v2.0`。原生运行素材的摘要以 `design/asset_manifest.json`、各阶段构建摘要和 Git 标签为准。

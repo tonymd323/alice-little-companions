@@ -19,13 +19,18 @@ part 'economy.dart';
 part 'task_rules.dart';
 
 class FamilyOverview {
-  FamilyOverview(Json row)
+  FamilyOverview(Json row, Rules rules)
     : id = row['id'] as String,
       childId = row['child_id'] as String,
       nickname = row['nickname'] as String,
       companion = Companion.values.byName(row['active_pet_id'] as String),
       balance = row['balance'] as int,
-      stage = row['stage'] as int,
+      stage = max(
+        row['stage'] as int,
+        rules.earnedStage(row['experience'] as int),
+      ),
+      experience = row['experience'] as int,
+      windowsLit = (row['windows_lit'] as int) != 0,
       days = row['growth_days'] as int,
       revision = row['domain_revision'] as int,
       latestDay = row['latest_local_day'] as String?;
@@ -35,6 +40,8 @@ class FamilyOverview {
   final Companion companion;
   final int balance;
   final int stage;
+  final int experience;
+  final bool windowsLit;
   final int days;
   final int revision;
   final String? latestDay;
@@ -242,12 +249,14 @@ class FamilyService {
   Future<FamilyOverview?> overview() async {
     final row = await db.row('''
       SELECT h.*, c.id AS child_id, c.nickname, c.active_pet_id, a.balance,
+        (EXISTS(SELECT 1 FROM window_story_milestones) OR EXISTS(SELECT 1 FROM window_math_bookmarks WHERE page IN ('sunny','puzzle','finished'))) AS windows_lit,
+        (SELECT COUNT(*) FROM completions WHERE is_valid = 1) AS experience,
         (SELECT COUNT(DISTINCT actual_date) FROM completions WHERE is_valid = 1) AS growth_days,
         COALESCE((SELECT MAX(stage) FROM growth_awards WHERE child_id = c.id), 1) AS stage
       FROM households h JOIN child_profiles c ON h.id = c.family_id
       JOIN accounts a ON a.child_id = c.id
       ''');
-    return row == null ? null : FamilyOverview(row);
+    return row == null ? null : FamilyOverview(row, rules);
   }
 
   static const taskFields = '''
@@ -324,12 +333,16 @@ class FamilyService {
     if (!pin.allows(session)) throw const UserError('请先验证家长 PIN。');
   }
 
-  Future<({WindowPage page, Set<int> pattern})> windowMathBookmark() async {
+  Future<({WindowPage page, Set<int> pattern, bool started})>
+  windowMathBookmark() async {
     final row = await db.row(
       'SELECT page, first_pane, second_pane FROM window_math_bookmarks',
     );
-    if (row == null) return (page: WindowPage.count, pattern: <int>{});
+    if (row == null) {
+      return (page: WindowPage.count, pattern: <int>{}, started: false);
+    }
     return (
+      started: true,
       page: WindowPage.values.byName(row['page'] as String),
       pattern: {
         if (row['first_pane'] case final int first) first,
@@ -348,6 +361,12 @@ class FamilyService {
       _,
       family,
     ) async {
+      if (family.windowsLit || page.index >= WindowPage.sunny.index) {
+        await db.customStatement(
+          'INSERT OR IGNORE INTO window_story_milestones(child_id) VALUES (?)',
+          [family.childId],
+        );
+      }
       await db.customStatement(
         '''
         INSERT INTO window_math_bookmarks (child_id, page, first_pane, second_pane)
@@ -512,6 +531,7 @@ class FamilyService {
         'delta': existing['delta'],
         'balance': existing['balance_after'],
         'new_stage': false,
+        'experience_delta': 0,
         'stage': family.stage,
       };
     }
@@ -545,25 +565,28 @@ class FamilyService {
       'reward:$instance',
       actual,
     );
-    final days = await db.value(
-      'SELECT COUNT(DISTINCT actual_date) FROM completions WHERE is_valid = 1',
-    ) as int;
-    for (
-      var i = family.stage - 1;
-      i < rules.thresholds.length && days >= rules.thresholds[i];
-      i++
-    ) {
-      await db.insertRow('growth_awards', {
-        'child_id': family.childId,
-        'threshold': rules.thresholds[i],
-        'stage': i + 2,
-        'awarded_at': now,
-      });
+    final experience = family.experience + 1;
+    final stage = max(family.stage, rules.earnedStage(experience));
+    await _preserveGrowth(family.childId, stage);
+    return {
+      ...ledger,
+      'experience_delta': 1,
+      'previous_stage': family.stage,
+      'new_stage': stage > family.stage,
+      'stage': stage,
+    };
+  }
+
+  // An older database can earn a higher stage on first open through its
+  // historical completions. Preserve that high-water mark before a correction.
+  Future<void> _preserveGrowth(String child, int stage) async {
+    for (var i = 0; i < stage - 1; i++) {
+      await db.customStatement(
+        'INSERT INTO growth_awards (child_id, threshold, stage, awarded_at) '
+        'VALUES (?, ?, ?, ?) ON CONFLICT(child_id, threshold) DO NOTHING',
+        [child, rules.thresholds[i], i + 2, now],
+      );
     }
-    final stage = await db.value(
-      'SELECT COALESCE(MAX(stage), 1) FROM growth_awards',
-    ) as int;
-    return {...ledger, 'new_stage': stage > family.stage, 'stage': stage};
   }
 
   void _validateActualDate(String actual) {

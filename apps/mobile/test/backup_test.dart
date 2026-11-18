@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -219,8 +218,73 @@ void main() {
       'valid_completion_count': 17,
       'owned_item_count': 5,
       'space_count': 1,
-      'max_growth_stage': 2,
+      'max_growth_stage': 3,
     });
+    // Encode the original 0.12 shape as a separate authenticated archive. It
+    // reported stage 2 on four actual dates, despite having 17 valid outcomes.
+    final oldDb = await preview.database.copy(
+      p.join(targetDir.path, 'legacy.sqlite'),
+    );
+    final legacySql = sqlite3.open(oldDb.path);
+    legacySql.execute(
+      'DROP TABLE window_story_milestones; DELETE FROM growth_awards WHERE stage > 2; PRAGMA user_version=3',
+    );
+    legacySql.close();
+    final legacyInfo = await checkSnapshot(
+      oldDb.path,
+      await expectedSchema(),
+      source.rules,
+      assets,
+    );
+    expect(legacyInfo.summary['max_growth_stage'], 2);
+    final legacyArchive = File(p.join(targetDir.path, 'legacy.alicebackup'));
+    await codec.write(
+      oldDb,
+      {...preview.manifest, 'schema_version': 3, 'summary': legacyInfo.summary},
+      password,
+      legacyArchive,
+    );
+    final legacyPreview = await incoming.inspect(legacyArchive, password, null);
+    addTearDown(legacyPreview.close);
+    expect(legacyPreview.info.summary['balance'], 37);
+    expect(legacyPreview.info.summary['valid_completion_count'], 17);
+    expect(legacyPreview.info.summary['max_growth_stage'], 2);
+    final legacyDevice = DeviceStore(
+      Directory(p.join(targetDir.path, 'legacy-device')),
+      MemorySecureValues(),
+    );
+    final legacyTarget = TransferService(
+      device: legacyDevice,
+      rules: source.rules,
+      availableAssets: assets,
+      current: () => null,
+    );
+    final migrated = await legacyTarget.activate(
+      legacyPreview,
+      pin,
+      PinGate.newRecoveryCode(),
+      session: null,
+      replace: false,
+    );
+    addTearDown(migrated.service.close);
+    final oldFamily = (await migrated.service.overview())!;
+    expect(
+      (
+        oldFamily.balance,
+        oldFamily.stage,
+        oldFamily.days,
+        oldFamily.experience,
+        oldFamily.companion.name,
+      ),
+      (37, 3, 4, 17, 'rabbit'),
+    );
+    final oldAfter = await checkSnapshot(
+      legacyDevice.databaseFile(migrated.service.pin.generation).path,
+      await expectedSchema(),
+      source.rules,
+      assets,
+    );
+    expect(oldAfter.businessDigest, legacyInfo.businessDigest);
     final restored = await incoming.activate(
       preview,
       pin,
@@ -232,15 +296,17 @@ void main() {
     final chapter = await target.windowMathBookmark();
     expect(chapter.page, WindowPage.finished);
     expect(chapter.pattern, {0, 4});
+    expect((await target.overview())!.windowsLit, isTrue);
     final restoredSnapshot = (await target.overview())!;
     expect(
       (
         restoredSnapshot.balance,
         restoredSnapshot.stage,
         restoredSnapshot.days,
+        restoredSnapshot.experience,
         restoredSnapshot.companion.name,
       ),
-      (37, 2, 4, 'rabbit'),
+      (37, 3, 4, 17, 'rabbit'),
     );
     expect((await target.wish())!['item_id'], 'single_armchair');
     expect(await target.db.value('SELECT COUNT(*) FROM placements'), 1);
@@ -289,7 +355,9 @@ void main() {
     final file = stock.device.databaseFile(id);
     await stock.service.close();
     final legacy = sqlite3.open(file.path);
-    legacy.execute('DROP TABLE window_math_bookmarks; PRAGMA user_version = 2');
+    legacy.execute(
+      'DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; PRAGMA user_version = 2',
+    );
     legacy.close();
     final schema = await expectedSchema();
     final before = await checkSnapshot(file.path, schema, stock.rules, assets);
@@ -297,7 +365,7 @@ void main() {
     stock.service = await FamilyService.load(stock.device, id, stock.rules);
     final service = stock.service;
     final after = await checkSnapshot(file.path, schema, stock.rules, assets);
-    expect(after.schemaVersion, 3);
+    expect(after.schemaVersion, 5);
     expect(after.businessDigest, before.businessDigest);
     expect(after.summary, before.summary);
     expect(await CheckpointStore(stock.device).files(), hasLength(1));
@@ -451,11 +519,11 @@ void main() {
     await stock.service.close();
     final old = sqlite3.open(stock.device.databaseFile(id).path);
     old.execute(
-      'DROP TABLE window_math_bookmarks; DROP TABLE base_furnishings; DROP INDEX ledger_day_kind_idx; DROP INDEX purchase_ledger_idx; PRAGMA user_version = 1',
+      'DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; DROP TABLE base_furnishings; DROP INDEX ledger_day_kind_idx; DROP INDEX purchase_ledger_idx; PRAGMA user_version = 1',
     );
     old.close();
     stock.service = await FamilyService.load(stock.device, id, stock.rules);
-    expect(await stock.service.db.value('PRAGMA user_version'), 3);
+    expect(await stock.service.db.value('PRAGMA user_version'), 5);
     expect((await stock.service.overview())!.balance, 0);
     expect(await stock.service.items(), hasLength(1));
     final backups = CheckpointStore(stock.device);

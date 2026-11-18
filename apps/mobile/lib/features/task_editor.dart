@@ -5,6 +5,7 @@ import '../application/family.dart';
 import '../domain/rules.dart';
 import 'common.dart';
 import 'garden.dart';
+import 'spaces.dart' show outfitFiles;
 import 'parent_access.dart';
 import 'tasks.dart' show DayChoice, TaskDetails, TaskTile, TypeChoice;
 
@@ -109,8 +110,9 @@ class _PublishPageState extends State<PublishPage> {
           )
         : TaskDraft(title.text, content.text, criteria.text, type, due: due);
     final session = widget.controller.session;
+    Json? confirmed;
     if (widget.backfill) {
-      await service.backfill(
+      confirmed = await service.backfill(
         draft,
         actual,
         feedback.text,
@@ -138,11 +140,22 @@ class _PublishPageState extends State<PublishPage> {
     }
     await widget.controller.refresh();
     if (!mounted) return;
+    if (confirmed?['new_stage'] == true) {
+      await showEvolution(
+        context,
+        widget.controller.family!.companion,
+        confirmed!['previous_stage'] as int,
+        confirmed['stage'] as int,
+        outfit: outfitFiles(widget.controller.outfit),
+        receipt: '${draft.title} · +${confirmed['delta']} 分 · +1 经验',
+      );
+      if (!mounted) return;
+    }
     Navigator.pop(context);
     showNotice(
       context,
       widget.backfill
-          ? '已补录并确认成果。'
+          ? '已补录 · +${confirmed?['delta']} 分 · +${confirmed?['experience_delta']} 经验'
           : editing
           ? '已更新未来计划。'
           : '小事已发布。',

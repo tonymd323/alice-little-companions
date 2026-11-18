@@ -255,9 +255,12 @@ void main() {
               20,
               35,
               55,
-            ].where((threshold) => offset + 1 >= threshold).length;
+            ].where((threshold) => offset + 2 >= threshold).length;
         final summary = (await service.overview())!;
-        expect((summary.days, summary.stage), (offset + 1, expected));
+        expect(
+          (summary.days, summary.experience, summary.stage),
+          (offset + 1, offset + 2, expected),
+        );
         if ([1, 2, 3, 9, 10, 19, 20, 34, 35, 54, 55].contains(offset + 1)) {
           for (final pet in Companion.values) {
             await service.selectCompanion(pet);

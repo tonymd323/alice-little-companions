@@ -455,6 +455,7 @@ extension FamilyEconomy on FamilyService {
         'refunded_purchase_ids': jsonEncode(verified.refunds),
         'command_id': id,
       });
+      await _preserveGrowth(family.childId, family.stage);
       await db.customStatement(
         'UPDATE completions SET is_valid = 0 WHERE instance_id = ?',
         [quote.instance],

@@ -64,7 +64,8 @@
       35,
       55
     ],
-    "unique_actual_dates": true,
+    "metric": "valid_parent_confirmed_completions",
+    "experience_per_completion": 1,
     "stage_count_including_initial": 6,
     "requires_points": false,
     "requires_streak": false,

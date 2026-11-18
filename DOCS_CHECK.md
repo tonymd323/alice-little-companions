@@ -3,10 +3,10 @@
 2026-11-18 开工基线。本检查读取文档、配置和交付素材；原生 App 的执行记录单独保存在验收执行表中。
 
 - 13 项产品需求、35 条业务规则、43 项原生验收用例。
-- 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 54}。
+- 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 126}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 444 项通过。下面列出逐项结果。
+- 本次准备检查 601 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -32,9 +32,10 @@
 - 内部链接有效：README.md → AGENTS.md
 - 内部链接有效：README.md → DOCS_CHECK.md
 - 内部链接有效：README.md → MANIFEST.json
-- 内部链接有效：README.md → docs/evidence/furnishings/README.md
-- 内部链接有效：README.md → docs/evidence/math-family/README.md
+- 内部链接有效：README.md → docs/evidence/daily/README.md
+- 内部链接有效：README.md → docs/WORLD_AND_COMPANIONS.md
 - 内部链接有效：README.md → docs/BACKUP_MIGRATION.md
+- 内部链接有效：README.md → docs/PLAN.md
 - 内部链接有效：design/ART_PROMPTS.md → references/pet-stages.png
 - 内部链接有效：design/ART_PROMPTS.md → references/garden-color.png
 - 内部链接有效：design/ART_PROMPTS.md → asset_manifest.json
@@ -69,6 +70,9 @@
 - 内部链接有效：docs/PLAN.md → evidence/math-family/README.md
 - 内部链接有效：docs/PLAN.md → evidence/math-preview/README.md
 - 内部链接有效：docs/PLAN.md → evidence/furnishings/README.md
+- 内部链接有效：docs/PLAN.md → evidence/daily/README.md
+- 内部链接有效：docs/PRD.md → WORLD_AND_COMPANIONS.md
+- 内部链接有效：docs/WORLD_AND_COMPANIONS.md → PLAN.md
 - 内部链接有效：docs/evidence/M0/README.md → flutter-version.json
 - 内部链接有效：docs/evidence/M0/README.md → SHA256SUMS
 - 内部链接有效：docs/evidence/M0/README.md → android-390x844.png
@@ -154,6 +158,14 @@
 - 内部链接有效：docs/evidence/M6/README.md → preflight.json
 - 内部链接有效：docs/evidence/M6/README.md → ../acceptance.csv
 - 内部链接有效：docs/evidence/M6/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/daily/README.md → installation.json
+- 内部链接有效：docs/evidence/daily/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/daily/README.md → room-catalogue.jpg
+- 内部链接有效：docs/evidence/daily/README.md → five-rooms.jpg
+- 内部链接有效：docs/evidence/daily/README.md → accessories-rest.jpg
+- 内部链接有效：docs/evidence/daily/README.md → accessories-flight.jpg
+- 内部链接有效：docs/evidence/daily/README.md → packaged-art.json
+- 内部链接有效：docs/evidence/daily/README.md → ../../PLAN.md
 - 内部链接有效：docs/evidence/furnishings/README.md → installation.json
 - 内部链接有效：docs/evidence/furnishings/README.md → ../../BACKUP_MIGRATION.md
 - 内部链接有效：docs/evidence/furnishings/README.md → home.png
@@ -207,6 +219,7 @@
 - 初始0分且不事后截断奖励
 - 扣分上限与无欠分一致
 - 成长阈值与阶段数一致
+- 每件有效现实成果增加1共享经验
 - 首次与核心写入无需服务器
 - 整套迁移与不合并账本一致
 - 备份格式参数一致
@@ -435,6 +448,150 @@
 - 正式素材文件可验证 rabbit-6-apron
 - 素材状态有效 rabbit-6-coat
 - 正式素材文件可验证 rabbit-6-coat
+- 素材状态有效 leap-cat-1-apron
+- 正式素材文件可验证 leap-cat-1-apron
+- 素材状态有效 leap-cat-1-coat
+- 正式素材文件可验证 leap-cat-1-coat
+- 素材状态有效 leap-cat-1
+- 正式素材文件可验证 leap-cat-1
+- 素材状态有效 leap-cat-2-apron
+- 正式素材文件可验证 leap-cat-2-apron
+- 素材状态有效 leap-cat-2-coat
+- 正式素材文件可验证 leap-cat-2-coat
+- 素材状态有效 leap-cat-2
+- 正式素材文件可验证 leap-cat-2
+- 素材状态有效 leap-cat-3-apron
+- 正式素材文件可验证 leap-cat-3-apron
+- 素材状态有效 leap-cat-3-coat
+- 正式素材文件可验证 leap-cat-3-coat
+- 素材状态有效 leap-cat-3
+- 正式素材文件可验证 leap-cat-3
+- 素材状态有效 leap-cat-4-apron
+- 正式素材文件可验证 leap-cat-4-apron
+- 素材状态有效 leap-cat-4-coat
+- 正式素材文件可验证 leap-cat-4-coat
+- 素材状态有效 leap-cat-4
+- 正式素材文件可验证 leap-cat-4
+- 素材状态有效 leap-cat-5-apron
+- 正式素材文件可验证 leap-cat-5-apron
+- 素材状态有效 leap-cat-5-coat
+- 正式素材文件可验证 leap-cat-5-coat
+- 素材状态有效 leap-cat-5
+- 正式素材文件可验证 leap-cat-5
+- 素材状态有效 leap-cat-6-apron
+- 正式素材文件可验证 leap-cat-6-apron
+- 素材状态有效 leap-cat-6-coat
+- 正式素材文件可验证 leap-cat-6-coat
+- 素材状态有效 leap-cat-6
+- 正式素材文件可验证 leap-cat-6
+- 素材状态有效 leap-fox-1-apron
+- 正式素材文件可验证 leap-fox-1-apron
+- 素材状态有效 leap-fox-1-coat
+- 正式素材文件可验证 leap-fox-1-coat
+- 素材状态有效 leap-fox-1
+- 正式素材文件可验证 leap-fox-1
+- 素材状态有效 leap-fox-2-apron
+- 正式素材文件可验证 leap-fox-2-apron
+- 素材状态有效 leap-fox-2-coat
+- 正式素材文件可验证 leap-fox-2-coat
+- 素材状态有效 leap-fox-2
+- 正式素材文件可验证 leap-fox-2
+- 素材状态有效 leap-fox-3-apron
+- 正式素材文件可验证 leap-fox-3-apron
+- 素材状态有效 leap-fox-3-coat
+- 正式素材文件可验证 leap-fox-3-coat
+- 素材状态有效 leap-fox-3
+- 正式素材文件可验证 leap-fox-3
+- 素材状态有效 leap-fox-4-apron
+- 正式素材文件可验证 leap-fox-4-apron
+- 素材状态有效 leap-fox-4-coat
+- 正式素材文件可验证 leap-fox-4-coat
+- 素材状态有效 leap-fox-4
+- 正式素材文件可验证 leap-fox-4
+- 素材状态有效 leap-fox-5-apron
+- 正式素材文件可验证 leap-fox-5-apron
+- 素材状态有效 leap-fox-5-coat
+- 正式素材文件可验证 leap-fox-5-coat
+- 素材状态有效 leap-fox-5
+- 正式素材文件可验证 leap-fox-5
+- 素材状态有效 leap-fox-6-apron
+- 正式素材文件可验证 leap-fox-6-apron
+- 素材状态有效 leap-fox-6-coat
+- 正式素材文件可验证 leap-fox-6-coat
+- 素材状态有效 leap-fox-6
+- 正式素材文件可验证 leap-fox-6
+- 素材状态有效 leap-rabbit-1-apron
+- 正式素材文件可验证 leap-rabbit-1-apron
+- 素材状态有效 leap-rabbit-1-coat
+- 正式素材文件可验证 leap-rabbit-1-coat
+- 素材状态有效 leap-rabbit-1
+- 正式素材文件可验证 leap-rabbit-1
+- 素材状态有效 leap-rabbit-2-apron
+- 正式素材文件可验证 leap-rabbit-2-apron
+- 素材状态有效 leap-rabbit-2-coat
+- 正式素材文件可验证 leap-rabbit-2-coat
+- 素材状态有效 leap-rabbit-2
+- 正式素材文件可验证 leap-rabbit-2
+- 素材状态有效 leap-rabbit-3-apron
+- 正式素材文件可验证 leap-rabbit-3-apron
+- 素材状态有效 leap-rabbit-3-coat
+- 正式素材文件可验证 leap-rabbit-3-coat
+- 素材状态有效 leap-rabbit-3
+- 正式素材文件可验证 leap-rabbit-3
+- 素材状态有效 leap-rabbit-4-apron
+- 正式素材文件可验证 leap-rabbit-4-apron
+- 素材状态有效 leap-rabbit-4-coat
+- 正式素材文件可验证 leap-rabbit-4-coat
+- 素材状态有效 leap-rabbit-4
+- 正式素材文件可验证 leap-rabbit-4
+- 素材状态有效 leap-rabbit-5-apron
+- 正式素材文件可验证 leap-rabbit-5-apron
+- 素材状态有效 leap-rabbit-5-coat
+- 正式素材文件可验证 leap-rabbit-5-coat
+- 素材状态有效 leap-rabbit-5
+- 正式素材文件可验证 leap-rabbit-5
+- 素材状态有效 leap-rabbit-6-apron
+- 正式素材文件可验证 leap-rabbit-6-apron
+- 素材状态有效 leap-rabbit-6-coat
+- 正式素材文件可验证 leap-rabbit-6-coat
+- 素材状态有效 leap-rabbit-6
+- 正式素材文件可验证 leap-rabbit-6
+- 素材状态有效 fitted-bow-cat-flight
+- 正式素材文件可验证 fitted-bow-cat-flight
+- 素材状态有效 fitted-bow-cat-rest
+- 正式素材文件可验证 fitted-bow-cat-rest
+- 素材状态有效 fitted-bow-fox-flight
+- 正式素材文件可验证 fitted-bow-fox-flight
+- 素材状态有效 fitted-bow-fox-rest
+- 正式素材文件可验证 fitted-bow-fox-rest
+- 素材状态有效 fitted-bow-rabbit-flight
+- 正式素材文件可验证 fitted-bow-rabbit-flight
+- 素材状态有效 fitted-bow-rabbit-rest
+- 正式素材文件可验证 fitted-bow-rabbit-rest
+- 素材状态有效 fitted-hat-cat-flight
+- 正式素材文件可验证 fitted-hat-cat-flight
+- 素材状态有效 fitted-hat-cat-rest
+- 正式素材文件可验证 fitted-hat-cat-rest
+- 素材状态有效 fitted-hat-fox-flight
+- 正式素材文件可验证 fitted-hat-fox-flight
+- 素材状态有效 fitted-hat-fox-rest
+- 正式素材文件可验证 fitted-hat-fox-rest
+- 素材状态有效 fitted-hat-rabbit-flight
+- 正式素材文件可验证 fitted-hat-rabbit-flight
+- 素材状态有效 fitted-hat-rabbit-rest
+- 正式素材文件可验证 fitted-hat-rabbit-rest
+- 素材状态有效 fitted-scarf-cat-flight
+- 正式素材文件可验证 fitted-scarf-cat-flight
+- 素材状态有效 fitted-scarf-cat-rest
+- 正式素材文件可验证 fitted-scarf-cat-rest
+- 素材状态有效 fitted-scarf-fox-flight
+- 正式素材文件可验证 fitted-scarf-fox-flight
+- 素材状态有效 fitted-scarf-fox-rest
+- 正式素材文件可验证 fitted-scarf-fox-rest
+- 素材状态有效 fitted-scarf-rabbit-flight
+- 正式素材文件可验证 fitted-scarf-rabbit-flight
+- 素材状态有效 fitted-scarf-rabbit-rest
+- 正式素材文件可验证 fitted-scarf-rabbit-rest
 - 场景 C 参考图摘要
 - 美术成长表与积分规则阈值一致
 - 方向参考图片hash正确

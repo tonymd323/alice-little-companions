@@ -9,6 +9,7 @@ import 'garden.dart';
 import 'rewards.dart';
 import 'spaces.dart';
 import 'tasks.dart';
+import 'storybook.dart';
 import 'window_math.dart';
 
 class FamilyHome extends StatefulWidget {
@@ -34,7 +35,11 @@ class _FamilyHomeState extends State<FamilyHome> {
 
   void preview() => openPage(
     context,
-    AppearancePreview(initial: family.companion, initialStage: family.stage),
+    AppearancePreview(
+      initial: family.companion,
+      initialStage: family.stage,
+      outfit: outfitFiles(controller.outfit),
+    ),
   );
   Future<void> browseFurniture() async {
     setState(() => view = HomeView.veranda);
@@ -48,15 +53,18 @@ class _FamilyHomeState extends State<FamilyHome> {
     double height,
     HomeView location, {
     ValueChanged<HomeView>? changeView,
+    Widget? chapterButton,
   }) => GardenScene(
     companion: family.companion,
     stage: family.stage,
     rules: controller.rules,
     scene: SceneDefinition(controller.rules, 'base_room'),
+    windowsLit: family.windowsLit,
     pieces: controller.homeLayout.map(ScenePiece.fromRow).toList(),
     outfit: outfitFiles(controller.outfit),
     view: location,
     onViewChanged: changeView,
+    chapterButton: chapterButton,
     showLabel: false,
     immersive: true,
     height: height,
@@ -74,10 +82,16 @@ class _FamilyHomeState extends State<FamilyHome> {
         context,
         WindowMathChapter(
           initialPage: bookmark.page,
+          mainStory: true,
+          openWithStory: !bookmark.started,
+          courtyardBuilder: (height) => familyScene(height, HomeView.courtyard),
           initialPattern: bookmark.pattern,
           companion: family.companion,
           verandaBuilder: (height) => familyScene(height, HomeView.veranda),
-          save: service.saveWindowMathBookmark,
+          save: (page, pattern) async {
+            await service.saveWindowMathBookmark(page, pattern);
+            if (controller.service == service) await controller.refresh();
+          },
         ),
       );
     } catch (_) {
@@ -236,6 +250,10 @@ class _FamilyHomeState extends State<FamilyHome> {
           ),
         ),
         Padding(
+          padding: const EdgeInsets.fromLTRB(18, 0, 18, 8),
+          child: _Experience(family, controller.rules.thresholds),
+        ),
+        Padding(
           padding: const EdgeInsets.fromLTRB(12, 4, 12, 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,29 +348,19 @@ class _FamilyHomeState extends State<FamilyHome> {
         final height = wide
             ? box.maxHeight
             : (box.maxHeight * .63).clamp(285.0, 625.0);
-        final scene = Stack(
-          children: [
-            familyScene(
-              height,
-              view,
-              changeView: (v) => setState(() => view = v),
+        final scene = familyScene(
+          height,
+          view,
+          changeView: (v) => setState(() => view = v),
+          chapterButton: TextButton.icon(
+            onPressed: frozen || openingChapter ? null : openMath,
+            icon: const Icon(Icons.grid_view_rounded, size: 17),
+            label: const Text('主线 · 暖廊的彩窗'),
+            style: TextButton.styleFrom(
+              foregroundColor: ink,
+              minimumSize: const Size(48, 44),
             ),
-            Positioned(
-              left: 12,
-              top: 66,
-              child: FilledButton.icon(
-                onPressed: frozen || openingChapter ? null : openMath,
-                icon: const Icon(Icons.grid_view_rounded, size: 19),
-                label: const Text('数学 · 暖廊的彩窗'),
-                style: FilledButton.styleFrom(
-                  backgroundColor: cream,
-                  foregroundColor: ink,
-                  side: const BorderSide(color: outline),
-                  elevation: 2,
-                ),
-              ),
-            ),
-          ],
+          ),
         );
         if (wide) {
           return Row(
@@ -479,9 +487,6 @@ class GrowthPage extends StatelessWidget {
     final records = controller.tasks.where(
       (task) => task.state == 'APPROVED' || task.state == 'CORRECTED',
     );
-    final next = family.stage < 6
-        ? controller.rules.thresholds[family.stage - 1]
-        : null;
     final history = records.toList(growable: false);
     return SafeArea(
       top: false,
@@ -527,9 +532,19 @@ class GrowthPage extends StatelessWidget {
                         Text(
                           '${family.companion.nickname} · ${stageNames[family.stage - 1]}',
                         ),
-                        Text(
-                          '已有 ${family.days} 个成果日${next == null ? '' : ' · 下个外观 $next 天'}',
-                        ),
+                        _Experience(family, controller.rules.thresholds),
+                        if (family.stage > 1)
+                          TextButton.icon(
+                            onPressed: () => showEvolution(
+                              context,
+                              family.companion,
+                              family.stage - 1,
+                              family.stage,
+                              outfit: outfitFiles(controller.outfit),
+                            ),
+                            icon: const Icon(Icons.replay),
+                            label: const Text('回看进化'),
+                          ),
                         const SizedBox(height: 8),
                         OutlinedButton(
                           onPressed: () => openPage(
@@ -537,6 +552,7 @@ class GrowthPage extends StatelessWidget {
                             AppearancePreview(
                               initial: family.companion,
                               initialStage: family.stage,
+                              outfit: outfitFiles(controller.outfit),
                             ),
                           ),
                           child: const Text('外观预览'),
@@ -545,6 +561,22 @@ class GrowthPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 14),
+                  GardenCard(
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(
+                        Icons.menu_book_outlined,
+                        color: terracotta,
+                      ),
+                      title: const Text('银杏家园手记'),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => openPage(
+                        context,
+                        GardenStorybook(stage: family.stage),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   if (history.isEmpty)
                     const GardenCard(child: Text('家长确认的小事会留在这里。')),
                 ],
@@ -553,6 +585,44 @@ class GrowthPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Experience extends StatelessWidget {
+  const _Experience(this.family, this.thresholds);
+  final FamilyOverview family;
+  final List<int> thresholds;
+  @override
+  Widget build(BuildContext context) {
+    final next = family.stage <= thresholds.length
+        ? thresholds[family.stage - 1]
+        : null;
+    final prior = family.stage == 1 ? 0 : thresholds[family.stage - 2];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          next == null
+              ? '经验 ${family.experience} · 已到最终阶段'
+              : '经验 ${family.experience} · 距进化还差 ${next - family.experience}',
+          style: const TextStyle(color: ink, fontWeight: FontWeight.w600),
+        ),
+        if (next != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: LinearProgressIndicator(
+              value: ((family.experience - prior) / (next - prior)).clamp(
+                0.0,
+                1.0,
+              ),
+              minHeight: 4,
+              borderRadius: BorderRadius.circular(6),
+              color: terracotta,
+              backgroundColor: wheat,
+            ),
+          ),
+      ],
     );
   }
 }

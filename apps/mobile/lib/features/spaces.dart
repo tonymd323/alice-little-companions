@@ -150,6 +150,7 @@ class _SpacePageState extends State<SpacePage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     GardenScene(
+                      playable: true,
                       view: HomeView.veranda,
                       label: space['name'] as String,
                       companion: family.companion,

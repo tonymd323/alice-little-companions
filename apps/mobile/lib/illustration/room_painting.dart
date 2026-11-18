@@ -31,6 +31,7 @@ class RoomLayer {
   final Rect frame;
   final double depth;
   final bool shadow;
+  bool get flat => art.endsWith('rug.webp') || art.endsWith('_path.webp');
 }
 
 const furnishedRooms = {
@@ -67,7 +68,6 @@ const _suites = {
 class RoomPainting {
   RoomPainting(String scene, List<ScenePiece> pieces) {
     final owned = {for (final piece in pieces) piece.asset: piece.name};
-    final isHome = scene == 'base_room';
     final builtIn = furnishedRooms[scene];
     if (builtIn != null && builtIn.every(owned.containsKey)) {
       background = artworkPath('painted_$scene');
@@ -85,39 +85,19 @@ class RoomPainting {
     }
     for (final entry in owned.entries) {
       final id = entry.key;
-      final s = _positions[id];
+      final s = _roomMounts[scene]?[id] ?? _positions[id];
       if (s == null) continue;
       var (x, y, w, h) = s;
       // Move the larger vignettes apart when a family owns both individual
       // furniture and its neighbouring suite. The lit walkway stays open.
       if (id == 'item_single_armchair' && owned.containsKey('suite_forest')) {
-        x = .36;
+        x = scene == 'base_room' ? .36 : .34;
       }
       if (id == 'item_single_bed' && owned.containsKey('suite_starlight')) {
-        x = .63;
+        x = scene == 'base_room' ? .59 : .61;
       }
       if (id == 'base_bed' && owned.containsKey('item_single_bed')) continue;
-      if (id == 'base_bed' && owned.containsKey('suite_starlight')) x = .62;
-      if (!isHome && !id.startsWith('part_')) {
-        // Keepsakes carried to another room in a legacy save have mounts on
-        // its furniture or floor, rather than on the veranda's window seat.
-        if (id == 'item_decor_cushion') {
-          x = .31;
-          y = .86;
-        }
-        if (id == 'item_decor_vase') {
-          x = .68;
-          y = .83;
-        }
-        if (id == 'item_decor_plant') {
-          x = .83;
-          y = .80;
-        }
-        if (id == 'item_decor_mobile') {
-          x = .37;
-          y = .30;
-        }
-      }
+      if (id == 'base_bed' && owned.containsKey('suite_starlight')) x = .59;
       final flat = id.endsWith('rug') || id.endsWith('_path');
       final elevated =
           id == 'item_decor_mobile' ||
@@ -157,10 +137,10 @@ class RoomPainting {
 const _positions = <String, (double, double, double, double)>{
   'base_rug': (.47, .942, .27, .090),
   'base_bed': (.72, .837, .196, .207),
-  'item_decor_vase': (.325, .570, .058, .119),
+  'item_decor_vase': (.365, .553, .055, .115),
   'item_decor_cushion': (.278, .578, .106, .074),
-  'item_decor_plant': (.875, .817, .124, .216),
-  'item_decor_mobile': (.658, .372, .094, .280),
+  'item_decor_plant': (.902, .746, .092, .158),
+  'item_decor_mobile': (.653, .370, .083, .252),
   'item_single_armchair': (.263, .841, .201, .312),
   'item_single_bed': (.70, .862, .232, .233),
   'suite_forest': (.155, .821, .273, .325),
@@ -183,4 +163,49 @@ const _positions = <String, (double, double, double, double)>{
   'part_flower_shop_counter': (.24, .80, .29, .25),
   'part_flower_shop_shelf': (.81, .76, .19, .33),
   'part_flower_shop_sign': (.65, .81, .08, .14),
+};
+
+// Each point is a physical support in that room's painting. In the garden
+// the vase sits on the planter and the chime hangs from the overhanging tree.
+const _roomMounts = <String, Map<String, (double, double, double, double)>>{
+  'garden': {
+    'item_decor_cushion': (.226, .549, .084, .066),
+    'item_decor_vase': (.942, .633, .046, .087),
+    'item_decor_mobile': (.305, .303, .075, .225),
+    'item_decor_plant': (.838, .807, .092, .16),
+    'item_single_armchair': (.192, .840, .168, .241),
+    'item_single_bed': (.682, .88, .202, .224),
+    'suite_forest': (.126, .841, .218, .294),
+    'suite_starlight': (.857, .91, .235, .252),
+  },
+  'treehouse': {
+    'item_decor_cushion': (.169, .665, .061, .049),
+    'item_decor_vase': (.888, .537, .048, .103),
+    'item_decor_mobile': (.392, .318, .074, .218),
+    'item_decor_plant': (.918, .81, .086, .152),
+    'item_single_armchair': (.223, .841, .186, .266),
+    'item_single_bed': (.710, .86, .204, .224),
+    'suite_forest': (.136, .865, .213, .292),
+    'suite_starlight': (.853, .90, .238, .250),
+  },
+  'pastry_shop': {
+    'item_decor_vase': (.837, .571, .048, .094),
+    'item_decor_cushion': (.914, .651, .061, .045),
+    'item_decor_mobile': (.627, .293, .075, .215),
+    'item_decor_plant': (.94, .846, .092, .166),
+    'item_single_armchair': (.219, .87, .172, .244),
+    'item_single_bed': (.705, .88, .208, .224),
+    'suite_forest': (.135, .913, .212, .274),
+    'suite_starlight': (.853, .931, .215, .220),
+  },
+  'flower_shop': {
+    'item_decor_vase': (.424, .498, .043, .092),
+    'item_decor_cushion': (.472, .832, .086, .064),
+    'item_decor_mobile': (.583, .295, .074, .211),
+    'item_decor_plant': (.915, .862, .099, .175),
+    'item_single_armchair': (.214, .872, .171, .245),
+    'item_single_bed': (.71, .873, .20, .222),
+    'suite_forest': (.134, .922, .210, .282),
+    'suite_starlight': (.859, .92, .222, .233),
+  },
 };

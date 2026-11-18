@@ -14,13 +14,17 @@ class WindowMathChapter extends StatefulWidget {
     required this.save,
     this.companion = Companion.rabbit,
     this.verandaBuilder,
+    this.courtyardBuilder,
+    this.mainStory = false,
+    this.openWithStory = false,
   });
 
   final WindowPage initialPage;
   final Set<int> initialPattern;
   final Future<void> Function(WindowPage page, Set<int> fiveLeafPanes) save;
   final Companion companion;
-  final Widget Function(double height)? verandaBuilder;
+  final Widget Function(double height)? verandaBuilder, courtyardBuilder;
+  final bool mainStory, openWithStory;
 
   @override
   State<WindowMathChapter> createState() => _WindowMathChapterState();
@@ -28,6 +32,7 @@ class WindowMathChapter extends StatefulWidget {
 
 class _WindowMathChapterState extends State<WindowMathChapter> {
   late WindowPage page = widget.initialPage;
+  late bool opening = widget.mainStory && widget.openWithStory;
   late final marked = {...widget.initialPattern};
   int? answer;
   bool hint = false;
@@ -73,6 +78,7 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
       if (!mounted) return;
       setState(() {
         page = next;
+        opening = false;
         marked
           ..clear()
           ..addAll(pattern);
@@ -133,7 +139,7 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
               onPressed: () => Navigator.pop(context),
               icon: const Icon(Icons.arrow_back_rounded),
             ),
-            title: const Text('暖廊的彩窗'),
+            title: Text(widget.mainStory ? '主线第一章 · 暖廊的彩窗' : '暖廊的彩窗'),
           )
         : null,
     body: SafeArea(
@@ -144,6 +150,47 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
           final sceneHeight = wide
               ? box.maxHeight
               : (box.maxWidth * .58).clamp(175.0, 268.0);
+          if (opening) {
+            return ListView(
+              controller: scroll,
+              children: [
+                widget.courtyardBuilder?.call(sceneHeight) ??
+                    GardenScene(
+                      companion: widget.companion,
+                      stage: 1,
+                      height: sceneHeight,
+                    ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        '石桥边的约定',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        '一阵风吹跑了窗花。原本约好在石桥见面的伙伴们，正等着桥面上那三朵金色的影子。$friend把落叶篮推到你面前。',
+                        style: const TextStyle(fontSize: 18, height: 1.46),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        '“我们把金叶嵌回三扇窗，大家就知道可以回家啦。”',
+                        style: const TextStyle(fontSize: 17, height: 1.46),
+                      ),
+                      const SizedBox(height: 18),
+                      FilledButton(
+                        onPressed: saving ? null : () => turn(WindowPage.count),
+                        child: const Text('去暖廊修好彩窗'),
+                      ),
+                      if (feedback.isNotEmpty) _Notice(feedback),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }
           final scene = _Room(
             height: sceneHeight,
             lit: lit,
@@ -185,7 +232,9 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
                       WindowPage.missing =>
                         '三扇窗一共要 12 片，$friend已经嵌好了 7 片。还要从篮子里拿几片？',
                       WindowPage.sunny =>
-                        '$friend把最后一片金叶嵌好。阳光穿过窗花，在地板上画出了三朵金花。',
+                        widget.mainStory
+                            ? '第三扇窗亮了。桥面上出现三朵金花！奶油沿石径跑来，桃桃数着光影，团团已经趴在窗座上等你。大家都赶上了暖廊的约定。'
+                            : '$friend把最后一片金叶嵌好。阳光穿过窗花，在地板上画出了三朵金花。',
                       WindowPage.puzzle =>
                         '还有 5 格小窗，每格可以嵌 3 片或 5 片。点窗格换花纹，把 19 片金叶刚好用完。',
                       WindowPage.finished =>
@@ -272,6 +321,12 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
                       highlighted: (_) => true,
                     ),
                     const SizedBox(height: 18),
+                    if (widget.mainStory)
+                      FilledButton.icon(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.cottage_outlined),
+                        label: const Text('回家看窗花'),
+                      ),
                     FilledButton(
                       onPressed: saving ? null : () => turn(WindowPage.puzzle),
                       child: Text(

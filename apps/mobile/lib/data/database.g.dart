@@ -10298,6 +10298,178 @@ class BaseFurnishingsCompanion extends UpdateCompanion<BaseFurnishing> {
   }
 }
 
+class WindowStoryMilestones extends Table
+    with TableInfo<WindowStoryMilestones, WindowStoryMilestone> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  WindowStoryMilestones(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _childIdMeta = const VerificationMeta(
+    'childId',
+  );
+  late final GeneratedColumn<String> childId = GeneratedColumn<String>(
+    'child_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY REFERENCES child_profiles(id)',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [childId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'window_story_milestones';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<WindowStoryMilestone> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('child_id')) {
+      context.handle(
+        _childIdMeta,
+        childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {childId};
+  @override
+  WindowStoryMilestone map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WindowStoryMilestone(
+      childId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}child_id'],
+      )!,
+    );
+  }
+
+  @override
+  WindowStoryMilestones createAlias(String alias) {
+    return WindowStoryMilestones(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class WindowStoryMilestone extends DataClass
+    implements Insertable<WindowStoryMilestone> {
+  final String childId;
+  const WindowStoryMilestone({required this.childId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['child_id'] = Variable<String>(childId);
+    return map;
+  }
+
+  WindowStoryMilestonesCompanion toCompanion(bool nullToAbsent) {
+    return WindowStoryMilestonesCompanion(childId: Value(childId));
+  }
+
+  factory WindowStoryMilestone.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WindowStoryMilestone(
+      childId: serializer.fromJson<String>(json['child_id']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{'child_id': serializer.toJson<String>(childId)};
+  }
+
+  WindowStoryMilestone copyWith({String? childId}) =>
+      WindowStoryMilestone(childId: childId ?? this.childId);
+  WindowStoryMilestone copyWithCompanion(WindowStoryMilestonesCompanion data) {
+    return WindowStoryMilestone(
+      childId: data.childId.present ? data.childId.value : this.childId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WindowStoryMilestone(')
+          ..write('childId: $childId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => childId.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WindowStoryMilestone && other.childId == this.childId);
+}
+
+class WindowStoryMilestonesCompanion
+    extends UpdateCompanion<WindowStoryMilestone> {
+  final Value<String> childId;
+  final Value<int> rowid;
+  const WindowStoryMilestonesCompanion({
+    this.childId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WindowStoryMilestonesCompanion.insert({
+    required String childId,
+    this.rowid = const Value.absent(),
+  }) : childId = Value(childId);
+  static Insertable<WindowStoryMilestone> custom({
+    Expression<String>? childId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (childId != null) 'child_id': childId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WindowStoryMilestonesCompanion copyWith({
+    Value<String>? childId,
+    Value<int>? rowid,
+  }) {
+    return WindowStoryMilestonesCompanion(
+      childId: childId ?? this.childId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (childId.present) {
+      map['child_id'] = Variable<String>(childId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WindowStoryMilestonesCompanion(')
+          ..write('childId: $childId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$FamilyDatabase extends GeneratedDatabase {
   _$FamilyDatabase(QueryExecutor e) : super(e);
   $FamilyDatabaseManager get managers => $FamilyDatabaseManager(this);
@@ -10359,6 +10531,8 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
     'CREATE INDEX purchase_ledger_idx ON purchases (ledger_id, refunded_at)',
   );
   late final BaseFurnishings baseFurnishings = BaseFurnishings(this);
+  late final WindowStoryMilestones windowStoryMilestones =
+      WindowStoryMilestones(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -10396,6 +10570,7 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
     ledgerDayKindIdx,
     purchaseLedgerIdx,
     baseFurnishings,
+    windowStoryMilestones,
   ];
 }
 
@@ -10968,6 +11143,27 @@ final class $ChildProfilesReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<WindowStoryMilestones, List<WindowStoryMilestone>>
+  _windowStoryMilestonesRefsTable(_$FamilyDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.windowStoryMilestones,
+        aliasName: 'child_profiles__id__window_story_milestones__child_id',
+      );
+
+  $WindowStoryMilestonesProcessedTableManager get windowStoryMilestonesRefs {
+    final manager = $WindowStoryMilestonesTableManager(
+      $_db,
+      $_db.windowStoryMilestones,
+    ).filter((f) => f.childId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _windowStoryMilestonesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $ChildProfilesFilterComposer
@@ -11108,6 +11304,31 @@ class $ChildProfilesFilterComposer
           }) => $WishesFilterComposer(
             $db: $db,
             $table: $db.wishes,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> windowStoryMilestonesRefs(
+    Expression<bool> Function($WindowStoryMilestonesFilterComposer f) f,
+  ) {
+    final $WindowStoryMilestonesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.windowStoryMilestones,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $WindowStoryMilestonesFilterComposer(
+            $db: $db,
+            $table: $db.windowStoryMilestones,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -11308,6 +11529,31 @@ class $ChildProfilesAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> windowStoryMilestonesRefs<T extends Object>(
+    Expression<T> Function($WindowStoryMilestonesAnnotationComposer a) f,
+  ) {
+    final $WindowStoryMilestonesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.windowStoryMilestones,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $WindowStoryMilestonesAnnotationComposer(
+            $db: $db,
+            $table: $db.windowStoryMilestones,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $ChildProfilesTableManager
@@ -11329,6 +11575,7 @@ class $ChildProfilesTableManager
             bool accountsRefs,
             bool growthAwardsRefs,
             bool wishesRefs,
+            bool windowStoryMilestonesRefs,
           })
         > {
   $ChildProfilesTableManager(_$FamilyDatabase db, ChildProfiles table)
@@ -11385,6 +11632,7 @@ class $ChildProfilesTableManager
                 accountsRefs = false,
                 growthAwardsRefs = false,
                 wishesRefs = false,
+                windowStoryMilestonesRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -11393,6 +11641,7 @@ class $ChildProfilesTableManager
                     if (accountsRefs) db.accounts,
                     if (growthAwardsRefs) db.growthAwards,
                     if (wishesRefs) db.wishes,
+                    if (windowStoryMilestonesRefs) db.windowStoryMilestones,
                   ],
                   addJoins:
                       <
@@ -11506,6 +11755,26 @@ class $ChildProfilesTableManager
                           referencedColumn: 'child_id',
                           typedResults: items,
                         ),
+                      if (windowStoryMilestonesRefs)
+                        await $_getPrefetchedDataByColumns<
+                          ChildProfile,
+                          ChildProfiles,
+                          WindowStoryMilestone,
+                          WindowStoryMilestones
+                        >(
+                          currentTable: table,
+                          referencedTable: $ChildProfilesReferences
+                              ._windowStoryMilestonesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $ChildProfilesReferences(
+                                db,
+                                table,
+                                p0,
+                              ).windowStoryMilestonesRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'child_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -11532,6 +11801,7 @@ typedef $ChildProfilesProcessedTableManager =
         bool accountsRefs,
         bool growthAwardsRefs,
         bool wishesRefs,
+        bool windowStoryMilestonesRefs,
       })
     >;
 typedef $WindowMathBookmarksCreateCompanionBuilder =
@@ -21485,6 +21755,254 @@ typedef $BaseFurnishingsProcessedTableManager =
       BaseFurnishing,
       PrefetchHooks Function({bool spaceId})
     >;
+typedef $WindowStoryMilestonesCreateCompanionBuilder =
+    WindowStoryMilestonesCompanion Function({
+      required String childId,
+      Value<int> rowid,
+    });
+typedef $WindowStoryMilestonesUpdateCompanionBuilder =
+    WindowStoryMilestonesCompanion Function({
+      Value<String> childId,
+      Value<int> rowid,
+    });
+
+final class $WindowStoryMilestonesReferences
+    extends
+        BaseReferences<
+          _$FamilyDatabase,
+          WindowStoryMilestones,
+          WindowStoryMilestone
+        > {
+  $WindowStoryMilestonesReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static ChildProfiles _childIdTable(_$FamilyDatabase db) => db.childProfiles
+      .createAlias('window_story_milestones__child_id__child_profiles__id');
+
+  $ChildProfilesProcessedTableManager get childId {
+    final $_column = $_itemColumn<String>('child_id')!;
+
+    final manager = $ChildProfilesTableManager(
+      $_db,
+      $_db.childProfiles,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $WindowStoryMilestonesFilterComposer
+    extends Composer<_$FamilyDatabase, WindowStoryMilestones> {
+  $WindowStoryMilestonesFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $ChildProfilesFilterComposer get childId {
+    final $ChildProfilesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesFilterComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $WindowStoryMilestonesOrderingComposer
+    extends Composer<_$FamilyDatabase, WindowStoryMilestones> {
+  $WindowStoryMilestonesOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $ChildProfilesOrderingComposer get childId {
+    final $ChildProfilesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesOrderingComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $WindowStoryMilestonesAnnotationComposer
+    extends Composer<_$FamilyDatabase, WindowStoryMilestones> {
+  $WindowStoryMilestonesAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $ChildProfilesAnnotationComposer get childId {
+    final $ChildProfilesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesAnnotationComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $WindowStoryMilestonesTableManager
+    extends
+        RootTableManager<
+          _$FamilyDatabase,
+          WindowStoryMilestones,
+          WindowStoryMilestone,
+          $WindowStoryMilestonesFilterComposer,
+          $WindowStoryMilestonesOrderingComposer,
+          $WindowStoryMilestonesAnnotationComposer,
+          $WindowStoryMilestonesCreateCompanionBuilder,
+          $WindowStoryMilestonesUpdateCompanionBuilder,
+          (WindowStoryMilestone, $WindowStoryMilestonesReferences),
+          WindowStoryMilestone,
+          PrefetchHooks Function({bool childId})
+        > {
+  $WindowStoryMilestonesTableManager(
+    _$FamilyDatabase db,
+    WindowStoryMilestones table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $WindowStoryMilestonesFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $WindowStoryMilestonesOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $WindowStoryMilestonesAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> childId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) => WindowStoryMilestonesCompanion(childId: childId, rowid: rowid),
+          createCompanionCallback:
+              ({
+                required String childId,
+                Value<int> rowid = const Value.absent(),
+              }) => WindowStoryMilestonesCompanion.insert(
+                childId: childId,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<WindowStoryMilestones, WindowStoryMilestone>(
+                    table,
+                  ),
+                  $WindowStoryMilestonesReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (childId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.childId,
+                        referencedTable: $WindowStoryMilestonesReferences
+                            ._childIdTable(db),
+                        referencedColumn: $WindowStoryMilestonesReferences
+                            ._childIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $WindowStoryMilestonesProcessedTableManager =
+    ProcessedTableManager<
+      _$FamilyDatabase,
+      WindowStoryMilestones,
+      WindowStoryMilestone,
+      $WindowStoryMilestonesFilterComposer,
+      $WindowStoryMilestonesOrderingComposer,
+      $WindowStoryMilestonesAnnotationComposer,
+      $WindowStoryMilestonesCreateCompanionBuilder,
+      $WindowStoryMilestonesUpdateCompanionBuilder,
+      (WindowStoryMilestone, $WindowStoryMilestonesReferences),
+      WindowStoryMilestone,
+      PrefetchHooks Function({bool childId})
+    >;
 
 class $FamilyDatabaseManager {
   final _$FamilyDatabase _db;
@@ -21535,4 +22053,6 @@ class $FamilyDatabaseManager {
       $CorrectionRecordsTableManager(_db, _db.correctionRecords);
   $BaseFurnishingsTableManager get baseFurnishings =>
       $BaseFurnishingsTableManager(_db, _db.baseFurnishings);
+  $WindowStoryMilestonesTableManager get windowStoryMilestones =>
+      $WindowStoryMilestonesTableManager(_db, _db.windowStoryMilestones);
 }

@@ -64,6 +64,9 @@ class Rules {
   final Map<String, Json> scenes;
   final Json wearAnchors;
 
+  int earnedStage(int experience) =>
+      1 + thresholds.takeWhile((threshold) => experience >= threshold).length;
+
   TaskType type(String id) => types.firstWhere(
     (value) => value.id == id,
     orElse: () => throw const UserError('请选择一种投入类型。'),

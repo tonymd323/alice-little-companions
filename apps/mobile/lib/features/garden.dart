@@ -2,6 +2,8 @@ import 'package:material_ui/material_ui.dart';
 
 import '../domain/companions.dart';
 import '../illustration/living_scene.dart';
+import '../illustration/evolution.dart';
+export '../illustration/evolution.dart' show showEvolution;
 export '../illustration/living_scene.dart';
 
 const paper = Color(0xFFFAF2E2);
@@ -156,10 +158,12 @@ class AppearancePreview extends StatefulWidget {
     super.key,
     this.initial = Companion.rabbit,
     this.initialStage = 4,
+    this.outfit = const {},
   });
 
   final Companion initial;
   final int initialStage;
+  final Map<String, String> outfit;
 
   @override
   State<AppearancePreview> createState() => _AppearancePreviewState();
@@ -209,6 +213,19 @@ class _AppearancePreviewState extends State<AppearancePreview> {
           ],
         ),
         const SizedBox(height: 12),
+        OutlinedButton.icon(
+          onPressed: () => showEvolution(
+            context,
+            pet,
+            stage == 1 ? 1 : stage - 1,
+            stage == 1 ? 2 : stage,
+            preview: true,
+            outfit: pet == widget.initial ? widget.outfit : const {},
+          ),
+          icon: const Icon(Icons.auto_awesome),
+          label: const Text('预演进化'),
+        ),
+        const SizedBox(height: 6),
         const Text('仅预览外观 · 不计积分', style: TextStyle(color: mutedInk)),
       ],
     ),
@@ -221,6 +238,8 @@ class _AppearancePreviewState extends State<AppearancePreview> {
       stage: stage,
       reveal: true,
       focus: true,
+      playable: true,
+      outfit: pet == widget.initial ? widget.outfit : const {},
       label: "伙伴手记",
     );
     return Scaffold(

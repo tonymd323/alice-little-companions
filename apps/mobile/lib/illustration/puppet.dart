@@ -6,6 +6,8 @@ import 'package:flutter/widgets.dart';
 
 import '../domain/companions.dart';
 import 'tailoring.dart';
+import 'companion_motion.dart';
+import 'action_poses.dart';
 
 /// Coordinates in the tightly cropped illustration. The pupil and appendage
 /// anchors differ even between growth stages of the same companion.
@@ -84,6 +86,20 @@ class _Mesh {
         other[n] = weight(u, v, rig.otherLimb, .23, .31);
         left[n] = weight(u, v, rig.leftEye, .082, .095);
         right[n] = weight(u, v, rig.rightEye, .066, .082);
+        nearPaw[n] = weight(
+          u,
+          v,
+          Offset((rig.leftEye.dx + .03).clamp(.26, .80), .88),
+          .24,
+          .29,
+        );
+        farPaw[n] = weight(
+          u,
+          v,
+          Offset(rig.leftEye.dx > .48 ? .29 : .70, .86),
+          .24,
+          .30,
+        );
         upper[n] = math.pow(math.max(0.0, 1 - v), 1.28).toDouble();
       }
     }
@@ -113,7 +129,9 @@ class _Mesh {
       other = Float32List(count),
       left = Float32List(count),
       right = Float32List(count),
-      upper = Float32List(count);
+      upper = Float32List(count),
+      nearPaw = Float32List(count),
+      farPaw = Float32List(count);
 
   static double weight(
     double u,
@@ -135,22 +153,28 @@ class _Mesh {
     double walking,
     double gaze,
     bool still,
-  ) {
+    PetMotion motion, {
+    double opacity = 1,
+  }) {
     final t = still ? 0.0 : time;
     final wave = math.sin(reaction * math.pi),
         swing = wave * math.sin(reaction * math.pi * 3.6);
-    final breath = math.sin(t * 2.1) * .010 + wave * .010;
+    final breath = math.sin(t * 2.1) * .018 + wave * .010;
     final tilt = math.sin(t * 1.02) * .005 + swing * .019 + gaze * .043;
     final phase = t % 4.1;
     final blink = phase > 3.69 && phase < 3.91
         ? math.sin((phase - 3.69) / .22 * math.pi)
         : 0.0;
     final tip =
-        math.sin(t * 1.78) * .007 +
+        math.sin(t * 1.78) * .024 +
+        motion.lean * .065 +
+        motion.curl * .09 +
         swing * (pet == Companion.fox ? .113 : .072);
     final lift =
         math.sin(time * 10).abs() * walking * .04 +
         wave * (pet == Companion.rabbit ? .083 : .021);
+    final stride = math.sin(t * (pet == Companion.rabbit ? 11 : 14)) * walking;
+    final curl = motion.curl, lean = motion.lean;
     final stillOffset = still ? 0.0 : 1.0;
     for (var n = 0; n < count; n++) {
       final u = base[n * 2], v = base[n * 2 + 1];
@@ -158,13 +182,16 @@ class _Mesh {
       final x =
           u +
           stillOffset *
-              (tilt * h +
+              ((tilt + lean * .10) * h +
+                  stride * .095 * (nearPaw[n] - farPaw[n]) -
+                  curl * .05 * h +
                   tip * l * (.62 - v + rig.limb.dy) -
                   tip * r * (pet == Companion.rabbit ? .74 : .50));
       final y =
           v +
           stillOffset *
-              (-breath * h -
+              ((-breath + curl * .16) * h -
+                  (stride * nearPaw[n] - stride * farPaw[n]).abs() * .048 -
                   lift +
                   tip * .27 * l -
                   tip * .23 * r +
@@ -185,6 +212,7 @@ class _Mesh {
       mesh,
       ui.BlendMode.srcOver,
       Paint()
+        ..color = const ui.Color(0xffffffff).withValues(alpha: opacity)
         ..shader = shader
         ..isAntiAlias = true,
     );
@@ -205,10 +233,13 @@ class IllustratedPet extends StatefulWidget {
     required this.walking,
     required this.gaze,
     required this.still,
+    this.motion,
+    this.actionPoses = false,
   });
   final Companion pet;
   final int stage;
-  final bool reveal, still;
+  final bool reveal, still, actionPoses;
+  final PetMotion Function()? motion;
   final Map<String, String> outfit;
   final Listenable clock;
   final double Function() seconds, reaction, walking, gaze;
@@ -219,8 +250,10 @@ class IllustratedPet extends StatefulWidget {
 class _IllustratedPetState extends State<IllustratedPet> {
   final _streams = <String, (ImageStream, ImageStreamListener)>{};
   final _images = <String, ImageInfo>{};
-  _Mesh? mesh;
-  ui.Image? _dressed;
+  _Mesh? mesh, leapMesh;
+  ui.Image? _dressed, _leapDressed;
+  String get leapPath =>
+      actionArtwork(widget.pet, widget.stage, widget.outfit['body']);
   String? _requested;
   String get path => portraitArtwork(
     widget.pet,
@@ -245,11 +278,18 @@ class _IllustratedPetState extends State<IllustratedPet> {
     final body = _images[path]?.image;
     if (body == null) return;
     final clothes = <String, ui.Image>{};
+    final flightWear = <String, ui.Image>{};
     for (final entry in widget.outfit.entries) {
       if (entry.key == 'body') continue;
-      final image = _images[wornArtwork(entry.value)]?.image;
+      final image = _images[fittedAccessory(entry.value, widget.pet)]?.image;
       if (image == null) return;
       clothes[entry.key] = image;
+      if (widget.actionPoses) {
+        final flight =
+            _images[fittedAccessory(entry.value, widget.pet, airborne: true)]
+                ?.image;
+        if (flight != null) flightWear[entry.key] = flight;
+      }
     }
     final rig = PetRig.forPose(widget.pet, widget.stage, widget.reveal);
     final dressed = clothes.isEmpty
@@ -264,8 +304,7 @@ class _IllustratedPetState extends State<IllustratedPet> {
             clothes,
             widget.outfit['head'],
           );
-    mesh?.shader.dispose();
-    _dressed?.dispose();
+    _disposeTextures();
     _dressed = dressed?.image;
     mesh = _Mesh(
       _dressed ?? body,
@@ -274,21 +313,67 @@ class _IllustratedPetState extends State<IllustratedPet> {
       Size(body.width.toDouble(), body.height.toDouble()),
       dressed?.padding ?? Offset.zero,
     );
+    final leap = _images[leapPath]?.image;
+    if (leap != null &&
+        widget.actionPoses &&
+        flightWear.length == clothes.length) {
+      final (left, right) = actionEyes(widget.pet, widget.stage);
+      final actionRig = PetRig(
+        left,
+        right,
+        const Offset(.18, .38),
+        const Offset(.64, .13),
+      );
+      final actionClothes = clothes.isEmpty
+          ? null
+          : applyAccessories(
+              leap,
+              widget.pet,
+              widget.stage,
+              true,
+              left,
+              right,
+              flightWear,
+              widget.outfit['head'],
+              airborne: true,
+            );
+      _leapDressed = actionClothes?.image;
+      leapMesh = _Mesh(
+        _leapDressed ?? leap,
+        actionRig,
+        widget.pet,
+        Size(leap.width.toDouble(), leap.height.toDouble()),
+        actionClothes?.padding ?? Offset.zero,
+      );
+    }
+  }
+
+  void _disposeTextures() {
+    mesh?.shader.dispose();
+    mesh = null;
+    leapMesh?.shader.dispose();
+    leapMesh = null;
+    _dressed?.dispose();
+    _dressed = null;
+    _leapDressed?.dispose();
+    _leapDressed = null;
   }
 
   void _resolve() {
     final needed = {
       path,
+      if (widget.actionPoses) leapPath,
       for (final entry in widget.outfit.entries)
-        if (entry.key != 'body') wornArtwork(entry.value),
+        if (entry.key != 'body') ...[
+          fittedAccessory(entry.value, widget.pet),
+          if (widget.actionPoses)
+            fittedAccessory(entry.value, widget.pet, airborne: true),
+        ],
     };
     final keyset = (needed.toList()..sort()).join('|');
     if (_requested == keyset) return;
     _requested = keyset;
-    mesh?.shader.dispose();
-    mesh = null;
-    _dressed?.dispose();
-    _dressed = null;
+    _disposeTextures();
     for (final key
         in _streams.keys.where((key) => !needed.contains(key)).toList()) {
       final (stream, listener) = _streams.remove(key)!;
@@ -320,8 +405,7 @@ class _IllustratedPetState extends State<IllustratedPet> {
     for (final pair in _streams.values) {
       pair.$1.removeListener(pair.$2);
     }
-    mesh?.shader.dispose();
-    _dressed?.dispose();
+    _disposeTextures();
     for (final info in _images.values) {
       info.dispose();
     }
@@ -329,14 +413,16 @@ class _IllustratedPetState extends State<IllustratedPet> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      RepaintBoundary(child: CustomPaint(painter: _PetPainter(widget, mesh)));
+  Widget build(BuildContext context) => RepaintBoundary(
+    child: CustomPaint(painter: _PetPainter(widget, mesh, leapMesh)),
+  );
 }
 
 class _PetPainter extends CustomPainter {
-  _PetPainter(this.actor, this.mesh) : super(repaint: actor.clock);
+  _PetPainter(this.actor, this.mesh, this.leapMesh)
+    : super(repaint: actor.clock);
   final IllustratedPet actor;
-  final _Mesh? mesh;
+  final _Mesh? mesh, leapMesh;
   @override
   void paint(Canvas canvas, Size size) {
     final m = mesh;
@@ -347,7 +433,47 @@ class _PetPainter extends CustomPainter {
     final t = actor.seconds(),
         reaction = actor.still ? 0.0 : actor.reaction(),
         walking = actor.still ? 0.0 : actor.walking();
-    m.paint(canvas, rect, t, reaction, walking, actor.gaze(), actor.still);
+    final motion = actor.still
+        ? const PetMotion.rest()
+        : actor.motion?.call() ?? const PetMotion.rest();
+    final mix = leapMesh == null ? 0.0 : motion.keyPose;
+    if (mix < 1) {
+      m.paint(
+        canvas,
+        rect,
+        t,
+        reaction,
+        walking,
+        actor.gaze(),
+        actor.still,
+        motion,
+        opacity: 1 - mix,
+      );
+    }
+    if (mix > 0) {
+      final airborne = leapMesh!;
+      final footprint = applyBoxFit(
+        BoxFit.contain,
+        airborne.bodySize,
+        size * 1.16,
+      ).destination;
+      final flightRect = Rect.fromCenter(
+        center: Offset(size.width / 2, size.height - footprint.height / 2),
+        width: footprint.width,
+        height: footprint.height,
+      );
+      airborne.paint(
+        canvas,
+        flightRect,
+        t,
+        0,
+        0,
+        0,
+        false,
+        const PetMotion.rest(),
+        opacity: mix,
+      );
+    }
   }
 
   @override

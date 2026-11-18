@@ -6,6 +6,8 @@ import '../domain/pin.dart';
 import 'backup_pages.dart';
 import 'common.dart';
 import 'garden.dart';
+import '../domain/garden_stories.dart';
+import 'storybook.dart';
 
 class FirstRunPage extends StatefulWidget {
   const FirstRunPage({super.key, required this.controller});
@@ -57,7 +59,7 @@ class _FirstRunPageState extends State<FirstRunPage> {
           ),
           const SizedBox(height: 5),
           Text(
-            '点点${pet.nickname}打个招呼，再选一位伙伴回家。',
+            '${pet.nickname}说：“${companionStories[pet]!.greeting}”',
             style: const TextStyle(color: mutedInk),
           ),
           const SizedBox(height: 12),
@@ -73,6 +75,11 @@ class _FirstRunPageState extends State<FirstRunPage> {
           Wrap(
             alignment: WrapAlignment.spaceEvenly,
             children: [
+              TextButton(
+                onPressed: () =>
+                    openPage(context, GardenStorybook(stage: 1, initial: pet)),
+                child: const Text('认识伙伴'),
+              ),
               TextButton(
                 onPressed: () => openPage(
                   context,

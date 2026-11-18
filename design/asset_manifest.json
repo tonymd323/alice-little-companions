@@ -2074,6 +2074,1230 @@
         452
       ],
       "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-1-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        390,
+        311
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-1-apron.webp",
+      "sha256": "b82270f5219919220c50f8ba5b92f71c22ac1e8c0984fa85d10b8772689f4483",
+      "runtime_size": [
+        390,
+        311
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-1-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        395,
+        310
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-1-coat.webp",
+      "sha256": "cb5e7e005716f3f43abf759e8ab33e19ed25354c36d76886004862699e0e905f",
+      "runtime_size": [
+        395,
+        310
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-1",
+      "kind": "pet_action",
+      "expected_size": [
+        389,
+        313
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-1.webp",
+      "sha256": "0df6ece52673bbe5e0a20f218f42eb4309dc5dd1738856670faecc231c395461",
+      "runtime_size": [
+        389,
+        313
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-2-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        491,
+        346
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-2-apron.webp",
+      "sha256": "ade3611b9fc21399d854df6ab818391abfa5ed6de3db9ae091c0e803448f5511",
+      "runtime_size": [
+        491,
+        346
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-2-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        494,
+        348
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-2-coat.webp",
+      "sha256": "f1726a914dae3c8c756f66c0d51360cc41ab05ce9b957bec71a4fe2693257bd1",
+      "runtime_size": [
+        494,
+        348
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-2",
+      "kind": "pet_action",
+      "expected_size": [
+        491,
+        346
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-2.webp",
+      "sha256": "5344094c8828a186d9d8976bc283af454e69c4bbfabf9d074a7b4aa0cc0776f6",
+      "runtime_size": [
+        491,
+        346
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-3-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        476,
+        364
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-3-apron.webp",
+      "sha256": "eb794b6992ed82ebdda5d80ff40e43d5590a2c3f30987256674ba1d6aa9537a2",
+      "runtime_size": [
+        476,
+        364
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-3-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        481,
+        371
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-3-coat.webp",
+      "sha256": "4ce10c57cc640b8172d12300978beeb53135750ddfd5291a418023288de2a652",
+      "runtime_size": [
+        481,
+        371
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-3",
+      "kind": "pet_action",
+      "expected_size": [
+        474,
+        369
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-3.webp",
+      "sha256": "9862637dd78acc51a734de26a6007930e7c2487d769135a89a101e32675a3c20",
+      "runtime_size": [
+        474,
+        369
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-4-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        477,
+        377
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-4-apron.webp",
+      "sha256": "aca03ba9e12fb48133f645d056cdcac3f392c3a7dc316ddf55a4538313c9c778",
+      "runtime_size": [
+        477,
+        377
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-4-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        482,
+        381
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-4-coat.webp",
+      "sha256": "547cf1a84a3bf71bbd55f3af50ce91cc7c1af5e1856d20e9f34c8b64bb64990d",
+      "runtime_size": [
+        482,
+        381
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-4",
+      "kind": "pet_action",
+      "expected_size": [
+        478,
+        378
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-4.webp",
+      "sha256": "43cb675137f56b72e1a47b8827639aaa54c1c3c7caa3bb23b8efdf589a8f7cff",
+      "runtime_size": [
+        478,
+        378
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-5-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        507,
+        419
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-5-apron.webp",
+      "sha256": "ca8a234367e4ff6acd7cba52bca9ce391653433c9aa1f25b494529c55dfa2187",
+      "runtime_size": [
+        507,
+        419
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-5-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        510,
+        421
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-5-coat.webp",
+      "sha256": "40c9a3106560664f2a7447fe28e8248bc7bd2ad5b38cdf6b3242b7a1bcb7b65c",
+      "runtime_size": [
+        510,
+        421
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-5",
+      "kind": "pet_action",
+      "expected_size": [
+        506,
+        418
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-5.webp",
+      "sha256": "a76c8a51ad5a5f67b226ee06316d2fe8be2162c578ead417a840cc28d9400c5c",
+      "runtime_size": [
+        506,
+        418
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-6-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        520,
+        376
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-6-apron.webp",
+      "sha256": "85a5556e0db0894f0af3f882c7c28e21c8dc8c0f83c12e9f5c17759b9cf9f1ab",
+      "runtime_size": [
+        520,
+        376
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-6-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        520,
+        374
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-6-coat.webp",
+      "sha256": "16504010cf7a7984f1a91e5d87a5e39210333b7802cab5beee05c5d51366ed77",
+      "runtime_size": [
+        520,
+        374
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-cat-6",
+      "kind": "pet_action",
+      "expected_size": [
+        520,
+        374
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-cat-6.webp",
+      "sha256": "6a74823d516bcbb9ca68a4cc32c80df77c514d9d4b9c1c4ebfeb32933d6be7c1",
+      "runtime_size": [
+        520,
+        374
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-1-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        415,
+        317
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-1-apron.webp",
+      "sha256": "e7a816c87027ab9b5ca672123c53e273158e3f8616d769fe777b13e5f570b1b4",
+      "runtime_size": [
+        415,
+        317
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-1-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        417,
+        322
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-1-coat.webp",
+      "sha256": "067098ae991f06152eda8fd4a655182968b037d342734af9ec37a3c55bffe47f",
+      "runtime_size": [
+        417,
+        322
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-1",
+      "kind": "pet_action",
+      "expected_size": [
+        412,
+        314
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-1.webp",
+      "sha256": "412522a33463ad932235a65280beb77c6403f3133392f6676866d515c36b9ba5",
+      "runtime_size": [
+        412,
+        314
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-2-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        420,
+        347
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-2-apron.webp",
+      "sha256": "e64284c0f31e9753532f7458c6aaee0ae824af3a91aec6ddec12d59a36e277d8",
+      "runtime_size": [
+        420,
+        347
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-2-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        425,
+        348
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-2-coat.webp",
+      "sha256": "f3c560514bfa32cde97e850bc2080213474c85435ca1660d84d899bf9251a926",
+      "runtime_size": [
+        425,
+        348
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-2",
+      "kind": "pet_action",
+      "expected_size": [
+        418,
+        346
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-2.webp",
+      "sha256": "fb71be050af3303a66d9d9c2cba51895b7353139c7eec623c4e82d129d8f90a6",
+      "runtime_size": [
+        418,
+        346
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-3-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        495,
+        369
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-3-apron.webp",
+      "sha256": "4468c69aac9399238e9429d76b6c57d8403094fd612b91cf19e7192a887cc37f",
+      "runtime_size": [
+        495,
+        369
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-3-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        499,
+        374
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-3-coat.webp",
+      "sha256": "57edf45c9aa4dcb870c2f96176c7160a055e525b47eca629eda2184a66597e09",
+      "runtime_size": [
+        499,
+        374
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-3",
+      "kind": "pet_action",
+      "expected_size": [
+        496,
+        368
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-3.webp",
+      "sha256": "8d5677bb3a5660163e66e539a4773263f215bcb9eb7fd9e270d40521ad42adce",
+      "runtime_size": [
+        496,
+        368
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-4-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        484,
+        383
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-4-apron.webp",
+      "sha256": "2395236f8a27d1a9e2a557df7ea5ee8285f3f90d6467f902b8ecc703fc99afd0",
+      "runtime_size": [
+        484,
+        383
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-4-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        485,
+        383
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-4-coat.webp",
+      "sha256": "0bd995349954db4d23b783c883dc35dd496c8751931c2c0618b1bbc11f1d18ac",
+      "runtime_size": [
+        485,
+        383
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-4",
+      "kind": "pet_action",
+      "expected_size": [
+        481,
+        378
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-4.webp",
+      "sha256": "124efdbaff3547f804ba2fcc208a170fe598dcdddc5de5b0d77a0caf015de5c6",
+      "runtime_size": [
+        481,
+        378
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-5-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        464,
+        399
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-5-apron.webp",
+      "sha256": "d73856abe1641b546d2c455929dfafede1a600fa3443f98451bea39e1131bec9",
+      "runtime_size": [
+        464,
+        399
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-5-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        465,
+        398
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-5-coat.webp",
+      "sha256": "c203ab7e58900da5c42a40afad10c0cfb2a6b8f8cf6a03e41b27f5012121c7a9",
+      "runtime_size": [
+        465,
+        398
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-5",
+      "kind": "pet_action",
+      "expected_size": [
+        461,
+        395
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-5.webp",
+      "sha256": "ced37a6a8bda9fd263576281814083d462332a0b3442711a0f4ded10d20b2e74",
+      "runtime_size": [
+        461,
+        395
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-6-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        520,
+        390
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-6-apron.webp",
+      "sha256": "2287eb54a829ef4a350933504264026cd58e48b9fc6a46ef32bcc5b913ef1b37",
+      "runtime_size": [
+        520,
+        390
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-6-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        520,
+        393
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-6-coat.webp",
+      "sha256": "ad1d06c255e36f15fa5d37be8887be197072d9a352718bed3a86794bd555ecde",
+      "runtime_size": [
+        520,
+        393
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-fox-6",
+      "kind": "pet_action",
+      "expected_size": [
+        520,
+        389
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-fox-6.webp",
+      "sha256": "c6f613d21b3a79840df9755e24032b1a51bc239afc03390b1d2d0385256f45ca",
+      "runtime_size": [
+        520,
+        389
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-1-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        478,
+        314
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-1-apron.webp",
+      "sha256": "f0722f3f0c5641f431774c03fb1d7271a5e0dbb18482eb4a098d97eddae9caee",
+      "runtime_size": [
+        478,
+        314
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-1-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        478,
+        312
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-1-coat.webp",
+      "sha256": "945bb2a028c27a62c2d5386c42366b4e6d48b12591d5546a1ff56fb2b88e3df1",
+      "runtime_size": [
+        478,
+        312
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-1",
+      "kind": "pet_action",
+      "expected_size": [
+        478,
+        310
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-1.webp",
+      "sha256": "75ba901609fea582d01ce17c4f8829b5a11b498bf2e8eec806b004f5daa8aaf0",
+      "runtime_size": [
+        478,
+        310
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-2-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        482,
+        350
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-2-apron.webp",
+      "sha256": "042deafd655c99cd2b8467b7beffc53b8618732cfc8de125997a34d522fc12a3",
+      "runtime_size": [
+        482,
+        350
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-2-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        486,
+        352
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-2-coat.webp",
+      "sha256": "b4abc7786e08bdb10c3b0c2ff78e6982f12cb011bf083d1d54f10b224b9546e1",
+      "runtime_size": [
+        486,
+        352
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-2",
+      "kind": "pet_action",
+      "expected_size": [
+        480,
+        347
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-2.webp",
+      "sha256": "886a82d53706d8eeb0dea5fdf01e8906f574620ae35e01985480d5363dfbacc0",
+      "runtime_size": [
+        480,
+        347
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-3-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        497,
+        322
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-3-apron.webp",
+      "sha256": "b04dba956e64f864f8eb5c7f9c335adad6b9d0290c60b5b4c67b7718defe46fc",
+      "runtime_size": [
+        497,
+        322
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-3-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        496,
+        320
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-3-coat.webp",
+      "sha256": "cf2c2c4df5d44cc270acb6f8c4e66fa74c77471f4c0fe2f643ca440762063709",
+      "runtime_size": [
+        496,
+        320
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-3",
+      "kind": "pet_action",
+      "expected_size": [
+        494,
+        320
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-3.webp",
+      "sha256": "f9b15fa31079894997f1a17b2320b240758a34efa0ef5f8d17758559a9733938",
+      "runtime_size": [
+        494,
+        320
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-4-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        434,
+        422
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-4-apron.webp",
+      "sha256": "2a3454444c687ce06f5fc35d2bd5930c5ed6351eb5b7a15cdc70f2d88276c563",
+      "runtime_size": [
+        434,
+        422
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-4-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        439,
+        421
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-4-coat.webp",
+      "sha256": "5001c5a33c84404b1025619516766b2dac55b1e4829d715fb00e343360263e19",
+      "runtime_size": [
+        439,
+        421
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-4",
+      "kind": "pet_action",
+      "expected_size": [
+        432,
+        419
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-4.webp",
+      "sha256": "a668c0a6272ae955aa2bb760343e8829a791267a069b69a874a1e89dda189be8",
+      "runtime_size": [
+        432,
+        419
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-5-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        460,
+        436
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-5-apron.webp",
+      "sha256": "edd38628b7d4f64ba39159c55b7ebe52330e7c230da472d64062f3774a24ebcb",
+      "runtime_size": [
+        460,
+        436
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-5-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        459,
+        437
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-5-coat.webp",
+      "sha256": "48b4e70dc17e42c4b6945043a3b79bf6539b4956ae63e0ecee45a29dbc556997",
+      "runtime_size": [
+        459,
+        437
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-5",
+      "kind": "pet_action",
+      "expected_size": [
+        456,
+        435
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-5.webp",
+      "sha256": "293b497f552d394ad92abb206de953d01b01a2a968ffd752cf97f03d9c29abb9",
+      "runtime_size": [
+        456,
+        435
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-6-apron",
+      "kind": "pet_action",
+      "expected_size": [
+        485,
+        477
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-6-apron.webp",
+      "sha256": "411dd44dee163ee8f369488ed9590d908a7334f36f1968c3976037e98a54e36f",
+      "runtime_size": [
+        485,
+        477
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-6-coat",
+      "kind": "pet_action",
+      "expected_size": [
+        494,
+        477
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-6-coat.webp",
+      "sha256": "f7656e0357b54ed953cb0eb595f65f911ea49e6d7e812fd8ab7c923ed6d5d7e6",
+      "runtime_size": [
+        494,
+        477
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "leap-rabbit-6",
+      "kind": "pet_action",
+      "expected_size": [
+        483,
+        474
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/leap-rabbit-6.webp",
+      "sha256": "e1738fb92ae9ac8b128ec4111e04f1b3c761ea599ef42116dfb96156467737d4",
+      "runtime_size": [
+        483,
+        474
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-bow-cat-flight",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        235
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-bow-cat-flight.webp",
+      "sha256": "b399fcda12aecf82ea545096b6b11a76a015257e747ebeb51a620cb110a82134",
+      "runtime_size": [
+        280,
+        235
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-bow-cat-rest",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        254,
+        280
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-bow-cat-rest.webp",
+      "sha256": "05f3130d41a37d6276b0c02c3e70d01fdc8110873f6f4c86c1e2781133f1f302",
+      "runtime_size": [
+        254,
+        280
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-bow-fox-flight",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        264
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-bow-fox-flight.webp",
+      "sha256": "136216c841568563b5e11eb97c2285fa0d661967114482345fd5ef993dd715e2",
+      "runtime_size": [
+        280,
+        264
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-bow-fox-rest",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        203,
+        280
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-bow-fox-rest.webp",
+      "sha256": "c64364e8dc323741b59c24802507bbe78cdcecf4ba508f5a0601b72cb47b995b",
+      "runtime_size": [
+        203,
+        280
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-bow-rabbit-flight",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        221
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-bow-rabbit-flight.webp",
+      "sha256": "968050c0c7aa44f7f6e7b07f75f68f35c9af173754e25e618e5910aeab9c71fa",
+      "runtime_size": [
+        280,
+        221
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-bow-rabbit-rest",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        254
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-bow-rabbit-rest.webp",
+      "sha256": "61a06282ef36fa3961d81f73b906645f5a91421025b3849788772f36f78d82a7",
+      "runtime_size": [
+        280,
+        254
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-hat-cat-flight",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        224
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-hat-cat-flight.webp",
+      "sha256": "c6272cf415a7aaefcbaeb28b338c9ca49aff78dfcc8efe6c8d2eecd1aff1dc6e",
+      "runtime_size": [
+        280,
+        224
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-hat-cat-rest",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        213
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-hat-cat-rest.webp",
+      "sha256": "d2d201b80b422e93ec13d48f73dca9ccda81c41eb6edc165f02fed800a580e04",
+      "runtime_size": [
+        280,
+        213
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-hat-fox-flight",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        219
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-hat-fox-flight.webp",
+      "sha256": "c2a37226848a134a3dd9a5dcd36f8f20e4c7cfd38bfd3f9909cb7767fe41771e",
+      "runtime_size": [
+        280,
+        219
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-hat-fox-rest",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        224
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-hat-fox-rest.webp",
+      "sha256": "aa29ada7e0ad074bb2c23c267524f582472304bcfd2ff582423243516078fcf5",
+      "runtime_size": [
+        280,
+        224
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-hat-rabbit-flight",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        216
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-hat-rabbit-flight.webp",
+      "sha256": "e7389fb9bc8926f4651fc6d81ca2786ff2ae8ffc57c11089112c7f88f7222f8d",
+      "runtime_size": [
+        280,
+        216
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-hat-rabbit-rest",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        174
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-hat-rabbit-rest.webp",
+      "sha256": "a1c8fab22ceed1098f4c251d4a3560caa72959a8882f2dda7fdb6ce7f454a114",
+      "runtime_size": [
+        280,
+        174
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-scarf-cat-flight",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        173
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-scarf-cat-flight.webp",
+      "sha256": "fd1cd17eefef19f7612596a63c52003f332d2c9915db47fa81880d1c19fe6a35",
+      "runtime_size": [
+        280,
+        173
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-scarf-cat-rest",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        237
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-scarf-cat-rest.webp",
+      "sha256": "7da4b44b55ee10d54c97ee9a1e31db2303909cdb163cfc9f94a9a389abfe34ee",
+      "runtime_size": [
+        280,
+        237
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-scarf-fox-flight",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        209
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-scarf-fox-flight.webp",
+      "sha256": "158e7791239c283bb807f842660e580b19e58d4514ccc93bbd70a17642438b45",
+      "runtime_size": [
+        280,
+        209
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-scarf-fox-rest",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        252
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-scarf-fox-rest.webp",
+      "sha256": "044e3dcf879e1de23b9b94dd63ef799e0bac8f73c3b595a0113f9ba30c2c227d",
+      "runtime_size": [
+        280,
+        252
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-scarf-rabbit-flight",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        188
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-scarf-rabbit-flight.webp",
+      "sha256": "64875c36f48ff58a38ed3cb040eee48eec130901838c4135e104f8f500a610fd",
+      "runtime_size": [
+        280,
+        188
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fitted-scarf-rabbit-rest",
+      "kind": "fitted_accessory",
+      "expected_size": [
+        280,
+        229
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fitted-scarf-rabbit-rest.webp",
+      "sha256": "0d8474929408e58872eda190bfaac87813cfe70f723357fba20e6ed129cc8a91",
+      "runtime_size": [
+        280,
+        229
+      ],
+      "device_qa": "pending"
     }
   ],
   "scene_reference": {

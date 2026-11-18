@@ -11,6 +11,7 @@ import 'package:alice_companions/features/garden.dart';
 import 'package:alice_companions/features/rewards.dart';
 import 'package:alice_companions/main.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:alice_companions/illustration/puppet.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'support/families.dart';
@@ -28,6 +29,69 @@ Future<void> advanceScene(WidgetTester tester) async {
 }
 
 void main() {
+  testWidgets(
+    'fresh main story repairs the home windows, resumes after replay and stays separate from points',
+    (tester) async {
+      final stock = (await tester.runAsync(TestFamily.create))!;
+      final controller = FamilyController(
+        stock.device,
+        stock.rules,
+        assets: fixtureAssets,
+      )..service = stock.service;
+      addTearDown(() async {
+        controller.dispose();
+        await stock.dispose();
+      });
+      await tester.runAsync(controller.refresh);
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(390, 844);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.view.resetPhysicalSize);
+      await tester.pumpWidget(CompanionsApp(controller: controller));
+      await advanceScene(tester);
+      Future<void> press(String text, {bool persist = false}) async {
+        final target = find.text(text);
+        await tester.ensureVisible(target);
+        if (persist) {
+          await tester.runAsync(() async {
+            await tester.tap(target);
+            await stock.service.db.value('SELECT 1');
+            await stock.service.serial.run(() async {});
+            await controller.refresh();
+          });
+        } else {
+          await tester.tap(target);
+        }
+        await advanceScene(tester);
+      }
+
+      await press('主线 · 暖廊的彩窗', persist: true);
+      expect(find.text('石桥边的约定'), findsOneWidget);
+      await press('去暖廊修好彩窗', persist: true);
+      await press('12 片');
+      await press('和桃桃一起补叶片', persist: true);
+      await press('5 片');
+      await press('看看阳光下的彩窗', persist: true);
+      expect(find.textContaining('大家都赶上了暖廊的约定'), findsOneWidget);
+      await press('回家看窗花');
+      expect(
+        tester.widget<GardenScene>(find.byType(GardenScene)).windowsLit,
+        isTrue,
+      );
+      await tester.runAsync(() async {
+        await stock.service.saveWindowMathBookmark(WindowPage.count, {});
+        await stock.reopen();
+        final family = (await stock.service.overview())!;
+        expect(
+          (family.windowsLit, family.balance, family.experience),
+          (true, 0, 0),
+        );
+        expect((await stock.service.windowMathBookmark()).started, isTrue);
+        expect(await stock.service.ledger(), isEmpty);
+      });
+    },
+  );
+
   testWidgets(
     'the family home opens its own saved window chapter with the chosen companion',
     (tester) async {
@@ -53,7 +117,7 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
       await tester.pumpWidget(CompanionsApp(controller: controller));
       await advanceScene(tester);
-      final entry = find.text('数学 · 暖廊的彩窗');
+      final entry = find.text('主线 · 暖廊的彩窗');
       expect(entry.hitTestable(), findsOneWidget);
       await tester.runAsync(() async {
         await tester.tap(entry);
@@ -269,14 +333,7 @@ void main() {
       await advanceScene(tester);
       await tester.tap(find.text('暖廊'));
       await advanceScene(tester);
-      final scene = find.byType(GardenScene);
-      final bounds = tester.getRect(scene);
-      await tester.tapAt(
-        Offset(
-          bounds.left + bounds.width * .63,
-          bounds.bottom - bounds.height * .20,
-        ),
-      );
+      await tester.tapAt(tester.getCenter(find.byType(IllustratedPet)));
       await advanceScene(tester);
       expect(find.text('桃桃轻轻跳了一下'), findsOneWidget);
       final preview = find.text('外观预览');
