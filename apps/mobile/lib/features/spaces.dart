@@ -49,10 +49,12 @@ class _SpacesPageState extends State<SpacesPage> {
                             child: AspectRatio(
                               aspectRatio: 1.85,
                               child: Image.asset(
-                                SceneDefinition(
-                                  service.rules,
-                                  space['scene_id'] as String,
-                                ).background,
+                                space['scene_id'] == 'base_room'
+                                    ? 'assets/art/veranda.webp'
+                                    : SceneDefinition(
+                                        service.rules,
+                                        space['scene_id'] as String,
+                                      ).background,
                                 fit: BoxFit.cover,
                                 excludeFromSemantics: true,
                               ),
@@ -149,6 +151,7 @@ class _SpacePageState extends State<SpacePage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     GardenScene(
+                      view: HomeView.veranda,
                       label: space['name'] as String,
                       companion: family.companion,
                       stage: family.stage,
@@ -552,6 +555,7 @@ class _WardrobePageState extends State<WardrobePage> {
                   stage: widget.controller.family!.stage,
                   rules: service.rules,
                   label: '试衣间',
+                  focus: true,
                   outfit: {
                     for (final entry in selection.entries)
                       if (available.containsKey(entry.value))
@@ -562,6 +566,7 @@ class _WardrobePageState extends State<WardrobePage> {
                 const SizedBox(height: 12),
                 CompanionPicker(
                   selected: pet,
+                  stage: widget.controller.family!.stage,
                   onSelected: (value) => setState(() {
                     pet = value;
                     draft = null;

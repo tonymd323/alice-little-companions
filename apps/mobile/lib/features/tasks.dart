@@ -62,7 +62,10 @@ class TaskDetails extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           task.stateLabel,
-          style: const TextStyle(color: foliage, fontWeight: FontWeight.w700),
+          style: const TextStyle(
+            color: terracotta,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         if (task.content.isNotEmpty) ...[
           const SizedBox(height: 10),
@@ -209,10 +212,24 @@ class _TaskListState extends State<TaskList> {
           const SizedBox(height: 12),
           if (entries.isEmpty)
             GardenCard(
-              child: Text(
-                filter == 0 && widget.controller.tasks.isEmpty
-                    ? '家长还没有添加任务。'
-                    : '这里还没有${filters[filter]}的小事。',
+              child: Column(
+                children: [
+                  Image.asset(
+                    widget.controller.family!.companion.artwork(
+                      widget.controller.family!.stage,
+                    ),
+                    width: 100,
+                    height: 94,
+                    filterQuality: FilterQuality.medium,
+                    excludeFromSemantics: true,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    filter == 0 && widget.controller.tasks.isEmpty
+                        ? '家长还没有添加任务。'
+                        : '这里还没有${filters[filter]}的小事。',
+                  ),
+                ],
               ),
             ),
           for (final entry in entries)

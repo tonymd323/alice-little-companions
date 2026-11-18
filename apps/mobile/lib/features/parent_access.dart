@@ -76,7 +76,11 @@ class _ParentUnlockState extends State<ParentUnlock> {
         children: [
           const Align(
             alignment: Alignment.centerLeft,
-            child: Icon(Icons.lock_outline_rounded, size: 30, color: foliage),
+            child: Icon(
+              Icons.lock_outline_rounded,
+              size: 30,
+              color: terracotta,
+            ),
           ),
           const SizedBox(height: 12),
           Text('请家长输入 PIN', style: Theme.of(context).textTheme.titleLarge),

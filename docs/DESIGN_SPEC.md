@@ -2,6 +2,14 @@
 
 以已发布的银杏树屋 Demo 为首版家园的视觉基线。宠物造型见[三只伙伴设定板](../design/references/pet-stages.png)，场景笔触与颜色见[C 版家园](../design/references/garden-color.png)。包内文件支持断网查看。[交互 Demo，第四阶段月牙耳兔](https://alice-little-companions-demo.tonymei323.chatgpt.site/?pet=rabbit&stage=4)
 
+## 0.10 手绘互动家园
+
+本轮手机体验反馈明确沿用 C 版银杏院落的水粉光色、角色轮廓和三宠六阶段。庭院保留原场景底画，暖廊是同一户小家可直接进入的室内机位，窗外延续银杏、溪水与桥。新家庭的家具可在暖廊布置，原有家庭的家具读取原空间、原坐标，显示与点按按相反方向换算。兑换目录中的四个独立空间仍依各自所有权开放。
+
+三宠按原设定重绘透明轮廓。原生 Flutter 对角色绘制局部形变网格，脚掌、眼睛、耳尖、尾巴与云翼各有权重。待机轻呼吸、定时眨眼，点按有各自的回应，抚摸时头部跟手，点可行走地面可挪步。切入后台或覆盖页面停止时钟，减少动态效果时用文字回应。纸白、木褐、银杏金沿用庭院色彩，赤陶色用于主操作，青蓝和灰紫分别帮助辨认空间与兑换。庭院和暖廊切换、抚摸、外观预览均属于本地展示。
+
+下列尺寸和 Demo 锚点记录最初交接口径。当前安装版绘制路径见 [伙伴网格](../apps/mobile/lib/illustration/puppet.dart)、[场景与触控](../apps/mobile/lib/illustration/living_scene.dart) 和[实际素材摘要](../design/asset_manifest.json)。
+
 ## 可直接接入第一轮原生 Demo 的素材
 
 | 文件 | 数量 | 用法 |

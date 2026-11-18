@@ -170,7 +170,7 @@ class _RewardTile extends StatelessWidget {
             ),
             Text(
               owned ? '已拥有' : '${item['price']} 分',
-              style: const TextStyle(color: foliage),
+              style: const TextStyle(color: terracotta),
             ),
           ],
         ),
@@ -248,6 +248,7 @@ class _RewardPageState extends State<RewardPage> {
                       rules: service.rules,
                       outfit: {slot: asset},
                       label: '衣饰试穿',
+                      focus: true,
                     )
                   else
                     GardenCard(

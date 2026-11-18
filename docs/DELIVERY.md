@@ -1,5 +1,8 @@
 # 家庭交付候选 0.9.0+6
 
+当前 Android 手绘互动版为 0.10.0+7，源码标签 `alice-illustrated-rc2`。手机可解压 ARM64 或通用 ZIP 后点 APK，直接覆盖已有 0.9.0。进入庭院或暖廊，可点伙伴、沿头部轻划，或点一处空地。原基础家园中的家具在暖廊内布置，布局继续随家庭备份迁移。
+
+
 源码候选标签为 `alice-rc1`。Android 包使用 release 模式和云端开发签名，适用于家庭试装。iOS/iPadOS 工程已随源码交付，签名安装需接入 Mac、Apple Team 和 iPad。整体验收还需两台实体机交叉迁移、更新和性能测量。
 
 - [验收逐项记录](evidence/acceptance.csv)

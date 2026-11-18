@@ -1,23 +1,27 @@
-import 'dart:math';
-
 import 'package:material_ui/material_ui.dart';
 
 import '../domain/companions.dart';
-import '../domain/layout_rules.dart';
-import '../domain/rules.dart';
+import '../illustration/living_scene.dart';
+export '../illustration/living_scene.dart';
 
-const paper = Color(0xFFF7F3EA);
-const cream = Color(0xFFFFFCF5);
-const foliage = Color(0xFF4E6652);
-const ink = Color(0xFF2F3B33);
-const mutedInk = Color(0xFF59635B);
-const faintGreen = Color(0xFFE6EDE2);
-const outline = Color(0xFFD9DED3);
+const paper = Color(0xFFFAF2E2);
+const cream = Color(0xFFFFFBEE);
+const terracotta = Color(0xFF90492F);
+const ink = Color(0xFF40352E);
+const mutedInk = Color(0xFF6C5B4A);
+const wheat = Color(0xFFF4E2BF);
+const outline = Color(0xFFDECBA8);
 
 ThemeData gardenTheme() {
-  final colors = ColorScheme.fromSeed(seedColor: foliage).copyWith(
-    primary: foliage,
+  final colors = ColorScheme.fromSeed(seedColor: terracotta).copyWith(
+    primary: terracotta,
     onPrimary: Colors.white,
+    primaryContainer: const Color(0xFFF1D4A4),
+    onPrimaryContainer: ink,
+    secondary: const Color(0xFF46667A),
+    secondaryContainer: const Color(0xFFF1DDB6),
+    onSecondaryContainer: ink,
+    surfaceTint: Colors.transparent,
     surface: cream,
     onSurface: ink,
     onSurfaceVariant: mutedInk,
@@ -27,6 +31,7 @@ ThemeData gardenTheme() {
     colorScheme: colors,
     scaffoldBackgroundColor: paper,
     appBarTheme: const AppBarTheme(
+      scrolledUnderElevation: 0,
       backgroundColor: paper,
       foregroundColor: ink,
     ),
@@ -59,269 +64,6 @@ ThemeData gardenTheme() {
   );
 }
 
-class ScenePiece {
-  const ScenePiece(this.place, this.asset, this.name);
-  ScenePiece.fromRow(Json row)
-    : place = PlacementDraft.fromRow(row),
-      asset = row['asset_id'] as String,
-      name = freeFurnishings[row['item_id']] ?? row['name'] as String;
-  final PlacementDraft place;
-  final String asset;
-  final String name;
-}
-
-class GardenScene extends StatelessWidget {
-  const GardenScene({
-    super.key,
-    required this.companion,
-    required this.stage,
-    this.label = '银杏家园',
-    this.reveal = false,
-    this.rules,
-    this.scene,
-    this.pieces = const [],
-    this.outfit = const {},
-    this.editing = false,
-    this.selected,
-    this.onSelect,
-    this.onFloor,
-  });
-
-  final Companion companion;
-  final int stage;
-  final String label;
-  final bool reveal;
-  final Rules? rules;
-  final SceneDefinition? scene;
-  final List<ScenePiece> pieces;
-  final Map<String, String> outfit;
-  final bool editing;
-  final String? selected;
-  final ValueChanged<String>? onSelect;
-  final ValueChanged<Offset>? onFloor;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth;
-        final height = width * 2 / 3;
-        final frame = height * [0.24, 0.27, 0.30, 0.34, 0.36, 0.39][stage - 1];
-        final center = width * .47;
-        final actualHeight =
-            frame / max(1, companion.aspect(stage, reveal: reveal));
-        final petTop = height * .95 - (frame + actualHeight) / 2;
-        final background = scene?.background ?? 'assets/art/garden.webp';
-        final front = scene?.foreground;
-        final config = rules;
-
-        void at(Offset point) =>
-            onFloor?.call(Offset(point.dx / width, point.dy / height));
-
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTapUp: onFloor == null
-                ? null
-                : (event) => at(event.localPosition),
-            onPanUpdate: onFloor == null
-                ? null
-                : (event) => at(event.localPosition),
-            child: SizedBox(
-              height: height,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.asset(
-                    background,
-                    fit: BoxFit.cover,
-                    excludeFromSemantics: true,
-                  ),
-                  if (editing && scene != null)
-                    IgnorePointer(
-                      child: CustomPaint(
-                        painter: _FloorGuide(scene!.floor, scene!.mounts),
-                      ),
-                    ),
-                  for (final piece in pieces) _layer(piece, width, height),
-                  IgnorePointer(
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: center - frame * .37,
-                          bottom: height * .045,
-                          width: frame * .74,
-                          height: frame * .12,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(frame),
-                              gradient: const RadialGradient(
-                                colors: [Color(0x63333B22), Color(0x00333B22)],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: center - frame / 2,
-                          top: petTop,
-                          width: frame,
-                          height: frame,
-                          child: Image.asset(
-                            companion.artwork(stage, reveal: reveal),
-                            fit: BoxFit.contain,
-                            semanticLabel:
-                                '${companion.label} · ${stageNames[stage - 1]}',
-                          ),
-                        ),
-                        if (config != null)
-                          for (final slot in ['body', 'neck', 'head', 'face'])
-                            if (outfit.containsKey(slot))
-                              _wear(
-                                config,
-                                slot,
-                                center - frame / 2,
-                                petTop,
-                                frame,
-                              ),
-                      ],
-                    ),
-                  ),
-                  if (front != null)
-                    IgnorePointer(
-                      child: Image.asset(
-                        front,
-                        fit: BoxFit.cover,
-                        excludeFromSemantics: true,
-                      ),
-                    ),
-                  Positioned(
-                    left: 12,
-                    top: 12,
-                    right: 12,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: cream,
-                          borderRadius: BorderRadius.circular(22),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          child: Text(
-                            label,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _wear(
-    Rules rules,
-    String slot,
-    double left,
-    double top,
-    double frame,
-  ) {
-    final anchor = wearPoint(rules, companion, stage, slot);
-    final width = frame * anchor[2];
-    final image = outfit[slot]!;
-    final height = slot == 'face' ? width * .55 : width * .86;
-    return Positioned(
-      left: left + frame * anchor[0] - width / 2,
-      top: top + frame * anchor[1] - height / 2,
-      width: width,
-      height: height,
-      child: Image.asset(
-        artworkPath(image),
-        fit: BoxFit.contain,
-        excludeFromSemantics: true,
-      ),
-    );
-  }
-
-  Widget _layer(ScenePiece piece, double width, double height) {
-    final placement = piece.place;
-    final size = width * itemWidth(piece.asset);
-    final hanging = placement.mount != null;
-    final item = Image.asset(
-      artworkPath(piece.asset),
-      fit: BoxFit.contain,
-      alignment: hanging ? Alignment.topCenter : Alignment.bottomCenter,
-      semanticLabel: piece.name,
-    );
-    final content = placement.flipped
-        ? Transform.flip(flipX: true, child: item)
-        : item;
-    return Positioned(
-      left: placement.x * width - size / 2,
-      width: size,
-      height: size,
-      top: placement.y * height - (hanging ? 0 : size),
-      child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: onSelect == null ? null : () => onSelect!(placement.id),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            border: selected == placement.id
-                ? Border.all(color: cream, width: 2)
-                : null,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: content,
-        ),
-      ),
-    );
-  }
-}
-
-class _FloorGuide extends CustomPainter {
-  const _FloorGuide(this.floor, this.mounts);
-  final List<(double, double)> floor;
-  final List<Json> mounts;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final boundary = Path()
-      ..addPolygon([
-        for (final point in floor)
-          Offset(point.$1 * size.width, point.$2 * size.height),
-      ], true);
-    canvas.drawPath(boundary, Paint()..color = const Color(0x4FFFFCF5));
-    final stroke = Paint()
-      ..color = cream
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    canvas.drawPath(boundary, stroke);
-    for (final mount in mounts) {
-      final xy = mount['position'] as List;
-      canvas.drawCircle(
-        Offset((xy[0] as num) * size.width, (xy[1] as num) * size.height),
-        6,
-        stroke,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(_FloorGuide oldDelegate) =>
-      oldDelegate.floor != floor || oldDelegate.mounts != mounts;
-}
-
 class GardenCard extends StatelessWidget {
   const GardenCard({super.key, required this.child});
 
@@ -345,10 +87,14 @@ class CompanionPicker extends StatelessWidget {
     super.key,
     required this.selected,
     required this.onSelected,
+    this.stage = 1,
+    this.reveal = false,
   });
 
   final Companion selected;
   final ValueChanged<Companion> onSelected;
+  final int stage;
+  final bool reveal;
 
   @override
   Widget build(BuildContext context) {
@@ -362,11 +108,11 @@ class CompanionPicker extends StatelessWidget {
                 selected: selected == pet,
                 button: true,
                 child: Material(
-                  color: selected == pet ? faintGreen : cream,
+                  color: selected == pet ? wheat : cream,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                     side: BorderSide(
-                      color: selected == pet ? foliage : outline,
+                      color: selected == pet ? terracotta : outline,
                     ),
                   ),
                   child: InkWell(
@@ -377,16 +123,20 @@ class CompanionPicker extends StatelessWidget {
                       child: Column(
                         children: [
                           Image.asset(
-                            pet.artwork(1),
-                            height: 44,
-                            width: 52,
+                            pet.artwork(stage, reveal: reveal),
+                            filterQuality: FilterQuality.medium,
+                            height: 53,
+                            width: 65,
                             excludeFromSemantics: true,
                           ),
                           const SizedBox(height: 4),
                           Text(
                             pet.label,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 14),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ],
                       ),
@@ -429,6 +179,8 @@ class _AppearancePreviewState extends State<AppearancePreview> {
         const SizedBox(height: 14),
         CompanionPicker(
           selected: pet,
+          stage: stage,
+          reveal: true,
           onSelected: (value) => setState(() => pet = value),
         ),
         const SizedBox(height: 12),
@@ -441,7 +193,7 @@ class _AppearancePreviewState extends State<AppearancePreview> {
                 child: IconButton(
                   tooltip: '第 $value 阶段 · ${stageNames[value - 1]}',
                   style: IconButton.styleFrom(
-                    backgroundColor: stage == value ? foliage : faintGreen,
+                    backgroundColor: stage == value ? terracotta : wheat,
                     foregroundColor: stage == value ? Colors.white : ink,
                   ),
                   onPressed: () => setState(() => stage = value),
@@ -464,7 +216,13 @@ class _AppearancePreviewState extends State<AppearancePreview> {
 
   @override
   Widget build(BuildContext context) {
-    final scene = GardenScene(companion: pet, stage: stage, reveal: true);
+    final scene = GardenScene(
+      companion: pet,
+      stage: stage,
+      reveal: true,
+      focus: true,
+      label: "伙伴手记",
+    );
     return Scaffold(
       appBar: AppBar(title: const Text('伙伴外观预览')),
       body: SafeArea(

@@ -37,6 +37,6 @@ Alice 在飞行模式下打开家园，免费选择银杏狐、月牙耳兔或�
 
 ## 交付状态
 
-原生工程已进入家庭交付候选阶段。云端已构建 Android 0.9.0+6，安装与覆盖验证使用 Android 模拟器。iOS/iPadOS 签名安装和双向真机迁移需接入 Mac、Apple Team 与两台家庭设备。[交付说明](docs/DELIVERY.md) · [备份与换机](docs/BACKUP_MIGRATION.md) · [逐项实测记录](docs/evidence/acceptance.csv)
+当前 Android 视觉体验版为 0.10.0+7，沿用 C 版手绘家园。庭院和暖廊可切换，三位伙伴支持触摸和抚摸，原有家具在暖廊可继续布置。0.9.0+6 保留为第一份离线家庭闭环候选。iOS/iPadOS 签名安装和双向真机迁移需接入 Mac、Apple Team 与两台家庭设备。[交付说明](docs/DELIVERY.md) · [备份与换机](docs/BACKUP_MIGRATION.md) · [逐项实测记录](docs/evidence/acceptance.csv)
 
 重跑准备检查，在本目录执行 `python3 tools/validate_devpack.py`。开工包的 `MANIFEST.json` 对应 `devpack-v2.0`。原生运行素材的摘要以 `design/asset_manifest.json`、各阶段构建摘要和 Git 标签为准。

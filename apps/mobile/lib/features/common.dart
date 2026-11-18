@@ -121,6 +121,68 @@ class FormFieldLabel extends StatelessWidget {
   );
 }
 
+class GinkgoSeal extends StatelessWidget {
+  const GinkgoSeal({super.key});
+  @override
+  Widget build(BuildContext context) => SizedBox.square(
+    dimension: 38,
+    child: CustomPaint(painter: _GinkgoMark()),
+  );
+}
+
+class _GinkgoMark extends CustomPainter {
+  @override
+  void paint(Canvas c, Size size) {
+    final s = size.width / 38;
+    c.scale(s);
+    c.drawCircle(
+      const Offset(19, 19),
+      18.3,
+      Paint()..color = const Color(0xFFF0D6A2),
+    );
+    final shape = Path()
+      ..moveTo(20, 27)
+      ..cubicTo(16, 23, 9, 23, 6, 16)
+      ..quadraticBezierTo(5, 13, 9, 10)
+      ..quadraticBezierTo(13, 6, 16, 9)
+      ..lineTo(18, 13)
+      ..quadraticBezierTo(18, 7, 22, 7)
+      ..quadraticBezierTo(27, 6, 31, 12)
+      ..cubicTo(35, 17, 25, 22, 20, 27)
+      ..close();
+    c.drawPath(shape, Paint()..color = const Color(0xFFBA782C));
+    final brush = Paint()
+      ..color = const Color(0xFFFFDA80)
+      ..strokeWidth = 1.2
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+    for (final end in const [
+      Offset(9, 14),
+      Offset(13, 11),
+      Offset(23, 11),
+      Offset(28, 14),
+    ]) {
+      c.drawPath(
+        Path()
+          ..moveTo(19.8, 25)
+          ..quadraticBezierTo(end.dx, 18, end.dx, end.dy),
+        brush,
+      );
+    }
+    c.drawPath(
+      Path()
+        ..moveTo(19.5, 25)
+        ..quadraticBezierTo(21, 29, 25, 31),
+      brush
+        ..color = const Color(0xFF925B2D)
+        ..strokeWidth = 1.8,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_GinkgoMark old) => false;
+}
+
 class PointsPill extends StatelessWidget {
   const PointsPill(this.points, {super.key});
   final int points;
@@ -136,7 +198,7 @@ class PointsPill extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.energy_savings_leaf_outlined, size: 18, color: ink),
+          const Icon(Icons.stars_rounded, size: 19, color: Color(0xFF845326)),
           const SizedBox(width: 5),
           Text(
             '$points 分',

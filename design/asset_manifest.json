@@ -198,13 +198,13 @@
       "alpha_required": true,
       "status": "planned",
       "runtime_path": "apps/mobile/assets/art/item_decor_vase.webp",
-      "sha256": "396b549405a128356988fabec417556f07c008410670bf1651a96080720e6bd5",
+      "sha256": "de7797a4a183a03c82a2443d18281f82e7efc01907ac4dcd27ad434618776501",
       "runtime_size": [
-        135,
-        211
+        299,
+        443
       ],
       "device_qa": "pending",
-      "production_state": "packaged_pending_device_qa"
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "item_decor_cushion",
@@ -216,13 +216,13 @@
       "alpha_required": true,
       "status": "planned",
       "runtime_path": "apps/mobile/assets/art/item_decor_cushion.webp",
-      "sha256": "20a37ffe3add870671d44ce26d0936a346c6bdc2be8b0b1fe40e2149b74d4ae5",
+      "sha256": "05be557c4d3c6c1e63795fd6f30d85673568c1980855c63aaf189fc5d606b1b9",
       "runtime_size": [
-        199,
-        143
+        425,
+        321
       ],
       "device_qa": "pending",
-      "production_state": "packaged_pending_device_qa"
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "item_decor_plant",
@@ -234,13 +234,13 @@
       "alpha_required": true,
       "status": "planned",
       "runtime_path": "apps/mobile/assets/art/item_decor_plant.webp",
-      "sha256": "78097cb85fb57c883075bc77f45e907eca8ff20efcd64f53ac581fed272c451c",
+      "sha256": "06aaca633a7dffcfa7d70e3c54c1fac8d7b77eb63663ba642f5403141b3461e2",
       "runtime_size": [
-        211,
-        212
+        446,
+        457
       ],
       "device_qa": "pending",
-      "production_state": "packaged_pending_device_qa"
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "item_decor_mobile",
@@ -342,13 +342,13 @@
       "alpha_required": true,
       "status": "planned",
       "runtime_path": "apps/mobile/assets/art/item_single_armchair.webp",
-      "sha256": "4e901ab7340edd5d1dfafbb50f5a2d1543ac4f907398f33d31e5162501e47e4a",
+      "sha256": "b8abaefb120749f1e849f0c03826d3718aab7a3e6b259a8e905b11bc7e8d2c21",
       "runtime_size": [
-        211,
-        201
+        455,
+        438
       ],
       "device_qa": "pending",
-      "production_state": "packaged_pending_device_qa"
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "item_single_bed",
@@ -846,13 +846,13 @@
       "alpha_required": true,
       "status": "planned",
       "runtime_path": "apps/mobile/assets/art/base_bed.webp",
-      "sha256": "dfc89a5cf6da3c89d978de37fa8ad2147c8df5177943b454bd146e9871707526",
+      "sha256": "d6a723761dcd6da44beddaeaf6ceb321b789bb991e198dd03ae3b14e0b7a49b9",
       "runtime_size": [
-        214,
-        192
+        441,
+        411
       ],
       "device_qa": "pending",
-      "production_state": "packaged_pending_device_qa"
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "base_rug",
@@ -864,13 +864,13 @@
       "alpha_required": true,
       "status": "planned",
       "runtime_path": "apps/mobile/assets/art/base_rug.webp",
-      "sha256": "1fce5959463671918bed2753be93b91a233579a32fdc02287d99e2ddc588cffe",
+      "sha256": "8e7dd1a199fa1919b3bdee3df6b7151b35377c8f641d98bb01cc35f540dac1e9",
       "runtime_size": [
-        218,
-        149
+        451,
+        293
       ],
       "device_qa": "pending",
-      "production_state": "packaged_pending_device_qa"
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_fox_1",
@@ -879,12 +879,13 @@
       "status": "demo_candidate",
       "demo_id": "fox-1",
       "runtime_path": "apps/mobile/assets/art/fox-1.webp",
-      "sha256": "4c6d15a1d5381462585274b74c105ddd02f9d092cf9f1057eadf0e9f3e7e82ec",
+      "sha256": "19b5e96a542f1bacf4d4f3a779b2ce3377ef77b064ec8415f24c32102e5ecc28",
       "runtime_size": [
-        153,
-        185
+        369,
+        451
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_fox_2",
@@ -893,12 +894,13 @@
       "status": "demo_candidate",
       "demo_id": "fox-2",
       "runtime_path": "apps/mobile/assets/art/fox-2.webp",
-      "sha256": "25cd80c01122e221d56b8e85df6aea1932116d20904dace2f77a45ca1e5e0d6b",
+      "sha256": "94cbd4e25f3c31a163cbfc4a66fee56c32c57ff732e7485ef900dea5b40f8661",
       "runtime_size": [
-        184,
-        231
+        354,
+        450
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_fox_3",
@@ -907,12 +909,13 @@
       "status": "demo_candidate",
       "demo_id": "fox-3",
       "runtime_path": "apps/mobile/assets/art/fox-3.webp",
-      "sha256": "cf314db02487336f7fbd7cc894c679553b6150ba1a2c2809ea9466f0a5e94ce8",
+      "sha256": "5c4b67826c769cbcd22069595e0349110479ad05ee90b6b0a4842e6d3730a2bf",
       "runtime_size": [
-        214,
-        227
+        422,
+        451
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_fox_4",
@@ -921,12 +924,13 @@
       "status": "demo_candidate",
       "demo_id": "fox-4",
       "runtime_path": "apps/mobile/assets/art/fox-4.webp",
-      "sha256": "c1871fbd5a82e7470863557f8a77cc2cb05076314f570317d701528da952ddd1",
+      "sha256": "56c4c8e728b5fd2b97266cc875cd97b5c2c9e0e143b80e7393f25f6127a43def",
       "runtime_size": [
-        255,
-        304
+        380,
+        455
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_fox_5",
@@ -935,12 +939,13 @@
       "status": "demo_candidate",
       "demo_id": "fox-5",
       "runtime_path": "apps/mobile/assets/art/fox-5.webp",
-      "sha256": "ab2b2430c66621421bf7eead1f2096b46edcf476cd6ed59b4395f815f8f1c617",
+      "sha256": "273cfea22a1f6365f7f4900b55aafb5325089e2c97711c79501a469d2928fad0",
       "runtime_size": [
-        265,
-        299
+        407,
+        452
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_fox_6",
@@ -949,12 +954,13 @@
       "status": "demo_candidate",
       "demo_id": "fox-6",
       "runtime_path": "apps/mobile/assets/art/fox-6.webp",
-      "sha256": "3a43fb78c1118ce04b9d113219482986660da942ae3bbe5fefd3c54cc5df6cc0",
+      "sha256": "43fe2cd9b72fa75a3065013bee113799e40cc677e3a899da0f3c403b4ff15fd0",
       "runtime_size": [
-        339,
-        290
+        468,
+        394
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_rabbit_1",
@@ -963,12 +969,13 @@
       "status": "demo_candidate",
       "demo_id": "rabbit-1",
       "runtime_path": "apps/mobile/assets/art/rabbit-1.webp",
-      "sha256": "f2cdf0a5ba2e73baf60b55167b09353fcbde19dd1998c77c77be24568895082d",
+      "sha256": "c58c8fb8ad4dc34a353da1b00e079aeb97e326fa934c29f56d2b99cc68140cd4",
       "runtime_size": [
-        156,
-        141
+        450,
+        408
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_rabbit_2",
@@ -977,12 +984,13 @@
       "status": "demo_candidate",
       "demo_id": "rabbit-2",
       "runtime_path": "apps/mobile/assets/art/rabbit-2.webp",
-      "sha256": "73ca6db3ee764cf555f498e77ff603ffb6732354fba97684606970e0e0fa897c",
+      "sha256": "9cc8c00b0f16a32faca0cb109a2bf13d4943d0540eb95e7822e2369d27062efc",
       "runtime_size": [
-        181,
-        177
+        450,
+        440
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_rabbit_3",
@@ -991,12 +999,13 @@
       "status": "demo_candidate",
       "demo_id": "rabbit-3",
       "runtime_path": "apps/mobile/assets/art/rabbit-3.webp",
-      "sha256": "b5d9ea98ea85c1292a7b70cf8eeaf3535304bc0e8b405f4ea10965abbf2e3911",
+      "sha256": "ad6ca22ca7e87c222103fb87d1feac2b2ec96851cabbdea249650e5903a14992",
       "runtime_size": [
-        277,
-        191
+        454,
+        317
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_rabbit_4",
@@ -1005,12 +1014,13 @@
       "status": "demo_candidate",
       "demo_id": "rabbit-4",
       "runtime_path": "apps/mobile/assets/art/rabbit-4.webp",
-      "sha256": "021452df59ff2bd9fce53d0780c168d488560af7be8450ad48d2a98d89e4001b",
+      "sha256": "0025028476399ab74aebd1bc7b385c56a31b7c51657ed5dfe015509cf48d98bd",
       "runtime_size": [
-        242,
-        274
+        386,
+        448
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_rabbit_5",
@@ -1019,12 +1029,13 @@
       "status": "demo_candidate",
       "demo_id": "rabbit-5",
       "runtime_path": "apps/mobile/assets/art/rabbit-5.webp",
-      "sha256": "690992f0af49b3b218029cbf0b582c8091745524d3864effac172152be8419b6",
+      "sha256": "e802b600ed4158eab39004e076e9ce9940bf5806aaeb4a98349ad8c9b91cee45",
       "runtime_size": [
-        256,
-        289
+        394,
+        450
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_rabbit_6",
@@ -1033,12 +1044,13 @@
       "status": "demo_candidate",
       "demo_id": "rabbit-6",
       "runtime_path": "apps/mobile/assets/art/rabbit-6.webp",
-      "sha256": "9839e8d9e24b7a85a22a943406e968510660fd7a017409823ee5c87d0737b801",
+      "sha256": "285aa0b4b6f23c1f6c3c2f9354420eb69d13e89f780990ec0b326b7e725285d3",
       "runtime_size": [
-        310,
-        332
+        417,
+        452
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_cat_1",
@@ -1047,12 +1059,13 @@
       "status": "demo_candidate",
       "demo_id": "cat-1",
       "runtime_path": "apps/mobile/assets/art/cat-1.webp",
-      "sha256": "1340c02a8455a7cc0f0b3af737c23df88b97be2baac0a173348acc1fd0f10062",
+      "sha256": "17110a5ebf09369f4561303a07dbb0c52e8cb468bc21433a33c1c7107cde6ebb",
       "runtime_size": [
-        144,
-        170
+        378,
+        440
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_cat_2",
@@ -1061,12 +1074,13 @@
       "status": "demo_candidate",
       "demo_id": "cat-2",
       "runtime_path": "apps/mobile/assets/art/cat-2.webp",
-      "sha256": "b3e04e554876fe72bdfbc8658abd85244c678e52bd2a09059cc8e154cffb2505",
+      "sha256": "77eeb7602b1e484aa6d9047d740869cbdfcaedae35a546c2ce996f6f2851e3f6",
       "runtime_size": [
-        196,
-        198
+        442,
+        443
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_cat_3",
@@ -1075,12 +1089,13 @@
       "status": "demo_candidate",
       "demo_id": "cat-3",
       "runtime_path": "apps/mobile/assets/art/cat-3.webp",
-      "sha256": "c7695f94ff733c5c1311e3cf37040405155c16ff1c4fd80a96047e8663e6056e",
+      "sha256": "e9c153a40d83bbeda77d834e29449ad3325cab3f829799ecd125cd32c7762d6c",
       "runtime_size": [
-        173,
-        215
+        357,
+        450
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_cat_4",
@@ -1089,12 +1104,13 @@
       "status": "demo_candidate",
       "demo_id": "cat-4",
       "runtime_path": "apps/mobile/assets/art/cat-4.webp",
-      "sha256": "7381bc1a65d40d3f45c9dae2eb6a4089579af4236dfd5f3314f8308afb7481a2",
+      "sha256": "90381f85755541b2f81691bf7e29f8f46b22757da5265315622d05c3c759c16f",
       "runtime_size": [
-        232,
-        214
+        455,
+        427
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_cat_5",
@@ -1103,12 +1119,13 @@
       "status": "demo_candidate",
       "demo_id": "cat-5",
       "runtime_path": "apps/mobile/assets/art/cat-5.webp",
-      "sha256": "79e968e5adb50a5c9793c7a499c061b78f78c7b67717de91d96dee10eb8a93c3",
+      "sha256": "657acdd5c12bcb0fb2991b3b8c0b20e9b4f526899a1b523dbee56b71faffdbe8",
       "runtime_size": [
-        340,
-        277
+        458,
+        381
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_cat_6",
@@ -1117,12 +1134,13 @@
       "status": "demo_candidate",
       "demo_id": "cat-6",
       "runtime_path": "apps/mobile/assets/art/cat-6.webp",
-      "sha256": "781a624530bb8feb953f03bb325ff8f446bd1f312610ff79f7f417bf256d7e75",
+      "sha256": "a042e9d0285a23689959c388213c05d4acba5757f75a1e79f4a2a4ec3520f600",
       "runtime_size": [
-        415,
-        356
+        464,
+        401
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     },
     {
       "id": "pet_cat_4_rest",
@@ -1131,12 +1149,13 @@
       "status": "demo_candidate",
       "demo_id": "cat-4-rest",
       "runtime_path": "apps/mobile/assets/art/cat-4-rest.webp",
-      "sha256": "bf2b06220d009f545667e0fda9930c56cdd71ca3aafb7e87e617757e0a59aeba",
+      "sha256": "0dc4561981dcdb0b8a7da8cea3a79d6daa7000fa71307f627071de8d2f2baa4e",
       "runtime_size": [
-        480,
-        451
+        1294,
+        1216
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "hd_ink_clean_alpha_pending_device_qa"
     }
   ],
   "scene_reference": {
@@ -1339,5 +1358,14 @@
       "bytes": 32552,
       "sha256": "9839e8d9e24b7a85a22a943406e968510660fd7a017409823ee5c87d0737b801"
     }
-  ]
+  ],
+  "home_veranda": {
+    "runtime_path": "apps/mobile/assets/art/veranda.webp",
+    "runtime_size": [
+      1536,
+      1024
+    ],
+    "sha256": "346b8dfea82b38940a8a670613bab2c31416e665a43d36bdeb2fa20b2840578f",
+    "device_qa": "pending"
+  }
 }

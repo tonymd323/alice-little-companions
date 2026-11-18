@@ -7,6 +7,9 @@ void main() {
   testWidgets('all 18 previews load without changing app state', (
     tester,
   ) async {
+    tester.platformDispatcher.accessibilityFeaturesTestValue =
+        const FakeAccessibilityFeatures(disableAnimations: true);
+    addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
     await tester.pumpWidget(const CompanionsApp());
     await tester.pumpAndSettle();
     for (final companion in Companion.values) {

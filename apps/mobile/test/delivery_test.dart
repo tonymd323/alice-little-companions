@@ -17,6 +17,14 @@ final fixtureAssets = (jsonDecode(
   File('assets/config/runtime_assets.json').readAsStringSync(),
 ) as Json).keys.toSet();
 
+// The illustrated home has a continuous idle pose. Advance transitions by a
+// fixed interval so this check also exercises an active animation clock.
+Future<void> advanceScene(WidgetTester tester) async {
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 450));
+  await tester.pump(const Duration(milliseconds: 40));
+}
+
 void main() {
   test('AC-26/34 active file failure can open the encrypted checkpoint through current PIN', () async {
     final fixture = await TestFamily.create();
@@ -73,6 +81,11 @@ void main() {
   testWidgets(
     'AC-35/36/37 preview is operable at four reference viewport sizes with 130% text',
     (tester) async {
+      tester.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
@@ -80,7 +93,7 @@ void main() {
       tester.platformDispatcher.textScaleFactorTestValue = 1.3;
       final selectedContrast =
           (Colors.white.computeLuminance() + .05) /
-          (foliage.computeLuminance() + .05);
+          (terracotta.computeLuminance() + .05);
       expect(selectedContrast, greaterThanOrEqualTo(4.5));
       for (final target in [
         const Size(1194, 834),
@@ -134,26 +147,38 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
       await tester.pumpWidget(CompanionsApp(controller: controller));
-      await tester.pumpAndSettle();
+      await advanceScene(tester);
+      await tester.tap(find.text('暖廊'));
+      await advanceScene(tester);
+      final scene = find.byType(GardenScene);
+      final bounds = tester.getRect(scene);
+      await tester.tapAt(
+        Offset(
+          bounds.left + bounds.width * .63,
+          bounds.bottom - bounds.height * .20,
+        ),
+      );
+      await advanceScene(tester);
+      expect(find.text('桃桃轻轻跳了一下'), findsOneWidget);
       final preview = find.text('外观预览');
       await tester.ensureVisible(preview);
       await tester.tap(preview);
-      await tester.pumpAndSettle();
+      await advanceScene(tester);
       for (final pet in Companion.values) {
         await tester.ensureVisible(find.text(pet.label));
         await tester.tap(find.text(pet.label));
-        await tester.pumpAndSettle();
+        await advanceScene(tester);
         for (var stage = 1; stage <= 6; stage++) {
           final button = find.byTooltip(
             '第 $stage 阶段 · ${stageNames[stage - 1]}',
           );
           await tester.ensureVisible(button);
           await tester.tap(button);
-          await tester.pumpAndSettle();
+          await advanceScene(tester);
         }
       }
       await tester.tap(find.byType(BackButton));
-      await tester.pumpAndSettle();
+      await advanceScene(tester);
       await tester.runAsync(() async {
         final latest = (await fixture.service.overview())!;
         expect(
