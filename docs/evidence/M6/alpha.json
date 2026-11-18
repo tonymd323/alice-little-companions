@@ -1,0 +1,258 @@
+{
+  "portraits_and_furnishings": [
+    {
+      "asset": "item_decor_vase.webp",
+      "pixels": [
+        299,
+        443
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 60584,
+      "partial_alpha_pixels": 18133
+    },
+    {
+      "asset": "item_decor_cushion.webp",
+      "pixels": [
+        425,
+        321
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 31161,
+      "partial_alpha_pixels": 4267
+    },
+    {
+      "asset": "item_decor_plant.webp",
+      "pixels": [
+        446,
+        457
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 85157,
+      "partial_alpha_pixels": 32902
+    },
+    {
+      "asset": "item_single_armchair.webp",
+      "pixels": [
+        455,
+        438
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 63655,
+      "partial_alpha_pixels": 9516
+    },
+    {
+      "asset": "base_bed.webp",
+      "pixels": [
+        441,
+        411
+      ],
+      "distinct_alpha": 247,
+      "transparent_pixels": 77033,
+      "partial_alpha_pixels": 6223
+    },
+    {
+      "asset": "base_rug.webp",
+      "pixels": [
+        451,
+        293
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 30854,
+      "partial_alpha_pixels": 4949
+    },
+    {
+      "asset": "fox-1.webp",
+      "pixels": [
+        369,
+        451
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 59573,
+      "partial_alpha_pixels": 7580
+    },
+    {
+      "asset": "fox-2.webp",
+      "pixels": [
+        354,
+        450
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 65419,
+      "partial_alpha_pixels": 10876
+    },
+    {
+      "asset": "fox-3.webp",
+      "pixels": [
+        422,
+        451
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 83568,
+      "partial_alpha_pixels": 12532
+    },
+    {
+      "asset": "fox-4.webp",
+      "pixels": [
+        380,
+        455
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 62250,
+      "partial_alpha_pixels": 10852
+    },
+    {
+      "asset": "fox-5.webp",
+      "pixels": [
+        407,
+        452
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 68771,
+      "partial_alpha_pixels": 13382
+    },
+    {
+      "asset": "fox-6.webp",
+      "pixels": [
+        468,
+        394
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 81241,
+      "partial_alpha_pixels": 11965
+    },
+    {
+      "asset": "rabbit-1.webp",
+      "pixels": [
+        450,
+        408
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 61573,
+      "partial_alpha_pixels": 7060
+    },
+    {
+      "asset": "rabbit-2.webp",
+      "pixels": [
+        450,
+        440
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 64967,
+      "partial_alpha_pixels": 7483
+    },
+    {
+      "asset": "rabbit-3.webp",
+      "pixels": [
+        454,
+        317
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 74375,
+      "partial_alpha_pixels": 6307
+    },
+    {
+      "asset": "rabbit-4.webp",
+      "pixels": [
+        386,
+        448
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 94191,
+      "partial_alpha_pixels": 7616
+    },
+    {
+      "asset": "rabbit-5.webp",
+      "pixels": [
+        394,
+        450
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 79677,
+      "partial_alpha_pixels": 9429
+    },
+    {
+      "asset": "rabbit-6.webp",
+      "pixels": [
+        417,
+        452
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 90976,
+      "partial_alpha_pixels": 11027
+    },
+    {
+      "asset": "cat-1.webp",
+      "pixels": [
+        378,
+        440
+      ],
+      "distinct_alpha": 247,
+      "transparent_pixels": 67446,
+      "partial_alpha_pixels": 6035
+    },
+    {
+      "asset": "cat-2.webp",
+      "pixels": [
+        442,
+        443
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 97701,
+      "partial_alpha_pixels": 8137
+    },
+    {
+      "asset": "cat-3.webp",
+      "pixels": [
+        357,
+        450
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 66767,
+      "partial_alpha_pixels": 6268
+    },
+    {
+      "asset": "cat-4.webp",
+      "pixels": [
+        455,
+        427
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 70839,
+      "partial_alpha_pixels": 9192
+    },
+    {
+      "asset": "cat-5.webp",
+      "pixels": [
+        458,
+        381
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 86615,
+      "partial_alpha_pixels": 8797
+    },
+    {
+      "asset": "cat-6.webp",
+      "pixels": [
+        464,
+        401
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 96341,
+      "partial_alpha_pixels": 10142
+    },
+    {
+      "asset": "cat-4-rest.webp",
+      "pixels": [
+        1294,
+        1216
+      ],
+      "distinct_alpha": 248,
+      "transparent_pixels": 703144,
+      "partial_alpha_pixels": 20778
+    }
+  ],
+  "veranda": [
+    1536,
+    1024
+  ]
+}

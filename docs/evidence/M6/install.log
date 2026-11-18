@@ -1,0 +1,11 @@
+Performing Streamed Install
+Success
+Starting: Intent { cmp=local.family.alice_companions/.MainActivity }
+Android emulator, cloud, x86_64, Android 11, API 30
+Package local.family.alice_companions
+versionCode=7 minSdk=26 targetSdk=36
+versionName=0.10.0
+Installed base.apk SHA-256 5e0a4e7d4edee28445b178ac8a0fff5aad02fef50b872b688fe56462c155539c
+PASS / Installed base.apk matches the delivered universal APK byte-for-byte.
+Airplane mode 1
+Display after capture Physical size: 1080x2280, Override size: 390x844, Physical density: 440, Override density: 160

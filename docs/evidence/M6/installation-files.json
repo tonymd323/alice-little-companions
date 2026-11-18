@@ -1,0 +1,34 @@
+{
+  "alice-0.10.0-android.apk": {
+    "bytes": 68603046,
+    "sha256": "5e0a4e7d4edee28445b178ac8a0fff5aad02fef50b872b688fe56462c155539c",
+    "metadata": [
+      "package: name='local.family.alice_companions' versionCode='7' versionName='0.10.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+      "sdkVersion:'26'",
+      "targetSdkVersion:'36'",
+      "native-code: 'arm64-v8a' 'armeabi-v7a' 'x86_64'"
+    ],
+    "certificate_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+    "zipalign_16k": true
+  },
+  "alice-0.10.0-android.zip": {
+    "bytes": 34064318,
+    "sha256": "be37e997b7d77f521183b872e7fe4d47993ae2d87813c9a6990db1891800439f"
+  },
+  "alice-0.10.0-arm64.apk": {
+    "bytes": 26649878,
+    "sha256": "db8464311befdc7f9be16dd78434e3553b529e78a32436918e1f46e33c291697",
+    "metadata": [
+      "package: name='local.family.alice_companions' versionCode='7' versionName='0.10.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+      "sdkVersion:'26'",
+      "targetSdkVersion:'36'",
+      "native-code: 'arm64-v8a'"
+    ],
+    "certificate_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+    "zipalign_16k": true
+  },
+  "alice-0.10.0-arm64.zip": {
+    "bytes": 14921397,
+    "sha256": "b8d967c04b9573e47a2ffe11e4f80d2864644d65552b29cd8312200c2742cb6e"
+  }
+}

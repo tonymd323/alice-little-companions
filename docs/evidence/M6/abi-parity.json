@@ -1,0 +1,13 @@
+{
+  "source": "302a0727de753f29911e154f36d9c4f88c1c29dd",
+  "flutter_bundle_entries": 80,
+  "byte_identical_entries": 79,
+  "native_asset_manifest_difference": "The standalone ABI manifest lists android_arm64. Its SQLite binding exactly matches the universal manifest for android_arm64.",
+  "material_icon_sha256": "8161a843cc4eb4fff839eb0f6b4a94500473e3658c3d133ccbae3d6b1ab919ce",
+  "aot_text_section_equal": true,
+  "aot_text_sha256": [
+    "29485c64e22c0848ef55a3bd5d528b660e4e3858c2169d861cf61aaea3d4d2c5",
+    "29485c64e22c0848ef55a3bd5d528b660e4e3858c2169d861cf61aaea3d4d2c5"
+  ],
+  "greeting_present_in_both_aot": true
+}

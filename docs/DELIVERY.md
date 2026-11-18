@@ -5,7 +5,8 @@
 0.9.0+6 的历史标签为 `alice-rc1`。Android 包使用 release 模式和云端开发签名，适用于家庭试装。iOS/iPadOS 工程已随源码交付，签名安装需接入 Mac、Apple Team 和 iPad。整体验收还需两台实体机交叉迁移、更新和性能测量。
 
 - [验收逐项记录](evidence/acceptance.csv)
-- [云端与设备证据](evidence/M5/README.md)
+- [当前版本截图、动效与检查](evidence/M6/README.md)
+- [0.9.0 云端与设备证据](evidence/M5/README.md)
 - [家长最终体验](OWNER_WALKTHROUGH.md)
 - [家庭备份与换机](BACKUP_MIGRATION.md)
 

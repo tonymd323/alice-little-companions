@@ -37,6 +37,6 @@
 | M4 | `alice-m4` | Android 0.5.0+5，18 项兑换、5 个空间、67 项运行素材。[记录](evidence/M4/README.md) |
 | M5 | `alice-rc1` | Android 0.9.0+6，源码及测试交付。iPad 签名、实体机、性能和双向迁移维持 BLOCKED。[记录](evidence/M5/README.md) |
 
-本轮手机反馈追加 M6 手绘家园返工。Android 0.10.0+7 使用标签 `alice-illustrated-rc2`，重点实测透明边缘、庭院与暖廊、伙伴局部形变和旧版覆盖。备份格式沿用既有版本。
+本轮手机反馈追加 M6 手绘家园返工。Android 0.10.0+7 使用标签 `alice-illustrated-rc2`，重点实测透明边缘、庭院与暖廊、伙伴局部形变和旧版覆盖。备份格式沿用既有版本。[本轮安装包与实测记录](evidence/M6/README.md)
 
 从当前候选向 Mac 和家庭设备交接时使用相同源码标签与锁文件，先做 iPad 编译、签名和安装，再补齐 [验收表](evidence/acceptance.csv) 的设备项目。家庭设备交接方式见 [交付说明](DELIVERY.md)。

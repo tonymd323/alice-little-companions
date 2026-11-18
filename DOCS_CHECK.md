@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 252 项通过。下面列出逐项结果。
+- 本次准备检查 285 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -39,11 +39,15 @@
 - 内部链接有效：design/ART_PROMPTS.md → references/garden-color.png
 - 内部链接有效：design/ART_PROMPTS.md → asset_manifest.json
 - 内部链接有效：docs/DELIVERY.md → evidence/acceptance.csv
+- 内部链接有效：docs/DELIVERY.md → evidence/M6/README.md
 - 内部链接有效：docs/DELIVERY.md → evidence/M5/README.md
 - 内部链接有效：docs/DELIVERY.md → OWNER_WALKTHROUGH.md
 - 内部链接有效：docs/DELIVERY.md → BACKUP_MIGRATION.md
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/references/pet-stages.png
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/references/garden-color.png
+- 内部链接有效：docs/DESIGN_SPEC.md → ../apps/mobile/lib/illustration/puppet.dart
+- 内部链接有效：docs/DESIGN_SPEC.md → ../apps/mobile/lib/illustration/living_scene.dart
+- 内部链接有效：docs/DESIGN_SPEC.md → ../design/asset_manifest.json
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/asset_manifest.json
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/scene_slots.json
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/tokens.json
@@ -58,6 +62,7 @@
 - 内部链接有效：docs/PLAN.md → evidence/M3/README.md
 - 内部链接有效：docs/PLAN.md → evidence/M4/README.md
 - 内部链接有效：docs/PLAN.md → evidence/M5/README.md
+- 内部链接有效：docs/PLAN.md → evidence/M6/README.md
 - 内部链接有效：docs/PLAN.md → evidence/acceptance.csv
 - 内部链接有效：docs/PLAN.md → DELIVERY.md
 - 内部链接有效：docs/evidence/M0/README.md → flutter-version.json
@@ -117,6 +122,34 @@
 - 内部链接有效：docs/evidence/M5/README.md → android-restore-comparison.png
 - 内部链接有效：docs/evidence/M5/README.md → android-restored-home.png
 - 内部链接有效：docs/evidence/M5/README.md → android-device-flow.log
+- 内部链接有效：docs/evidence/M6/README.md → installation-files.json
+- 内部链接有效：docs/evidence/M6/README.md → SHA256SUMS
+- 内部链接有效：docs/evidence/M6/README.md → companions-motion.mp4
+- 内部链接有效：docs/evidence/M6/README.md → android-interaction.mp4
+- 内部链接有效：docs/evidence/M6/README.md → home-comparison.jpg
+- 内部链接有效：docs/evidence/M6/README.md → courtyard-2x.png
+- 内部链接有效：docs/evidence/M6/README.md → veranda-2x.png
+- 内部链接有效：docs/evidence/M6/README.md → layout.png
+- 内部链接有效：docs/evidence/M6/README.md → reopened.png
+- 内部链接有效：docs/evidence/M6/README.md → edges.png
+- 内部链接有效：docs/evidence/M6/README.md → alpha.json
+- 内部链接有效：docs/evidence/M6/README.md → ../../../tools/check_illustrated_art.py
+- 内部链接有效：docs/evidence/M6/README.md → analyze.log
+- 内部链接有效：docs/evidence/M6/README.md → tests.log
+- 内部链接有效：docs/evidence/M6/README.md → ../../../apps/mobile/test/delivery_test.dart
+- 内部链接有效：docs/evidence/M6/README.md → ../../../apps/mobile/test/illustration_test.dart
+- 内部链接有效：docs/evidence/M6/README.md → android-flow.log
+- 内部链接有效：docs/evidence/M6/README.md → reduced-motion.png
+- 内部链接有效：docs/evidence/M6/README.md → tablet-landscape.png
+- 内部链接有效：docs/evidence/M6/README.md → abi-parity.json
+- 内部链接有效：docs/evidence/M6/README.md → build.log
+- 内部链接有效：docs/evidence/M6/README.md → arm64-clean-build.log
+- 内部链接有效：docs/evidence/M6/README.md → locked-deps.log
+- 内部链接有效：docs/evidence/M6/README.md → video.json
+- 内部链接有效：docs/evidence/M6/README.md → install.log
+- 内部链接有效：docs/evidence/M6/README.md → preflight.json
+- 内部链接有效：docs/evidence/M6/README.md → ../acceptance.csv
+- 内部链接有效：docs/evidence/M6/README.md → ../../BACKUP_MIGRATION.md
 - 内部链接有效：references/SOURCES.md → ../docs/ENVIRONMENT.md
 - 任务分值2/3/5一致
 - 单积分且无游戏产币
@@ -258,7 +291,7 @@
 - 备份测试向量口令派生参数与结果匹配
 - 备份容器字段长度与固定样例摘要匹配
 - 验收执行表与43条用例一一对应
-- 文本配色对比达标：#2F3B33/#F7F3EA=10.57
-- 文本配色对比达标：#59635B/#FFFCF5=6.10
-- 文本配色对比达标：#FFFFFF/#4E6652=6.28
+- 文本配色对比达标：#40352E/#FAF2E2=10.68
+- 文本配色对比达标：#6C5B4A/#FFFBEE=6.27
+- 文本配色对比达标：#FFFFFF/#90492F=6.60
 - 点击尺寸基线至少48

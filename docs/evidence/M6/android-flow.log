@@ -1,0 +1,8 @@
+Source 302a0727de753f29911e154f36d9c4f88c1c29dd
+PASS / final release, Android 11 x86_64 emulator in airplane mode. Existing rabbit and 3 points survived same-signature install. Bed and floor rug saved and restored after a forced stop.
+OS transition animation scale 0 during the reduced-motion capture.
+PASS / reduced-motion response captured in the Android compositor as a text acknowledgement.
+PASS / normal Android motion, actual direct touch and stroke in the courtyard, floor taps and entrance to the veranda recorded from the installed APK.
+PASS / Android emulator screenshots at 780x1688 with density 320 and 1194x834 with density 160.
+PASS / balance was still 3 after all visual interactions.
+PASS / Cold-launched 1194x834 landscape at 160 dpi and verified the task panel to the right of the scene in the Android accessibility tree.

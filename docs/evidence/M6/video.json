@@ -1,0 +1,20 @@
+{
+  "companions-motion.mp4": {
+    "capture": "Same Flutter painter and rig as release; rendered offscreen at 24 samples per second.",
+    "codec_name": "h264",
+    "width": 990,
+    "height": 404,
+    "avg_frame_rate": "24/1",
+    "duration": "3.750000",
+    "nb_frames": "90"
+  },
+  "android-interaction.mp4": {
+    "capture": "Android 11 software emulator system screen recorder, actual installed universal APK; variable capture rate.",
+    "codec_name": "h264",
+    "width": 384,
+    "height": 832,
+    "avg_frame_rate": "810000/620003",
+    "duration": "20.666756",
+    "nb_frames": "27"
+  }
+}
