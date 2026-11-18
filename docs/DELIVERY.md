@@ -1,9 +1,8 @@
-# 家庭交付候选 0.9.0+6
+# 小小伙伴家庭安装说明
 
 当前 Android 手绘互动版为 0.10.0+7，源码标签 `alice-illustrated-rc2`。手机可解压 ARM64 或通用 ZIP 后点 APK，直接覆盖已有 0.9.0。进入庭院或暖廊，可点伙伴、沿头部轻划，或点一处空地。原基础家园中的家具在暖廊内布置，布局继续随家庭备份迁移。
 
-
-源码候选标签为 `alice-rc1`。Android 包使用 release 模式和云端开发签名，适用于家庭试装。iOS/iPadOS 工程已随源码交付，签名安装需接入 Mac、Apple Team 和 iPad。整体验收还需两台实体机交叉迁移、更新和性能测量。
+0.9.0+6 的历史标签为 `alice-rc1`。Android 包使用 release 模式和云端开发签名，适用于家庭试装。iOS/iPadOS 工程已随源码交付，签名安装需接入 Mac、Apple Team 和 iPad。整体验收还需两台实体机交叉迁移、更新和性能测量。
 
 - [验收逐项记录](evidence/acceptance.csv)
 - [云端与设备证据](evidence/M5/README.md)
@@ -12,7 +11,7 @@
 
 ## Android 试装
 
-取 `artifacts/M5/alice-0.9.0-android.apk`，对照 `artifacts/M5/SHA256SUMS`。通过系统文件管理器打开 APK，按系统提示允许这一来源安装。也可连测试机运行 `adb install -r alice-0.9.0-android.apk`。安装后开启飞行模式，从主屏幕打开「小小伙伴」。测试版本由同一云端开发证书签名，模拟器已使用这一身份覆盖升级并核对旧存档。
+取 `artifacts/M6/alice-0.10.0-android.apk`，核对同目录发放的 SHA-256。通过系统文件管理器打开 APK，按系统提示允许这一来源安装。也可连测试机运行 `adb install -r alice-0.10.0-android.apk`。安装后开启飞行模式，从主屏幕打开「小小伙伴」。测试版本由同一云端开发证书签名，模拟器已使用这一身份覆盖升级并核对旧存档。
 
 正式家庭签名可在 Mac 或可信 Android 构建机的 `apps/mobile/android/key.properties` 中配置以下四项。该文件和签名私钥应保存在签名机。构建结果输出到 `build/app/outputs/flutter-apk/app-release.apk`。后续同包名覆盖升级使用同一证书和递增版本号。若试装版未来改用不同证书，先在试装版导出并回读完整备份，再迁到新签名版本。
 
@@ -25,7 +24,7 @@ keyPassword=...
 
 ## iPad 首次试装
 
-1. 在可运行匹配 Xcode 的 Mac 上克隆交付的 Git bundle，检出 `alice-rc1`。使用 Flutter 3.50.0，revision `ab2912035e160d9cad6306df307576da6128ebdb`。检查 `flutter doctor -v`、`xcodebuild -version` 和 `xcrun --sdk iphoneos --show-sdk-version`。
+1. 在可运行匹配 Xcode 的 Mac 上克隆交付的 Git bundle，检出 `alice-illustrated-rc2`。使用 Flutter 3.50.0，revision `ab2912035e160d9cad6306df307576da6128ebdb`。检查 `flutter doctor -v`、`xcodebuild -version` 和 `xcrun --sdk iphoneos --show-sdk-version`。
 2. 在 `apps/mobile` 运行 `flutter pub get --enforce-lockfile`。先用 `flutter build ios --simulator` 验证 iPad 模拟器，再用 `flutter build ios --release --no-codesign` 验证设备编译。Flutter 生成 SwiftPM 项目依赖，Mac 完成解析后保存实际生成的锁文件。
 3. 用 Xcode 打开 `apps/mobile/ios/Runner.xcworkspace`。连接 iPad，在设备上处理系统信任和开发者模式提示。家长在 Xcode 登录 Apple 账号并选可用 Team，为 Runner 使用可签名的唯一 Bundle Identifier。以后更新沿用相同标识及签名身份。
 4. 家庭试装可用 Xcode Personal Team 直接 Run 到这台 iPad。描述文件有效期通常为 7 天。若已有合适的付费会员和注册设备，可按已选分发方式构建，例如 `flutter build ipa --release --export-method ad-hoc`。以实际签名、安装结果和描述文件期限为准。

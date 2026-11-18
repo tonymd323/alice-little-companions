@@ -16,6 +16,7 @@ class ScenePiece {
       name = freeFurnishings[row['item_id']] ?? row['name'] as String;
   final PlacementDraft place;
   final String asset, name;
+  bool get liesFlat => asset.contains('rug') || asset.endsWith('_path');
 }
 
 enum HomeView { courtyard, veranda }
@@ -278,7 +279,9 @@ class _GardenSceneState extends State<GardenScene>
         (_veranda ? 1.22 : 1) *
         depth;
     final at = map.screen(source);
-    return Rect.fromLTWH(at.dx - w / 2, at.dy - (hanging ? 0 : w), w, w);
+    // Floor textiles follow the floor plane; catalogue portraits face the reader.
+    final h = piece.liesFlat ? w * (.27 + .17 * (source.dy - .65)) : w;
+    return Rect.fromLTWH(at.dx - w / 2, at.dy - (hanging ? 0 : h), w, h);
   }
 
   void _floor(Offset point, SceneProjection map) {
@@ -392,7 +395,7 @@ class _GardenSceneState extends State<GardenScene>
                   final rect = _petBox(map), foot = map.screen(_foot);
                   bool behind(ScenePiece p) =>
                       p.place.mount != null ||
-                      p.asset.contains('rug') ||
+                      p.liesFlat ||
                       map.fromSave(Offset(p.place.x, p.place.y)).dy <=
                           _foot.dy + .015;
                   final contactWidth =
@@ -539,10 +542,10 @@ class _GardenSceneState extends State<GardenScene>
 
   Widget _piece(ScenePiece piece, SceneProjection map) {
     final rect = _pieceBox(piece, map), hung = piece.place.mount != null;
-    final rug = piece.asset.contains('rug') || piece.asset.endsWith('_path');
+    final rug = piece.liesFlat;
     Widget image = Image.asset(
       artworkPath(piece.asset),
-      fit: BoxFit.contain,
+      fit: rug ? BoxFit.fill : BoxFit.contain,
       alignment: hung ? Alignment.topCenter : Alignment.bottomCenter,
       filterQuality: FilterQuality.medium,
       semanticLabel: piece.name,
