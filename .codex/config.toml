@@ -1,0 +1,23 @@
+[agents.visual_art]
+description = "美术指导与原画。负责 C 版画风、角色穿戴、房间透视和光影的最终合成样稿。"
+config_file = "roles/visual_art.toml"
+
+[agents.animation]
+description = "角色与场景动画。负责表演分镜、手绘关键姿态、连续动作和环境中的因果变化。"
+config_file = "roles/animation.toml"
+
+[agents.story_gameplay]
+description = "剧情编剧与玩法设计。把角色动机、Alice 的操作与二年级数学写进同一场戏。"
+config_file = "roles/story_gameplay.toml"
+
+[agents.audio]
+description = "声音设计。按镜头与事件制作环境声、拟音、音乐和有必要的短句配音。"
+config_file = "roles/audio.toml"
+
+[agents.game_engineering]
+description = "Flutter 客户端与技术美术集成。将画面、表演、声音和玩法接入现有离线家庭 App。"
+config_file = "roles/game_engineering.toml"
+
+[agents.playtest]
+description = "独立试玩与质量评审。核对实际玩家操作、手机画面、动作、叙事因果和数据回归。"
+config_file = "roles/playtest.toml"

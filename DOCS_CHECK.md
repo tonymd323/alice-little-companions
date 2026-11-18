@@ -6,11 +6,12 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 126}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 631 项通过。下面列出逐项结果。
+- 本次准备检查 650 项通过。下面列出逐项结果。
 
 ## 检查记录
 
 - 八份核心文档存在且有实质内容
+- 内部链接有效：AGENTS.md → docs/GAME_STUDIO.md
 - 内部链接有效：README.md → START_CODEX.md
 - 内部链接有效：README.md → docs/PLAN.md
 - 内部链接有效：README.md → docs/PRD.md
@@ -24,6 +25,7 @@
 - 内部链接有效：README.md → docs/TECH_SPEC.md
 - 内部链接有效：README.md → docs/BACKUP_FORMAT.md
 - 内部链接有效：README.md → docs/DATA_HANDOFF.md
+- 内部链接有效：README.md → docs/GAME_STUDIO.md
 - 内部链接有效：README.md → docs/ENVIRONMENT.md
 - 内部链接有效：README.md → docs/evidence/cloud-preflight.json
 - 内部链接有效：README.md → docs/OWNER_WALKTHROUGH.md
@@ -36,6 +38,7 @@
 - 内部链接有效：README.md → docs/WORLD_AND_COMPANIONS.md
 - 内部链接有效：README.md → docs/BACKUP_MIGRATION.md
 - 内部链接有效：README.md → docs/PLAN.md
+- 内部链接有效：START_CODEX.md → docs/GAME_STUDIO.md
 - 内部链接有效：design/ART_PROMPTS.md → references/pet-stages.png
 - 内部链接有效：design/ART_PROMPTS.md → references/garden-color.png
 - 内部链接有效：design/ART_PROMPTS.md → asset_manifest.json
@@ -60,10 +63,26 @@
 - 内部链接有效：docs/ENVIRONMENT.md → evidence/daily/preflight.json
 - 内部链接有效：docs/ENVIRONMENT.md → evidence/daily/README.md
 - 内部链接有效：docs/ENVIRONMENT.md → evidence/M0/README.md
+- 内部链接有效：docs/GAME_STUDIO.md → ../apps/mobile/lib/illustration/tailoring.dart
+- 内部链接有效：docs/GAME_STUDIO.md → evidence/daily/phone-accessories.jpg
+- 内部链接有效：docs/GAME_STUDIO.md → ../apps/mobile/lib/illustration/puppet.dart
+- 内部链接有效：docs/GAME_STUDIO.md → ../apps/mobile/lib/illustration/animated_backdrop.dart
+- 内部链接有效：docs/GAME_STUDIO.md → evidence/daily/chapter-opening.png
+- 内部链接有效：docs/GAME_STUDIO.md → evidence/daily/chapter-ending.png
+- 内部链接有效：docs/GAME_STUDIO.md → ../apps/mobile/lib/features/window_math.dart
+- 内部链接有效：docs/GAME_STUDIO.md → ../apps/mobile/lib/illustration/living_scene.dart
+- 内部链接有效：docs/GAME_STUDIO.md → ../.codex/roles/visual_art.toml
+- 内部链接有效：docs/GAME_STUDIO.md → ../.codex/roles/animation.toml
+- 内部链接有效：docs/GAME_STUDIO.md → ../.codex/roles/story_gameplay.toml
+- 内部链接有效：docs/GAME_STUDIO.md → ../.codex/roles/audio.toml
+- 内部链接有效：docs/GAME_STUDIO.md → ../.codex/roles/game_engineering.toml
+- 内部链接有效：docs/GAME_STUDIO.md → ../.codex/roles/playtest.toml
+- 内部链接有效：docs/GAME_STUDIO.md → ../.codex/config.toml
 - 内部链接有效：docs/OWNER_WALKTHROUGH.md → evidence/daily/phone-accessories.jpg
 - 内部链接有效：docs/OWNER_WALKTHROUGH.md → evidence/daily/three-skills.mp4
 - 内部链接有效：docs/OWNER_WALKTHROUGH.md → WORLD_AND_COMPANIONS.md
 - 内部链接有效：docs/OWNER_WALKTHROUGH.md → ../fixtures/migration_roundtrip.json
+- 内部链接有效：docs/PLAN.md → GAME_STUDIO.md
 - 内部链接有效：docs/PLAN.md → evidence/M0/README.md
 - 内部链接有效：docs/PLAN.md → evidence/M1/README.md
 - 内部链接有效：docs/PLAN.md → evidence/M2/README.md

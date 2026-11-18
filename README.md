@@ -14,6 +14,7 @@ Alice 在飞行模式下打开家园，免费选择银杏狐、月牙耳兔或�
 | 积分、兑换和升级如何计算 | [业务规则](docs/RULES.md)、[任务配置](config/rules.json)、[兑换目录](config/catalog.json) |
 | 实现应做到什么样子 | [Demo 与正式版差异](docs/DEMO_TO_APP.md)、[新版交互 Demo](https://alice-little-companions-demo.tonymei323.chatgpt.site/?pet=rabbit&stage=4)、[美术规范](docs/DESIGN_SPEC.md)、[素材清单](design/asset_manifest.json) |
 | 怎样离线工作并完整换机 | [技术规格](docs/TECH_SPEC.md)、[备份协议](docs/BACKUP_FORMAT.md)、[数据交接](docs/DATA_HANDOFF.md) |
+| 接下来谁来负责美术、表演和剧情 | [游戏制作组、试玩反馈与第一段样片提案](docs/GAME_STUDIO.md) |
 | 在哪里开发 | [开发环境及开工命令](docs/ENVIRONMENT.md)、[云端工具盘点](docs/evidence/cloud-preflight.json) |
 | 做到什么程度可以交给家长 | [家长验收单](docs/OWNER_WALKTHROUGH.md)、[逐项验收](docs/ACCEPTANCE.md)、[验收执行表](docs/evidence/acceptance.csv)、[项目约定](AGENTS.md) |
 | 本包已检查什么 | [准备工作校验结果](DOCS_CHECK.md)、[交付文件摘要](MANIFEST.json) |
