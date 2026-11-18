@@ -13,6 +13,10 @@
 
 [暖廊实拍](home.png) · [扶手椅原样](armchair-before.png) · [摆好后的同一处](armchair-preview.png) · [桃桃原样](coat-before.png) · [桃桃穿杏色外套](coat-preview.png)
 
+## 实际兑换记录
+
+在另一个 Android 11 测试用户中，旧版家庭从 0 分开始，通过五次家长确认取得 25 分，然后直接升级最终包。兑换杏色外套后回到小家，杀进程再打开，桃桃仍穿着外套，余额为 0。家长通过兑换记录退回原款，余额恢复到 25 分。用这 25 分兑换扶手椅后，回家即可见到它，杀进程重开仍在原位，余额为 0 分。[外套重启实拍](wearing-coat.png) · [扶手椅重启实拍](installed-armchair.png) · [逐步记录](android-upgrade.log)
+
 ## 美术与测试依据
 
 两件衣服分别绘入三位伙伴的六个阶段，并另绘云翼猫第四阶段的收翼与展翼姿态，共 38 张透明穿衣角色图。下列两张资料图按银杏狐、月牙耳兔和云翼猫排列，从左到右为一至六阶段。帽子、蝴蝶结、眼镜和围巾在角色纹理合成时贴合头、眼、颈部，随伙伴的呼吸、走动和招手反应一起运动。[杏色外套](coat-poses.jpg) · [花边围裙](apron-poses.jpg) · [素材摘要与尺寸](../../../design/asset_manifest.json)
@@ -21,4 +25,16 @@
 
 Android 11 云模拟器在飞行模式验证。应用升级使用与 0.11.0 相同的签名。最终安装包的文件摘要以安装信息为准。[升级与操作记录](android-upgrade.log) · [安装信息](installation.json)
 
-本次完整 Flutter 测试 32 项通过，静态分析通过。从 GitHub 私有仓库新建浅克隆，读出的 APK 与装机包逐字节一致，共 72,353,716 字节。[GitHub 回读校验](github-download.json)
+本次完整 Flutter 测试 32 项通过，静态分析通过。另从发行 APK 内逐件读取 54 张新素材，核对文件摘要、图像尺寸与透明边缘。[包内素材核验](packaged-art.json)
+
+从 GitHub 私有仓库新建浅克隆，读出的 APK 与装机包逐字节一致，共 72,353,716 字节。[GitHub 回读校验](github-download.json)
+
+### 复跑
+
+从源码标签进入 `apps/mobile`，用 Flutter 3.50.0 和仓库锁文件恢复依赖，执行下列命令。装机验证使用 `flutter build apk --release` 的家庭应用默认入口。
+
+```sh
+flutter pub get --enforce-lockfile
+flutter analyze --no-pub
+flutter test --no-pub --reporter expanded
+```

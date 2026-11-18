@@ -6,3 +6,8 @@ PASS Previewed and toggled the armchair in the veranda and apricot coat on the r
 Published APK, Android 0.12.0+9
 PASS Final release with 38 costumed portraits, same rabbit, 3 points and two free furnishings. Installed SHA-256 3cb8de3d1e02bf1c24d3baf2884091289a6201e45614a93f1d2240e80e892806.
 PASS Previewed and toggled the armchair in the veranda and apricot coat on the rabbit at 3 points. Cold reopening still shows 3 points.
+PASS Separate Android test profile created on 0.11.0. Five parent-confirmed test tasks provided exactly 25 points.
+PASS Final 0.12.0 installed directly over 0.11.0 in the 25-point Android test household. Same UID, first-install time and test balance.
+PASS Bought apricot coat through the catalogue (25 → 0). The cold-launched home shows the rabbit still wearing it.
+PASS Parent refund returned the original 25 points and removed the coat.
+PASS Bought wooden armchair (25 → 0), returned to the veranda and killed and reopened the release APK. Its fixed chair and zero balance persisted.

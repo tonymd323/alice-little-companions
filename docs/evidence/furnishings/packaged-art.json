@@ -1,0 +1,13 @@
+{
+  "apk_sha256": "3cb8de3d1e02bf1c24d3baf2884091289a6201e45614a93f1d2240e80e892806",
+  "matched_runtime_files": 54,
+  "costumed_pet": 38,
+  "room_layer": 8,
+  "furnished_scene": 4,
+  "wearable_texture": 4,
+  "checks": [
+    "SHA-256 of each file read from the APK against the source art manifest",
+    "image dimensions",
+    "transparent exterior, solid interior and intermediate alpha for each transparent image"
+  ]
+}
