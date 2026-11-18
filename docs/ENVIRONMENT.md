@@ -12,7 +12,7 @@
 
 其中只有安装包、源码和测试用假数据需要跨环境交接。正式家庭数据库、备份口令和签名私钥在家庭设备或指定的签名机保管。编辑器可选 VS Code；Codex 直接在仓库运行即可。产品端无需单独部署数据库或后端。
 
-**当前实测**　云执行环境为 Debian 13 x86_64，可调用 Git 2.52.0、OpenJDK 21.0.13。本次在 PATH 中未找到 flutter、dart、adb、sdkmanager、xcodebuild。Mac 配置、iPad 型号及系统、安卓型号及系统和 Apple 签名资格待连接时读取。此处未安装 SDK、创建证书或运行原生应用。
+**日用版云端实测**　Debian 13 x86_64 上已使用 Git 2.52.0、Flutter 3.50.0、Dart 3.14.0、OpenJDK 21.0.13 和 Android SDK 36 构建 0.13.0+10。Android 11 模拟器在飞行模式完成覆盖升级、试穿、兑换、主线和冷启动。首次开工盘点时工具链尚未装入 PATH。iPad 构建与真机测试需要可用的 Mac、Xcode、Apple Team 和设备。[工具清单](evidence/daily/preflight.json) · [安装包实测](evidence/daily/README.md)
 
 ## 工具版本与兼容性
 
