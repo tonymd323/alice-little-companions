@@ -121,7 +121,7 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
         .singleOrNull;
     final placed = base == null
         ? <Json>[]
-        : await active!.layout(base['id'] as String);
+        : await active!.furnishings(base['id'] as String);
     final worn = loaded == null
         ? <Json>[]
         : await active!.wardrobe(loaded.companion);

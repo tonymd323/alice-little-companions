@@ -1,6 +1,42 @@
 part of 'family.dart';
 
 extension FamilyDecorations on FamilyService {
+  /// Ownership drives the painting. Older placements still determine the room
+  /// of an unbound item, even when the family restores a pre-0.12 backup.
+  Future<List<Json>> furnishings(String space) async {
+    final room = await db.row('SELECT scene_id FROM spaces WHERE id = ?', [
+      space,
+    ]);
+    if (room == null) return [];
+    final rows = await db.rows(
+      '''
+      SELECT e.item_id, e.asset_id, e.name FROM entitlements e
+      LEFT JOIN placements p ON p.entitlement_id = e.id
+      WHERE e.revoked = 0 AND e.slot IS NULL AND
+        COALESCE(e.bound_space, p.space_id,
+          (SELECT id FROM spaces WHERE scene_id = 'base_room')) = ?
+      ORDER BY e.item_id
+      ''',
+      [space],
+    );
+    return [
+      if (room['scene_id'] == 'base_room')
+        for (final free in freeFurnishings.entries)
+          {'item_id': free.key, 'asset_id': free.key, 'name': free.value},
+      ...rows,
+    ];
+  }
+
+  Future<Json?> displayRoom(String purchase) => db.row(
+    '''SELECT s.* FROM entitlements e
+       LEFT JOIN placements p ON p.entitlement_id = e.id
+       JOIN spaces s ON s.id = COALESCE(e.bound_space, p.space_id,
+         (SELECT id FROM spaces WHERE scene_id = 'base_room'))
+       WHERE e.purchase_id = ? AND e.revoked = 0
+       ORDER BY CASE WHEN s.scene_id = 'base_room' THEN 0 ELSE 1 END, e.item_id LIMIT 1''',
+    [purchase],
+  );
+
   Future<List<Json>> layout(String space) => db.rows(
     '''
     SELECT p.*, e.item_id, e.asset_id, e.name FROM placements p

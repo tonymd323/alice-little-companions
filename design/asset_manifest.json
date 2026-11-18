@@ -1156,6 +1156,924 @@
       ],
       "device_qa": "pending",
       "production_state": "hd_ink_clean_alpha_pending_device_qa"
+    },
+    {
+      "id": "installed_decor_cushion",
+      "kind": "room_layer",
+      "expected_size": [
+        341,
+        245
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/installed_decor_cushion.webp",
+      "sha256": "994af4633456a7a54f9c872cf38a7e327b7b2fe446261562bda0c65c8a5432ad",
+      "runtime_size": [
+        341,
+        245
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "installed_decor_mobile",
+      "kind": "room_layer",
+      "expected_size": [
+        274,
+        394
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/installed_decor_mobile.webp",
+      "sha256": "37cc09e572a01e21381689d18196f0222e20748cb0132a3e7c6bc1cf7f2ff35c",
+      "runtime_size": [
+        274,
+        394
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "installed_decor_plant",
+      "kind": "room_layer",
+      "expected_size": [
+        341,
+        363
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/installed_decor_plant.webp",
+      "sha256": "6cbf10391d943b15ae36a5a255d384c97246af3abbffa9bad18969d61e1b5db1",
+      "runtime_size": [
+        341,
+        363
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "installed_decor_vase",
+      "kind": "room_layer",
+      "expected_size": [
+        226,
+        362
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/installed_decor_vase.webp",
+      "sha256": "7976fd63d023a514bcbcffea1a0a3b5bca9b88d4a73bb967d10d26ee6f9a4f53",
+      "runtime_size": [
+        226,
+        362
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "installed_single_armchair",
+      "kind": "room_layer",
+      "expected_size": [
+        354,
+        361
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/installed_single_armchair.webp",
+      "sha256": "bc475735b9256c865dfc613138650e7302f7f721271314b75186483cf088f1f7",
+      "runtime_size": [
+        354,
+        361
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "installed_single_bed",
+      "kind": "room_layer",
+      "expected_size": [
+        350,
+        295
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/installed_single_bed.webp",
+      "sha256": "d33f60a589a79a521ccd9a2c469cbaf7c682ae064c4bec01af78af63d989c753",
+      "runtime_size": [
+        350,
+        295
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "painted_flower_shop",
+      "kind": "furnished_scene",
+      "expected_size": [
+        768,
+        512
+      ],
+      "alpha_required": false,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/painted_flower_shop.webp",
+      "sha256": "1b4694be1741f0f7a396276081c41fa8a1980cf798cd07cbf600ff52f51576a2",
+      "runtime_size": [
+        768,
+        512
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "painted_garden",
+      "kind": "furnished_scene",
+      "expected_size": [
+        768,
+        512
+      ],
+      "alpha_required": false,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/painted_garden.webp",
+      "sha256": "467642144423de633b7171d004961fd75499582610d357ad186c127bc2ff295a",
+      "runtime_size": [
+        768,
+        512
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "painted_pastry_shop",
+      "kind": "furnished_scene",
+      "expected_size": [
+        768,
+        512
+      ],
+      "alpha_required": false,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/painted_pastry_shop.webp",
+      "sha256": "2be85fa3d077d09b395dad2a4579f839db2439e1fa92c09c591bbb3fc876593e",
+      "runtime_size": [
+        768,
+        512
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "painted_treehouse",
+      "kind": "furnished_scene",
+      "expected_size": [
+        768,
+        512
+      ],
+      "alpha_required": false,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/painted_treehouse.webp",
+      "sha256": "8b202b63e16593daabd8334df795f40444bc3e25ecd8142824d4ee18480ae019",
+      "runtime_size": [
+        768,
+        512
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "suite_forest",
+      "kind": "room_layer",
+      "expected_size": [
+        333,
+        359
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/suite_forest.webp",
+      "sha256": "8c429b25d7a423d474735f5411d58be705b6ca0c2702a0fd89f9c63f56f2742e",
+      "runtime_size": [
+        333,
+        359
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "suite_starlight",
+      "kind": "room_layer",
+      "expected_size": [
+        394,
+        339
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/suite_starlight.webp",
+      "sha256": "7343c63c65b481727c80771fbced714d76210f6572cf74628eab7e1c17165a55",
+      "runtime_size": [
+        394,
+        339
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "worn_accessory_bow",
+      "kind": "wearable_texture",
+      "expected_size": [
+        351,
+        334
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/worn_accessory_bow.webp",
+      "sha256": "12f7f99593dabc223576e44e738b736fd0566bcb8efde1aa5fbba2961742c989",
+      "runtime_size": [
+        351,
+        334
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "worn_accessory_glasses",
+      "kind": "wearable_texture",
+      "expected_size": [
+        442,
+        178
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/worn_accessory_glasses.webp",
+      "sha256": "3e41d222c8af682199c783c6b1fd6533c1d353cebaf742951d465fbd8ac6a291",
+      "runtime_size": [
+        442,
+        178
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "worn_accessory_hat",
+      "kind": "wearable_texture",
+      "expected_size": [
+        412,
+        303
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/worn_accessory_hat.webp",
+      "sha256": "5eea7770a9f0874221527833b26223f930a3f545ff8c021e01ea57ecc5935bc5",
+      "runtime_size": [
+        412,
+        303
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "worn_accessory_scarf",
+      "kind": "wearable_texture",
+      "expected_size": [
+        332,
+        325
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/worn_accessory_scarf.webp",
+      "sha256": "086de6380820018481c2c13bba5d1d94da3c49494138154e7e34ba2c501ffbb6",
+      "runtime_size": [
+        332,
+        325
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-1-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        378,
+        440
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-1-apron.webp",
+      "sha256": "0bda92a16681c0b548d9c262eda4334390430dd58b7a658d7cf8fef2056d57fb",
+      "runtime_size": [
+        378,
+        440
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-1-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        378,
+        440
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-1-coat.webp",
+      "sha256": "9ef88ceb30631ec8a05662a2cb0ae1379e5608b04f8a2c311e183f55c4733754",
+      "runtime_size": [
+        378,
+        440
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-2-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        442,
+        443
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-2-apron.webp",
+      "sha256": "7566f0957a344b5415f8f91b25305ef81f5dcfd6e5d99eec859dca981a45913d",
+      "runtime_size": [
+        442,
+        443
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-2-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        442,
+        443
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-2-coat.webp",
+      "sha256": "3ddea55c3b4d3e5ac2b750347a45fd8c10b2b67d7bb7413bc3cf16e5ea7da947",
+      "runtime_size": [
+        442,
+        443
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-3-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        357,
+        450
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-3-apron.webp",
+      "sha256": "018879e841af7fe84dd3974fb6e32884d74bdd416ecce41ec398a34865af0d72",
+      "runtime_size": [
+        357,
+        450
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-3-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        357,
+        450
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-3-coat.webp",
+      "sha256": "75d1f6fc55720dfe61babd6a5d9701a290995fdf17fa726dcf2751bd58ea202b",
+      "runtime_size": [
+        357,
+        450
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-4-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        455,
+        427
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-4-apron.webp",
+      "sha256": "618b745df041adad768082a4ec11687cfbaa86137dde482cedf662c9aa087a35",
+      "runtime_size": [
+        455,
+        427
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-4-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        455,
+        427
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-4-coat.webp",
+      "sha256": "56e89e374234b89820c561ca0658dd3ee3b626f73c63cc16538be8a02a423586",
+      "runtime_size": [
+        455,
+        427
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-4-rest-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        1294,
+        1216
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-4-rest-apron.webp",
+      "sha256": "012fe86b618046171370a1023cd8912b701f27049986e4c9504e3390272737d9",
+      "runtime_size": [
+        1294,
+        1216
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-4-rest-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        1294,
+        1216
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-4-rest-coat.webp",
+      "sha256": "a824ea08d1ab1e4f0d34be1657b857bd75fcf825ecada8d324a6e4aa4ab95b4e",
+      "runtime_size": [
+        1294,
+        1216
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-5-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        458,
+        381
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-5-apron.webp",
+      "sha256": "ec62aa62156ab1fd1671d593a43e53260be5fef1982eae16eed51a947f62d8f9",
+      "runtime_size": [
+        458,
+        381
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-5-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        458,
+        381
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-5-coat.webp",
+      "sha256": "20d918313c970e790d01990ac71f33263242cb9b4b6b56c5fd670a0e4ad78416",
+      "runtime_size": [
+        458,
+        381
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-6-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        464,
+        401
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-6-apron.webp",
+      "sha256": "749aaadd5e63943853e1549f5aed70f2fb33c0b7af5ac3f830d5841f05aa3cf0",
+      "runtime_size": [
+        464,
+        401
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-6-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        464,
+        401
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/cat-6-coat.webp",
+      "sha256": "a33d0b5abc5f54d23132a915a24db42007eff87db1319875807f8bed5772003d",
+      "runtime_size": [
+        464,
+        401
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-1-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        369,
+        451
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fox-1-apron.webp",
+      "sha256": "a21c49ab0f6fb53b32b79664f6d403c7d3ace2dfbabc1d18571dc5e3d67537d0",
+      "runtime_size": [
+        369,
+        451
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-1-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        369,
+        451
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fox-1-coat.webp",
+      "sha256": "619ba76a8d288400fe8e65c56dc37899eeba88d7a32eb9c34517d3b505078404",
+      "runtime_size": [
+        369,
+        451
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-2-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        354,
+        450
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fox-2-apron.webp",
+      "sha256": "b42012210198f13b7b3c5e31180f2c9ca99f9b6ca2a0826dde28c405829696f1",
+      "runtime_size": [
+        354,
+        450
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-2-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        354,
+        450
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fox-2-coat.webp",
+      "sha256": "208efd5c8f79e9fc3c5a28a6b0099ca52d7e127b65bd31f9669292e580c71b4f",
+      "runtime_size": [
+        354,
+        450
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-3-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        422,
+        451
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fox-3-apron.webp",
+      "sha256": "c6e2e3322b7d70aa54b2384ed5c99d4d842fb13a0d6ccd6e04a8216aac0d57d3",
+      "runtime_size": [
+        422,
+        451
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-3-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        422,
+        451
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fox-3-coat.webp",
+      "sha256": "e64b314f4d39e5bf73bd96110254f1e4f85861dab19d07d64a9f21ab80ee395d",
+      "runtime_size": [
+        422,
+        451
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-4-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        380,
+        455
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fox-4-apron.webp",
+      "sha256": "82abc2c5a2f7d1a750e84c80cb818c9a00283cc218ea17c610b1d2ac1b113f88",
+      "runtime_size": [
+        380,
+        455
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-4-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        380,
+        455
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fox-4-coat.webp",
+      "sha256": "e0cebb58f0f9aabc9a831b60d4dffc4952dfc272ecba40bf4c20761e7d1fcd9a",
+      "runtime_size": [
+        380,
+        455
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-5-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        407,
+        452
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fox-5-apron.webp",
+      "sha256": "ecb51197a62b8d66cc5a2a095fd5304d7eb066970d8789bd411a2d6c084a15c2",
+      "runtime_size": [
+        407,
+        452
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-5-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        407,
+        452
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fox-5-coat.webp",
+      "sha256": "17f9d9ee12d94369909cc76d1dd32acf96346de5e15c755ee634c8777c8ca20f",
+      "runtime_size": [
+        407,
+        452
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-6-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        468,
+        394
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fox-6-apron.webp",
+      "sha256": "4f701701cf4c70cd6e04fa77e4db4256e1bf9ec26c434361442a5e5c78b39abb",
+      "runtime_size": [
+        468,
+        394
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-6-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        468,
+        394
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/fox-6-coat.webp",
+      "sha256": "39f35c52e8eea1f0a4868f75668bbe17f19204f768ffff8bf7fe835cc8661b6e",
+      "runtime_size": [
+        468,
+        394
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "rabbit-1-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        450,
+        408
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/rabbit-1-apron.webp",
+      "sha256": "62f6ffddb1602d5bd029050db5d0f203926b25e8f96e72a03e2a54896b5233d9",
+      "runtime_size": [
+        450,
+        408
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "rabbit-1-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        450,
+        408
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/rabbit-1-coat.webp",
+      "sha256": "bac31710434d45697d376e62d869c54de431c392a7204b4a9fe15ba2b732f472",
+      "runtime_size": [
+        450,
+        408
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "rabbit-2-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        450,
+        440
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/rabbit-2-apron.webp",
+      "sha256": "97f0fb79a13b0a2f2cf93a46f2dffd9c601cc2af83dc321fc2d56639b124b063",
+      "runtime_size": [
+        450,
+        440
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "rabbit-2-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        450,
+        440
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/rabbit-2-coat.webp",
+      "sha256": "324e64821e6577f330c1154b36883265285a90bc00ae78fc8fd29bb6dcc11c0f",
+      "runtime_size": [
+        450,
+        440
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "rabbit-3-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        454,
+        317
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/rabbit-3-apron.webp",
+      "sha256": "8f634a074c8c569df7c98d086a2470615ea97ff6682700a5981079379848adf5",
+      "runtime_size": [
+        454,
+        317
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "rabbit-3-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        454,
+        317
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/rabbit-3-coat.webp",
+      "sha256": "4fa048e313d064851577179aa01dfdb05ec837148fb50f6f79ed2a1e693f2671",
+      "runtime_size": [
+        454,
+        317
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "rabbit-4-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        386,
+        448
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/rabbit-4-apron.webp",
+      "sha256": "248e17a9ae890ef4bc50f047a524bd60c10d533bb800d1543f08d5aaec776740",
+      "runtime_size": [
+        386,
+        448
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "rabbit-4-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        386,
+        448
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/rabbit-4-coat.webp",
+      "sha256": "8e9674328cbb0fa06837935d370250641842f35f776ab9fdd8549cfbeedffac4",
+      "runtime_size": [
+        386,
+        448
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "rabbit-5-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        394,
+        450
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/rabbit-5-apron.webp",
+      "sha256": "15568de6c0374849f0587860063b5a0927b93822df3889929ca2853c35a385c0",
+      "runtime_size": [
+        394,
+        450
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "rabbit-5-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        394,
+        450
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/rabbit-5-coat.webp",
+      "sha256": "a9dea68ce020816da0c87843c2cb66ee292d861b893874c8569e018bfeb51be4",
+      "runtime_size": [
+        394,
+        450
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "rabbit-6-apron",
+      "kind": "costumed_pet",
+      "expected_size": [
+        417,
+        452
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/rabbit-6-apron.webp",
+      "sha256": "ff81c8d05bb61c7a06125a5d16ad937d320067d5f04044bdb7b1f3ca00196fb5",
+      "runtime_size": [
+        417,
+        452
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "rabbit-6-coat",
+      "kind": "costumed_pet",
+      "expected_size": [
+        417,
+        452
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/art/rabbit-6-coat.webp",
+      "sha256": "ea870a2692f7175f13a828f8ead9745c2682102652347c0e3c98e7d1979112ed",
+      "runtime_size": [
+        417,
+        452
+      ],
+      "device_qa": "pending"
     }
   ],
   "scene_reference": {

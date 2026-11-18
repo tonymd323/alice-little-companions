@@ -22,7 +22,7 @@ Alice 在飞行模式下打开家园，免费选择银杏狐、月牙耳兔或�
 
 - 家长决定任务内容。只有家长确认后，真实成果才进入记录并获得积分。只使用一种积分，只能兑换 App 内的物品、布置和空间。
 - 日常陪伴与升级有明确的视觉区别。三只伙伴各有六阶段，每次升级都有可辨认的外观变化。长大的纪念来自现实成果，开店、点击宠物和在线时长不产分。
-- C 版银杏家园采用手绘笔触、明亮色彩和可交互的独立图层。免费家园里的桥、树屋是背景；兑换的功能区和店铺可进入、命名、单独布置。
+- C 版银杏家园采用手绘笔触、明亮色彩和可交互的独立图层。免费家园里的桥、树屋是背景；兑换的功能区和店铺可进入、命名，内有专属手绘陈设。
 - 已安装的 App 能离线完成首次建家和日常操作。外部加密备份可由家长保管，并可在 iPad 和安卓之间双向完整迁移。
 
 ## 0.10.0 的实施默认与待验证条件
@@ -37,6 +37,6 @@ Alice 在飞行模式下打开家园，免费选择银杏狐、月牙耳兔或�
 
 ## 交付状态
 
-Android 家庭版 0.11.0+8 可覆盖安装到 0.10.0。打开「小小伙伴」，在「银杏家园」点「数学 · 暖廊的彩窗」，就能和当前伙伴一起解题。章节进度与选定的窗花保存在家庭存档内。iPad 签名安装和双向真机迁移仍需 Mac、Apple Team 与两台家庭设备。[下载安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.11.0-android.apk?raw=true) · [数学章节实测](docs/evidence/math-family/README.md) · [备份与换机](docs/BACKUP_MIGRATION.md)
+Android 家庭版 0.12.0+9 可覆盖安装到旧家庭版。小家的「家具」可以先看摆好效果，「衣橱」可以让当前伙伴试穿。确认兑换后家具出现在房间，衣服穿到选定伙伴身上。「数学 · 暖廊的彩窗」沿用原家庭和书签。iPad 安装与双向真机迁移仍需实际设备、Mac 和 Apple Team。[下载安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.12.0-android.apk?raw=true) · [家具与衣橱实测](docs/evidence/furnishings/README.md) · [数学章节实测](docs/evidence/math-family/README.md) · [备份与换机](docs/BACKUP_MIGRATION.md)
 
 重跑准备检查，在本目录执行 `python3 tools/validate_devpack.py`。开工包的 `MANIFEST.json` 对应 `devpack-v2.0`。原生运行素材的摘要以 `design/asset_manifest.json`、各阶段构建摘要和 Git 标签为准。

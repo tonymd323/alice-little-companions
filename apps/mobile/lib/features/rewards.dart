@@ -2,11 +2,13 @@ import 'package:material_ui/material_ui.dart';
 
 import '../application/controller.dart';
 import '../application/family.dart';
+import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/rules.dart';
 import 'common.dart';
 import 'garden.dart';
 import 'parent_access.dart';
+import 'spaces.dart';
 
 const _tiers = {
   'small': '小装饰',
@@ -17,8 +19,24 @@ const _tiers = {
   'shop': '店铺',
 };
 
+enum CatalogSection {
+  all('成果兑换'),
+  furniture('家具图册'),
+  clothes('衣服与配饰');
+
+  const CatalogSection(this.title);
+  final String title;
+}
+
 class CatalogPage extends StatefulWidget {
-  const CatalogPage({super.key, required this.controller});
+  const CatalogPage({
+    super.key,
+    required this.controller,
+    this.section = CatalogSection.all,
+    this.model,
+  });
+  final CatalogSection section;
+  final Companion? model;
   final FamilyController controller;
 
   @override
@@ -33,7 +51,7 @@ class _CatalogPageState extends State<CatalogPage> {
     listenable: widget.controller,
     builder: (context, _) => Scaffold(
       appBar: AppBar(
-        title: const Text('成果兑换'),
+        title: Text(widget.section.title),
         actions: [
           Center(child: PointsPill(widget.controller.family!.balance)),
           const SizedBox(width: 12),
@@ -51,6 +69,17 @@ class _CatalogPageState extends State<CatalogPage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
+            final groups = widget.section == CatalogSection.all
+                ? _tiers
+                : widget.section == CatalogSection.clothes
+                ? {'single': '衣服', 'accessory': '配饰'}
+                : {
+                    'single': '家具',
+                    'small': '窗边小物',
+                    'bundle': '主题套装',
+                    'zone': '功能区',
+                    'shop': '店铺',
+                  };
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -69,7 +98,7 @@ class _CatalogPageState extends State<CatalogPage> {
                   label: const Text('我的兑换'),
                   icon: const Icon(Icons.inventory_2_outlined),
                 ),
-                for (final tier in _tiers.entries) ...[
+                for (final tier in groups.entries) ...[
                   const SizedBox(height: 18),
                   Text(
                     tier.value,
@@ -91,7 +120,12 @@ class _CatalogPageState extends State<CatalogPage> {
                         children: [
                           for (final product
                               in widget.controller.rules.catalog.values.where(
-                                (item) => item['tier'] == tier.key,
+                                (item) =>
+                                    item['tier'] == tier.key &&
+                                    (widget.section == CatalogSection.all ||
+                                        (item['slot'] != null) ==
+                                            (widget.section ==
+                                                CatalogSection.clothes)),
                               ))
                             SizedBox(
                               width: width,
@@ -104,6 +138,7 @@ class _CatalogPageState extends State<CatalogPage> {
                                     RewardPage(
                                       controller: widget.controller,
                                       product: product,
+                                      model: widget.model,
                                     ),
                                   );
                                   if (mounted) {
@@ -184,7 +219,9 @@ class RewardPage extends StatefulWidget {
     super.key,
     required this.controller,
     required this.product,
+    this.model,
   });
+  final Companion? model;
   final FamilyController controller;
   final Json product;
 
@@ -195,15 +232,47 @@ class RewardPage extends StatefulWidget {
 class _RewardPageState extends State<RewardPage> {
   FamilyService get service => widget.controller.service!;
   String get id => widget.product['id'] as String;
-  late Future<(Json?, Json?)> state = load();
-  bool trying = false;
+  Companion get pet => widget.model ?? widget.controller.family!.companion;
+  late var state = load();
+  bool preview = true;
 
-  Future<(Json?, Json?)> load() async => (
-    (await service.purchases())
+  Future<
+    ({
+      Json? purchase,
+      Json? wish,
+      Json? room,
+      List<ScenePiece> pieces,
+      Map<String, String> outfit,
+    })
+  >
+  load() async {
+    final purchase = (await service.purchases())
         .where((row) => row['item_id'] == id && row['refunded_at'] == null)
-        .singleOrNull,
-    await service.wish(),
-  );
+        .singleOrNull;
+    final spaces = await service.spaces();
+    Json? room;
+    final spaceType = widget.product['space_id'];
+    if (spaceType != null) {
+      room = spaces
+          .where((space) => space['scene_id'] == spaceType)
+          .firstOrNull;
+    } else if (purchase != null && widget.product['slot'] == null) {
+      room = await service.displayRoom(purchase['id'] as String);
+    } else {
+      room = widget.controller.baseSpace;
+    }
+    return (
+      purchase: purchase,
+      wish: await service.wish(),
+      room: room,
+      pieces: room == null
+          ? <ScenePiece>[]
+          : (await service.furnishings(room['id'] as String))
+                .map(ScenePiece.fromRow)
+                .toList(),
+      outfit: outfitFiles(await service.wardrobe(pet)),
+    );
+  }
 
   Future<void> reload() async {
     await widget.controller.refresh();
@@ -229,35 +298,73 @@ class _RewardPageState extends State<RewardPage> {
               if (loaded == null) {
                 return const Center(child: CircularProgressIndicator());
               }
-              final purchase = loaded.$1;
-              final wished = loaded.$2?['item_id'] == id;
+              final purchase = loaded.purchase;
+              final wished = loaded.wish?['item_id'] == id;
               final fixed = product['price'] as int;
               final wishPrice = wished
-                  ? loaded.$2!['selected_price'] as int
+                  ? loaded.wish!['selected_price'] as int
                   : fixed;
               final price = fixed < wishPrice ? fixed : wishPrice;
               final family = widget.controller.family!;
               final asset = product['asset_id'] as String;
+              final sceneId =
+                  (loaded.room?['scene_id'] ??
+                          product['space_id'] ??
+                          'base_room')
+                      as String;
+              final roomName =
+                  (loaded.room?['name'] ??
+                          (product['space_id'] == null
+                              ? '银杏家园'
+                              : product['name']))
+                      as String;
+              final candidates = ScenePiece.preview(product);
+              final withPreview = {
+                for (final p in loaded.pieces) p.asset: p,
+                if (purchase == null)
+                  for (final p in candidates) p.asset: p,
+              }.values.toList();
+              final installed = slot == null
+                  ? purchase != null
+                  : loaded.outfit[slot] == asset;
+              final showNew = preview && !installed;
+              final frame = slot == null
+                  ? RoomPainting(sceneId, withPreview).frameFor(candidates)
+                  : null;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (trying && slot != null)
-                    GardenScene(
-                      companion: family.companion,
-                      stage: family.stage,
-                      rules: service.rules,
-                      outfit: {slot: asset},
-                      label: '衣饰试穿',
-                      focus: true,
-                    )
-                  else
-                    GardenCard(
-                      child: Image.asset(
-                        artworkPath(asset),
-                        height: 165,
-                        fit: BoxFit.contain,
-                        semanticLabel: product['name'] as String,
-                      ),
+                  GardenScene(
+                    companion: pet,
+                    stage: family.stage,
+                    rules: service.rules,
+                    scene: SceneDefinition(service.rules, sceneId),
+                    view: HomeView.veranda,
+                    pieces: showNew ? withPreview : loaded.pieces,
+                    outfit: {
+                      ...loaded.outfit,
+                      if (slot != null && showNew) slot: asset,
+                    },
+                    label: slot != null ? pet.nickname : roomName,
+                    focus: slot != null,
+                    detailFrame: frame,
+                  ),
+                  if (!installed)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ChoiceChip(
+                          label: const Text('原样'),
+                          selected: !preview,
+                          onSelected: (_) => setState(() => preview = false),
+                        ),
+                        const SizedBox(width: 8),
+                        ChoiceChip(
+                          label: Text(slot == null ? '看摆好效果' : '试穿效果'),
+                          selected: preview,
+                          onSelected: (_) => setState(() => preview = true),
+                        ),
+                      ],
                     ),
                   const SizedBox(height: 14),
                   GardenCard(
@@ -277,17 +384,35 @@ class _RewardPageState extends State<RewardPage> {
                                 : '还差 ${price - balance} 分',
                           )
                         else
-                          const Text('已拥有，可在换装或布置中使用。'),
+                          Text(
+                            slot == null
+                                ? '已在$roomName中展出。'
+                                : installed
+                                ? '${pet.nickname}正穿着这件衣饰。'
+                                : '已收藏，可在衣橱中换上。',
+                          ),
                         if (parts != null) ...[
                           const SizedBox(height: 10),
                           Text(
                             '包含 ${parts.map((part) => part['name']).join('、')}',
                           ),
                         ],
-                        if (slot != null)
+                        if (purchase == null)
+                          Text(
+                            slot != null
+                                ? '确认兑换后，${pet.nickname}会穿上它。'
+                                : '确认兑换后，家具会在${product['space_id'] == null ? '暖廊' : roomName}中就位。',
+                          )
+                        else if (slot == null && loaded.room != null)
                           OutlinedButton(
-                            onPressed: () => setState(() => trying = !trying),
-                            child: Text(trying ? '查看物品' : '试穿'),
+                            onPressed: () => openPage(
+                              context,
+                              SpacePage(
+                                controller: widget.controller,
+                                id: loaded.room!['id'] as String,
+                              ),
+                            ),
+                            child: Text('去$roomName看看'),
                           ),
                         const SizedBox(height: 12),
                         if (purchase == null) ...[
@@ -302,10 +427,18 @@ class _RewardPageState extends State<RewardPage> {
                                 '确认兑换',
                               );
                               if (!ok) return;
-                              await service.purchase(id);
+                              await service.purchase(
+                                id,
+                                wearOn: slot == null ? null : widget.model,
+                              );
                               await reload();
                               if (context.mounted) {
-                                showNotice(context, '这件成果已放入物品栏。');
+                                showNotice(
+                                  context,
+                                  slot == null
+                                      ? '家具已就位。'
+                                      : '${pet.nickname}穿上了${product['name']}。',
+                                );
                               }
                             },
                           ),

@@ -5,7 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/widgets.dart';
 
 import '../domain/companions.dart';
-import '../domain/layout_rules.dart';
+import 'tailoring.dart';
 
 /// Coordinates in the tightly cropped illustration. The pupil and appendage
 /// anchors differ even between growth stages of the same companion.
@@ -55,20 +55,10 @@ class PetRig {
       Offset(row[6], row[7]),
     );
   }
-
-  Offset anchor(String slot) {
-    final eyes = (leftEye + rightEye) / 2;
-    return switch (slot) {
-      'head' => eyes + const Offset(-.04, -.135),
-      'face' => eyes,
-      'neck' => eyes + const Offset(-.022, .18),
-      _ => Offset((eyes.dx + .5) / 2, eyes.dy + .29),
-    };
-  }
 }
 
 class _Mesh {
-  _Mesh(this.image, this.rig, this.pet) {
+  _Mesh(this.image, this.rig, this.pet, this.bodySize, this.padding) {
     shader = ui.ImageShader(
       image,
       ui.TileMode.clamp,
@@ -78,9 +68,12 @@ class _Mesh {
     );
     for (var j = 0; j <= rows; j++) {
       for (var i = 0; i <= columns; i++) {
-        final n = j * (columns + 1) + i, u = i / columns, v = j / rows;
-        uv[n * 2] = u * image.width;
-        uv[n * 2 + 1] = v * image.height;
+        final n = j * (columns + 1) + i;
+        uv[n * 2] = i / columns * image.width;
+        uv[n * 2 + 1] = j / rows * image.height;
+        final u = base[n * 2] = (uv[n * 2] - padding.dx) / bodySize.width;
+        final v = base[n * 2 + 1] =
+            (uv[n * 2 + 1] - padding.dy) / bodySize.height;
         limb[n] = weight(
           u,
           v,
@@ -91,7 +84,7 @@ class _Mesh {
         other[n] = weight(u, v, rig.otherLimb, .23, .31);
         left[n] = weight(u, v, rig.leftEye, .082, .095);
         right[n] = weight(u, v, rig.rightEye, .066, .082);
-        upper[n] = math.pow(1 - v, 1.28).toDouble();
+        upper[n] = math.pow(math.max(0.0, 1 - v), 1.28).toDouble();
       }
     }
   }
@@ -108,10 +101,14 @@ class _Mesh {
       ],
   ]);
   final ui.Image image;
+  final Size bodySize;
+  final Offset padding;
   final PetRig rig;
   final Companion pet;
   late final ui.ImageShader shader;
-  final uv = Float32List(count * 2), xy = Float32List(count * 2);
+  final base = Float32List(count * 2),
+      uv = Float32List(count * 2),
+      xy = Float32List(count * 2);
   final limb = Float32List(count),
       other = Float32List(count),
       left = Float32List(count),
@@ -156,7 +153,7 @@ class _Mesh {
         wave * (pet == Companion.rabbit ? .083 : .021);
     final stillOffset = still ? 0.0 : 1.0;
     for (var n = 0; n < count; n++) {
-      final u = (n % (columns + 1)) / columns, v = (n ~/ (columns + 1)) / rows;
+      final u = base[n * 2], v = base[n * 2 + 1];
       final l = limb[n], r = other[n], h = upper[n];
       final x =
           u +
@@ -223,7 +220,15 @@ class _IllustratedPetState extends State<IllustratedPet> {
   final _streams = <String, (ImageStream, ImageStreamListener)>{};
   final _images = <String, ImageInfo>{};
   _Mesh? mesh;
-  String get path => widget.pet.artwork(widget.stage, reveal: widget.reveal);
+  ui.Image? _dressed;
+  String? _requested;
+  String get path => portraitArtwork(
+    widget.pet,
+    widget.stage,
+    widget.reveal,
+    widget.outfit['body'],
+  );
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -236,21 +241,61 @@ class _IllustratedPetState extends State<IllustratedPet> {
     _resolve();
   }
 
+  void _rebuildTexture() {
+    final body = _images[path]?.image;
+    if (body == null) return;
+    final clothes = <String, ui.Image>{};
+    for (final entry in widget.outfit.entries) {
+      if (entry.key == 'body') continue;
+      final image = _images[wornArtwork(entry.value)]?.image;
+      if (image == null) return;
+      clothes[entry.key] = image;
+    }
+    final rig = PetRig.forPose(widget.pet, widget.stage, widget.reveal);
+    final dressed = clothes.isEmpty
+        ? null
+        : applyAccessories(
+            body,
+            widget.pet,
+            widget.stage,
+            widget.reveal,
+            rig.leftEye,
+            rig.rightEye,
+            clothes,
+            widget.outfit['head'],
+          );
+    mesh?.shader.dispose();
+    _dressed?.dispose();
+    _dressed = dressed?.image;
+    mesh = _Mesh(
+      _dressed ?? body,
+      rig,
+      widget.pet,
+      Size(body.width.toDouble(), body.height.toDouble()),
+      dressed?.padding ?? Offset.zero,
+    );
+  }
+
   void _resolve() {
     final needed = {
       path,
-      for (final id in widget.outfit.values) artworkPath(id),
+      for (final entry in widget.outfit.entries)
+        if (entry.key != 'body') wornArtwork(entry.value),
     };
+    final keyset = (needed.toList()..sort()).join('|');
+    if (_requested == keyset) return;
+    _requested = keyset;
+    mesh?.shader.dispose();
+    mesh = null;
+    _dressed?.dispose();
+    _dressed = null;
     for (final key
         in _streams.keys.where((key) => !needed.contains(key)).toList()) {
       final (stream, listener) = _streams.remove(key)!;
       stream.removeListener(listener);
-      if (mesh?.image == _images[key]?.image) {
-        mesh?.shader.dispose();
-        mesh = null;
-      }
       _images.remove(key)?.dispose();
     }
+    var subscribing = true;
     for (final key in needed.where((k) => !_streams.containsKey(k))) {
       final stream = AssetImage(key)
           .resolve(createLocalImageConfiguration(context));
@@ -259,28 +304,15 @@ class _IllustratedPetState extends State<IllustratedPet> {
           info.dispose();
           return;
         }
-        void accept() {
-          if (key == path) {
-            mesh?.shader.dispose();
-            mesh = _Mesh(
-              info.image,
-              PetRig.forPose(widget.pet, widget.stage, widget.reveal),
-              widget.pet,
-            );
-          }
-          _images.remove(key)?.dispose();
-          _images[key] = info;
-        }
-
-        if (synchronous) {
-          accept();
-        } else {
-          setState(accept);
-        }
+        _images.remove(key)?.dispose();
+        _images[key] = info;
+        if (!subscribing) setState(_rebuildTexture);
       });
       _streams[key] = (stream, listener);
       stream.addListener(listener);
     }
+    subscribing = false;
+    _rebuildTexture();
   }
 
   @override
@@ -289,6 +321,7 @@ class _IllustratedPetState extends State<IllustratedPet> {
       pair.$1.removeListener(pair.$2);
     }
     mesh?.shader.dispose();
+    _dressed?.dispose();
     for (final info in _images.values) {
       info.dispose();
     }
@@ -296,76 +329,25 @@ class _IllustratedPetState extends State<IllustratedPet> {
   }
 
   @override
-  Widget build(BuildContext context) => RepaintBoundary(
-    child: CustomPaint(
-      painter: _PetPainter(widget, mesh, {
-        for (final e in widget.outfit.entries)
-          if (_images[artworkPath(e.value)] case final image?)
-            e.key: image.image,
-      }),
-    ),
-  );
+  Widget build(BuildContext context) =>
+      RepaintBoundary(child: CustomPaint(painter: _PetPainter(widget, mesh)));
 }
 
 class _PetPainter extends CustomPainter {
-  _PetPainter(this.actor, this.mesh, this.clothes)
-    : super(repaint: actor.clock);
+  _PetPainter(this.actor, this.mesh) : super(repaint: actor.clock);
   final IllustratedPet actor;
   final _Mesh? mesh;
-  final Map<String, ui.Image> clothes;
   @override
   void paint(Canvas canvas, Size size) {
     final m = mesh;
     if (m == null || size.isEmpty) return;
-    final source = Size(m.image.width.toDouble(), m.image.height.toDouble());
+    final source = m.bodySize;
     final dest = applyBoxFit(BoxFit.contain, source, size).destination;
     final rect = Alignment.bottomCenter.inscribe(dest, Offset.zero & size);
     final t = actor.seconds(),
         reaction = actor.still ? 0.0 : actor.reaction(),
         walking = actor.still ? 0.0 : actor.walking();
     m.paint(canvas, rect, t, reaction, walking, actor.gaze(), actor.still);
-    for (final slot in ['body', 'neck', 'head', 'face']) {
-      final img = clothes[slot];
-      if (img == null) continue;
-      final a = m.rig.anchor(slot);
-      final wave = math.sin(reaction * math.pi);
-      final offset = actor.still
-          ? Offset.zero
-          : Offset(
-              (math.sin(t * 1.02) * .005 +
-                      math.sin(reaction * math.pi * 3.6) * wave * .019 +
-                      actor.gaze() * .043) *
-                  (1 - a.dy) *
-                  rect.width,
-              -(math.sin(t * 2.1) * .010 * (1 - a.dy) +
-                      wave * (actor.pet == Companion.rabbit ? .083 : .021) +
-                      math.sin(t * 10).abs() * walking * .04) *
-                  rect.height,
-            );
-      final width =
-          rect.shortestSide *
-          (slot == 'body'
-              ? .53
-              : slot == 'head'
-              ? .38
-              : slot == 'face'
-              ? .37
-              : .36);
-      final center =
-          Offset(rect.left + a.dx * rect.width, rect.top + a.dy * rect.height) +
-          offset;
-      final frame = Rect.fromCenter(
-        center: center,
-        width: width,
-        height: width * img.height / img.width,
-      );
-      canvas.drawImageRect(
-        img,
-        Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble()),
-        frame,
-        Paint()..filterQuality = ui.FilterQuality.medium,
-      );
-    }
   }
 
   @override

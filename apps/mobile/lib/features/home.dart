@@ -36,11 +36,12 @@ class _FamilyHomeState extends State<FamilyHome> {
     context,
     AppearancePreview(initial: family.companion, initialStage: family.stage),
   );
-  Future<void> decorate() async {
-    final base = controller.baseSpace;
-    if (base == null) return;
+  Future<void> browseFurniture() async {
     setState(() => view = HomeView.veranda);
-    await openPage(context, LayoutPage(controller: controller, space: base));
+    await openPage(
+      context,
+      CatalogPage(controller: controller, section: CatalogSection.furniture),
+    );
   }
 
   GardenScene familyScene(
@@ -240,18 +241,18 @@ class _FamilyHomeState extends State<FamilyHome> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _WorkshopAction(
-                '换装',
+                '衣橱',
                 Icons.checkroom_outlined,
                 const Color(0xFFF0DBCE),
                 const Color(0xFF925347),
                 () => openPage(context, WardrobePage(controller: controller)),
               ),
               _WorkshopAction(
-                '布置',
+                '家具',
                 Icons.chair_outlined,
                 const Color(0xFFF1DFB5),
                 const Color(0xFF835A2E),
-                frozen ? null : decorate,
+                browseFurniture,
               ),
               _WorkshopAction(
                 '空间',

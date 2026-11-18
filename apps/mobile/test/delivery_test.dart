@@ -8,6 +8,7 @@ import 'package:alice_companions/domain/pin.dart';
 import 'package:alice_companions/domain/rules.dart';
 import 'package:alice_companions/domain/window_page.dart';
 import 'package:alice_companions/features/garden.dart';
+import 'package:alice_companions/features/rewards.dart';
 import 'package:alice_companions/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
@@ -73,6 +74,74 @@ void main() {
         tester.widget<GardenScene>(find.byType(GardenScene)).view,
         HomeView.veranda,
       );
+    },
+  );
+
+  testWidgets(
+    'room and clothing comparisons open from the family catalogue without changing the SQLite state',
+    (tester) async {
+      final stock = (await tester.runAsync(TestFamily.create))!;
+      final controller = FamilyController(
+        stock.device,
+        stock.rules,
+        assets: fixtureAssets,
+      )..service = stock.service;
+      addTearDown(() async {
+        controller.dispose();
+        await stock.dispose();
+      });
+      await tester.runAsync(controller.refresh);
+      Future<List<Object?>> state() async => [
+        (await stock.service.overview())!.revision,
+        (await stock.service.overview())!.balance,
+        await stock.service.db.value('SELECT count(*) FROM processed_commands'),
+        await stock.service.ledger(),
+        await stock.service.items(),
+        await stock.service.wardrobe(Companion.rabbit),
+      ];
+      final before = await tester.runAsync(state);
+      for (final id in ['single_armchair', 'single_coat']) {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: RewardPage(
+              key: ValueKey(id),
+              controller: controller,
+              product: stock.rules.catalog[id]!,
+            ),
+          ),
+        );
+        final option = find.text(id == 'single_coat' ? '试穿效果' : '看摆好效果');
+        for (var i = 0; i < 24 && option.evaluate().isEmpty; i++) {
+          await tester.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 15)),
+          );
+          await advanceScene(tester);
+        }
+        expect(option, findsOneWidget);
+        GardenScene room() =>
+            tester.widget<GardenScene>(find.byType(GardenScene));
+        final look = room();
+        if (id == 'single_coat') {
+          expect(look.outfit['body'], 'item_single_coat');
+        } else {
+          expect(
+            look.pieces.map((p) => p.asset),
+            contains('item_single_armchair'),
+          );
+        }
+        await tester.tap(find.text('原样'));
+        await advanceScene(tester);
+        expect(room().outfit, isEmpty);
+        expect(
+          room().pieces.map((p) => p.asset),
+          isNot(contains('item_single_armchair')),
+        );
+        await tester.tap(option);
+        await advanceScene(tester);
+        expect(room().outfit, look.outfit);
+        expect(tester.takeException(), isNull);
+      }
+      expect(await tester.runAsync(state), before);
     },
   );
 

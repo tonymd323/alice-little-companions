@@ -196,86 +196,99 @@ extension FamilyEconomy on FamilyService {
   Json _product(String id) =>
       rules.catalog[id] ?? (throw const UserError('这个成果暂不可兑换。'));
 
-  Future<Json> purchase(String item, {String? commandId}) async {
+  Future<Json> purchase(
+    String item, {
+    Companion? wearOn,
+    String? commandId,
+  }) async {
     String? fresh;
-    final result = await _command('purchase', item, commandId, (
-      id,
-      family,
-    ) async {
-      final owned = await db.row(
-        'SELECT id, price_paid FROM purchases WHERE item_id = ? AND refunded_at IS NULL',
-        [item],
-      );
-      if (owned != null) {
-        return {'id': owned['id'], 'charged': 0, 'owned': true};
-      }
-      final product = _product(item);
-      final wish = await this.wish();
-      final fixed = product['price'] as int;
-      final price = wish?['item_id'] == item
-          ? min(fixed, wish!['selected_price'] as int)
-          : fixed;
-      if (family.balance < price) {
-        throw UserError('还差 ${price - family.balance} 分。');
-      }
-      final key = uuid.v4();
-      final ledger = await _addLedger(
-        id,
-        -price,
-        'purchase',
-        'purchase:$key',
-        today,
-      );
-      await db.insertRow('purchases', {
-        'id': key,
-        'item_id': item,
-        'name': product['name'],
-        'price_paid': price,
-        'ledger_id': ledger['id'],
-        'created_at': now,
-        'command_id': id,
-        'asset_id': product['asset_id'],
-      });
-      final spaceType = product['space_id'] as String?;
-      final space = spaceType == null ? null : uuid.v4();
-      if (space != null) {
-        await db.insertRow('spaces', {
-          'id': space,
-          'scene_id': spaceType,
+    final result = await _command(
+      'purchase',
+      wearOn == null ? item : [item, wearOn.name],
+      commandId,
+      (id, family) async {
+        final owned = await db.row(
+          'SELECT id, price_paid FROM purchases WHERE item_id = ? AND refunded_at IS NULL',
+          [item],
+        );
+        if (owned != null) {
+          return {'id': owned['id'], 'charged': 0, 'owned': true};
+        }
+        final product = _product(item);
+        final wish = await this.wish();
+        final fixed = product['price'] as int;
+        final price = wish?['item_id'] == item
+            ? min(fixed, wish!['selected_price'] as int)
+            : fixed;
+        if (family.balance < price) {
+          throw UserError('还差 ${price - family.balance} 分。');
+        }
+        final key = uuid.v4();
+        final ledger = await _addLedger(
+          id,
+          -price,
+          'purchase',
+          'purchase:$key',
+          today,
+        );
+        await db.insertRow('purchases', {
+          'id': key,
+          'item_id': item,
           'name': product['name'],
-          'purchase_id': key,
+          'price_paid': price,
+          'ledger_id': ledger['id'],
+          'created_at': now,
+          'command_id': id,
+          'asset_id': product['asset_id'],
         });
-      }
-      final components = (product['included_items'] as List?)?.cast<Json>();
-      for (final (index, part) in (components ?? [product]).indexed) {
-        final instance = uuid.v4();
-        await db.insertRow('entitlements', {
-          'id': instance,
-          'purchase_id': key,
-          'item_id': part['id'],
-          'asset_id': part['asset_id'],
-          'name': part['name'],
-          'slot': part['slot'],
-          'bound_space': part['bound_to_container'] == true ? space : null,
-        });
+        final spaceType = product['space_id'] as String?;
+        final space = spaceType == null ? null : uuid.v4();
         if (space != null) {
-          await db.insertRow('placements', {
-            'entitlement_id': instance,
-            'space_id': space,
-            'x': [.26, .52, .75][index],
-            'y': [.80, .89, .74][index],
-            'z': index,
+          await db.insertRow('spaces', {
+            'id': space,
+            'scene_id': spaceType,
+            'name': product['name'],
+            'purchase_id': key,
           });
         }
-      }
-      fault?.call('ownership');
-      await db.customStatement(
-        'DELETE FROM wishes WHERE child_id = ? AND item_id = ?',
-        [family.childId, item],
-      );
-      fresh = key;
-      return {'id': key, 'charged': price, 'balance': ledger['balance']};
-    });
+        final components = (product['included_items'] as List?)?.cast<Json>();
+        for (final (index, part) in (components ?? [product]).indexed) {
+          final instance = uuid.v4();
+          await db.insertRow('entitlements', {
+            'id': instance,
+            'purchase_id': key,
+            'item_id': part['id'],
+            'asset_id': part['asset_id'],
+            'name': part['name'],
+            'slot': part['slot'],
+            'bound_space': part['bound_to_container'] == true ? space : null,
+          });
+          if (part['slot'] != null) {
+            await db.customStatement(
+              '''INSERT INTO pet_state(pet_id, slot, entitlement_id) VALUES (?, ?, ?)
+               ON CONFLICT(pet_id, slot) DO UPDATE SET entitlement_id = excluded.entitlement_id''',
+              [(wearOn ?? family.companion).name, part['slot'], instance],
+            );
+          }
+          if (space != null) {
+            await db.insertRow('placements', {
+              'entitlement_id': instance,
+              'space_id': space,
+              'x': [.26, .52, .75][index],
+              'y': [.80, .89, .74][index],
+              'z': index,
+            });
+          }
+        }
+        fault?.call('ownership');
+        await db.customStatement(
+          'DELETE FROM wishes WHERE child_id = ? AND item_id = ?',
+          [family.childId, item],
+        );
+        fresh = key;
+        return {'id': key, 'charged': price, 'balance': ledger['balance']};
+      },
+    );
     if (fresh != null) {
       _childUndoStarts[fresh!] = _undoClock.elapsedMilliseconds;
     }

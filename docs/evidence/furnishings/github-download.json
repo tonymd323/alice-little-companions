@@ -1,0 +1,9 @@
+{
+  "retrieved_from": "Independent shallow Git fetch from GitHub and read of the committed APK blob",
+  "remote_branch": "android-downloads",
+  "remote_commit": "3d5821b2b281ff53c1f87b931298b77101123ccb",
+  "path": "downloads/alice-0.12.0-android.apk",
+  "bytes": 72353716,
+  "sha256": "3cb8de3d1e02bf1c24d3baf2884091289a6201e45614a93f1d2240e80e892806",
+  "byte_identical_to_installed_release": true
+}

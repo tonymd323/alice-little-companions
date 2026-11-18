@@ -3,10 +3,10 @@
 2026-11-18 开工基线。本检查读取文档、配置和交付素材；原生 App 的执行记录单独保存在验收执行表中。
 
 - 13 项产品需求、35 条业务规则、43 项原生验收用例。
-- 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47}。
+- 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 54}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 314 项通过。下面列出逐项结果。
+- 本次准备检查 440 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -32,6 +32,7 @@
 - 内部链接有效：README.md → AGENTS.md
 - 内部链接有效：README.md → DOCS_CHECK.md
 - 内部链接有效：README.md → MANIFEST.json
+- 内部链接有效：README.md → docs/evidence/furnishings/README.md
 - 内部链接有效：README.md → docs/evidence/math-family/README.md
 - 内部链接有效：README.md → docs/BACKUP_MIGRATION.md
 - 内部链接有效：design/ART_PROMPTS.md → references/pet-stages.png
@@ -67,6 +68,7 @@
 - 内部链接有效：docs/PLAN.md → RULES.md
 - 内部链接有效：docs/PLAN.md → evidence/math-family/README.md
 - 内部链接有效：docs/PLAN.md → evidence/math-preview/README.md
+- 内部链接有效：docs/PLAN.md → evidence/furnishings/README.md
 - 内部链接有效：docs/evidence/M0/README.md → flutter-version.json
 - 内部链接有效：docs/evidence/M0/README.md → SHA256SUMS
 - 内部链接有效：docs/evidence/M0/README.md → android-390x844.png
@@ -152,6 +154,22 @@
 - 内部链接有效：docs/evidence/M6/README.md → preflight.json
 - 内部链接有效：docs/evidence/M6/README.md → ../acceptance.csv
 - 内部链接有效：docs/evidence/M6/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/furnishings/README.md → installation.json
+- 内部链接有效：docs/evidence/furnishings/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/furnishings/README.md → home.png
+- 内部链接有效：docs/evidence/furnishings/README.md → armchair-before.png
+- 内部链接有效：docs/evidence/furnishings/README.md → armchair-preview.png
+- 内部链接有效：docs/evidence/furnishings/README.md → coat-before.png
+- 内部链接有效：docs/evidence/furnishings/README.md → coat-preview.png
+- 内部链接有效：docs/evidence/furnishings/README.md → coat-poses.jpg
+- 内部链接有效：docs/evidence/furnishings/README.md → apron-poses.jpg
+- 内部链接有效：docs/evidence/furnishings/README.md → ../../../design/asset_manifest.json
+- 内部链接有效：docs/evidence/furnishings/README.md → full-tests.log
+- 内部链接有效：docs/evidence/furnishings/README.md → analyze.log
+- 内部链接有效：docs/evidence/furnishings/README.md → android-build.log
+- 内部链接有效：docs/evidence/furnishings/README.md → android-upgrade.log
+- 内部链接有效：docs/evidence/furnishings/README.md → installation.json
+- 内部链接有效：docs/evidence/furnishings/README.md → github-download.json
 - 内部链接有效：docs/evidence/math-family/README.md → home.png
 - 内部链接有效：docs/evidence/math-family/README.md → chapter.png
 - 内部链接有效：docs/evidence/math-family/README.md → finished.png
@@ -305,6 +323,114 @@
 - 候选素材可追溯 pet_cat_6
 - 素材状态有效 pet_cat_4_rest
 - 候选素材可追溯 pet_cat_4_rest
+- 素材状态有效 installed_decor_cushion
+- 正式素材文件可验证 installed_decor_cushion
+- 素材状态有效 installed_decor_mobile
+- 正式素材文件可验证 installed_decor_mobile
+- 素材状态有效 installed_decor_plant
+- 正式素材文件可验证 installed_decor_plant
+- 素材状态有效 installed_decor_vase
+- 正式素材文件可验证 installed_decor_vase
+- 素材状态有效 installed_single_armchair
+- 正式素材文件可验证 installed_single_armchair
+- 素材状态有效 installed_single_bed
+- 正式素材文件可验证 installed_single_bed
+- 素材状态有效 painted_flower_shop
+- 正式素材文件可验证 painted_flower_shop
+- 素材状态有效 painted_garden
+- 正式素材文件可验证 painted_garden
+- 素材状态有效 painted_pastry_shop
+- 正式素材文件可验证 painted_pastry_shop
+- 素材状态有效 painted_treehouse
+- 正式素材文件可验证 painted_treehouse
+- 素材状态有效 suite_forest
+- 正式素材文件可验证 suite_forest
+- 素材状态有效 suite_starlight
+- 正式素材文件可验证 suite_starlight
+- 素材状态有效 worn_accessory_bow
+- 正式素材文件可验证 worn_accessory_bow
+- 素材状态有效 worn_accessory_glasses
+- 正式素材文件可验证 worn_accessory_glasses
+- 素材状态有效 worn_accessory_hat
+- 正式素材文件可验证 worn_accessory_hat
+- 素材状态有效 worn_accessory_scarf
+- 正式素材文件可验证 worn_accessory_scarf
+- 素材状态有效 cat-1-apron
+- 正式素材文件可验证 cat-1-apron
+- 素材状态有效 cat-1-coat
+- 正式素材文件可验证 cat-1-coat
+- 素材状态有效 cat-2-apron
+- 正式素材文件可验证 cat-2-apron
+- 素材状态有效 cat-2-coat
+- 正式素材文件可验证 cat-2-coat
+- 素材状态有效 cat-3-apron
+- 正式素材文件可验证 cat-3-apron
+- 素材状态有效 cat-3-coat
+- 正式素材文件可验证 cat-3-coat
+- 素材状态有效 cat-4-apron
+- 正式素材文件可验证 cat-4-apron
+- 素材状态有效 cat-4-coat
+- 正式素材文件可验证 cat-4-coat
+- 素材状态有效 cat-4-rest-apron
+- 正式素材文件可验证 cat-4-rest-apron
+- 素材状态有效 cat-4-rest-coat
+- 正式素材文件可验证 cat-4-rest-coat
+- 素材状态有效 cat-5-apron
+- 正式素材文件可验证 cat-5-apron
+- 素材状态有效 cat-5-coat
+- 正式素材文件可验证 cat-5-coat
+- 素材状态有效 cat-6-apron
+- 正式素材文件可验证 cat-6-apron
+- 素材状态有效 cat-6-coat
+- 正式素材文件可验证 cat-6-coat
+- 素材状态有效 fox-1-apron
+- 正式素材文件可验证 fox-1-apron
+- 素材状态有效 fox-1-coat
+- 正式素材文件可验证 fox-1-coat
+- 素材状态有效 fox-2-apron
+- 正式素材文件可验证 fox-2-apron
+- 素材状态有效 fox-2-coat
+- 正式素材文件可验证 fox-2-coat
+- 素材状态有效 fox-3-apron
+- 正式素材文件可验证 fox-3-apron
+- 素材状态有效 fox-3-coat
+- 正式素材文件可验证 fox-3-coat
+- 素材状态有效 fox-4-apron
+- 正式素材文件可验证 fox-4-apron
+- 素材状态有效 fox-4-coat
+- 正式素材文件可验证 fox-4-coat
+- 素材状态有效 fox-5-apron
+- 正式素材文件可验证 fox-5-apron
+- 素材状态有效 fox-5-coat
+- 正式素材文件可验证 fox-5-coat
+- 素材状态有效 fox-6-apron
+- 正式素材文件可验证 fox-6-apron
+- 素材状态有效 fox-6-coat
+- 正式素材文件可验证 fox-6-coat
+- 素材状态有效 rabbit-1-apron
+- 正式素材文件可验证 rabbit-1-apron
+- 素材状态有效 rabbit-1-coat
+- 正式素材文件可验证 rabbit-1-coat
+- 素材状态有效 rabbit-2-apron
+- 正式素材文件可验证 rabbit-2-apron
+- 素材状态有效 rabbit-2-coat
+- 正式素材文件可验证 rabbit-2-coat
+- 素材状态有效 rabbit-3-apron
+- 正式素材文件可验证 rabbit-3-apron
+- 素材状态有效 rabbit-3-coat
+- 正式素材文件可验证 rabbit-3-coat
+- 素材状态有效 rabbit-4-apron
+- 正式素材文件可验证 rabbit-4-apron
+- 素材状态有效 rabbit-4-coat
+- 正式素材文件可验证 rabbit-4-coat
+- 素材状态有效 rabbit-5-apron
+- 正式素材文件可验证 rabbit-5-apron
+- 素材状态有效 rabbit-5-coat
+- 正式素材文件可验证 rabbit-5-coat
+- 素材状态有效 rabbit-6-apron
+- 正式素材文件可验证 rabbit-6-apron
+- 素材状态有效 rabbit-6-coat
+- 正式素材文件可验证 rabbit-6-coat
 - 场景 C 参考图摘要
 - 美术成长表与积分规则阈值一致
 - 方向参考图片hash正确

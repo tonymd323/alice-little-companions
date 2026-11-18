@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -8,6 +9,7 @@ import 'package:alice_companions/data/checkpoints.dart';
 import 'package:alice_companions/data/device.dart';
 import 'package:alice_companions/data/snapshot.dart';
 import 'package:alice_companions/domain/backup_codec.dart';
+import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/domain/pin.dart';
 import 'package:alice_companions/domain/rules.dart';
 import 'package:alice_companions/domain/window_page.dart';
@@ -165,13 +167,10 @@ void main() {
     await s.setWish('single_armchair');
     final items = await s.items();
     final space = (await s.spaces()).single;
-    await s.db.insertRow('pet_state', {
-      'pet_id': 'rabbit',
-      'slot': 'neck',
-      'entitlement_id': items.singleWhere(
-        (item) => item['item_id'] == 'accessory_scarf',
-      )['id'],
-    });
+    expect(
+      (await s.wardrobe(Companion.rabbit)).single['entitlement_id'],
+      items.singleWhere((item) => item['item_id'] == 'accessory_scarf')['id'],
+    );
     await s.db.insertRow('placements', {
       'space_id': space['id'],
       'entitlement_id': items.singleWhere(
