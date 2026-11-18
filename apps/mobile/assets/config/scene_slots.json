@@ -1,0 +1,369 @@
+{
+  "version": "1.1",
+  "scenes": [
+    {
+      "id": "base_room",
+      "canvas": [
+        1536,
+        1024
+      ],
+      "floor_polygon": [
+        [
+          0.14,
+          0.735
+        ],
+        [
+          0.3,
+          0.705
+        ],
+        [
+          0.54,
+          0.745
+        ],
+        [
+          0.635,
+          0.82
+        ],
+        [
+          0.605,
+          0.875
+        ],
+        [
+          0.52,
+          0.92
+        ],
+        [
+          0.4,
+          0.965
+        ],
+        [
+          0.12,
+          0.925
+        ]
+      ],
+      "wall_polygon": [],
+      "coordinates": "normalized",
+      "note": "C 版草地可摆放区域初稿。溪流、桥栏及裸岩位于范围外。拖放须将屏幕坐标反算回完整背景，核查物件占地和宠物落脚处。",
+      "status": "candidate_for_device_qa",
+      "hanging_mounts": [
+        {
+          "id": "porch_eave",
+          "position": [
+            0.36,
+            0.27
+          ],
+          "capacity": 1,
+          "status": "candidate_for_device_qa"
+        }
+      ]
+    },
+    {
+      "id": "garden",
+      "canvas": [
+        1536,
+        1024
+      ],
+      "floor_polygon": [
+        [
+          0.08,
+          0.52
+        ],
+        [
+          0.92,
+          0.52
+        ],
+        [
+          0.97,
+          0.94
+        ],
+        [
+          0.03,
+          0.94
+        ]
+      ],
+      "wall_polygon": [
+        [
+          0.1,
+          0.12
+        ],
+        [
+          0.9,
+          0.12
+        ],
+        [
+          0.9,
+          0.48
+        ],
+        [
+          0.1,
+          0.48
+        ]
+      ],
+      "coordinates": "normalized",
+      "note": "该多边形为布局初始约束，正式场景出图后按实际地面调整并验收，不能只看物品中心点。",
+      "status": "provisional_pending_artwork"
+    },
+    {
+      "id": "treehouse",
+      "canvas": [
+        1536,
+        1024
+      ],
+      "floor_polygon": [
+        [
+          0.08,
+          0.52
+        ],
+        [
+          0.92,
+          0.52
+        ],
+        [
+          0.97,
+          0.94
+        ],
+        [
+          0.03,
+          0.94
+        ]
+      ],
+      "wall_polygon": [
+        [
+          0.1,
+          0.12
+        ],
+        [
+          0.9,
+          0.12
+        ],
+        [
+          0.9,
+          0.48
+        ],
+        [
+          0.1,
+          0.48
+        ]
+      ],
+      "coordinates": "normalized",
+      "note": "该多边形为布局初始约束，正式场景出图后按实际地面调整并验收，不能只看物品中心点。",
+      "status": "provisional_pending_artwork"
+    },
+    {
+      "id": "pastry_shop",
+      "canvas": [
+        1536,
+        1024
+      ],
+      "floor_polygon": [
+        [
+          0.08,
+          0.52
+        ],
+        [
+          0.92,
+          0.52
+        ],
+        [
+          0.97,
+          0.94
+        ],
+        [
+          0.03,
+          0.94
+        ]
+      ],
+      "wall_polygon": [
+        [
+          0.1,
+          0.12
+        ],
+        [
+          0.9,
+          0.12
+        ],
+        [
+          0.9,
+          0.48
+        ],
+        [
+          0.1,
+          0.48
+        ]
+      ],
+      "coordinates": "normalized",
+      "note": "该多边形为布局初始约束，正式场景出图后按实际地面调整并验收，不能只看物品中心点。",
+      "status": "provisional_pending_artwork"
+    },
+    {
+      "id": "flower_shop",
+      "canvas": [
+        1536,
+        1024
+      ],
+      "floor_polygon": [
+        [
+          0.08,
+          0.52
+        ],
+        [
+          0.92,
+          0.52
+        ],
+        [
+          0.97,
+          0.94
+        ],
+        [
+          0.03,
+          0.94
+        ]
+      ],
+      "wall_polygon": [
+        [
+          0.1,
+          0.12
+        ],
+        [
+          0.9,
+          0.12
+        ],
+        [
+          0.9,
+          0.48
+        ],
+        [
+          0.1,
+          0.48
+        ]
+      ],
+      "coordinates": "normalized",
+      "note": "该多边形为布局初始约束，正式场景出图后按实际地面调整并验收，不能只看物品中心点。",
+      "status": "provisional_pending_artwork"
+    }
+  ],
+  "home_demo": {
+    "design_asset_id": "garden",
+    "pet_center_x": 0.47,
+    "pet_bottom": 0.95,
+    "pet_frame_height_by_stage": [
+      0.24,
+      0.27,
+      0.3,
+      0.34,
+      0.36,
+      0.39
+    ],
+    "normalized_in": "visible_scene_viewport",
+    "sprite_fit": "center_contain_in_square",
+    "background_fit": "center_cover",
+    "mobile_background_crop": "center",
+    "release_note": "正式版摆放位置保存于原始背景空间，镜头裁切或尺寸变化时同时转换显示位置及命中区域。"
+  },
+  "demo_wear_anchors": {
+    "coordinates": "0–100 in centered square sprite frame",
+    "fields": [
+      "face_x",
+      "eye_y",
+      "neck_y"
+    ],
+    "fox": [
+      [
+        66,
+        43,
+        62
+      ],
+      [
+        42,
+        39,
+        56
+      ],
+      [
+        34,
+        25,
+        43
+      ],
+      [
+        32,
+        44,
+        57
+      ],
+      [
+        42,
+        45,
+        57
+      ],
+      [
+        65,
+        40,
+        49
+      ]
+    ],
+    "rabbit": [
+      [
+        58,
+        29,
+        50
+      ],
+      [
+        56,
+        20,
+        40
+      ],
+      [
+        57,
+        31,
+        45
+      ],
+      [
+        58,
+        46,
+        60
+      ],
+      [
+        56,
+        46,
+        59
+      ],
+      [
+        59,
+        36,
+        47
+      ]
+    ],
+    "cat": [
+      [
+        62,
+        39,
+        60
+      ],
+      [
+        77,
+        27,
+        47
+      ],
+      [
+        68,
+        25,
+        46
+      ],
+      [
+        83,
+        28,
+        45
+      ],
+      [
+        67,
+        28,
+        38
+      ],
+      [
+        67,
+        33,
+        44
+      ]
+    ],
+    "cat_stage_4_pose": "rest",
+    "validation": "Demo 初始坐标。展翼姿态、体槽、头槽及各物品仍需独立真机校准。"
+  }
+}

@@ -87,3 +87,7 @@ M0 的环境记录放在 `docs/evidence/M0/`，包含工具版本、代码提交
 长期日常使用由签名安装条件和 App 运行时离线能力共同决定。先在开发期用测试账号完成签名与安装，再在正式包上断开网络、USB 和调试器，从桌面重新打开，独立核验家长确认、积分落账、换装、备份与恢复。签名资格及实际设备可在第一次真机验收前集中落实，云端其他开发可先推进。
 
 [Apple 个人账户签名期限](https://developer.apple.com/help/account/basics/about-your-developer-account/) · [Apple 会员费用](https://developer.apple.com/programs/whats-included/) · [注册设备与 Ad Hoc](https://developer.apple.com/help/account/provisioning-profiles/create-an-ad-hoc-provisioning-profile/) · [TestFlight 构建期限](https://developer.apple.com/help/app-store-connect/test-a-beta-version/testflight-overview/) · [Android 应用签名](https://developer.android.com/studio/publish/app-signing)
+
+## M0 云端实测
+
+原生工程位于 `apps/mobile`。使用 Flutter 3.50.0 的 `ab2912035e160d9cad6306df307576da6128ebdb` 提交，内含 Dart 3.14.0。Android 工具为 JDK 21、Gradle 9.5.0、AGP 9.3.1、Kotlin 2.4.20、compile/target SDK 36、min SDK 26、NDK 28.2.13676358。iOS 工程部署目标 16.0。云电脑使用位于工作区 scratch 的 SDK，需加载该机的环境脚本后执行 Flutter 命令。Android 构建用 `flutter build apk --release`，让 Flutter 按 release 模式重新注册插件。[M0 实测记录](evidence/M0/README.md)
