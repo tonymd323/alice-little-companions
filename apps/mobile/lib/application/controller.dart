@@ -7,9 +7,17 @@ import '../domain/companions.dart';
 import '../domain/pin.dart';
 import '../domain/rules.dart';
 import 'family.dart';
+import 'transfer.dart';
 
 class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
-  FamilyController(this.device, this.rules);
+  FamilyController(this.device, this.rules, {this.assets = const {}});
+  final Set<String> assets;
+  late final transfer = TransferService(
+    device: device,
+    rules: rules,
+    availableAssets: assets,
+    current: () => service,
+  );
 
   final DeviceStore device;
   final Rules rules;
@@ -50,6 +58,15 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
       recovery: recovery,
     );
     await refresh();
+  }
+
+  Future<void> acceptActivation(Activation activated) async {
+    if (activated.alreadyRestored) return;
+    final previous = service;
+    lock();
+    service = activated.service;
+    await refresh();
+    await previous?.close();
   }
 
   Future<void> unlock(String pin) async {

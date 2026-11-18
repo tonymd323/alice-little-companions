@@ -1,0 +1,596 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:path/path.dart' as p;
+
+import '../application/controller.dart';
+import '../application/transfer.dart';
+import '../domain/backup_codec.dart';
+import '../domain/pin.dart';
+import '../domain/rules.dart';
+import 'common.dart';
+import 'garden.dart';
+import 'parent_access.dart';
+
+class DataPage extends StatefulWidget {
+  const DataPage({super.key, required this.controller});
+  final FamilyController controller;
+
+  @override
+  State<DataPage> createState() => _DataPageState();
+}
+
+class _DataPageState extends State<DataPage> {
+  TransferService get transfer => widget.controller.transfer;
+  late Future<(Json, List<File>)> states = load();
+
+  Future<(Json, List<File>)> load() async =>
+      (await transfer.status(), await transfer.checkpoints.files());
+
+  Future<void> visit(Widget page) async {
+    await openPage(context, page);
+    if (mounted) setState(() => states = load());
+  }
+
+  @override
+  Widget build(BuildContext context) => ParentFrame(
+    controller: widget.controller,
+    title: '备份与迁移',
+    child: PageBody(
+      child: FutureBuilder(
+        future: states,
+        builder: (context, state) {
+          final data = state.data;
+          if (data == null) {
+            return state.hasError
+                ? const GardenCard(child: Text('暂时无法读取设备备份状态。'))
+                : const Center(child: CircularProgressIndicator());
+          }
+          final control = data.$1;
+          final kind = control['state'];
+          final frozen = kind != 'IDLE';
+          final last = control['last_verified_at'] as String?;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              GardenCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '外部加密备份',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      last == null
+                          ? '还没有回读验证过外部备份。'
+                          : '上次外部验证 ${localTime(last)}',
+                    ),
+                    if (control['last_external_status'] == 'unverified' ||
+                        control['last_external_status'] == 'pending')
+                      const Text('最近导出的文件等待回读验证。'),
+                    if (kind == 'AWAITING_FILE_VERIFICATION')
+                      const Text('迁移文件待验证。这台设备暂时只读。'),
+                    if (kind == 'MIGRATION_PENDING')
+                      const Text('迁移文件已验证。这台设备只读，可在新设备恢复。'),
+                    if (kind == 'ARCHIVED') const Text('这台设备已归档，可查看原有成果。'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              if (!frozen)
+                FilledButton.icon(
+                  onPressed: () => visit(
+                    ExportPage(controller: widget.controller, mode: 'backup'),
+                  ),
+                  icon: const Icon(Icons.file_upload_outlined),
+                  label: const Text('导出备份'),
+                ),
+              const SizedBox(height: 8),
+              OutlinedButton(
+                onPressed: () => visit(
+                  ExportPage(controller: widget.controller, mode: 'migration'),
+                ),
+                child: Text(frozen ? '再次保存同一迁移文件' : '迁移到新设备'),
+              ),
+              if (control['outgoing_id'] != null)
+                OutlinedButton(
+                  onPressed: () => visit(
+                    RestorePage(
+                      controller: widget.controller,
+                      verifyOnly: true,
+                    ),
+                  ),
+                  child: const Text('回读验证导出文件'),
+                ),
+              OutlinedButton(
+                onPressed: () =>
+                    visit(RestorePage(controller: widget.controller)),
+                child: const Text('从外部备份恢复'),
+              ),
+              if (kind == 'MIGRATION_PENDING')
+                ActionButton(
+                  label: '归档旧设备',
+                  outlined: true,
+                  action: () => endMigration(archive: true),
+                ),
+              if (frozen)
+                ActionButton(
+                  label: '取消迁移并恢复写入',
+                  outlined: true,
+                  action: () => endMigration(archive: false),
+                ),
+              const SizedBox(height: 20),
+              Text('内部恢复点', style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              const Text('恢复点保存在这台设备内。请另行导出一份外部备份，以便换机或卸载后恢复。'),
+              if (data.$2.isEmpty) const ListTile(title: Text('目前没有内部恢复点。')),
+              for (final file in data.$2)
+                ListTile(
+                  leading: const Icon(Icons.history),
+                  title: Text(checkpointTime(file)),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => visit(
+                    RestorePage(
+                      controller: widget.controller,
+                      checkpoint: file,
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
+      ),
+    ),
+  );
+
+  Future<void> endMigration({required bool archive}) async {
+    final ok = await confirmChoice(
+      context,
+      archive ? '归档这台旧设备？' : '在这台设备继续记账？',
+      archive ? '请先确认新设备已恢复成功。旧设备将保留已有数据供查看。' : '请确认目标设备未继续使用这个迁移存档，之后在这台设备记账。',
+      archive ? '确认归档' : '确认恢复写入',
+    );
+    if (!ok) return;
+    await transfer.endMigration(
+      archive: archive,
+      session: widget.controller.session,
+    );
+    await widget.controller.refresh();
+    if (mounted) setState(() => states = load());
+  }
+}
+
+String localTime(String time) {
+  final local = DateTime.parse(time).toLocal();
+  return '${dateKey(local)} ${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
+}
+
+String checkpointTime(File file) {
+  final value = int.tryParse(p.basename(file.path).split('-').first);
+  return value == null
+      ? '设备恢复点'
+      : localTime(
+          DateTime.fromMicrosecondsSinceEpoch(
+            value,
+            isUtc: true,
+          ).toIso8601String(),
+        );
+}
+
+class ExportPage extends StatefulWidget {
+  const ExportPage({super.key, required this.controller, required this.mode});
+  final FamilyController controller;
+  final String mode;
+
+  @override
+  State<ExportPage> createState() => _ExportPageState();
+}
+
+class _ExportPageState extends State<ExportPage> {
+  final password = TextEditingController();
+  final repeated = TextEditingController();
+  String? phase;
+  bool get migrating => widget.mode == 'migration';
+
+  @override
+  void dispose() {
+    password.dispose();
+    repeated.dispose();
+    super.dispose();
+  }
+
+  Future<void> export() async {
+    if (password.text != repeated.text) throw const UserError('两次输入的备份口令不一致。');
+    BackupCodec.checkPassphrase(password.text);
+    FocusScope.of(context).unfocus();
+    setState(() => phase = '正在生成和回读校验…');
+    final transfer = widget.controller.transfer;
+    final ticket = await transfer.prepareExport(
+      widget.mode,
+      password.text,
+      widget.controller.session,
+    );
+    password.clear();
+    repeated.clear();
+    await widget.controller.refresh();
+    if (!mounted) {
+      await transfer.finishExport(ticket, SaveOutcome.cancelled);
+      return;
+    }
+    setState(() => phase = '请选择 App 外的保存位置。');
+    var outcome = SaveOutcome.handedToSystem;
+    try {
+      final location = await FilePicker.saveFile(
+        fileName: ticket.name,
+        bytes: await ticket.file.readAsBytes(),
+        mimeType: 'application/octet-stream',
+      );
+      if (location == null) {
+        outcome = SaveOutcome.cancelled;
+      } else if (location.scheme == 'file') {
+        final external = File.fromUri(location);
+        if (await external.exists() &&
+            await fileHash(external) == await fileHash(ticket.file)) {
+          outcome = SaveOutcome.externallyVerified;
+        }
+      }
+    } catch (_) {
+      // A provider can stop responding after a write. Keep the receipt pending for readback.
+    }
+    await transfer.finishExport(ticket, outcome);
+    await widget.controller.refresh();
+    if (!mounted) return;
+    final message = switch (outcome) {
+      SaveOutcome.cancelled => '已取消文件保存。',
+      SaveOutcome.handedToSystem => '请确认文件已保存，再从数据页回读验证。',
+      SaveOutcome.externallyVerified => '外部文件已保存并验证。',
+    };
+    setState(() => phase = message);
+    showNotice(context, message);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final summary = widget.controller.family!;
+    return ParentFrame(
+      controller: widget.controller,
+      title: migrating ? '迁移到新设备' : '导出备份',
+      child: PageBody(
+        maxWidth: 520,
+        child: GardenCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                '余额 ${summary.balance} 分 · ${widget.controller.tasks.length} 件小事',
+              ),
+              const SizedBox(height: 8),
+              Text(
+                migrating
+                    ? '生成迁移文件后，这台设备将暂时只读。请在新设备恢复后继续使用。'
+                    : '备份包含成果、积分流水、拥有的物品和家园布置。请把文件保存到 App 外。',
+              ),
+              const SizedBox(height: 14),
+              FormFieldLabel(
+                label: '备份口令（至少 10 个字符）',
+                controller: password,
+                secret: true,
+              ),
+              FormFieldLabel(
+                label: '确认备份口令',
+                controller: repeated,
+                secret: true,
+              ),
+              ActionButton(label: '生成并保存文件', action: export),
+              if (phase != null) ...[const SizedBox(height: 8), Text(phase!)],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RestorePage extends StatefulWidget {
+  const RestorePage({
+    super.key,
+    required this.controller,
+    this.verifyOnly = false,
+    this.checkpoint,
+  });
+  final FamilyController controller;
+  final bool verifyOnly;
+  final File? checkpoint;
+
+  @override
+  State<RestorePage> createState() => _RestorePageState();
+}
+
+class _RestorePageState extends State<RestorePage> {
+  final password = TextEditingController();
+  final pin = TextEditingController();
+  final repeated = TextEditingController();
+  PlatformFile? selected;
+  RestorePreview? preview;
+  RestoreProtection? protection;
+  String? recovery;
+  String? status;
+
+  FamilyController get controller => widget.controller;
+  TransferService get transfer => controller.transfer;
+
+  @override
+  void dispose() {
+    unawaited(preview?.close());
+    password.dispose();
+    pin.dispose();
+    repeated.dispose();
+    super.dispose();
+  }
+
+  Future<void> choose() async {
+    final result = await FilePicker.pickFile(dialogTitle: '选择 .alicebackup 文件');
+    if (result == null) {
+      if (mounted) showNotice(context, '已取消文件选择。');
+      return;
+    }
+    if (result.path == null ||
+        await File(result.path!).length() > BackupCodec.maxContainer) {
+      throw const UserError('无法读取文件或文件超过支持大小。');
+    }
+    if (mounted) {
+      setState(() {
+        selected = result;
+        status = null;
+      });
+    }
+  }
+
+  Future<void> inspect() async {
+    FocusScope.of(context).unfocus();
+    if (widget.checkpoint == null && selected == null) {
+      throw const UserError('请先选择备份文件。');
+    }
+    if (widget.verifyOnly) {
+      await transfer.verifyExternal(
+        File(selected!.path!),
+        password.text,
+        controller.session,
+      );
+      password.clear();
+      if (mounted) setState(() => status = '已验证外部文件。');
+      return;
+    }
+    final data = widget.checkpoint == null
+        ? await transfer.inspect(
+            File(selected!.path!),
+            password.text,
+            controller.session,
+          )
+        : await transfer.inspectCheckpoint(
+            widget.checkpoint!,
+            controller.session,
+          );
+    if (!mounted) {
+      await data.close();
+      return;
+    }
+    password.clear();
+    final control = await transfer.status();
+    if (!mounted) {
+      await data.close();
+      return;
+    }
+    if (data.backupId != null &&
+        control['last_import_id'] == data.backupId &&
+        control['last_import_revision'] == controller.family?.revision) {
+      await data.close();
+      if (mounted) setState(() => status = '这份备份已经恢复。');
+      return;
+    }
+    setState(() => preview = data);
+  }
+
+  Future<void> prepare() async {
+    if (!PinGate.correctFormat(pin.text) || pin.text != repeated.text) {
+      throw const UserError('请输入并确认 6 位数字新 PIN。');
+    }
+    FocusScope.of(context).unfocus();
+    if (controller.family != null) {
+      protection = await transfer.protectCurrent(controller.session);
+      if (!mounted) return;
+      final ok = await confirmChoice(
+        context,
+        '替换这台设备的小家？',
+        '已建立内部恢复点。确认后将整体恢复到所选备份的时间点。',
+        '确认替换',
+      );
+      if (!ok) return;
+    }
+    if (mounted) setState(() => recovery = PinGate.newRecoveryCode());
+  }
+
+  Future<void> activateRestore() async {
+    final result = await transfer.activate(
+      preview!,
+      pin.text,
+      recovery!,
+      session: controller.session,
+      replace: controller.family != null,
+      protection: protection,
+    );
+    await controller.acceptActivation(result);
+    if (!mounted) return;
+    final message = result.alreadyRestored ? '这份备份已经恢复。' : '存档已恢复到这台设备。';
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    showNotice(context, message);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final title = widget.verifyOnly
+        ? '回读验证'
+        : widget.checkpoint != null
+        ? '恢复设备内存档'
+        : '从备份恢复';
+    final body = PageBody(
+      maxWidth: 650,
+      child: recovery != null
+          ? RecoveryCard(
+              code: recovery!,
+              label: '激活恢复后的存档',
+              onReady: activateRestore,
+            )
+          : preview != null
+          ? previewForm()
+          : selectForm(),
+    );
+    return controller.family == null
+        ? Scaffold(
+            appBar: AppBar(title: Text(title)),
+            body: body,
+          )
+        : ParentFrame(controller: controller, title: title, child: body);
+  }
+
+  Widget selectForm() => GardenCard(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (widget.checkpoint == null) ...[
+          OutlinedButton.icon(
+            onPressed: () async {
+              try {
+                await choose();
+              } on UserError catch (error) {
+                if (mounted) showNotice(context, error.message);
+              } catch (_) {
+                if (mounted) showNotice(context, '系统暂时无法读取文件。');
+              }
+            },
+            label: const Text('选择备份文件'),
+            icon: const Icon(Icons.folder_open_outlined),
+          ),
+          if (selected != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 12),
+              child: Text(
+                selected!.name,
+                style: const TextStyle(color: mutedInk),
+              ),
+            ),
+          FormFieldLabel(label: '原备份口令', controller: password, secret: true),
+        ] else ...[
+          Text(checkpointTime(widget.checkpoint!)),
+          const SizedBox(height: 12),
+        ],
+        ActionButton(
+          label: widget.verifyOnly ? '验证文件' : '验证并预览',
+          action: inspect,
+        ),
+        if (status != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(status!),
+          ),
+      ],
+    ),
+  );
+
+  Widget previewForm() {
+    final data = preview!;
+    final summary = data.info.summary;
+    final current = controller.family;
+    final time = data.manifest['created_at_utc'] as String?;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        LayoutBuilder(
+          builder: (context, box) {
+            final incoming = GardenCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '待恢复的小家',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Text(data.info.nickname),
+                  if (time != null) Text(localTime(time)),
+                  Text(
+                    '${summary['balance']} 分 · ${summary['valid_completion_count']} 份有效成果',
+                  ),
+                  Text(
+                    '${summary['ledger_count']} 条流水 · ${summary['owned_item_count']} 件物品',
+                  ),
+                  Text(
+                    '${summary['space_count']} 个空间 · 伙伴阶段 ${summary['max_growth_stage']}',
+                  ),
+                ],
+              ),
+            );
+            if (current == null) return incoming;
+            final existing = GardenCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('当前小家', style: Theme.of(context).textTheme.titleMedium),
+                  Text(current.nickname),
+                  Text(
+                    '${current.balance} 分 · ${controller.tasks.where((t) => t.state == 'APPROVED').length} 份有效成果',
+                  ),
+                  Text('伙伴阶段 ${current.stage}'),
+                ],
+              ),
+            );
+            return box.maxWidth >= 530
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: existing),
+                      const SizedBox(width: 10),
+                      Expanded(child: incoming),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [existing, const SizedBox(height: 10), incoming],
+                  );
+          },
+        ),
+        const SizedBox(height: 14),
+        GardenCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text('请为这台设备设置新家长 PIN。'),
+              const SizedBox(height: 10),
+              FormFieldLabel(
+                label: '新家长 PIN（6 位数字）',
+                controller: pin,
+                limit: 6,
+                secret: true,
+                keyboard: TextInputType.number,
+              ),
+              FormFieldLabel(
+                label: '确认新家长 PIN',
+                controller: repeated,
+                limit: 6,
+                secret: true,
+                keyboard: TextInputType.number,
+              ),
+              ActionButton(
+                label: current == null ? '下一步' : '保护当前数据并确认',
+                action: prepare,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}

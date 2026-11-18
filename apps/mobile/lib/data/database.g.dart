@@ -9584,6 +9584,395 @@ class CorrectionRecordsCompanion extends UpdateCompanion<CorrectionRecord> {
   }
 }
 
+class BaseFurnishings extends Table
+    with TableInfo<BaseFurnishings, BaseFurnishing> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  BaseFurnishings(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL PRIMARY KEY CHECK (id IN (\'base_bed\', \'base_rug\'))',
+  );
+  static const VerificationMeta _spaceIdMeta = const VerificationMeta(
+    'spaceId',
+  );
+  late final GeneratedColumn<String> spaceId = GeneratedColumn<String>(
+    'space_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL REFERENCES spaces(id)',
+  );
+  static const VerificationMeta _xMeta = const VerificationMeta('x');
+  late final GeneratedColumn<double> x = GeneratedColumn<double>(
+    'x',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (x BETWEEN 0 AND 1)',
+  );
+  static const VerificationMeta _yMeta = const VerificationMeta('y');
+  late final GeneratedColumn<double> y = GeneratedColumn<double>(
+    'y',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (y BETWEEN 0 AND 1)',
+  );
+  static const VerificationMeta _flippedMeta = const VerificationMeta(
+    'flipped',
+  );
+  late final GeneratedColumn<int> flipped = GeneratedColumn<int>(
+    'flipped',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0 CHECK (flipped IN (0, 1))',
+    defaultValue: const CustomExpression('0'),
+  );
+  static const VerificationMeta _zMeta = const VerificationMeta('z');
+  late final GeneratedColumn<int> z = GeneratedColumn<int>(
+    'z',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, spaceId, x, y, flipped, z];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'base_furnishings';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<BaseFurnishing> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('space_id')) {
+      context.handle(
+        _spaceIdMeta,
+        spaceId.isAcceptableOrUnknown(data['space_id']!, _spaceIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_spaceIdMeta);
+    }
+    if (data.containsKey('x')) {
+      context.handle(_xMeta, x.isAcceptableOrUnknown(data['x']!, _xMeta));
+    } else if (isInserting) {
+      context.missing(_xMeta);
+    }
+    if (data.containsKey('y')) {
+      context.handle(_yMeta, y.isAcceptableOrUnknown(data['y']!, _yMeta));
+    } else if (isInserting) {
+      context.missing(_yMeta);
+    }
+    if (data.containsKey('flipped')) {
+      context.handle(
+        _flippedMeta,
+        flipped.isAcceptableOrUnknown(data['flipped']!, _flippedMeta),
+      );
+    }
+    if (data.containsKey('z')) {
+      context.handle(_zMeta, z.isAcceptableOrUnknown(data['z']!, _zMeta));
+    } else if (isInserting) {
+      context.missing(_zMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  BaseFurnishing map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return BaseFurnishing(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      spaceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}space_id'],
+      )!,
+      x: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}x'],
+      )!,
+      y: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}y'],
+      )!,
+      flipped: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}flipped'],
+      )!,
+      z: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}z'],
+      )!,
+    );
+  }
+
+  @override
+  BaseFurnishings createAlias(String alias) {
+    return BaseFurnishings(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class BaseFurnishing extends DataClass implements Insertable<BaseFurnishing> {
+  final String id;
+  final String spaceId;
+  final double x;
+  final double y;
+  final int flipped;
+  final int z;
+  const BaseFurnishing({
+    required this.id,
+    required this.spaceId,
+    required this.x,
+    required this.y,
+    required this.flipped,
+    required this.z,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['space_id'] = Variable<String>(spaceId);
+    map['x'] = Variable<double>(x);
+    map['y'] = Variable<double>(y);
+    map['flipped'] = Variable<int>(flipped);
+    map['z'] = Variable<int>(z);
+    return map;
+  }
+
+  BaseFurnishingsCompanion toCompanion(bool nullToAbsent) {
+    return BaseFurnishingsCompanion(
+      id: Value(id),
+      spaceId: Value(spaceId),
+      x: Value(x),
+      y: Value(y),
+      flipped: Value(flipped),
+      z: Value(z),
+    );
+  }
+
+  factory BaseFurnishing.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BaseFurnishing(
+      id: serializer.fromJson<String>(json['id']),
+      spaceId: serializer.fromJson<String>(json['space_id']),
+      x: serializer.fromJson<double>(json['x']),
+      y: serializer.fromJson<double>(json['y']),
+      flipped: serializer.fromJson<int>(json['flipped']),
+      z: serializer.fromJson<int>(json['z']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'space_id': serializer.toJson<String>(spaceId),
+      'x': serializer.toJson<double>(x),
+      'y': serializer.toJson<double>(y),
+      'flipped': serializer.toJson<int>(flipped),
+      'z': serializer.toJson<int>(z),
+    };
+  }
+
+  BaseFurnishing copyWith({
+    String? id,
+    String? spaceId,
+    double? x,
+    double? y,
+    int? flipped,
+    int? z,
+  }) => BaseFurnishing(
+    id: id ?? this.id,
+    spaceId: spaceId ?? this.spaceId,
+    x: x ?? this.x,
+    y: y ?? this.y,
+    flipped: flipped ?? this.flipped,
+    z: z ?? this.z,
+  );
+  BaseFurnishing copyWithCompanion(BaseFurnishingsCompanion data) {
+    return BaseFurnishing(
+      id: data.id.present ? data.id.value : this.id,
+      spaceId: data.spaceId.present ? data.spaceId.value : this.spaceId,
+      x: data.x.present ? data.x.value : this.x,
+      y: data.y.present ? data.y.value : this.y,
+      flipped: data.flipped.present ? data.flipped.value : this.flipped,
+      z: data.z.present ? data.z.value : this.z,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BaseFurnishing(')
+          ..write('id: $id, ')
+          ..write('spaceId: $spaceId, ')
+          ..write('x: $x, ')
+          ..write('y: $y, ')
+          ..write('flipped: $flipped, ')
+          ..write('z: $z')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, spaceId, x, y, flipped, z);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BaseFurnishing &&
+          other.id == this.id &&
+          other.spaceId == this.spaceId &&
+          other.x == this.x &&
+          other.y == this.y &&
+          other.flipped == this.flipped &&
+          other.z == this.z);
+}
+
+class BaseFurnishingsCompanion extends UpdateCompanion<BaseFurnishing> {
+  final Value<String> id;
+  final Value<String> spaceId;
+  final Value<double> x;
+  final Value<double> y;
+  final Value<int> flipped;
+  final Value<int> z;
+  final Value<int> rowid;
+  const BaseFurnishingsCompanion({
+    this.id = const Value.absent(),
+    this.spaceId = const Value.absent(),
+    this.x = const Value.absent(),
+    this.y = const Value.absent(),
+    this.flipped = const Value.absent(),
+    this.z = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  BaseFurnishingsCompanion.insert({
+    required String id,
+    required String spaceId,
+    required double x,
+    required double y,
+    this.flipped = const Value.absent(),
+    required int z,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       spaceId = Value(spaceId),
+       x = Value(x),
+       y = Value(y),
+       z = Value(z);
+  static Insertable<BaseFurnishing> custom({
+    Expression<String>? id,
+    Expression<String>? spaceId,
+    Expression<double>? x,
+    Expression<double>? y,
+    Expression<int>? flipped,
+    Expression<int>? z,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (spaceId != null) 'space_id': spaceId,
+      if (x != null) 'x': x,
+      if (y != null) 'y': y,
+      if (flipped != null) 'flipped': flipped,
+      if (z != null) 'z': z,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  BaseFurnishingsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? spaceId,
+    Value<double>? x,
+    Value<double>? y,
+    Value<int>? flipped,
+    Value<int>? z,
+    Value<int>? rowid,
+  }) {
+    return BaseFurnishingsCompanion(
+      id: id ?? this.id,
+      spaceId: spaceId ?? this.spaceId,
+      x: x ?? this.x,
+      y: y ?? this.y,
+      flipped: flipped ?? this.flipped,
+      z: z ?? this.z,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (spaceId.present) {
+      map['space_id'] = Variable<String>(spaceId.value);
+    }
+    if (x.present) {
+      map['x'] = Variable<double>(x.value);
+    }
+    if (y.present) {
+      map['y'] = Variable<double>(y.value);
+    }
+    if (flipped.present) {
+      map['flipped'] = Variable<int>(flipped.value);
+    }
+    if (z.present) {
+      map['z'] = Variable<int>(z.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BaseFurnishingsCompanion(')
+          ..write('id: $id, ')
+          ..write('spaceId: $spaceId, ')
+          ..write('x: $x, ')
+          ..write('y: $y, ')
+          ..write('flipped: $flipped, ')
+          ..write('z: $z, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$FamilyDatabase extends GeneratedDatabase {
   _$FamilyDatabase(QueryExecutor e) : super(e);
   $FamilyDatabaseManager get managers => $FamilyDatabaseManager(this);
@@ -9633,6 +10022,15 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
   late final GrowthAwards growthAwards = GrowthAwards(this);
   late final Wishes wishes = Wishes(this);
   late final CorrectionRecords correctionRecords = CorrectionRecords(this);
+  late final Index ledgerDayKindIdx = Index(
+    'ledger_day_kind_idx',
+    'CREATE INDEX ledger_day_kind_idx ON ledger_entries (posted_day, kind)',
+  );
+  late final Index purchaseLedgerIdx = Index(
+    'purchase_ledger_idx',
+    'CREATE INDEX purchase_ledger_idx ON purchases (ledger_id, refunded_at)',
+  );
+  late final BaseFurnishings baseFurnishings = BaseFurnishings(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -9666,6 +10064,9 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
     growthAwards,
     wishes,
     correctionRecords,
+    ledgerDayKindIdx,
+    purchaseLedgerIdx,
+    baseFurnishings,
   ];
 }
 
@@ -17086,6 +17487,27 @@ final class $SpacesReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<BaseFurnishings, List<BaseFurnishing>>
+  _baseFurnishingsRefsTable(_$FamilyDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.baseFurnishings,
+        aliasName: 'spaces__id__base_furnishings__space_id',
+      );
+
+  $BaseFurnishingsProcessedTableManager get baseFurnishingsRefs {
+    final manager = $BaseFurnishingsTableManager(
+      $_db,
+      $_db.baseFurnishings,
+    ).filter((f) => f.spaceId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _baseFurnishingsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $SpacesFilterComposer extends Composer<_$FamilyDatabase, Spaces> {
@@ -17180,6 +17602,31 @@ class $SpacesFilterComposer extends Composer<_$FamilyDatabase, Spaces> {
           }) => $PlacementsFilterComposer(
             $db: $db,
             $table: $db.placements,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> baseFurnishingsRefs(
+    Expression<bool> Function($BaseFurnishingsFilterComposer f) f,
+  ) {
+    final $BaseFurnishingsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.baseFurnishings,
+      getReferencedColumn: (t) => t.spaceId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $BaseFurnishingsFilterComposer(
+            $db: $db,
+            $table: $db.baseFurnishings,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -17336,6 +17783,31 @@ class $SpacesAnnotationComposer extends Composer<_$FamilyDatabase, Spaces> {
     );
     return f(composer);
   }
+
+  Expression<T> baseFurnishingsRefs<T extends Object>(
+    Expression<T> Function($BaseFurnishingsAnnotationComposer a) f,
+  ) {
+    final $BaseFurnishingsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.baseFurnishings,
+      getReferencedColumn: (t) => t.spaceId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $BaseFurnishingsAnnotationComposer(
+            $db: $db,
+            $table: $db.baseFurnishings,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $SpacesTableManager
@@ -17355,6 +17827,7 @@ class $SpacesTableManager
             bool purchaseId,
             bool entitlementsRefs,
             bool placementsRefs,
+            bool baseFurnishingsRefs,
           })
         > {
   $SpacesTableManager(_$FamilyDatabase db, Spaces table)
@@ -17413,12 +17886,14 @@ class $SpacesTableManager
                 purchaseId = false,
                 entitlementsRefs = false,
                 placementsRefs = false,
+                baseFurnishingsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (entitlementsRefs) db.entitlements,
                     if (placementsRefs) db.placements,
+                    if (baseFurnishingsRefs) db.baseFurnishings,
                   ],
                   addJoins:
                       <
@@ -17485,6 +17960,25 @@ class $SpacesTableManager
                           referencedColumn: 'space_id',
                           typedResults: items,
                         ),
+                      if (baseFurnishingsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          Space,
+                          Spaces,
+                          BaseFurnishing,
+                          BaseFurnishings
+                        >(
+                          currentTable: table,
+                          referencedTable: $SpacesReferences
+                              ._baseFurnishingsRefsTable(db),
+                          managerFromTypedResult: (p0) => $SpacesReferences(
+                            db,
+                            table,
+                            p0,
+                          ).baseFurnishingsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'space_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -17509,6 +18003,7 @@ typedef $SpacesProcessedTableManager =
         bool purchaseId,
         bool entitlementsRefs,
         bool placementsRefs,
+        bool baseFurnishingsRefs,
       })
     >;
 typedef $EntitlementsCreateCompanionBuilder = EntitlementsCompanion Function({
@@ -19923,6 +20418,340 @@ typedef $CorrectionRecordsProcessedTableManager =
       CorrectionRecord,
       PrefetchHooks Function({bool instanceId, bool originalRewardId})
     >;
+typedef $BaseFurnishingsCreateCompanionBuilder =
+    BaseFurnishingsCompanion Function({
+      required String id,
+      required String spaceId,
+      required double x,
+      required double y,
+      Value<int> flipped,
+      required int z,
+      Value<int> rowid,
+    });
+typedef $BaseFurnishingsUpdateCompanionBuilder =
+    BaseFurnishingsCompanion Function({
+      Value<String> id,
+      Value<String> spaceId,
+      Value<double> x,
+      Value<double> y,
+      Value<int> flipped,
+      Value<int> z,
+      Value<int> rowid,
+    });
+
+final class $BaseFurnishingsReferences
+    extends BaseReferences<_$FamilyDatabase, BaseFurnishings, BaseFurnishing> {
+  $BaseFurnishingsReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static Spaces _spaceIdTable(_$FamilyDatabase db) =>
+      db.spaces.createAlias('base_furnishings__space_id__spaces__id');
+
+  $SpacesProcessedTableManager get spaceId {
+    final $_column = $_itemColumn<String>('space_id')!;
+
+    final manager = $SpacesTableManager(
+      $_db,
+      $_db.spaces,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_spaceIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $BaseFurnishingsFilterComposer
+    extends Composer<_$FamilyDatabase, BaseFurnishings> {
+  $BaseFurnishingsFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get x => $composableBuilder(
+    column: $table.x,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get y => $composableBuilder(
+    column: $table.y,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get flipped => $composableBuilder(
+    column: $table.flipped,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get z => $composableBuilder(
+    column: $table.z,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $SpacesFilterComposer get spaceId {
+    final $SpacesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.spaceId,
+      referencedTable: $db.spaces,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SpacesFilterComposer(
+            $db: $db,
+            $table: $db.spaces,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $BaseFurnishingsOrderingComposer
+    extends Composer<_$FamilyDatabase, BaseFurnishings> {
+  $BaseFurnishingsOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get x => $composableBuilder(
+    column: $table.x,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get y => $composableBuilder(
+    column: $table.y,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get flipped => $composableBuilder(
+    column: $table.flipped,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get z => $composableBuilder(
+    column: $table.z,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $SpacesOrderingComposer get spaceId {
+    final $SpacesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.spaceId,
+      referencedTable: $db.spaces,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SpacesOrderingComposer(
+            $db: $db,
+            $table: $db.spaces,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $BaseFurnishingsAnnotationComposer
+    extends Composer<_$FamilyDatabase, BaseFurnishings> {
+  $BaseFurnishingsAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<double> get x =>
+      $composableBuilder(column: $table.x, builder: (column) => column);
+
+  GeneratedColumn<double> get y =>
+      $composableBuilder(column: $table.y, builder: (column) => column);
+
+  GeneratedColumn<int> get flipped =>
+      $composableBuilder(column: $table.flipped, builder: (column) => column);
+
+  GeneratedColumn<int> get z =>
+      $composableBuilder(column: $table.z, builder: (column) => column);
+
+  $SpacesAnnotationComposer get spaceId {
+    final $SpacesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.spaceId,
+      referencedTable: $db.spaces,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SpacesAnnotationComposer(
+            $db: $db,
+            $table: $db.spaces,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $BaseFurnishingsTableManager
+    extends
+        RootTableManager<
+          _$FamilyDatabase,
+          BaseFurnishings,
+          BaseFurnishing,
+          $BaseFurnishingsFilterComposer,
+          $BaseFurnishingsOrderingComposer,
+          $BaseFurnishingsAnnotationComposer,
+          $BaseFurnishingsCreateCompanionBuilder,
+          $BaseFurnishingsUpdateCompanionBuilder,
+          (BaseFurnishing, $BaseFurnishingsReferences),
+          BaseFurnishing,
+          PrefetchHooks Function({bool spaceId})
+        > {
+  $BaseFurnishingsTableManager(_$FamilyDatabase db, BaseFurnishings table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $BaseFurnishingsFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $BaseFurnishingsOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $BaseFurnishingsAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> spaceId = const Value.absent(),
+                Value<double> x = const Value.absent(),
+                Value<double> y = const Value.absent(),
+                Value<int> flipped = const Value.absent(),
+                Value<int> z = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => BaseFurnishingsCompanion(
+                id: id,
+                spaceId: spaceId,
+                x: x,
+                y: y,
+                flipped: flipped,
+                z: z,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String spaceId,
+                required double x,
+                required double y,
+                Value<int> flipped = const Value.absent(),
+                required int z,
+                Value<int> rowid = const Value.absent(),
+              }) => BaseFurnishingsCompanion.insert(
+                id: id,
+                spaceId: spaceId,
+                x: x,
+                y: y,
+                flipped: flipped,
+                z: z,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<BaseFurnishings, BaseFurnishing>(table),
+                  $BaseFurnishingsReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({spaceId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (spaceId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.spaceId,
+                        referencedTable: $BaseFurnishingsReferences
+                            ._spaceIdTable(db),
+                        referencedColumn: $BaseFurnishingsReferences
+                            ._spaceIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $BaseFurnishingsProcessedTableManager =
+    ProcessedTableManager<
+      _$FamilyDatabase,
+      BaseFurnishings,
+      BaseFurnishing,
+      $BaseFurnishingsFilterComposer,
+      $BaseFurnishingsOrderingComposer,
+      $BaseFurnishingsAnnotationComposer,
+      $BaseFurnishingsCreateCompanionBuilder,
+      $BaseFurnishingsUpdateCompanionBuilder,
+      (BaseFurnishing, $BaseFurnishingsReferences),
+      BaseFurnishing,
+      PrefetchHooks Function({bool spaceId})
+    >;
 
 class $FamilyDatabaseManager {
   final _$FamilyDatabase _db;
@@ -19969,4 +20798,6 @@ class $FamilyDatabaseManager {
   $WishesTableManager get wishes => $WishesTableManager(_db, _db.wishes);
   $CorrectionRecordsTableManager get correctionRecords =>
       $CorrectionRecordsTableManager(_db, _db.correctionRecords);
+  $BaseFurnishingsTableManager get baseFurnishings =>
+      $BaseFurnishingsTableManager(_db, _db.baseFurnishings);
 }

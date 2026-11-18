@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import '../application/controller.dart';
 import '../application/family.dart';
 import '../domain/rules.dart';
+import 'backup_pages.dart';
 import 'common.dart';
 import 'garden.dart';
 import 'parent_access.dart';
@@ -322,6 +323,11 @@ class ParentHome extends StatelessWidget {
                       CorrectionsPage(controller: controller),
                     ),
                     child: const Text('误奖更正'),
+                  ),
+                  OutlinedButton(
+                    onPressed: () =>
+                        openPage(context, DataPage(controller: controller)),
+                    child: const Text('备份与迁移'),
                   ),
                   OutlinedButton.icon(
                     onPressed: () =>

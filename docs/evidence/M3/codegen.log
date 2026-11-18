@@ -1,0 +1,10 @@
+  compiling builders/aot
+  50s compiling builders/aot
+  0s drift_dev:preparing_builder on 1 input; lib/data/schema.drift
+  0s drift_dev:preparing_builder on 1 input: 1 output
+  0s drift_dev on 115 inputs; integration_test/preview_and_storage_test.dart
+  15s drift_dev on 115 inputs: 1 output; spent 12s analyzing, 3s resolving; lib/application/controller.dart
+  15s drift_dev on 115 inputs: 29 skipped, 55 output, 31 no-op; spent 12s analyzing, 3s resolving
+  0s source_gen:combining_builder on 57 inputs; integration_test/preview_and_storage_test.dart
+  0s source_gen:combining_builder on 57 inputs: 29 skipped, 1 output, 27 no-op
+  Built with build_runner/aot in 67s; wrote 58 outputs.

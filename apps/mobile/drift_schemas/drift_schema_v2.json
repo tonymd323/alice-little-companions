@@ -1,0 +1,2666 @@
+{
+  "_meta": {
+    "description": "This file contains a serialized version of schema entities for drift.",
+    "version": "1.3.0"
+  },
+  "options": {
+    "store_date_time_values_as_text": false
+  },
+  "entities": [
+    {
+      "id": 0,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "households",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "singleton",
+            "getter_name": "singleton",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 1 UNIQUE CHECK (singleton = 1)",
+            "default_dart": "const CustomExpression('1')",
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique"
+            ]
+          },
+          {
+            "name": "lineage_id",
+            "getter_name": "lineageId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "timezone",
+            "getter_name": "timezone",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "rules_version",
+            "getter_name": "rulesVersion",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "catalog_version",
+            "getter_name": "catalogVersion",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "domain_revision",
+            "getter_name": "domainRevision",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "latest_local_day",
+            "getter_name": "latestLocalDay",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 1,
+      "references": [
+        0
+      ],
+      "type": "table",
+      "data": {
+        "name": "child_profiles",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "family_id",
+            "getter_name": "familyId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL UNIQUE REFERENCES households(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique",
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "households",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "nickname",
+            "getter_name": "nickname",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "active_pet_id",
+            "getter_name": "activePetId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (active_pet_id IN ('fox', 'rabbit', 'cat'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 2,
+      "references": [
+        1
+      ],
+      "type": "table",
+      "data": {
+        "name": "accounts",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "child_id",
+            "getter_name": "childId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL UNIQUE REFERENCES child_profiles(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique",
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "child_profiles",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "balance",
+            "getter_name": "balance",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0 CHECK (balance >= 0)",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 3,
+      "references": [
+        0
+      ],
+      "type": "table",
+      "data": {
+        "name": "task_templates",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "family_id",
+            "getter_name": "familyId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES households(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "households",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "mode",
+            "getter_name": "mode",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (mode IN ('once', 'recurring', 'staged'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "current_version",
+            "getter_name": "currentVersion",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 1 CHECK (current_version >= 1)",
+            "default_dart": "const CustomExpression('1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "paused",
+            "getter_name": "paused",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0 CHECK (paused IN (0, 1))",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 4,
+      "references": [
+        3
+      ],
+      "type": "table",
+      "data": {
+        "name": "task_versions",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "template_id",
+            "getter_name": "templateId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES task_templates(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "task_templates",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "version",
+            "getter_name": "version",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "title",
+            "getter_name": "title",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "content",
+            "getter_name": "content",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "criteria",
+            "getter_name": "criteria",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "task_type",
+            "getter_name": "taskType",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "reward",
+            "getter_name": "reward",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (reward BETWEEN 2 AND 5)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "rules_version",
+            "getter_name": "rulesVersion",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "schedule_json",
+            "getter_name": "scheduleJson",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "UNIQUE(template_id, version)"
+        ],
+        "unique_keys": [
+          [
+            "template_id",
+            "version"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "references": [
+        4
+      ],
+      "type": "table",
+      "data": {
+        "name": "project_stages",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "version_id",
+            "getter_name": "versionId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES task_versions(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "task_versions",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "sequence",
+            "getter_name": "sequence",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (sequence >= 1)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "title",
+            "getter_name": "title",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "criteria",
+            "getter_name": "criteria",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "task_type",
+            "getter_name": "taskType",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "reward",
+            "getter_name": "reward",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (reward BETWEEN 2 AND 5)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "UNIQUE(version_id, sequence)"
+        ],
+        "unique_keys": [
+          [
+            "version_id",
+            "sequence"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "references": [
+        3,
+        4,
+        5
+      ],
+      "type": "table",
+      "data": {
+        "name": "task_instances",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "instance_key",
+            "getter_name": "instanceKey",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL UNIQUE",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique"
+            ]
+          },
+          {
+            "name": "template_id",
+            "getter_name": "templateId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES task_templates(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "task_templates",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "version_id",
+            "getter_name": "versionId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES task_versions(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "task_versions",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "stage_id",
+            "getter_name": "stageId",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "REFERENCES project_stages(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "project_stages",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "prior_instance_id",
+            "getter_name": "priorInstanceId",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "REFERENCES task_instances(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "task_instances",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "planned_day",
+            "getter_name": "plannedDay",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "slot",
+            "getter_name": "slot",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 1",
+            "default_dart": "const CustomExpression('1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "due_day",
+            "getter_name": "dueDay",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "state",
+            "getter_name": "state",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (state IN ('OPEN', 'SUBMITTED', 'RETURNED', 'APPROVED', 'EXPIRED', 'CANCELLED', 'CORRECTED', 'WAITING'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "actual_date",
+            "getter_name": "actualDate",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "approved_at",
+            "getter_name": "approvedAt",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "resolution_note",
+            "getter_name": "resolutionNote",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT ''",
+            "default_dart": "const CustomExpression('\\'\\'')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 7,
+      "references": [
+        6
+      ],
+      "type": "index",
+      "data": {
+        "on": 6,
+        "name": "task_state_idx",
+        "sql": "CREATE INDEX task_state_idx ON task_instances(state, planned_day);",
+        "unique": false,
+        "columns": []
+      }
+    },
+    {
+      "id": 8,
+      "references": [
+        6
+      ],
+      "type": "index",
+      "data": {
+        "on": 6,
+        "name": "task_plan_idx",
+        "sql": "CREATE INDEX task_plan_idx ON task_instances(template_id, planned_day, slot);",
+        "unique": false,
+        "columns": []
+      }
+    },
+    {
+      "id": 9,
+      "references": [
+        6
+      ],
+      "type": "table",
+      "data": {
+        "name": "submissions",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "instance_id",
+            "getter_name": "instanceId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES task_instances(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "task_instances",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "note",
+            "getter_name": "note",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "actual_date",
+            "getter_name": "actualDate",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "created_at",
+            "getter_name": "createdAt",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 10,
+      "references": [
+        9
+      ],
+      "type": "index",
+      "data": {
+        "on": 9,
+        "name": "submission_instance_idx",
+        "sql": "CREATE INDEX submission_instance_idx ON submissions(instance_id, created_at);",
+        "unique": false,
+        "columns": []
+      }
+    },
+    {
+      "id": 11,
+      "references": [
+        6
+      ],
+      "type": "table",
+      "data": {
+        "name": "completions",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "instance_id",
+            "getter_name": "instanceId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL UNIQUE REFERENCES task_instances(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique",
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "task_instances",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "actual_date",
+            "getter_name": "actualDate",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "feedback",
+            "getter_name": "feedback",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "is_valid",
+            "getter_name": "isValid",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 1 CHECK (is_valid IN (0, 1))",
+            "default_dart": "const CustomExpression('1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "approval_command_id",
+            "getter_name": "approvalCommandId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL UNIQUE",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique"
+            ]
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 12,
+      "references": [
+        11
+      ],
+      "type": "index",
+      "data": {
+        "on": 11,
+        "name": "completion_date_idx",
+        "sql": "CREATE INDEX completion_date_idx ON completions(is_valid, actual_date);",
+        "unique": false,
+        "columns": []
+      }
+    },
+    {
+      "id": 13,
+      "references": [
+        2
+      ],
+      "type": "table",
+      "data": {
+        "name": "ledger_entries",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "account_id",
+            "getter_name": "accountId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES accounts(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "accounts",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "delta",
+            "getter_name": "delta",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "balance_after",
+            "getter_name": "balanceAfter",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (balance_after >= 0)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "kind",
+            "getter_name": "kind",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (kind IN ('reward', 'penalty', 'penalty_reversal', 'purchase', 'refund', 'correction'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "source_key",
+            "getter_name": "sourceKey",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL UNIQUE",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique"
+            ]
+          },
+          {
+            "name": "reversal_of",
+            "getter_name": "reversalOf",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "UNIQUE REFERENCES ledger_entries(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique",
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "ledger_entries",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "actual_date",
+            "getter_name": "actualDate",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "posted_day",
+            "getter_name": "postedDay",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "created_at",
+            "getter_name": "createdAt",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "command_id",
+            "getter_name": "commandId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 14,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "processed_commands",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "payload_hash",
+            "getter_name": "payloadHash",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "result_json",
+            "getter_name": "resultJson",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "created_at",
+            "getter_name": "createdAt",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 15,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "penalty_rules",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "behavior",
+            "getter_name": "behavior",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "condition_text",
+            "getter_name": "conditionText",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "points",
+            "getter_name": "points",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (points BETWEEN 1 AND 3)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 16,
+      "references": [
+        15,
+        13
+      ],
+      "type": "table",
+      "data": {
+        "name": "penalty_events",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "rule_id",
+            "getter_name": "ruleId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES penalty_rules(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "penalty_rules",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "fact",
+            "getter_name": "fact",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "actual_date",
+            "getter_name": "actualDate",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "posted_day",
+            "getter_name": "postedDay",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "planned_points",
+            "getter_name": "plannedPoints",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (planned_points BETWEEN 1 AND 3)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "deducted",
+            "getter_name": "deducted",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (deducted BETWEEN 0 AND planned_points)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "ledger_id",
+            "getter_name": "ledgerId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL UNIQUE REFERENCES ledger_entries(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique",
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "ledger_entries",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 17,
+      "references": [
+        2
+      ],
+      "type": "table",
+      "data": {
+        "name": "penalty_day_usage",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "account_id",
+            "getter_name": "accountId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES accounts(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "accounts",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "posted_day",
+            "getter_name": "postedDay",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "used",
+            "getter_name": "used",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (used BETWEEN 0 AND 3)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "PRIMARY KEY(account_id, posted_day)"
+        ],
+        "explicit_pk": [
+          "account_id",
+          "posted_day"
+        ]
+      }
+    },
+    {
+      "id": 18,
+      "references": [
+        13
+      ],
+      "type": "table",
+      "data": {
+        "name": "purchases",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "item_id",
+            "getter_name": "itemId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "name",
+            "getter_name": "name",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "price_paid",
+            "getter_name": "pricePaid",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (price_paid > 0)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "ledger_id",
+            "getter_name": "ledgerId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL UNIQUE REFERENCES ledger_entries(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique",
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "ledger_entries",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "created_at",
+            "getter_name": "createdAt",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "refunded_at",
+            "getter_name": "refundedAt",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "command_id",
+            "getter_name": "commandId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL UNIQUE",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique"
+            ]
+          },
+          {
+            "name": "asset_id",
+            "getter_name": "assetId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 19,
+      "references": [
+        18
+      ],
+      "type": "index",
+      "data": {
+        "on": 18,
+        "name": "purchased_once",
+        "sql": "CREATE UNIQUE INDEX purchased_once ON purchases(item_id) WHERE refunded_at IS NULL;",
+        "unique": true,
+        "columns": []
+      }
+    },
+    {
+      "id": 20,
+      "references": [
+        18
+      ],
+      "type": "table",
+      "data": {
+        "name": "spaces",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "scene_id",
+            "getter_name": "sceneId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL UNIQUE",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique"
+            ]
+          },
+          {
+            "name": "name",
+            "getter_name": "name",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "purchase_id",
+            "getter_name": "purchaseId",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "REFERENCES purchases(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "purchases",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "layout_version",
+            "getter_name": "layoutVersion",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 21,
+      "references": [
+        18,
+        20
+      ],
+      "type": "table",
+      "data": {
+        "name": "entitlements",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "purchase_id",
+            "getter_name": "purchaseId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES purchases(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "purchases",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "item_id",
+            "getter_name": "itemId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "asset_id",
+            "getter_name": "assetId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "name",
+            "getter_name": "name",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "slot",
+            "getter_name": "slot",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "CHECK (slot IN ('head', 'face', 'neck', 'body'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "bound_space",
+            "getter_name": "boundSpace",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "REFERENCES spaces(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "spaces",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "revoked",
+            "getter_name": "revoked",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0 CHECK (revoked IN (0, 1))",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "UNIQUE(purchase_id, item_id)"
+        ],
+        "unique_keys": [
+          [
+            "purchase_id",
+            "item_id"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 22,
+      "references": [
+        21
+      ],
+      "type": "index",
+      "data": {
+        "on": 21,
+        "name": "active_entitlement",
+        "sql": "CREATE UNIQUE INDEX active_entitlement ON entitlements(item_id) WHERE revoked = 0;",
+        "unique": true,
+        "columns": []
+      }
+    },
+    {
+      "id": 23,
+      "references": [
+        21,
+        20
+      ],
+      "type": "table",
+      "data": {
+        "name": "placements",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "entitlement_id",
+            "getter_name": "entitlementId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY REFERENCES entitlements(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key",
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "entitlements",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "space_id",
+            "getter_name": "spaceId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES spaces(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "spaces",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "x",
+            "getter_name": "x",
+            "moor_type": "double",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (x BETWEEN 0 AND 1)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "y",
+            "getter_name": "y",
+            "moor_type": "double",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (y BETWEEN 0 AND 1)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "rotation",
+            "getter_name": "rotation",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "flipped",
+            "getter_name": "flipped",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0 CHECK (flipped IN (0, 1))",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "z",
+            "getter_name": "z",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "mount_id",
+            "getter_name": "mountId",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "UNIQUE(space_id, mount_id)"
+        ],
+        "unique_keys": [
+          [
+            "space_id",
+            "mount_id"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 24,
+      "references": [
+        21
+      ],
+      "type": "table",
+      "data": {
+        "name": "pet_state",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "pet_id",
+            "getter_name": "petId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (pet_id IN ('fox', 'rabbit', 'cat'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "slot",
+            "getter_name": "slot",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (slot IN ('head', 'face', 'neck', 'body'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "entitlement_id",
+            "getter_name": "entitlementId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES entitlements(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "entitlements",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "PRIMARY KEY(pet_id, slot)"
+        ],
+        "explicit_pk": [
+          "pet_id",
+          "slot"
+        ]
+      }
+    },
+    {
+      "id": 25,
+      "references": [
+        1
+      ],
+      "type": "table",
+      "data": {
+        "name": "growth_awards",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "child_id",
+            "getter_name": "childId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES child_profiles(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "child_profiles",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "threshold",
+            "getter_name": "threshold",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "stage",
+            "getter_name": "stage",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (stage BETWEEN 2 AND 6)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "awarded_at",
+            "getter_name": "awardedAt",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "PRIMARY KEY(child_id, threshold)"
+        ],
+        "explicit_pk": [
+          "child_id",
+          "threshold"
+        ]
+      }
+    },
+    {
+      "id": 26,
+      "references": [
+        1
+      ],
+      "type": "table",
+      "data": {
+        "name": "wishes",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "child_id",
+            "getter_name": "childId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY REFERENCES child_profiles(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key",
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "child_profiles",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "item_id",
+            "getter_name": "itemId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "selected_price",
+            "getter_name": "selectedPrice",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (selected_price > 0)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "selected_at",
+            "getter_name": "selectedAt",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 27,
+      "references": [
+        6,
+        13
+      ],
+      "type": "table",
+      "data": {
+        "name": "correction_records",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "instance_id",
+            "getter_name": "instanceId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY REFERENCES task_instances(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key",
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "task_instances",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "original_reward_id",
+            "getter_name": "originalRewardId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL UNIQUE REFERENCES ledger_entries(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique",
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "ledger_entries",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "recovered",
+            "getter_name": "recovered",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (recovered >= 0)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "shortfall",
+            "getter_name": "shortfall",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (shortfall >= 0)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "reason",
+            "getter_name": "reason",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "refunded_purchase_ids",
+            "getter_name": "refundedPurchaseIds",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "command_id",
+            "getter_name": "commandId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL UNIQUE",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique"
+            ]
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 28,
+      "references": [
+        13
+      ],
+      "type": "index",
+      "data": {
+        "on": 13,
+        "name": "ledger_day_kind_idx",
+        "sql": "CREATE INDEX ledger_day_kind_idx ON ledger_entries(posted_day, kind);",
+        "unique": false,
+        "columns": []
+      }
+    },
+    {
+      "id": 29,
+      "references": [
+        18
+      ],
+      "type": "index",
+      "data": {
+        "on": 18,
+        "name": "purchase_ledger_idx",
+        "sql": "CREATE INDEX purchase_ledger_idx ON purchases(ledger_id, refunded_at);",
+        "unique": false,
+        "columns": []
+      }
+    },
+    {
+      "id": 30,
+      "references": [
+        20
+      ],
+      "type": "table",
+      "data": {
+        "name": "base_furnishings",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY CHECK (id IN ('base_bed', 'base_rug'))",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "space_id",
+            "getter_name": "spaceId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL REFERENCES spaces(id)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "spaces",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "x",
+            "getter_name": "x",
+            "moor_type": "double",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (x BETWEEN 0 AND 1)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "y",
+            "getter_name": "y",
+            "moor_type": "double",
+            "nullable": false,
+            "customConstraints": "NOT NULL CHECK (y BETWEEN 0 AND 1)",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "flipped",
+            "getter_name": "flipped",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0 CHECK (flipped IN (0, 1))",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "z",
+            "getter_name": "z",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    }
+  ],
+  "fixed_sql": [
+    {
+      "name": "households",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"households\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"singleton\" INTEGER NOT NULL DEFAULT 1 UNIQUE CHECK (singleton = 1), \"lineage_id\" TEXT NOT NULL, \"timezone\" TEXT NOT NULL, \"rules_version\" TEXT NOT NULL, \"catalog_version\" TEXT NOT NULL, \"domain_revision\" INTEGER NOT NULL DEFAULT 0, \"latest_local_day\" TEXT);"
+        }
+      ]
+    },
+    {
+      "name": "child_profiles",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"child_profiles\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"family_id\" TEXT NOT NULL UNIQUE REFERENCES households(id), \"nickname\" TEXT NOT NULL, \"active_pet_id\" TEXT NOT NULL CHECK (active_pet_id IN ('fox', 'rabbit', 'cat')));"
+        }
+      ]
+    },
+    {
+      "name": "accounts",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"accounts\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"child_id\" TEXT NOT NULL UNIQUE REFERENCES child_profiles(id), \"balance\" INTEGER NOT NULL DEFAULT 0 CHECK (balance >= 0));"
+        }
+      ]
+    },
+    {
+      "name": "task_templates",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"task_templates\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"family_id\" TEXT NOT NULL REFERENCES households(id), \"mode\" TEXT NOT NULL CHECK (mode IN ('once', 'recurring', 'staged')), \"current_version\" INTEGER NOT NULL DEFAULT 1 CHECK (current_version >= 1), \"paused\" INTEGER NOT NULL DEFAULT 0 CHECK (paused IN (0, 1)));"
+        }
+      ]
+    },
+    {
+      "name": "task_versions",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"task_versions\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"template_id\" TEXT NOT NULL REFERENCES task_templates(id), \"version\" INTEGER NOT NULL, \"title\" TEXT NOT NULL, \"content\" TEXT NOT NULL, \"criteria\" TEXT NOT NULL, \"task_type\" TEXT NOT NULL, \"reward\" INTEGER NOT NULL CHECK (reward BETWEEN 2 AND 5), \"rules_version\" TEXT NOT NULL, \"schedule_json\" TEXT NOT NULL, UNIQUE(template_id, version));"
+        }
+      ]
+    },
+    {
+      "name": "project_stages",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"project_stages\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"version_id\" TEXT NOT NULL REFERENCES task_versions(id), \"sequence\" INTEGER NOT NULL CHECK (sequence >= 1), \"title\" TEXT NOT NULL, \"criteria\" TEXT NOT NULL, \"task_type\" TEXT NOT NULL, \"reward\" INTEGER NOT NULL CHECK (reward BETWEEN 2 AND 5), UNIQUE(version_id, sequence));"
+        }
+      ]
+    },
+    {
+      "name": "task_instances",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"task_instances\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"instance_key\" TEXT NOT NULL UNIQUE, \"template_id\" TEXT NOT NULL REFERENCES task_templates(id), \"version_id\" TEXT NOT NULL REFERENCES task_versions(id), \"stage_id\" TEXT REFERENCES project_stages(id), \"prior_instance_id\" TEXT REFERENCES task_instances(id), \"planned_day\" TEXT NOT NULL, \"slot\" INTEGER NOT NULL DEFAULT 1, \"due_day\" TEXT, \"state\" TEXT NOT NULL CHECK (state IN ('OPEN', 'SUBMITTED', 'RETURNED', 'APPROVED', 'EXPIRED', 'CANCELLED', 'CORRECTED', 'WAITING')), \"actual_date\" TEXT, \"approved_at\" INTEGER, \"resolution_note\" TEXT NOT NULL DEFAULT '');"
+        }
+      ]
+    },
+    {
+      "name": "task_state_idx",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE INDEX task_state_idx ON task_instances (state, planned_day)"
+        }
+      ]
+    },
+    {
+      "name": "task_plan_idx",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE INDEX task_plan_idx ON task_instances (template_id, planned_day, slot)"
+        }
+      ]
+    },
+    {
+      "name": "submissions",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"submissions\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"instance_id\" TEXT NOT NULL REFERENCES task_instances(id), \"note\" TEXT NOT NULL, \"actual_date\" TEXT NOT NULL, \"created_at\" INTEGER NOT NULL);"
+        }
+      ]
+    },
+    {
+      "name": "submission_instance_idx",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE INDEX submission_instance_idx ON submissions (instance_id, created_at)"
+        }
+      ]
+    },
+    {
+      "name": "completions",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"completions\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"instance_id\" TEXT NOT NULL UNIQUE REFERENCES task_instances(id), \"actual_date\" TEXT NOT NULL, \"feedback\" TEXT NOT NULL, \"is_valid\" INTEGER NOT NULL DEFAULT 1 CHECK (is_valid IN (0, 1)), \"approval_command_id\" TEXT NOT NULL UNIQUE);"
+        }
+      ]
+    },
+    {
+      "name": "completion_date_idx",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE INDEX completion_date_idx ON completions (is_valid, actual_date)"
+        }
+      ]
+    },
+    {
+      "name": "ledger_entries",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"ledger_entries\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"account_id\" TEXT NOT NULL REFERENCES accounts(id), \"delta\" INTEGER NOT NULL, \"balance_after\" INTEGER NOT NULL CHECK (balance_after >= 0), \"kind\" TEXT NOT NULL CHECK (kind IN ('reward', 'penalty', 'penalty_reversal', 'purchase', 'refund', 'correction')), \"source_key\" TEXT NOT NULL UNIQUE, \"reversal_of\" TEXT UNIQUE REFERENCES ledger_entries(id), \"actual_date\" TEXT NOT NULL, \"posted_day\" TEXT NOT NULL, \"created_at\" INTEGER NOT NULL, \"command_id\" TEXT NOT NULL);"
+        }
+      ]
+    },
+    {
+      "name": "processed_commands",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"processed_commands\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"payload_hash\" TEXT NOT NULL, \"result_json\" TEXT NOT NULL, \"created_at\" INTEGER NOT NULL);"
+        }
+      ]
+    },
+    {
+      "name": "penalty_rules",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"penalty_rules\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"behavior\" TEXT NOT NULL, \"condition_text\" TEXT NOT NULL, \"points\" INTEGER NOT NULL CHECK (points BETWEEN 1 AND 3));"
+        }
+      ]
+    },
+    {
+      "name": "penalty_events",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"penalty_events\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"rule_id\" TEXT NOT NULL REFERENCES penalty_rules(id), \"fact\" TEXT NOT NULL, \"actual_date\" TEXT NOT NULL, \"posted_day\" TEXT NOT NULL, \"planned_points\" INTEGER NOT NULL CHECK (planned_points BETWEEN 1 AND 3), \"deducted\" INTEGER NOT NULL CHECK (deducted BETWEEN 0 AND planned_points), \"ledger_id\" TEXT NOT NULL UNIQUE REFERENCES ledger_entries(id));"
+        }
+      ]
+    },
+    {
+      "name": "penalty_day_usage",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"penalty_day_usage\" (\"account_id\" TEXT NOT NULL REFERENCES accounts(id), \"posted_day\" TEXT NOT NULL, \"used\" INTEGER NOT NULL CHECK (used BETWEEN 0 AND 3), PRIMARY KEY(account_id, posted_day));"
+        }
+      ]
+    },
+    {
+      "name": "purchases",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"purchases\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"item_id\" TEXT NOT NULL, \"name\" TEXT NOT NULL, \"price_paid\" INTEGER NOT NULL CHECK (price_paid > 0), \"ledger_id\" TEXT NOT NULL UNIQUE REFERENCES ledger_entries(id), \"created_at\" INTEGER NOT NULL, \"refunded_at\" INTEGER, \"command_id\" TEXT NOT NULL UNIQUE, \"asset_id\" TEXT NOT NULL);"
+        }
+      ]
+    },
+    {
+      "name": "purchased_once",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE UNIQUE INDEX purchased_once ON purchases (item_id) WHERE refunded_at IS NULL"
+        }
+      ]
+    },
+    {
+      "name": "spaces",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"spaces\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"scene_id\" TEXT NOT NULL UNIQUE, \"name\" TEXT NOT NULL, \"purchase_id\" TEXT REFERENCES purchases(id), \"layout_version\" INTEGER NOT NULL DEFAULT 0);"
+        }
+      ]
+    },
+    {
+      "name": "entitlements",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"entitlements\" (\"id\" TEXT NOT NULL PRIMARY KEY, \"purchase_id\" TEXT NOT NULL REFERENCES purchases(id), \"item_id\" TEXT NOT NULL, \"asset_id\" TEXT NOT NULL, \"name\" TEXT NOT NULL, \"slot\" TEXT CHECK (slot IN ('head', 'face', 'neck', 'body')), \"bound_space\" TEXT REFERENCES spaces(id), \"revoked\" INTEGER NOT NULL DEFAULT 0 CHECK (revoked IN (0, 1)), UNIQUE(purchase_id, item_id));"
+        }
+      ]
+    },
+    {
+      "name": "active_entitlement",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE UNIQUE INDEX active_entitlement ON entitlements (item_id) WHERE revoked = 0"
+        }
+      ]
+    },
+    {
+      "name": "placements",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"placements\" (\"entitlement_id\" TEXT NOT NULL PRIMARY KEY REFERENCES entitlements(id), \"space_id\" TEXT NOT NULL REFERENCES spaces(id), \"x\" REAL NOT NULL CHECK (x BETWEEN 0 AND 1), \"y\" REAL NOT NULL CHECK (y BETWEEN 0 AND 1), \"rotation\" INTEGER NOT NULL DEFAULT 0, \"flipped\" INTEGER NOT NULL DEFAULT 0 CHECK (flipped IN (0, 1)), \"z\" INTEGER NOT NULL, \"mount_id\" TEXT, UNIQUE(space_id, mount_id));"
+        }
+      ]
+    },
+    {
+      "name": "pet_state",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"pet_state\" (\"pet_id\" TEXT NOT NULL CHECK (pet_id IN ('fox', 'rabbit', 'cat')), \"slot\" TEXT NOT NULL CHECK (slot IN ('head', 'face', 'neck', 'body')), \"entitlement_id\" TEXT NOT NULL REFERENCES entitlements(id), PRIMARY KEY(pet_id, slot));"
+        }
+      ]
+    },
+    {
+      "name": "growth_awards",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"growth_awards\" (\"child_id\" TEXT NOT NULL REFERENCES child_profiles(id), \"threshold\" INTEGER NOT NULL, \"stage\" INTEGER NOT NULL CHECK (stage BETWEEN 2 AND 6), \"awarded_at\" INTEGER NOT NULL, PRIMARY KEY(child_id, threshold));"
+        }
+      ]
+    },
+    {
+      "name": "wishes",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"wishes\" (\"child_id\" TEXT NOT NULL PRIMARY KEY REFERENCES child_profiles(id), \"item_id\" TEXT NOT NULL, \"selected_price\" INTEGER NOT NULL CHECK (selected_price > 0), \"selected_at\" INTEGER NOT NULL);"
+        }
+      ]
+    },
+    {
+      "name": "correction_records",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"correction_records\" (\"instance_id\" TEXT NOT NULL PRIMARY KEY REFERENCES task_instances(id), \"original_reward_id\" TEXT NOT NULL UNIQUE REFERENCES ledger_entries(id), \"recovered\" INTEGER NOT NULL CHECK (recovered >= 0), \"shortfall\" INTEGER NOT NULL CHECK (shortfall >= 0), \"reason\" TEXT NOT NULL, \"refunded_purchase_ids\" TEXT NOT NULL, \"command_id\" TEXT NOT NULL UNIQUE);"
+        }
+      ]
+    },
+    {
+      "name": "ledger_day_kind_idx",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE INDEX ledger_day_kind_idx ON ledger_entries (posted_day, kind)"
+        }
+      ]
+    },
+    {
+      "name": "purchase_ledger_idx",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE INDEX purchase_ledger_idx ON purchases (ledger_id, refunded_at)"
+        }
+      ]
+    },
+    {
+      "name": "base_furnishings",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"base_furnishings\" (\"id\" TEXT NOT NULL PRIMARY KEY CHECK (id IN ('base_bed', 'base_rug')), \"space_id\" TEXT NOT NULL REFERENCES spaces(id), \"x\" REAL NOT NULL CHECK (x BETWEEN 0 AND 1), \"y\" REAL NOT NULL CHECK (y BETWEEN 0 AND 1), \"flipped\" INTEGER NOT NULL DEFAULT 0 CHECK (flipped IN (0, 1)), \"z\" INTEGER NOT NULL);"
+        }
+      ]
+    }
+  ]
+}

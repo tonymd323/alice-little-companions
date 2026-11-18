@@ -1,0 +1,3 @@
+Android 11 emulator / airplane mode 1 / release 0.2.0+2
+PASS: create family, choose rabbit, preview and return with 0 points, create focus task, submit, confirm once
+PASS: force-stop and cold open. 3 points, current companion retained

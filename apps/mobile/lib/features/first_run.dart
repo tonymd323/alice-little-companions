@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import '../application/controller.dart';
 import '../domain/companions.dart';
 import '../domain/pin.dart';
+import 'backup_pages.dart';
 import 'common.dart';
 import 'garden.dart';
 
@@ -79,6 +80,11 @@ class _FirstRunPageState extends State<FirstRunPage> {
             OutlinedButton(
               onPressed: () => openPage(context, const AppearancePreview()),
               child: const Text('外观预览'),
+            ),
+            TextButton(
+              onPressed: () =>
+                  openPage(context, RestorePage(controller: widget.controller)),
+              child: const Text('从备份恢复'),
             ),
           ],
           if (step == 1)

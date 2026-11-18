@@ -410,6 +410,7 @@ extension FamilyEconomy on FamilyService {
         throw const UserError('请确认无法追回的差额。');
       }
       final explanation = textValue(reason, 500, requiredLabel: '更正说明');
+      await _protectBeforeCorrection?.call();
       for (final purchase in verified.refunds) {
         await _refundInTransaction(id, purchase);
       }

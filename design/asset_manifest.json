@@ -17,9 +17,14 @@
       ],
       "alpha_required": false,
       "status": "demo_candidate",
-      "runtime_path": null,
-      "sha256": null,
-      "demo_id": "garden"
+      "runtime_path": "apps/mobile/assets/art/garden.webp",
+      "sha256": "fe09689ac123c25f45e02b39e0f26b636e0ec6b6f8ae810bcb0f6e3d966e8a76",
+      "demo_id": "garden",
+      "runtime_size": [
+        1536,
+        1024
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "scene_base_room_foreground",
@@ -42,8 +47,13 @@
       ],
       "alpha_required": false,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/scene_garden_background.webp",
+      "sha256": "482bcb247233d6c20579feaa9e522e872239e873c122ee0b54f449d988723ab9",
+      "runtime_size": [
+        768,
+        512
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "scene_garden_foreground",
@@ -66,8 +76,13 @@
       ],
       "alpha_required": false,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/scene_treehouse_background.webp",
+      "sha256": "ffbaec878a2a67c33a567762f4dc7070b735d4e0a5d403a8f9760654087b5ad1",
+      "runtime_size": [
+        768,
+        512
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "scene_treehouse_foreground",
@@ -90,8 +105,13 @@
       ],
       "alpha_required": false,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/scene_pastry_shop_background.webp",
+      "sha256": "8153c3048917c3c68222d485c209b9f4f3d5e1a468ebcdcf4decace5aa71ed93",
+      "runtime_size": [
+        768,
+        512
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "scene_pastry_shop_foreground",
@@ -114,8 +134,13 @@
       ],
       "alpha_required": false,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/scene_flower_shop_background.webp",
+      "sha256": "35e6ecfffa2f7858f2d797f8f61c4a24f6c8bfa97a4ba211030cd30ae69383de",
+      "runtime_size": [
+        768,
+        512
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "scene_flower_shop_foreground",
@@ -138,8 +163,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_decor_vase.webp",
+      "sha256": "396b549405a128356988fabec417556f07c008410670bf1651a96080720e6bd5",
+      "runtime_size": [
+        135,
+        211
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_decor_cushion",
@@ -150,8 +180,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_decor_cushion.webp",
+      "sha256": "20a37ffe3add870671d44ce26d0936a346c6bdc2be8b0b1fe40e2149b74d4ae5",
+      "runtime_size": [
+        199,
+        143
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_decor_plant",
@@ -162,8 +197,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_decor_plant.webp",
+      "sha256": "78097cb85fb57c883075bc77f45e907eca8ff20efcd64f53ac581fed272c451c",
+      "runtime_size": [
+        211,
+        212
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_decor_mobile",
@@ -174,8 +214,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_decor_mobile.webp",
+      "sha256": "8854a58e4300a549087e602c474195ede3796e526d92b168d2894cb2d00cdc18",
+      "runtime_size": [
+        171,
+        227
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_accessory_scarf",
@@ -186,8 +231,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_accessory_scarf.webp",
+      "sha256": "eb39704a6d1a5bb28d7db1e905b4b0d188521ac28d473d6770b9c567ec2eb30e",
+      "runtime_size": [
+        171,
+        184
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_accessory_hat",
@@ -198,8 +248,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_accessory_hat.webp",
+      "sha256": "3079d936856e51f6e68239757cc95e630cbb7189520f925bc67287ee49ca2c66",
+      "runtime_size": [
+        210,
+        146
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_accessory_bow",
@@ -210,8 +265,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_accessory_bow.webp",
+      "sha256": "295a29baa9648061be6399ba6441a89154859c5caa8748be977e5df2ef6bdc61",
+      "runtime_size": [
+        181,
+        168
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_accessory_glasses",
@@ -222,8 +282,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_accessory_glasses.webp",
+      "sha256": "d524a642310ab859580155ac393c2769121d22f0300c7645f4c1c8e24dc83a0f",
+      "runtime_size": [
+        216,
+        97
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_single_armchair",
@@ -234,8 +299,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_single_armchair.webp",
+      "sha256": "4e901ab7340edd5d1dfafbb50f5a2d1543ac4f907398f33d31e5162501e47e4a",
+      "runtime_size": [
+        211,
+        201
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_single_bed",
@@ -246,8 +316,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_single_bed.webp",
+      "sha256": "54aee76db3f1cab312224339224bd51e8885b5bddee518f9b5889c05220f6045",
+      "runtime_size": [
+        214,
+        192
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_single_coat",
@@ -258,8 +333,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_single_coat.webp",
+      "sha256": "7ec344a45799ce4c34a55026611a81663a33f16132c32379acd5131e5fbf3815",
+      "runtime_size": [
+        224,
+        170
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_single_apron",
@@ -270,8 +350,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_single_apron.webp",
+      "sha256": "4ed7067d1b5f9539673c9460a8aa237a82dd9679161f6326245443513af13df6",
+      "runtime_size": [
+        197,
+        222
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_bundle_forest",
@@ -282,8 +367,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_bundle_forest.webp",
+      "sha256": "acb5ba69ca664c27582fff01d81ffca7e058abe4f2799621aaaa3422b58bdb2b",
+      "runtime_size": [
+        415,
+        165
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_bundle_forest_chair",
@@ -294,8 +384,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_bundle_forest_chair.webp",
+      "sha256": "50b4986d9bd2fe80f1cd8b7657a8f6578743cccb720915db21e94bd2f37b364e",
+      "runtime_size": [
+        213,
+        225
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_bundle_forest_table",
@@ -306,8 +401,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_bundle_forest_table.webp",
+      "sha256": "9c1e9a00c88131986001a5118916b0aead6a6e49aceb2cb7d7b471c7a407808e",
+      "runtime_size": [
+        185,
+        187
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_bundle_forest_lamp",
@@ -318,8 +418,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_bundle_forest_lamp.webp",
+      "sha256": "8a4260b002ac34cc8326d1493cf81f75acde62de1dcc03f8676581fe9f66f626",
+      "runtime_size": [
+        174,
+        226
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_bundle_starlight",
@@ -330,8 +435,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_bundle_starlight.webp",
+      "sha256": "d8d1ad9262ba2cb71466c388c4a843bf566eedd6b6e180b54ed03501a0bef9f1",
+      "runtime_size": [
+        415,
+        165
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_bundle_starlight_bed",
@@ -342,8 +452,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_bundle_starlight_bed.webp",
+      "sha256": "1b5ce3a86775d649363f511d7bdfcc2ae8f8eb15d6e8821fa1e4f3abfcf14985",
+      "runtime_size": [
+        228,
+        200
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_bundle_starlight_cabinet",
@@ -354,8 +469,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_bundle_starlight_cabinet.webp",
+      "sha256": "3ed5e45f038e6db8b6e1e563682542993517c7f640a21858f9875a7983a549f8",
+      "runtime_size": [
+        181,
+        203
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_bundle_starlight_rug",
@@ -366,8 +486,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_bundle_starlight_rug.webp",
+      "sha256": "184826ddd69fad269c1b9bb8f762e57a44b4f4b221015fd30605a6da7dc9bda0",
+      "runtime_size": [
+        246,
+        134
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_garden",
@@ -378,8 +503,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_garden.webp",
+      "sha256": "2493924eb7ec9c699ebd8a0d35607a25ccfc5c51996520ee4ac011cd5fd5cec8",
+      "runtime_size": [
+        310,
+        218
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_garden_bench",
@@ -390,8 +520,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_garden_bench.webp",
+      "sha256": "d75dd613b0e5ce38e197b4d4ad61953f284853ebc15f8a83afc4e472bc722eb6",
+      "runtime_size": [
+        227,
+        190
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_garden_planter",
@@ -402,8 +537,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_garden_planter.webp",
+      "sha256": "d4b4624acf4216f8f482f5204662e084e4435de205d4945fd8c107a7ecca39db",
+      "runtime_size": [
+        213,
+        196
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_garden_path",
@@ -414,8 +554,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_garden_path.webp",
+      "sha256": "4a8d54fd7d807b32d3744c2a39adab55d54535fb5968d1e138e35d56f01de47c",
+      "runtime_size": [
+        191,
+        167
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_treehouse",
@@ -426,8 +571,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_treehouse.webp",
+      "sha256": "c3e3d37635d882601cc18aae5e2147c023f8a2f863d31d1af5166dfc211813ce",
+      "runtime_size": [
+        310,
+        218
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_treehouse_bench",
@@ -438,8 +588,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_treehouse_bench.webp",
+      "sha256": "e55a881d42e7c99ef2bb17f6b161eef356f0fa4e8433f84e45449ba20ee54516",
+      "runtime_size": [
+        181,
+        189
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_treehouse_shelf",
@@ -450,8 +605,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_treehouse_shelf.webp",
+      "sha256": "ac3eb6613119a731f9f82c56e602e5ae46c457dc5fe4e08430ac12a8701c79be",
+      "runtime_size": [
+        204,
+        212
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_treehouse_rug",
@@ -462,8 +622,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_treehouse_rug.webp",
+      "sha256": "695c6d4658ffe27a0d54becc552568b6fd7656e1710e9632e8f5a7a7479670d2",
+      "runtime_size": [
+        218,
+        149
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_pastry_shop",
@@ -474,8 +639,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_pastry_shop.webp",
+      "sha256": "9efd7be7024549f545d78a35e307b8f67d24a7b69c2b6b7ee801ff437a635fd3",
+      "runtime_size": [
+        310,
+        218
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_pastry_shop_counter",
@@ -486,8 +656,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_pastry_shop_counter.webp",
+      "sha256": "b0fae00b8f1eab5a367df6a291717029d254ba6fee388d6a8a1aabb7a29e9621",
+      "runtime_size": [
+        232,
+        212
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_pastry_shop_table",
@@ -498,8 +673,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_pastry_shop_table.webp",
+      "sha256": "a5223a67b89d8dbbd15c9809dc19c6c1aeef9f4c40353e84e20f038abc244e57",
+      "runtime_size": [
+        185,
+        187
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_pastry_shop_sign",
@@ -510,8 +690,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_pastry_shop_sign.webp",
+      "sha256": "dae4ef4e0cbc525138ebb21ce993051b7071e04eafdaa31916b9d0420ecdaaff",
+      "runtime_size": [
+        182,
+        203
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "item_flower_shop",
@@ -522,8 +707,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/item_flower_shop.webp",
+      "sha256": "9e2b2a35023eb1344c263cc52bc8b59f75fd7bf2bb65aaea3292cdb807b1f94f",
+      "runtime_size": [
+        310,
+        218
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_flower_shop_counter",
@@ -534,8 +724,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_flower_shop_counter.webp",
+      "sha256": "d44fabfd50d5be3090a105c746ee1615dc91c7642fe0ec6cf851fee4562375bb",
+      "runtime_size": [
+        231,
+        206
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_flower_shop_shelf",
@@ -546,8 +741,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_flower_shop_shelf.webp",
+      "sha256": "494a8c6a197343a827917f1708b99213ee478d8989c544c4c55f46bd3fe9afc3",
+      "runtime_size": [
+        192,
+        210
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "part_flower_shop_sign",
@@ -558,8 +758,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/part_flower_shop_sign.webp",
+      "sha256": "ccb7b2ea2d9ec96c63b6c349f7bc8fcc0fbe684c0b6e8fcd681668191b323779",
+      "runtime_size": [
+        169,
+        204
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "base_bed",
@@ -570,8 +775,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/base_bed.webp",
+      "sha256": "dfc89a5cf6da3c89d978de37fa8ad2147c8df5177943b454bd146e9871707526",
+      "runtime_size": [
+        214,
+        192
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "base_rug",
@@ -582,8 +792,13 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/base_rug.webp",
+      "sha256": "1fce5959463671918bed2753be93b91a233579a32fdc02287d99e2ddc588cffe",
+      "runtime_size": [
+        218,
+        149
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_fox_1",
@@ -591,8 +806,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "fox-1",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/fox-1.webp",
+      "sha256": "4c6d15a1d5381462585274b74c105ddd02f9d092cf9f1057eadf0e9f3e7e82ec",
+      "runtime_size": [
+        153,
+        185
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_fox_2",
@@ -600,8 +820,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "fox-2",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/fox-2.webp",
+      "sha256": "25cd80c01122e221d56b8e85df6aea1932116d20904dace2f77a45ca1e5e0d6b",
+      "runtime_size": [
+        184,
+        231
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_fox_3",
@@ -609,8 +834,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "fox-3",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/fox-3.webp",
+      "sha256": "cf314db02487336f7fbd7cc894c679553b6150ba1a2c2809ea9466f0a5e94ce8",
+      "runtime_size": [
+        214,
+        227
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_fox_4",
@@ -618,8 +848,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "fox-4",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/fox-4.webp",
+      "sha256": "c1871fbd5a82e7470863557f8a77cc2cb05076314f570317d701528da952ddd1",
+      "runtime_size": [
+        255,
+        304
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_fox_5",
@@ -627,8 +862,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "fox-5",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/fox-5.webp",
+      "sha256": "ab2b2430c66621421bf7eead1f2096b46edcf476cd6ed59b4395f815f8f1c617",
+      "runtime_size": [
+        265,
+        299
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_fox_6",
@@ -636,8 +876,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "fox-6",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/fox-6.webp",
+      "sha256": "3a43fb78c1118ce04b9d113219482986660da942ae3bbe5fefd3c54cc5df6cc0",
+      "runtime_size": [
+        339,
+        290
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_rabbit_1",
@@ -645,8 +890,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "rabbit-1",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/rabbit-1.webp",
+      "sha256": "f2cdf0a5ba2e73baf60b55167b09353fcbde19dd1998c77c77be24568895082d",
+      "runtime_size": [
+        156,
+        141
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_rabbit_2",
@@ -654,8 +904,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "rabbit-2",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/rabbit-2.webp",
+      "sha256": "73ca6db3ee764cf555f498e77ff603ffb6732354fba97684606970e0e0fa897c",
+      "runtime_size": [
+        181,
+        177
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_rabbit_3",
@@ -663,8 +918,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "rabbit-3",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/rabbit-3.webp",
+      "sha256": "b5d9ea98ea85c1292a7b70cf8eeaf3535304bc0e8b405f4ea10965abbf2e3911",
+      "runtime_size": [
+        277,
+        191
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_rabbit_4",
@@ -672,8 +932,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "rabbit-4",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/rabbit-4.webp",
+      "sha256": "021452df59ff2bd9fce53d0780c168d488560af7be8450ad48d2a98d89e4001b",
+      "runtime_size": [
+        242,
+        274
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_rabbit_5",
@@ -681,8 +946,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "rabbit-5",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/rabbit-5.webp",
+      "sha256": "690992f0af49b3b218029cbf0b582c8091745524d3864effac172152be8419b6",
+      "runtime_size": [
+        256,
+        289
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_rabbit_6",
@@ -690,8 +960,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "rabbit-6",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/rabbit-6.webp",
+      "sha256": "9839e8d9e24b7a85a22a943406e968510660fd7a017409823ee5c87d0737b801",
+      "runtime_size": [
+        310,
+        332
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_cat_1",
@@ -699,8 +974,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "cat-1",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/cat-1.webp",
+      "sha256": "1340c02a8455a7cc0f0b3af737c23df88b97be2baac0a173348acc1fd0f10062",
+      "runtime_size": [
+        144,
+        170
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_cat_2",
@@ -708,8 +988,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "cat-2",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/cat-2.webp",
+      "sha256": "b3e04e554876fe72bdfbc8658abd85244c678e52bd2a09059cc8e154cffb2505",
+      "runtime_size": [
+        196,
+        198
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_cat_3",
@@ -717,8 +1002,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "cat-3",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/cat-3.webp",
+      "sha256": "c7695f94ff733c5c1311e3cf37040405155c16ff1c4fd80a96047e8663e6056e",
+      "runtime_size": [
+        173,
+        215
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_cat_4",
@@ -726,8 +1016,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "cat-4",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/cat-4.webp",
+      "sha256": "7381bc1a65d40d3f45c9dae2eb6a4089579af4236dfd5f3314f8308afb7481a2",
+      "runtime_size": [
+        232,
+        214
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_cat_5",
@@ -735,8 +1030,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "cat-5",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/cat-5.webp",
+      "sha256": "79e968e5adb50a5c9793c7a499c061b78f78c7b67717de91d96dee10eb8a93c3",
+      "runtime_size": [
+        340,
+        277
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_cat_6",
@@ -744,8 +1044,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "cat-6",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/cat-6.webp",
+      "sha256": "781a624530bb8feb953f03bb325ff8f446bd1f312610ff79f7f417bf256d7e75",
+      "runtime_size": [
+        415,
+        356
+      ],
+      "device_qa": "pending"
     },
     {
       "id": "pet_cat_4_rest",
@@ -753,8 +1058,13 @@
       "alpha_required": true,
       "status": "demo_candidate",
       "demo_id": "cat-4-rest",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/cat-4-rest.webp",
+      "sha256": "bf2b06220d009f545667e0fda9930c56cdd71ca3aafb7e87e617757e0a59aeba",
+      "runtime_size": [
+        480,
+        451
+      ],
+      "device_qa": "pending"
     }
   ],
   "scene_reference": {

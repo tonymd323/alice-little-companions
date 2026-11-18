@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../domain/pin.dart';
+import '../domain/rules.dart';
 import 'database.dart';
 
 const uuid = Uuid();
@@ -42,7 +43,10 @@ class DeviceStore {
       await const MethodChannel('alice/storage')
           .invokeMethod<void>('excludeFromBackup', root.path);
     }
-    return DeviceStore(root, const PlatformSecureValues());
+    final device = DeviceStore(root, const PlatformSecureValues());
+    final leftover = Directory(p.join(root.path, 'temporary'));
+    if (await leftover.exists()) await leftover.delete(recursive: true);
+    return device;
   }
 
   File get pointer => File(p.join(root.path, 'active.json'));
@@ -72,6 +76,25 @@ class DeviceStore {
 
   Future<void> activate(String id, {String? previous}) =>
       writeAtomic(pointer, {'active': id, 'previous': previous});
+
+  Future<Directory> temporaryDirectory() async {
+    final parent = await Directory(p.join(root.path, 'temporary'))
+        .create(recursive: true);
+    return parent.createTemp('work-');
+  }
+
+  Future<Json> control(String id) async {
+    final file = controlFile(id);
+    if (await file.exists()) {
+      return jsonDecode(await file.readAsString()) as Json;
+    }
+    final state = {'device_id': uuid.v4(), 'state': 'IDLE'};
+    await updateControl(id, state);
+    return state;
+  }
+
+  Future<void> updateControl(String id, Json state) =>
+      writeAtomic(controlFile(id), state);
 
   Future<void> writeAtomic(File file, Map<String, Object?> data) async {
     await file.parent.create(recursive: true);

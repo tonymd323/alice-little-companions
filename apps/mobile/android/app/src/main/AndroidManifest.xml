@@ -3,6 +3,7 @@
         android:label="小小伙伴"
         android:allowBackup="false"
         android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/local_data_rules"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

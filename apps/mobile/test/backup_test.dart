@@ -1,0 +1,422 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:alice_companions/application/family.dart';
+import 'package:alice_companions/application/transfer.dart';
+import 'package:alice_companions/data/checkpoints.dart';
+import 'package:alice_companions/data/device.dart';
+import 'package:alice_companions/domain/backup_codec.dart';
+import 'package:alice_companions/domain/pin.dart';
+import 'package:alice_companions/domain/rules.dart';
+import 'package:archive/archive.dart';
+import 'package:crypto/crypto.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:path/path.dart' as p;
+import 'package:sqlite3/sqlite3.dart';
+
+import 'support/families.dart';
+
+const codec = BackupCodec();
+final vectorBook = jsonDecode(
+  File('../../fixtures/migration_roundtrip.json').readAsStringSync(),
+) as Json;
+final formatVector = vectorBook['codec_vector'] as Json;
+final password = formatVector['passphrase'] as String;
+final assets =
+    (jsonDecode(File('assets/config/runtime_assets.json').readAsStringSync())
+            as Json)
+        .entries
+        .where((item) => File(item.value as String).existsSync())
+        .map((entry) => entry.key)
+        .toSet();
+final pin = 739184.toString();
+const fixtureDraft = TaskDraft('测试任务A', '测试内容', '测试标准A', 'focus');
+
+TransferService transfers(TestFamily fixture, {Set<String>? withAssets}) =>
+    TransferService(
+      device: fixture.device,
+      rules: fixture.rules,
+      availableAssets: withAssets ?? assets,
+      current: () => fixture.service,
+    );
+
+Uint8List hex(String value) => Uint8List.fromList(
+  List.generate(
+    value.length ~/ 2,
+    (i) => int.parse(value.substring(i * 2, i * 2 + 2), radix: 16),
+  ),
+);
+
+Future<void> fails(Future<Object?> operation) async =>
+    expectLater(operation, throwsA(isA<UserError>()));
+
+void main() {
+  test(
+    'AC-23/24/28 ALICEBK1 exact published vector and authentication failures',
+    () async {
+      final header = utf8.encode(formatVector['header_utf8'] as String);
+      final expected = BytesBuilder()
+        ..add(ascii.encode('ALICEBK1'))
+        ..add(
+          (ByteData(
+            4,
+          )..setUint32(0, header.length, Endian.big)).buffer.asUint8List(),
+        )
+        ..add(header)
+        ..add(hex(formatVector['ciphertext_hex'] as String))
+        ..add(hex(formatVector['tag_hex'] as String));
+      final payload = hex(formatVector['payload_hex'] as String);
+      final seal = await codec.encryptPayload(
+        payload,
+        password,
+        salt: List.generate(16, (i) => i),
+        nonce: List.generate(12, (i) => i + 16),
+      );
+      expect(seal, expected.toBytes());
+      expect(sha256.convert(seal).toString(), formatVector['container_sha256']);
+      expect(await codec.decryptPayload(seal, password), payload);
+      await fails(codec.decryptPayload(seal, password.trim()));
+      await fails(
+        codec.decryptPayload(
+          Uint8List.sublistView(seal, 0, seal.length - 1),
+          password,
+        ),
+      );
+      await fails(
+        codec.decryptPayload(
+          Uint8List.fromList(seal)..[seal.length - 1] ^= 1,
+          password,
+        ),
+      );
+      final headerLimit = Uint8List.fromList(seal);
+      ByteData.sublistView(headerLimit).setUint32(8, 4097);
+      await fails(codec.decryptPayload(headerLimit, password));
+      Uint8List replaceHeader(String from, String to) {
+        final text = utf8.decode(header).replaceFirst(from, to);
+        return Uint8List.fromList([
+          ...seal.sublist(0, 12),
+          ...utf8.encode(text),
+          ...seal.sublist(12 + header.length),
+        ]);
+      }
+
+      await fails(
+        codec.decryptPayload(
+          replaceHeader('"format_version":1', '"format_version":8'),
+          password,
+        ),
+      );
+      await fails(
+        codec.decryptPayload(replaceHeader('600000', '6000000'), password),
+      );
+    },
+  );
+
+  test('AC-22/27/28/31 fixed 37-point replica, freeze, fresh credentials and reward to 42', () async {
+    final clock = DateTime.utc(2026, 11, 18);
+    final source = await TestFamily.create(now: () => clock);
+    addTearDown(source.dispose);
+    final s = source.service;
+    final parent = await s.pin.unlock(TestFamily.pin);
+    final fixture = vectorBook['domain_fixture'] as Json;
+    for (final day in (fixture['reward_days'] as List).cast<Json>()) {
+      final types = (day['approved_task_types'] as List)
+          .cast<String>()
+          .toList();
+      if (day['actual_date'] == '2024-01-08') {
+        types.remove('focus');
+        await s.publishProject(fixtureDraft, [
+          const StageDraft('测试阶段A', '测试标准A', 'focus'),
+          const StageDraft('测试阶段B', '测试标准B', 'challenge'),
+        ], session: parent);
+        final first = (await s.tasks()).singleWhere(
+          (task) => task.state == 'OPEN',
+        );
+        await s.submit(first.id, '');
+        await s.approve(first.id, '2024-01-08', '测试阶段反馈', session: parent);
+      }
+      for (final type in types) {
+        await s.backfill(
+          TaskDraft('测试任务A', '测试内容', '测试标准', type),
+          day['actual_date'] as String,
+          '测试反馈',
+          session: parent,
+        );
+      }
+    }
+    await s.publish(
+      const TaskDraft('测试任务A', '', '测试A', 'light'),
+      session: parent,
+    );
+    final pending =
+        (await s.publish(
+              const TaskDraft('测试任务B', '', '测试B', 'challenge'),
+              session: parent,
+            ))['instance_id']
+            as String;
+    await s.submit(pending, '');
+    for (final item
+        in (fixture['purchased_catalog_ids'] as List).cast<String>()) {
+      await s.purchase(item);
+    }
+    await s.setWish('single_armchair');
+    final items = await s.items();
+    final space = (await s.spaces()).single;
+    await s.db.insertRow('pet_state', {
+      'pet_id': 'rabbit',
+      'slot': 'neck',
+      'entitlement_id': items.singleWhere(
+        (item) => item['item_id'] == 'accessory_scarf',
+      )['id'],
+    });
+    await s.db.insertRow('placements', {
+      'space_id': space['id'],
+      'entitlement_id': items.singleWhere(
+        (item) => item['item_id'] == 'decor_plant',
+      )['id'],
+      'x': .3,
+      'y': .8,
+      'z': 1,
+    });
+    final outgoing = transfers(source);
+    await fails(outgoing.prepareExport('migration', password, null));
+    final outgoingFile = outgoing.prepareExport('migration', password, parent);
+    final tryingWrite = fails(s.selectCompanion(source.rules.companion('cat')));
+    final ticket = await outgoingFile;
+    await tryingWrite;
+    await outgoing.finishExport(ticket, SaveOutcome.handedToSystem);
+    expect((await outgoing.status())['state'], 'AWAITING_FILE_VERIFICATION');
+    await source.reopen(now: () => clock);
+    final oldOwner = await source.service.pin.unlock(TestFamily.pin);
+    expect(source.service.frozen, isTrue);
+    await fails(
+      source.service.approve(pending, '2024-01-16', '', session: oldOwner),
+    );
+    await fails(source.service.purchase('accessory_hat'));
+    await outgoing.verifyExternal(ticket.file, password, oldOwner);
+    expect((await outgoing.status())['state'], 'MIGRATION_PENDING');
+
+    final targetDir = await Directory.systemTemp.createTemp('alice-target-');
+    addTearDown(() => targetDir.delete(recursive: true));
+    final targetDevice = DeviceStore(targetDir, MemorySecureValues());
+    FamilyService? target;
+    addTearDown(() async => target?.close());
+    final incoming = TransferService(
+      device: targetDevice,
+      rules: source.rules,
+      availableAssets: assets,
+      current: () => target,
+    );
+    final preview = await incoming.inspect(ticket.file, password, null);
+    addTearDown(preview.close);
+    expect(preview.info.summary, {
+      'balance': 37,
+      'ledger_count': 22,
+      'valid_completion_count': 17,
+      'owned_item_count': 5,
+      'space_count': 1,
+      'max_growth_stage': 2,
+    });
+    final restored = await incoming.activate(
+      preview,
+      pin,
+      PinGate.newRecoveryCode(),
+      session: null,
+      replace: false,
+    );
+    target = restored.service;
+    final restoredSnapshot = (await target.overview())!;
+    expect(
+      (
+        restoredSnapshot.balance,
+        restoredSnapshot.stage,
+        restoredSnapshot.days,
+        restoredSnapshot.companion.name,
+      ),
+      (37, 2, 4, 'rabbit'),
+    );
+    expect((await target.wish())!['item_id'], 'single_armchair');
+    expect(await target.db.value('SELECT COUNT(*) FROM placements'), 1);
+    expect(await target.db.value('SELECT COUNT(*) FROM pet_state'), 1);
+    await fails(target.pin.unlock(TestFamily.pin));
+    final targetParent = await target.pin.unlock(pin);
+    expect(
+      await targetDevice.secure.read(
+        'alice.pin.${source.service.pin.generation}',
+      ),
+      isNull,
+    );
+    final repeated = await incoming.activate(
+      preview,
+      pin,
+      PinGate.newRecoveryCode(),
+      session: targetParent,
+      replace: true,
+    );
+    expect(repeated.alreadyRestored, isTrue);
+    await target.approve(pending, '2024-01-16', '', session: targetParent);
+    expect((await target.overview())!.balance, 42);
+    await fails(
+      incoming.activate(
+        preview,
+        pin,
+        PinGate.newRecoveryCode(),
+        session: targetParent,
+        replace: true,
+      ),
+    );
+    expect((await source.service.overview())!.balance, 37);
+  }, timeout: const Timeout(Duration(minutes: 4)));
+
+  test('AC-24/25/26/32/33 invalid input and interrupted activation preserve generation', () async {
+    final fixture = await TestFamily.create();
+    addTearDown(fixture.dispose);
+    final safe = transfers(fixture);
+    final service = fixture.service;
+    final parent = await service.pin.unlock(TestFamily.pin);
+    await service.backfill(
+      fixtureDraft,
+      service.today,
+      '测试反馈',
+      session: parent,
+    );
+    final ticket = await safe.prepareExport('migration', password, parent);
+    expect(service.frozen, isTrue);
+    await safe.finishExport(ticket, SaveOutcome.cancelled);
+    expect(service.frozen, isFalse);
+    expect((await safe.status())['state'], 'IDLE');
+    final backup = await safe.prepareExport('backup', password, parent);
+    await safe.finishExport(backup, SaveOutcome.handedToSystem);
+    expect((await safe.status())['last_verified_at'], isNull);
+    final preview = await safe.inspect(backup.file, password, parent);
+    addTearDown(preview.close);
+    final active = await fixture.device.activeGeneration();
+    final absentAsset = transfers(
+      fixture,
+      withAssets: {...assets}..remove('pet_cat_4_rest'),
+    );
+    await fails(absentAsset.inspect(backup.file, password, parent));
+    await fails(safe.inspect(backup.file, 'incorrect password', parent));
+    await fails(safe.inspect(backup.file, password, null));
+
+    final invalid = File(p.join(fixture.root.path, 'invalid.alicebackup'));
+    final unsafeZip = ZipEncoder().encode(
+      Archive()
+        ..addFile(ArchiveFile('../snapshot.sqlite', 1, [2]))
+        ..addFile(ArchiveFile('manifest.json', 2, utf8.encode('{}'))),
+    );
+    await invalid.writeAsBytes(
+      await codec.encryptPayload(Uint8List.fromList(unsafeZip), password),
+    );
+    await fails(safe.inspect(invalid, password, parent));
+    final largeManifest = Uint8List(BackupCodec.maxManifest + 1);
+    final largeZip = ZipEncoder().encode(
+      Archive()
+        ..addFile(ArchiveFile('snapshot.sqlite', 1, [2]))
+        ..addFile(
+          ArchiveFile('manifest.json', largeManifest.length, largeManifest),
+        ),
+    );
+    await invalid.writeAsBytes(
+      await codec.encryptPayload(Uint8List.fromList(largeZip), password),
+    );
+    await fails(safe.inspect(invalid, password, parent));
+    final badVersion = File(p.join(fixture.root.path, 'future.sqlite'));
+    await preview.database.copy(badVersion.path);
+    final sql = sqlite3.open(badVersion.path);
+    sql.userVersion = 98;
+    sql.close();
+    await codec.write(
+      badVersion,
+      {...preview.manifest, 'schema_version': 98},
+      password,
+      invalid,
+    );
+    await fails(safe.inspect(invalid, password, parent));
+    expect(await fixture.device.activeGeneration(), active);
+    expect((await service.overview())!.balance, 3);
+
+    final blocked = File(p.join(fixture.root.path, 'checkpoints'));
+    await blocked.writeAsString('fixture');
+    await expectLater(
+      safe.protectCurrent(parent),
+      throwsA(isA<FileSystemException>()),
+    );
+    await blocked.delete();
+    expect(await fixture.device.activeGeneration(), active);
+    final protection = await safe.protectCurrent(parent);
+    for (final phase in [
+      'database',
+      'credentials',
+      'before_pointer',
+      'after_pointer',
+    ]) {
+      final interrupted = TransferService(
+        device: fixture.device,
+        rules: fixture.rules,
+        availableAssets: assets,
+        current: () => service,
+        fault: (at) {
+          if (at == phase) throw StateError('simulated interruption');
+        },
+      );
+      await expectLater(
+        interrupted.activate(
+          preview,
+          pin,
+          PinGate.newRecoveryCode(),
+          session: parent,
+          replace: true,
+          protection: protection,
+        ),
+        throwsStateError,
+      );
+      final generation = (await fixture.device.activeGeneration())!;
+      expect(generation == active, phase != 'after_pointer');
+      final reloaded = await FamilyService.load(
+        fixture.device,
+        generation,
+        fixture.rules,
+      );
+      expect((await reloaded.overview())!.balance, 3);
+      expect(await reloaded.ledger(), hasLength(1));
+      await reloaded.close();
+    }
+  }, timeout: const Timeout(Duration(minutes: 5)));
+
+  test('AC-34 schema upgrade keeps balance, ownership and at most five encrypted restore points', () async {
+    final stock = await TestFamily.create();
+    addTearDown(stock.dispose);
+    final parent = await stock.service.pin.unlock(TestFamily.pin);
+    for (var i = 0; i < 4; i++) {
+      await stock.service.backfill(
+        fixtureDraft,
+        stock.service.today,
+        '',
+        session: parent,
+      );
+    }
+    await stock.service.purchase('accessory_hat');
+    final id = (await stock.device.activeGeneration())!;
+    await stock.service.close();
+    final old = sqlite3.open(stock.device.databaseFile(id).path);
+    old.execute(
+      'DROP TABLE base_furnishings; DROP INDEX ledger_day_kind_idx; DROP INDEX purchase_ledger_idx; PRAGMA user_version = 1',
+    );
+    old.close();
+    stock.service = await FamilyService.load(stock.device, id, stock.rules);
+    expect(await stock.service.db.value('PRAGMA user_version'), 2);
+    expect((await stock.service.overview())!.balance, 0);
+    expect(await stock.service.items(), hasLength(1));
+    final backups = CheckpointStore(stock.device);
+    expect(await backups.files(), hasLength(1));
+    final checkpoint = (await backups.files()).single;
+    final header = await checkpoint.openRead(0, 8).first;
+    expect(utf8.decode(header), 'ALICECP1');
+    for (var i = 0; i < 6; i++) {
+      await backups.protectDatabase(stock.device.databaseFile(id));
+    }
+    expect(await backups.files(), hasLength(5));
+  }, timeout: const Timeout(Duration(minutes: 2)));
+}

@@ -4,8 +4,10 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 
+import '../data/checkpoints.dart';
 import '../data/database.dart';
 import '../data/device.dart';
+import '../data/snapshot.dart';
 import '../domain/companions.dart';
 import '../domain/pin.dart';
 import '../domain/rules.dart';
@@ -117,6 +119,7 @@ class FamilyService {
     this.rules, {
     DateTime Function()? clock,
     this.fault,
+    this._protectBeforeCorrection,
   }) : _now = clock ?? DateTime.now;
 
   final FamilyDatabase db;
@@ -124,6 +127,7 @@ class FamilyService {
   final Rules rules;
   final DateTime Function() _now;
   final void Function(String phase)? fault;
+  final Future<void> Function()? _protectBeforeCorrection;
   final serial = SerialWork();
   bool frozen = false;
   final _undoClock = Stopwatch()..start();
@@ -136,7 +140,14 @@ class FamilyService {
     String generation,
     Rules rules, {
     DateTime Function()? clock,
+    bool protectUpgrade = true,
   }) async {
+    final file = device.databaseFile(generation);
+    if (protectUpgrade &&
+        await file.exists() &&
+        await inspectSchemaVersion(file.path) == 1) {
+      await CheckpointStore(device).protectDatabase(file);
+    }
     final db = await device.openGeneration(generation);
     final pin = PinGate(
       device.secure,
@@ -144,9 +155,33 @@ class FamilyService {
       iterations: rules.pinIterations,
       now: clock,
     );
-    final service = FamilyService(db, pin, rules, clock: clock);
-    await service.overview();
-    return service;
+    final service = FamilyService(
+      db,
+      pin,
+      rules,
+      clock: clock,
+      protectBeforeCorrection: () =>
+          CheckpointStore(device).protectDatabase(file),
+    );
+    try {
+      await service.overview();
+      final state = await device.control(generation);
+      if (state['state'] == 'EXPORTING') {
+        await device.updateControl(generation, {
+          ...state,
+          'state': 'IDLE',
+          'outgoing_id': null,
+          'outgoing_mode': null,
+          'outgoing_sha256': null,
+        });
+      } else {
+        service.frozen = state['state'] != 'IDLE';
+      }
+      return service;
+    } catch (_) {
+      await service.close();
+      rethrow;
+    }
   }
 
   static Future<FamilyService> initialize(

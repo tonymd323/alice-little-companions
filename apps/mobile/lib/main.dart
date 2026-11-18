@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -18,9 +20,20 @@ Future<void> main() async {
         'scene_slots',
       ].map((name) => rootBundle.loadString('assets/config/$name.json')),
     );
+    final paths = jsonDecode(
+      await rootBundle.loadString('assets/config/runtime_assets.json'),
+    ) as Map<String, dynamic>;
+    final bundled = (await AssetManifest.loadFromAssetBundle(rootBundle))
+        .listAssets()
+        .toSet();
+    final available = paths.entries
+        .where((entry) => bundled.contains(entry.value))
+        .map((entry) => entry.key)
+        .toSet();
     final controller = FamilyController(
       await DeviceStore.open(),
       Rules.decode(data[0], data[1], data[2]),
+      assets: available,
     );
     await controller.open();
     WidgetsBinding.instance.addObserver(controller);
