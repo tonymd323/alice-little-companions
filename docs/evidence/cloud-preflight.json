@@ -1,0 +1,30 @@
+{
+  "host": "Linux",
+  "architecture": "x86_64",
+  "scope": "tools on PATH; devices, signing and building untested",
+  "tools": {
+    "git": {
+      "status": "available",
+      "version_output": "git version 2.52.0"
+    },
+    "flutter": {
+      "status": "not_on_path"
+    },
+    "dart": {
+      "status": "not_on_path"
+    },
+    "java": {
+      "status": "available",
+      "version_output": "openjdk version \"21.0.13\" 2026-10-20"
+    },
+    "adb": {
+      "status": "not_on_path"
+    },
+    "sdkmanager": {
+      "status": "not_on_path"
+    },
+    "xcodebuild": {
+      "status": "not_on_path"
+    }
+  }
+}

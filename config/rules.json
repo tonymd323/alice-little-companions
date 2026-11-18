@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "rules_version": "1.1",
+  "family_timezone": "Asia/Shanghai",
+  "task_types": [
+    {
+      "id": "light",
+      "name": "轻量行动",
+      "points": 2
+    },
+    {
+      "id": "focus",
+      "name": "持续投入",
+      "points": 3
+    },
+    {
+      "id": "challenge",
+      "name": "突破挑战",
+      "points": 5
+    }
+  ],
+  "execution_modes": [
+    "once",
+    "recurring",
+    "staged"
+  ],
+  "max_instances_per_day_per_template": 5,
+  "initial_balance": 0,
+  "currency_count": 1,
+  "weekly_pricing_reference": 30,
+  "budget_warning_multiple": 2,
+  "income_cap": null,
+  "points_expire": false,
+  "gameplay_income": false,
+  "price_tiers": {
+    "small": 6,
+    "accessory": 12,
+    "single": 25,
+    "bundle": 50,
+    "zone": 90,
+    "shop": 120
+  },
+  "penalty": {
+    "allowed_points": [
+      1,
+      2,
+      3
+    ],
+    "daily_actual_cap": 3,
+    "day_basis": "posted_local_date",
+    "release_daily_capacity_on_reversal": false,
+    "allow_debt": false
+  },
+  "purchase": {
+    "child_undo_seconds": 300,
+    "parent_error_refund": true,
+    "repeat_unique_item_purchase": false
+  },
+  "growth": {
+    "thresholds": [
+      3,
+      10,
+      20,
+      35,
+      55
+    ],
+    "unique_actual_dates": true,
+    "stage_count_including_initial": 6,
+    "requires_points": false,
+    "requires_streak": false,
+    "demote_on_spend_or_penalty": false,
+    "shared_across_companions": true
+  },
+  "parent_access": {
+    "pin_digits": 6,
+    "session_seconds": 600,
+    "lock_on_background": true,
+    "failed_attempts_before_delay": 5,
+    "initial_delay_seconds": 60,
+    "max_delay_seconds": 900,
+    "pin_pbkdf2_iterations": 600000,
+    "recovery_key_entropy_bits": 128
+  },
+  "offline": {
+    "first_run_supported": true,
+    "core_writes_supported": true,
+    "remote_assets_required": false,
+    "server_required": false
+  },
+  "backup": {
+    "format_version": 1,
+    "magic": "ALICEBK1",
+    "extension": ".alicebackup",
+    "min_passphrase_codepoints": 10,
+    "cipher": "AES-256-GCM",
+    "kdf": "PBKDF2-HMAC-SHA256",
+    "iterations": 600000,
+    "max_read_iterations": 1200000,
+    "salt_bytes": 16,
+    "nonce_bytes": 12,
+    "tag_bytes": 16,
+    "max_header_bytes": 4096,
+    "max_container_bytes": 268435456,
+    "max_plaintext_bytes": 536870912,
+    "max_manifest_bytes": 1048576,
+    "allowed_zip_entries": [
+      "manifest.json",
+      "snapshot.sqlite"
+    ],
+    "internal_restore_points": 5
+  },
+  "migration": {
+    "model": "single_current_device",
+    "merge_supported": false,
+    "source_readonly_after_successful_export": true,
+    "restore_resets_device_credentials": true
+  }
+}

@@ -1,0 +1,189 @@
+# 开工包校验结果
+
+2026-11-18 开工基线。本检查读取文档、配置和交付素材；原生 App 的执行记录单独保存在验收执行表中。
+
+- 13 项产品需求、35 条业务规则、43 项原生验收用例。
+- 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47}。
+- 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
+- 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
+- 本次准备检查 177 项通过。下面列出逐项结果。
+
+## 检查记录
+
+- 八份核心文档存在且有实质内容
+- 内部链接有效：README.md → START_CODEX.md
+- 内部链接有效：README.md → docs/PLAN.md
+- 内部链接有效：README.md → docs/PRD.md
+- 内部链接有效：README.md → docs/UX_SPEC.md
+- 内部链接有效：README.md → docs/RULES.md
+- 内部链接有效：README.md → config/rules.json
+- 内部链接有效：README.md → config/catalog.json
+- 内部链接有效：README.md → docs/DEMO_TO_APP.md
+- 内部链接有效：README.md → docs/DESIGN_SPEC.md
+- 内部链接有效：README.md → design/asset_manifest.json
+- 内部链接有效：README.md → docs/TECH_SPEC.md
+- 内部链接有效：README.md → docs/BACKUP_FORMAT.md
+- 内部链接有效：README.md → docs/DATA_HANDOFF.md
+- 内部链接有效：README.md → docs/ENVIRONMENT.md
+- 内部链接有效：README.md → docs/evidence/cloud-preflight.json
+- 内部链接有效：README.md → docs/OWNER_WALKTHROUGH.md
+- 内部链接有效：README.md → docs/ACCEPTANCE.md
+- 内部链接有效：README.md → docs/evidence/acceptance.csv
+- 内部链接有效：README.md → AGENTS.md
+- 内部链接有效：README.md → DOCS_CHECK.md
+- 内部链接有效：README.md → MANIFEST.json
+- 内部链接有效：design/ART_PROMPTS.md → references/pet-stages.png
+- 内部链接有效：design/ART_PROMPTS.md → references/garden-color.png
+- 内部链接有效：design/ART_PROMPTS.md → asset_manifest.json
+- 内部链接有效：docs/DESIGN_SPEC.md → ../design/references/pet-stages.png
+- 内部链接有效：docs/DESIGN_SPEC.md → ../design/references/garden-color.png
+- 内部链接有效：docs/DESIGN_SPEC.md → ../design/asset_manifest.json
+- 内部链接有效：docs/DESIGN_SPEC.md → ../design/scene_slots.json
+- 内部链接有效：docs/DESIGN_SPEC.md → ../design/tokens.json
+- 内部链接有效：docs/DESIGN_SPEC.md → ../design/ART_PROMPTS.md
+- 内部链接有效：docs/OWNER_WALKTHROUGH.md → ../fixtures/migration_roundtrip.json
+- 内部链接有效：references/SOURCES.md → ../docs/ENVIRONMENT.md
+- 任务分值2/3/5一致
+- 单积分且无游戏产币
+- 初始0分且不事后截断奖励
+- 扣分上限与无欠分一致
+- 成长阈值与阶段数一致
+- 首次与核心写入无需服务器
+- 整套迁移与不合并账本一致
+- 备份格式参数一致
+- 18个商品且ID唯一
+- 商品分层数量一致
+- 商品价格与无收益规则一致
+- 正式素材ID不重复
+- 商品及套装部件全部有素材计划
+- 套装内部件与独立商品无重复收费ID
+- 五个空间定义完整
+- 三只伙伴免费可选
+- 免费家园与可购空间区分
+- 三只伙伴六个阶段、收翼姿态、空家园共20个可接入文件
+- 美术文件格式、大小及摘要匹配 cat-1
+- 美术文件格式、大小及摘要匹配 cat-2
+- 美术文件格式、大小及摘要匹配 cat-3
+- 美术文件格式、大小及摘要匹配 cat-4-rest
+- 美术文件格式、大小及摘要匹配 cat-4
+- 美术文件格式、大小及摘要匹配 cat-5
+- 美术文件格式、大小及摘要匹配 cat-6
+- 美术文件格式、大小及摘要匹配 fox-1
+- 美术文件格式、大小及摘要匹配 fox-2
+- 美术文件格式、大小及摘要匹配 fox-3
+- 美术文件格式、大小及摘要匹配 fox-4
+- 美术文件格式、大小及摘要匹配 fox-5
+- 美术文件格式、大小及摘要匹配 fox-6
+- 美术文件格式、大小及摘要匹配 garden
+- 美术文件格式、大小及摘要匹配 rabbit-1
+- 美术文件格式、大小及摘要匹配 rabbit-2
+- 美术文件格式、大小及摘要匹配 rabbit-3
+- 美术文件格式、大小及摘要匹配 rabbit-4
+- 美术文件格式、大小及摘要匹配 rabbit-5
+- 美术文件格式、大小及摘要匹配 rabbit-6
+- 素材状态有效 scene_base_room_background
+- 候选素材可追溯 scene_base_room_background
+- 素材状态有效 scene_base_room_foreground
+- 素材状态有效 scene_garden_background
+- 素材状态有效 scene_garden_foreground
+- 素材状态有效 scene_treehouse_background
+- 素材状态有效 scene_treehouse_foreground
+- 素材状态有效 scene_pastry_shop_background
+- 素材状态有效 scene_pastry_shop_foreground
+- 素材状态有效 scene_flower_shop_background
+- 素材状态有效 scene_flower_shop_foreground
+- 素材状态有效 item_decor_vase
+- 素材状态有效 item_decor_cushion
+- 素材状态有效 item_decor_plant
+- 素材状态有效 item_decor_mobile
+- 素材状态有效 item_accessory_scarf
+- 素材状态有效 item_accessory_hat
+- 素材状态有效 item_accessory_bow
+- 素材状态有效 item_accessory_glasses
+- 素材状态有效 item_single_armchair
+- 素材状态有效 item_single_bed
+- 素材状态有效 item_single_coat
+- 素材状态有效 item_single_apron
+- 素材状态有效 item_bundle_forest
+- 素材状态有效 part_bundle_forest_chair
+- 素材状态有效 part_bundle_forest_table
+- 素材状态有效 part_bundle_forest_lamp
+- 素材状态有效 item_bundle_starlight
+- 素材状态有效 part_bundle_starlight_bed
+- 素材状态有效 part_bundle_starlight_cabinet
+- 素材状态有效 part_bundle_starlight_rug
+- 素材状态有效 item_garden
+- 素材状态有效 part_garden_bench
+- 素材状态有效 part_garden_planter
+- 素材状态有效 part_garden_path
+- 素材状态有效 item_treehouse
+- 素材状态有效 part_treehouse_bench
+- 素材状态有效 part_treehouse_shelf
+- 素材状态有效 part_treehouse_rug
+- 素材状态有效 item_pastry_shop
+- 素材状态有效 part_pastry_shop_counter
+- 素材状态有效 part_pastry_shop_table
+- 素材状态有效 part_pastry_shop_sign
+- 素材状态有效 item_flower_shop
+- 素材状态有效 part_flower_shop_counter
+- 素材状态有效 part_flower_shop_shelf
+- 素材状态有效 part_flower_shop_sign
+- 素材状态有效 base_bed
+- 素材状态有效 base_rug
+- 素材状态有效 pet_fox_1
+- 候选素材可追溯 pet_fox_1
+- 素材状态有效 pet_fox_2
+- 候选素材可追溯 pet_fox_2
+- 素材状态有效 pet_fox_3
+- 候选素材可追溯 pet_fox_3
+- 素材状态有效 pet_fox_4
+- 候选素材可追溯 pet_fox_4
+- 素材状态有效 pet_fox_5
+- 候选素材可追溯 pet_fox_5
+- 素材状态有效 pet_fox_6
+- 候选素材可追溯 pet_fox_6
+- 素材状态有效 pet_rabbit_1
+- 候选素材可追溯 pet_rabbit_1
+- 素材状态有效 pet_rabbit_2
+- 候选素材可追溯 pet_rabbit_2
+- 素材状态有效 pet_rabbit_3
+- 候选素材可追溯 pet_rabbit_3
+- 素材状态有效 pet_rabbit_4
+- 候选素材可追溯 pet_rabbit_4
+- 素材状态有效 pet_rabbit_5
+- 候选素材可追溯 pet_rabbit_5
+- 素材状态有效 pet_rabbit_6
+- 候选素材可追溯 pet_rabbit_6
+- 素材状态有效 pet_cat_1
+- 候选素材可追溯 pet_cat_1
+- 素材状态有效 pet_cat_2
+- 候选素材可追溯 pet_cat_2
+- 素材状态有效 pet_cat_3
+- 候选素材可追溯 pet_cat_3
+- 素材状态有效 pet_cat_4
+- 候选素材可追溯 pet_cat_4
+- 素材状态有效 pet_cat_5
+- 候选素材可追溯 pet_cat_5
+- 素材状态有效 pet_cat_6
+- 候选素材可追溯 pet_cat_6
+- 素材状态有效 pet_cat_4_rest
+- 候选素材可追溯 pet_cat_4_rest
+- 场景 C 参考图摘要
+- 美术成长表与积分规则阈值一致
+- 方向参考图片hash正确
+- 方向参考为至少1024边长PNG
+- 方向稿不冒充正式素材
+- 13项产品需求均映射到验收
+- 43条验收编号完整且唯一
+- 35条业务规则编号完整
+- 验收规则引用均存在
+- 迁移样本17次奖励、5次购买、余额37
+- 目标机后续确认42分
+- 口令 Unicode 与空格原样保留
+- 备份测试向量口令派生参数与结果匹配
+- 备份容器字段长度与固定样例摘要匹配
+- 验收执行表与43条用例一一对应
+- 文本配色对比达标：#2F3B33/#F7F3EA=10.57
+- 文本配色对比达标：#59635B/#FFFCF5=6.10
+- 文本配色对比达标：#FFFFFF/#4E6652=6.28
+- 点击尺寸基线至少48

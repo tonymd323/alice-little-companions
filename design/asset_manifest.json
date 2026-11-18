@@ -1,0 +1,961 @@
+{
+  "version": "1.1",
+  "reference": {
+    "path": "references/pet-stages.png",
+    "caption": "三只伙伴六阶段设定板",
+    "status": "reference_only",
+    "sha256": "3870371cf6d3f5d7a07232b1ef321423d6a11f3f1964b42bf3486a2170f983b9",
+    "counts_as_production_asset": false
+  },
+  "production_assets": [
+    {
+      "id": "scene_base_room_background",
+      "kind": "scene_background",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "alpha_required": false,
+      "status": "demo_candidate",
+      "runtime_path": null,
+      "sha256": null,
+      "demo_id": "garden"
+    },
+    {
+      "id": "scene_base_room_foreground",
+      "kind": "scene_foreground",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "scene_garden_background",
+      "kind": "scene_background",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "alpha_required": false,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "scene_garden_foreground",
+      "kind": "scene_foreground",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "scene_treehouse_background",
+      "kind": "scene_background",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "alpha_required": false,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "scene_treehouse_foreground",
+      "kind": "scene_foreground",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "scene_pastry_shop_background",
+      "kind": "scene_background",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "alpha_required": false,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "scene_pastry_shop_foreground",
+      "kind": "scene_foreground",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "scene_flower_shop_background",
+      "kind": "scene_background",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "alpha_required": false,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "scene_flower_shop_foreground",
+      "kind": "scene_foreground",
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_decor_vase",
+      "kind": "decoration",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_decor_cushion",
+      "kind": "decoration",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_decor_plant",
+      "kind": "decoration",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_decor_mobile",
+      "kind": "decoration",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_accessory_scarf",
+      "kind": "accessory",
+      "expected_size": [
+        1024,
+        1024
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_accessory_hat",
+      "kind": "accessory",
+      "expected_size": [
+        1024,
+        1024
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_accessory_bow",
+      "kind": "accessory",
+      "expected_size": [
+        1024,
+        1024
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_accessory_glasses",
+      "kind": "accessory",
+      "expected_size": [
+        1024,
+        1024
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_single_armchair",
+      "kind": "furniture",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_single_bed",
+      "kind": "furniture",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_single_coat",
+      "kind": "garment",
+      "expected_size": [
+        1024,
+        1024
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_single_apron",
+      "kind": "garment",
+      "expected_size": [
+        1024,
+        1024
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_bundle_forest",
+      "kind": "bundle",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_bundle_forest_chair",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_bundle_forest_table",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_bundle_forest_lamp",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_bundle_starlight",
+      "kind": "bundle",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_bundle_starlight_bed",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_bundle_starlight_cabinet",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_bundle_starlight_rug",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_garden",
+      "kind": "zone",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_garden_bench",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_garden_planter",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_garden_path",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_treehouse",
+      "kind": "zone",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_treehouse_bench",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_treehouse_shelf",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_treehouse_rug",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_pastry_shop",
+      "kind": "shop",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_pastry_shop_counter",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_pastry_shop_table",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_pastry_shop_sign",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "item_flower_shop",
+      "kind": "shop",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_flower_shop_counter",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_flower_shop_shelf",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "part_flower_shop_sign",
+      "kind": "included_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "base_bed",
+      "kind": "free_base_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "base_rug",
+      "kind": "free_base_item",
+      "expected_size": [
+        768,
+        768
+      ],
+      "alpha_required": true,
+      "status": "planned",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_fox_1",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "fox-1",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_fox_2",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "fox-2",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_fox_3",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "fox-3",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_fox_4",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "fox-4",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_fox_5",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "fox-5",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_fox_6",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "fox-6",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_rabbit_1",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "rabbit-1",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_rabbit_2",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "rabbit-2",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_rabbit_3",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "rabbit-3",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_rabbit_4",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "rabbit-4",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_rabbit_5",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "rabbit-5",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_rabbit_6",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "rabbit-6",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_cat_1",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "cat-1",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_cat_2",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "cat-2",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_cat_3",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "cat-3",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_cat_4",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "cat-4",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_cat_5",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "cat-5",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_cat_6",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "cat-6",
+      "runtime_path": null,
+      "sha256": null
+    },
+    {
+      "id": "pet_cat_4_rest",
+      "kind": "pet",
+      "alpha_required": true,
+      "status": "demo_candidate",
+      "demo_id": "cat-4-rest",
+      "runtime_path": null,
+      "sha256": null
+    }
+  ],
+  "scene_reference": {
+    "path": "references/garden-color.png",
+    "caption": "C 版家园带宠物合成方向稿",
+    "status": "reference_only",
+    "sha256": "0a3e515432dcba109f8328dea1867dffd56d1c4a1ab94a5c12853f067fc277db"
+  },
+  "demo_source": {
+    "commit_sha": "285b9cac8771b7db0483f6ff764ac33aa775716a",
+    "url": "https://alice-little-companions-demo.tonymei323.chatgpt.site",
+    "paths_relative_to": "design/",
+    "stage_days": [
+      0,
+      3,
+      10,
+      20,
+      35,
+      55
+    ]
+  },
+  "demo_assets": [
+    {
+      "id": "cat-1",
+      "path": "demo-assets/cat-1.webp",
+      "width": 144,
+      "height": 170,
+      "alpha": true,
+      "bytes": 9566,
+      "sha256": "1340c02a8455a7cc0f0b3af737c23df88b97be2baac0a173348acc1fd0f10062"
+    },
+    {
+      "id": "cat-2",
+      "path": "demo-assets/cat-2.webp",
+      "width": 196,
+      "height": 198,
+      "alpha": true,
+      "bytes": 13010,
+      "sha256": "b3e04e554876fe72bdfbc8658abd85244c678e52bd2a09059cc8e154cffb2505"
+    },
+    {
+      "id": "cat-3",
+      "path": "demo-assets/cat-3.webp",
+      "width": 173,
+      "height": 215,
+      "alpha": true,
+      "bytes": 13554,
+      "sha256": "c7695f94ff733c5c1311e3cf37040405155c16ff1c4fd80a96047e8663e6056e"
+    },
+    {
+      "id": "cat-4-rest",
+      "path": "demo-assets/cat-4-rest.webp",
+      "width": 480,
+      "height": 451,
+      "alpha": true,
+      "bytes": 50176,
+      "sha256": "bf2b06220d009f545667e0fda9930c56cdd71ca3aafb7e87e617757e0a59aeba"
+    },
+    {
+      "id": "cat-4",
+      "path": "demo-assets/cat-4.webp",
+      "width": 232,
+      "height": 214,
+      "alpha": true,
+      "bytes": 20302,
+      "sha256": "7381bc1a65d40d3f45c9dae2eb6a4089579af4236dfd5f3314f8308afb7481a2"
+    },
+    {
+      "id": "cat-5",
+      "path": "demo-assets/cat-5.webp",
+      "width": 340,
+      "height": 277,
+      "alpha": true,
+      "bytes": 28420,
+      "sha256": "79e968e5adb50a5c9793c7a499c061b78f78c7b67717de91d96dee10eb8a93c3"
+    },
+    {
+      "id": "cat-6",
+      "path": "demo-assets/cat-6.webp",
+      "width": 415,
+      "height": 356,
+      "alpha": true,
+      "bytes": 41072,
+      "sha256": "781a624530bb8feb953f03bb325ff8f446bd1f312610ff79f7f417bf256d7e75"
+    },
+    {
+      "id": "fox-1",
+      "path": "demo-assets/fox-1.webp",
+      "width": 153,
+      "height": 185,
+      "alpha": true,
+      "bytes": 11412,
+      "sha256": "4c6d15a1d5381462585274b74c105ddd02f9d092cf9f1057eadf0e9f3e7e82ec"
+    },
+    {
+      "id": "fox-2",
+      "path": "demo-assets/fox-2.webp",
+      "width": 184,
+      "height": 231,
+      "alpha": true,
+      "bytes": 15684,
+      "sha256": "25cd80c01122e221d56b8e85df6aea1932116d20904dace2f77a45ca1e5e0d6b"
+    },
+    {
+      "id": "fox-3",
+      "path": "demo-assets/fox-3.webp",
+      "width": 214,
+      "height": 227,
+      "alpha": true,
+      "bytes": 18228,
+      "sha256": "cf314db02487336f7fbd7cc894c679553b6150ba1a2c2809ea9466f0a5e94ce8"
+    },
+    {
+      "id": "fox-4",
+      "path": "demo-assets/fox-4.webp",
+      "width": 255,
+      "height": 304,
+      "alpha": true,
+      "bytes": 27740,
+      "sha256": "c1871fbd5a82e7470863557f8a77cc2cb05076314f570317d701528da952ddd1"
+    },
+    {
+      "id": "fox-5",
+      "path": "demo-assets/fox-5.webp",
+      "width": 265,
+      "height": 299,
+      "alpha": true,
+      "bytes": 30784,
+      "sha256": "ab2b2430c66621421bf7eead1f2096b46edcf476cd6ed59b4395f815f8f1c617"
+    },
+    {
+      "id": "fox-6",
+      "path": "demo-assets/fox-6.webp",
+      "width": 339,
+      "height": 290,
+      "alpha": true,
+      "bytes": 34940,
+      "sha256": "3a43fb78c1118ce04b9d113219482986660da942ae3bbe5fefd3c54cc5df6cc0"
+    },
+    {
+      "id": "garden",
+      "path": "demo-assets/garden.webp",
+      "width": 1536,
+      "height": 1024,
+      "alpha": false,
+      "bytes": 638650,
+      "sha256": "fe09689ac123c25f45e02b39e0f26b636e0ec6b6f8ae810bcb0f6e3d966e8a76"
+    },
+    {
+      "id": "rabbit-1",
+      "path": "demo-assets/rabbit-1.webp",
+      "width": 156,
+      "height": 141,
+      "alpha": true,
+      "bytes": 7700,
+      "sha256": "f2cdf0a5ba2e73baf60b55167b09353fcbde19dd1998c77c77be24568895082d"
+    },
+    {
+      "id": "rabbit-2",
+      "path": "demo-assets/rabbit-2.webp",
+      "width": 181,
+      "height": 177,
+      "alpha": true,
+      "bytes": 11168,
+      "sha256": "73ca6db3ee764cf555f498e77ff603ffb6732354fba97684606970e0e0fa897c"
+    },
+    {
+      "id": "rabbit-3",
+      "path": "demo-assets/rabbit-3.webp",
+      "width": 277,
+      "height": 191,
+      "alpha": true,
+      "bytes": 14952,
+      "sha256": "b5d9ea98ea85c1292a7b70cf8eeaf3535304bc0e8b405f4ea10965abbf2e3911"
+    },
+    {
+      "id": "rabbit-4",
+      "path": "demo-assets/rabbit-4.webp",
+      "width": 242,
+      "height": 274,
+      "alpha": true,
+      "bytes": 19406,
+      "sha256": "021452df59ff2bd9fce53d0780c168d488560af7be8450ad48d2a98d89e4001b"
+    },
+    {
+      "id": "rabbit-5",
+      "path": "demo-assets/rabbit-5.webp",
+      "width": 256,
+      "height": 289,
+      "alpha": true,
+      "bytes": 25382,
+      "sha256": "690992f0af49b3b218029cbf0b582c8091745524d3864effac172152be8419b6"
+    },
+    {
+      "id": "rabbit-6",
+      "path": "demo-assets/rabbit-6.webp",
+      "width": 310,
+      "height": 332,
+      "alpha": true,
+      "bytes": 32552,
+      "sha256": "9839e8d9e24b7a85a22a943406e968510660fd7a017409823ee5c87d0737b801"
+    }
+  ]
+}

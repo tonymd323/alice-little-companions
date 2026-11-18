@@ -1,0 +1,448 @@
+{
+  "catalog_version": "1.1",
+  "initial_free_space": "base_room",
+  "initial_free_pets": [
+    "fox",
+    "rabbit",
+    "cat"
+  ],
+  "default_pet": "fox",
+  "companions": [
+    {
+      "id": "fox",
+      "name": "银杏狐",
+      "nickname": "奶油"
+    },
+    {
+      "id": "rabbit",
+      "name": "月牙耳兔",
+      "nickname": "桃桃"
+    },
+    {
+      "id": "cat",
+      "name": "云翼猫",
+      "nickname": "团团"
+    }
+  ],
+  "items": [
+    {
+      "id": "decor_vase",
+      "name": "小花瓶",
+      "tier": "small",
+      "price": 6,
+      "kind": "decoration",
+      "asset_id": "item_decor_vase",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": true
+    },
+    {
+      "id": "decor_cushion",
+      "name": "云朵靠垫",
+      "tier": "small",
+      "price": 6,
+      "kind": "decoration",
+      "asset_id": "item_decor_cushion",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": true
+    },
+    {
+      "id": "decor_plant",
+      "name": "窗边绿植",
+      "tier": "small",
+      "price": 6,
+      "kind": "decoration",
+      "asset_id": "item_decor_plant",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": true
+    },
+    {
+      "id": "decor_mobile",
+      "name": "叶子挂饰",
+      "tier": "small",
+      "price": 6,
+      "kind": "decoration",
+      "asset_id": "item_decor_mobile",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": true,
+      "placement_surface": "hanging_mount"
+    },
+    {
+      "id": "accessory_scarf",
+      "name": "鼠尾草围巾",
+      "tier": "accessory",
+      "price": 12,
+      "kind": "accessory",
+      "asset_id": "item_accessory_scarf",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": false,
+      "slot": "neck"
+    },
+    {
+      "id": "accessory_hat",
+      "name": "小画家帽",
+      "tier": "accessory",
+      "price": 12,
+      "kind": "accessory",
+      "asset_id": "item_accessory_hat",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": false,
+      "slot": "head"
+    },
+    {
+      "id": "accessory_bow",
+      "name": "蝴蝶结",
+      "tier": "accessory",
+      "price": 12,
+      "kind": "accessory",
+      "asset_id": "item_accessory_bow",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": false,
+      "slot": "head"
+    },
+    {
+      "id": "accessory_glasses",
+      "name": "圆框眼镜",
+      "tier": "accessory",
+      "price": 12,
+      "kind": "accessory",
+      "asset_id": "item_accessory_glasses",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": false,
+      "slot": "face"
+    },
+    {
+      "id": "single_armchair",
+      "name": "木质扶手椅",
+      "tier": "single",
+      "price": 25,
+      "kind": "furniture",
+      "asset_id": "item_single_armchair",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": true
+    },
+    {
+      "id": "single_bed",
+      "name": "原木小床",
+      "tier": "single",
+      "price": 25,
+      "kind": "furniture",
+      "asset_id": "item_single_bed",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": true
+    },
+    {
+      "id": "single_coat",
+      "name": "杏色外套",
+      "tier": "single",
+      "price": 25,
+      "kind": "garment",
+      "asset_id": "item_single_coat",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": false,
+      "slot": "body"
+    },
+    {
+      "id": "single_apron",
+      "name": "花边围裙",
+      "tier": "single",
+      "price": 25,
+      "kind": "garment",
+      "asset_id": "item_single_apron",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": false,
+      "slot": "body"
+    },
+    {
+      "id": "bundle_forest",
+      "name": "森林阅读角",
+      "tier": "bundle",
+      "price": 50,
+      "kind": "bundle",
+      "asset_id": "item_bundle_forest",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": false,
+      "included_items": [
+        {
+          "id": "bundle_forest_chair",
+          "name": "叶纹座椅",
+          "asset_id": "part_bundle_forest_chair",
+          "not_sold_separately": true,
+          "bound_to_container": false
+        },
+        {
+          "id": "bundle_forest_table",
+          "name": "树桩边桌",
+          "asset_id": "part_bundle_forest_table",
+          "not_sold_separately": true,
+          "bound_to_container": false
+        },
+        {
+          "id": "bundle_forest_lamp",
+          "name": "林间落地灯",
+          "asset_id": "part_bundle_forest_lamp",
+          "not_sold_separately": true,
+          "bound_to_container": false
+        }
+      ]
+    },
+    {
+      "id": "bundle_starlight",
+      "name": "星光卧室",
+      "tier": "bundle",
+      "price": 50,
+      "kind": "bundle",
+      "asset_id": "item_bundle_starlight",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": false,
+      "included_items": [
+        {
+          "id": "bundle_starlight_bed",
+          "name": "星纹床",
+          "asset_id": "part_bundle_starlight_bed",
+          "not_sold_separately": true,
+          "bound_to_container": false
+        },
+        {
+          "id": "bundle_starlight_cabinet",
+          "name": "月牙床头柜",
+          "asset_id": "part_bundle_starlight_cabinet",
+          "not_sold_separately": true,
+          "bound_to_container": false
+        },
+        {
+          "id": "bundle_starlight_rug",
+          "name": "星光地毯",
+          "asset_id": "part_bundle_starlight_rug",
+          "not_sold_separately": true,
+          "bound_to_container": false
+        }
+      ]
+    },
+    {
+      "id": "garden",
+      "name": "花园",
+      "tier": "zone",
+      "price": 90,
+      "kind": "zone",
+      "asset_id": "item_garden",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": false,
+      "space_id": "garden",
+      "included_items": [
+        {
+          "id": "garden_bench",
+          "name": "花园长凳",
+          "asset_id": "part_garden_bench",
+          "not_sold_separately": true,
+          "bound_to_container": true
+        },
+        {
+          "id": "garden_planter",
+          "name": "基础花槽",
+          "asset_id": "part_garden_planter",
+          "not_sold_separately": true,
+          "bound_to_container": true
+        },
+        {
+          "id": "garden_path",
+          "name": "小径踏石",
+          "asset_id": "part_garden_path",
+          "not_sold_separately": true,
+          "bound_to_container": true
+        }
+      ]
+    },
+    {
+      "id": "treehouse",
+      "name": "树屋",
+      "tier": "zone",
+      "price": 90,
+      "kind": "zone",
+      "asset_id": "item_treehouse",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": false,
+      "space_id": "treehouse",
+      "included_items": [
+        {
+          "id": "treehouse_bench",
+          "name": "树屋木凳",
+          "asset_id": "part_treehouse_bench",
+          "not_sold_separately": true,
+          "bound_to_container": true
+        },
+        {
+          "id": "treehouse_shelf",
+          "name": "木架",
+          "asset_id": "part_treehouse_shelf",
+          "not_sold_separately": true,
+          "bound_to_container": true
+        },
+        {
+          "id": "treehouse_rug",
+          "name": "编织地毯",
+          "asset_id": "part_treehouse_rug",
+          "not_sold_separately": true,
+          "bound_to_container": true
+        }
+      ]
+    },
+    {
+      "id": "pastry_shop",
+      "name": "甜品店",
+      "tier": "shop",
+      "price": 120,
+      "kind": "shop",
+      "asset_id": "item_pastry_shop",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": false,
+      "space_id": "pastry_shop",
+      "included_items": [
+        {
+          "id": "pastry_shop_counter",
+          "name": "甜品展示柜",
+          "asset_id": "part_pastry_shop_counter",
+          "not_sold_separately": true,
+          "bound_to_container": true
+        },
+        {
+          "id": "pastry_shop_table",
+          "name": "小桌",
+          "asset_id": "part_pastry_shop_table",
+          "not_sold_separately": true,
+          "bound_to_container": true
+        },
+        {
+          "id": "pastry_shop_sign",
+          "name": "招牌",
+          "asset_id": "part_pastry_shop_sign",
+          "not_sold_separately": true,
+          "bound_to_container": true
+        }
+      ]
+    },
+    {
+      "id": "flower_shop",
+      "name": "花店",
+      "tier": "shop",
+      "price": 120,
+      "kind": "shop",
+      "asset_id": "item_flower_shop",
+      "unique": true,
+      "permanent": true,
+      "generates_points": false,
+      "supported_rotations": [
+        0
+      ],
+      "supports_horizontal_flip": false,
+      "space_id": "flower_shop",
+      "included_items": [
+        {
+          "id": "flower_shop_counter",
+          "name": "花店柜台",
+          "asset_id": "part_flower_shop_counter",
+          "not_sold_separately": true,
+          "bound_to_container": true
+        },
+        {
+          "id": "flower_shop_shelf",
+          "name": "花架",
+          "asset_id": "part_flower_shop_shelf",
+          "not_sold_separately": true,
+          "bound_to_container": true
+        },
+        {
+          "id": "flower_shop_sign",
+          "name": "招牌",
+          "asset_id": "part_flower_shop_sign",
+          "not_sold_separately": true,
+          "bound_to_container": true
+        }
+      ]
+    }
+  ]
+}

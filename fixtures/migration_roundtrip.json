@@ -1,0 +1,127 @@
+{
+  "domain_fixture": {
+    "fixture_version": 1,
+    "purpose": "AC-21、AC-27、AC-29、AC-30 和 AC-31；仅用于隔离测试家庭",
+    "family_timezone": "Asia/Shanghai",
+    "reward_days": [
+      {
+        "actual_date": "2024-01-08",
+        "approved_task_types": [
+          "challenge",
+          "challenge",
+          "challenge",
+          "focus"
+        ]
+      },
+      {
+        "actual_date": "2024-01-09",
+        "approved_task_types": [
+          "challenge",
+          "challenge",
+          "challenge",
+          "challenge",
+          "light"
+        ]
+      },
+      {
+        "actual_date": "2024-01-11",
+        "approved_task_types": [
+          "challenge",
+          "challenge",
+          "focus",
+          "light"
+        ]
+      },
+      {
+        "actual_date": "2024-01-15",
+        "approved_task_types": [
+          "challenge",
+          "challenge",
+          "challenge",
+          "focus"
+        ]
+      }
+    ],
+    "staged_project": {
+      "stage_types": [
+        "focus",
+        "challenge"
+      ],
+      "completed_stage": 1,
+      "counted_in_reward_day": "2024-01-08",
+      "replace_reward_type": "focus",
+      "pending_stage": 2
+    },
+    "other_unfinished_tasks": [
+      {
+        "alias": "pending-a",
+        "type": "light",
+        "state": "OPEN"
+      },
+      {
+        "alias": "pending-b",
+        "type": "challenge",
+        "state": "SUBMITTED"
+      }
+    ],
+    "purchased_catalog_ids": [
+      "decor_vase",
+      "decor_cushion",
+      "decor_plant",
+      "decor_mobile",
+      "accessory_scarf"
+    ],
+    "selected_wish": "single_armchair",
+    "outfit": {
+      "neck": "accessory_scarf"
+    },
+    "placement": {
+      "item": "decor_plant",
+      "space": "base_room",
+      "x": 0.3,
+      "y": 0.8,
+      "z": 1,
+      "rotation": 0,
+      "flipped": false
+    },
+    "before_export": {
+      "reward_entries": 17,
+      "purchase_entries": 5,
+      "total_ledger_entries": 22,
+      "total_reward": 73,
+      "total_spent": 36,
+      "balance": 37,
+      "distinct_completion_dates": 4,
+      "displayed_pet_stage": 2,
+      "unlocked_growth_thresholds": [
+        3
+      ],
+      "active_purchased_catalog_items": 5,
+      "active_spaces": 1,
+      "placed_items": 1,
+      "approved_instances": 17,
+      "open_instances": 2,
+      "submitted_instances": 1
+    },
+    "after_target_approves_pending_b": {
+      "new_actual_date": "2024-01-16",
+      "points_change": 5,
+      "balance": 42,
+      "total_ledger_entries": 23,
+      "distinct_completion_dates": 5,
+      "displayed_pet_stage": 2
+    },
+    "active_pet_id": "rabbit"
+  },
+  "codec_vector": {
+    "purpose": "仅验证容器加密及编码。载荷为单元测试字节；完整导入层应拒绝它。固定 salt / nonce / 口令仅用于测试。",
+    "passphrase": " 离线Alice-园é ",
+    "passphrase_utf8_hex": "20e7a6bbe7babf416c6963652de59bad65cc8120",
+    "payload_hex": "414c494345424b3120636f64656320756e69742066697874757265207631",
+    "header_utf8": "{\"format_version\":1,\"kdf\":\"PBKDF2-HMAC-SHA256\",\"iterations\":600000,\"salt\":\"AAECAwQFBgcICQoLDA0ODw==\",\"cipher\":\"AES-256-GCM\",\"nonce\":\"EBESExQVFhcYGRob\",\"payload_bytes\":30}",
+    "key_hex": "58a48743121ec1361b4307d8f26124b32e8e075962e9c4e0d488487e6489a28c",
+    "ciphertext_hex": "a3abb97e5e4dec528c873f04d5c3398f3855c7263d0d01aa90b1dd692b8e",
+    "tag_hex": "cb9bf9b1d6752d962de49f5a86bbeb00",
+    "container_sha256": "2ed2f38a97dc3299614e7cee56eb63c480e3ea99915248dd3fb6b36769c26951"
+  }
+}
