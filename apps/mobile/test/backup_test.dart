@@ -6,9 +6,11 @@ import 'package:alice_companions/application/family.dart';
 import 'package:alice_companions/application/transfer.dart';
 import 'package:alice_companions/data/checkpoints.dart';
 import 'package:alice_companions/data/device.dart';
+import 'package:alice_companions/data/snapshot.dart';
 import 'package:alice_companions/domain/backup_codec.dart';
 import 'package:alice_companions/domain/pin.dart';
 import 'package:alice_companions/domain/rules.dart';
+import 'package:alice_companions/domain/window_page.dart';
 import 'package:archive/archive.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -179,6 +181,7 @@ void main() {
       'y': .8,
       'z': 1,
     });
+    await s.saveWindowMathBookmark(WindowPage.finished, {4, 0});
     final outgoing = transfers(source);
     await fails(outgoing.prepareExport('migration', password, null));
     final outgoingFile = outgoing.prepareExport('migration', password, parent);
@@ -190,6 +193,7 @@ void main() {
     await source.reopen(now: () => clock);
     final oldOwner = await source.service.pin.unlock(TestFamily.pin);
     expect(source.service.frozen, isTrue);
+    await fails(source.service.saveWindowMathBookmark(WindowPage.count, {}));
     await fails(
       source.service.approve(pending, '2024-01-16', '', session: oldOwner),
     );
@@ -226,6 +230,9 @@ void main() {
       replace: false,
     );
     target = restored.service;
+    final chapter = await target.windowMathBookmark();
+    expect(chapter.page, WindowPage.finished);
+    expect(chapter.pattern, {0, 4});
     final restoredSnapshot = (await target.overview())!;
     expect(
       (
@@ -268,6 +275,49 @@ void main() {
     );
     expect((await source.service.overview())!.balance, 37);
   }, timeout: const Timeout(Duration(minutes: 4)));
+
+  test('0.10 family upgrades with an empty chapter, keeps its ledger and restores the bookmark on restart', () async {
+    final stock = await TestFamily.create();
+    addTearDown(stock.dispose);
+    final owner = await stock.service.pin.unlock(TestFamily.pin);
+    await stock.service.backfill(
+      fixtureDraft,
+      stock.service.today,
+      '',
+      session: owner,
+    );
+    final id = (await stock.device.activeGeneration())!;
+    final file = stock.device.databaseFile(id);
+    await stock.service.close();
+    final legacy = sqlite3.open(file.path);
+    legacy.execute('DROP TABLE window_math_bookmarks; PRAGMA user_version = 2');
+    legacy.close();
+    final schema = await expectedSchema();
+    final before = await checkSnapshot(file.path, schema, stock.rules, assets);
+    expect(before.schemaVersion, 2);
+    stock.service = await FamilyService.load(stock.device, id, stock.rules);
+    final service = stock.service;
+    final after = await checkSnapshot(file.path, schema, stock.rules, assets);
+    expect(after.schemaVersion, 3);
+    expect(after.businessDigest, before.businessDigest);
+    expect(after.summary, before.summary);
+    expect(await CheckpointStore(stock.device).files(), hasLength(1));
+    final first = await service.windowMathBookmark();
+    expect(first.page, WindowPage.count);
+    expect(first.pattern, isEmpty);
+    await fails(service.saveWindowMathBookmark(WindowPage.finished, {0, 5}));
+    await fails(service.saveWindowMathBookmark(WindowPage.missing, {1}));
+    await service.saveWindowMathBookmark(WindowPage.finished, {1, 3});
+    await stock.reopen();
+    final saved = await stock.service.windowMathBookmark();
+    expect(saved.page, WindowPage.finished);
+    expect(saved.pattern, {1, 3});
+    expect((await stock.service.overview())!.balance, 3);
+    expect(await stock.service.ledger(), hasLength(1));
+    final current = await checkSnapshot(file.path, schema, stock.rules, assets);
+    expect(current.businessDigest, isNot(before.businessDigest));
+    expect(current.summary, before.summary);
+  });
 
   test('AC-24/25/26/32/33 invalid input and interrupted activation preserve generation', () async {
     final fixture = await TestFamily.create();
@@ -402,11 +452,11 @@ void main() {
     await stock.service.close();
     final old = sqlite3.open(stock.device.databaseFile(id).path);
     old.execute(
-      'DROP TABLE base_furnishings; DROP INDEX ledger_day_kind_idx; DROP INDEX purchase_ledger_idx; PRAGMA user_version = 1',
+      'DROP TABLE window_math_bookmarks; DROP TABLE base_furnishings; DROP INDEX ledger_day_kind_idx; DROP INDEX purchase_ledger_idx; PRAGMA user_version = 1',
     );
     old.close();
     stock.service = await FamilyService.load(stock.device, id, stock.rules);
-    expect(await stock.service.db.value('PRAGMA user_version'), 2);
+    expect(await stock.service.db.value('PRAGMA user_version'), 3);
     expect((await stock.service.overview())!.balance, 0);
     expect(await stock.service.items(), hasLength(1));
     final backups = CheckpointStore(stock.device);

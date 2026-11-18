@@ -1,9 +1,10 @@
 import 'package:material_ui/material_ui.dart';
 
 import '../domain/companions.dart';
+import '../domain/window_page.dart';
 import 'garden.dart';
 
-enum WindowPage { count, missing, sunny, puzzle, finished }
+export '../domain/window_page.dart' show WindowPage;
 
 class WindowMathChapter extends StatefulWidget {
   const WindowMathChapter({
@@ -11,11 +12,15 @@ class WindowMathChapter extends StatefulWidget {
     required this.initialPage,
     this.initialPattern = const {},
     required this.save,
+    this.companion = Companion.rabbit,
+    this.verandaBuilder,
   });
 
   final WindowPage initialPage;
   final Set<int> initialPattern;
   final Future<void> Function(WindowPage page, Set<int> fiveLeafPanes) save;
+  final Companion companion;
+  final Widget Function(double height)? verandaBuilder;
 
   @override
   State<WindowMathChapter> createState() => _WindowMathChapterState();
@@ -29,6 +34,7 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
   bool saving = false;
   String feedback = '';
   final scroll = ScrollController();
+  String get friend => widget.companion.nickname;
 
   static const countPerWindow = 4;
   static const countWindows = 3;
@@ -91,7 +97,9 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
           ? (counting
                 ? '4 ＋ 4 ＋ 4 ＝ 12。三扇窗一共要 12 片。'
                 : '7 ＋ 5 ＝ 12。再补 5 片，窗花就齐了！')
-          : (counting ? '桃桃轻轻敲了敲窗框。点一扇数一组，再把三组加起来。' : '看看窗格里的空叶印，它们正等着金叶。');
+          : (counting
+                ? '$friend轻轻敲了敲窗框。点一扇数一组，再把三组加起来。'
+                : '看看窗格里的空叶印，它们正等着金叶。');
     });
   }
 
@@ -118,6 +126,16 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+    appBar: Navigator.canPop(context)
+        ? AppBar(
+            leading: IconButton(
+              tooltip: '回到小家',
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back_rounded),
+            ),
+            title: const Text('暖廊的彩窗'),
+          )
+        : null,
     body: SafeArea(
       bottom: false,
       child: LayoutBuilder(
@@ -126,7 +144,21 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
           final sceneHeight = wide
               ? box.maxHeight
               : (box.maxWidth * .58).clamp(175.0, 268.0);
-          final scene = _Room(height: sceneHeight, lit: lit);
+          final scene = _Room(
+            height: sceneHeight,
+            lit: lit,
+            showTitle: !Navigator.canPop(context),
+            veranda:
+                widget.verandaBuilder?.call(sceneHeight) ??
+                GardenScene(
+                  companion: widget.companion,
+                  stage: 1,
+                  view: HomeView.veranda,
+                  height: sceneHeight,
+                  immersive: true,
+                  showLabel: false,
+                ),
+          );
           final story = SafeArea(
             top: false,
             child: Padding(
@@ -148,10 +180,12 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
                   const SizedBox(height: 7),
                   Text(
                     switch (page) {
-                      WindowPage.count => '桃桃想给暖廊的 3 扇小窗做窗花。每扇要用 4 片金叶，一共要用几片？',
+                      WindowPage.count =>
+                        '$friend想给暖廊的 3 扇小窗做窗花。每扇要用 4 片金叶，一共要用几片？',
                       WindowPage.missing =>
-                        '三扇窗一共要 12 片，桃桃已经嵌好了 7 片。还要从篮子里拿几片？',
-                      WindowPage.sunny => '桃桃把最后一片金叶嵌好。阳光穿过窗花，在地板上画出了三朵金花。',
+                        '三扇窗一共要 12 片，$friend已经嵌好了 7 片。还要从篮子里拿几片？',
+                      WindowPage.sunny =>
+                        '$friend把最后一片金叶嵌好。阳光穿过窗花，在地板上画出了三朵金花。',
                       WindowPage.puzzle =>
                         '还有 5 格小窗，每格可以嵌 3 片或 5 片。点窗格换花纹，把 19 片金叶刚好用完。',
                       WindowPage.finished =>
@@ -198,7 +232,7 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
                                     ? WindowPage.missing
                                     : WindowPage.sunny,
                               ),
-                        child: Text(counting ? '和桃桃一起补叶片' : '看看阳光下的彩窗'),
+                        child: Text(counting ? '和$friend一起补叶片' : '看看阳光下的彩窗'),
                       ),
                     ] else ...[
                       Align(
@@ -206,7 +240,7 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
                         child: TextButton.icon(
                           onPressed: () => setState(() => hint = !hint),
                           icon: const Icon(Icons.lightbulb_outline, size: 18),
-                          label: Text(hint ? '收起提示' : '看看桃桃的提示'),
+                          label: Text(hint ? '收起提示' : '看看$friend的提示'),
                         ),
                       ),
                       if (hint)
@@ -319,9 +353,15 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
 }
 
 class _Room extends StatelessWidget {
-  const _Room({required this.height, required this.lit});
+  const _Room({
+    required this.height,
+    required this.lit,
+    required this.showTitle,
+    required this.veranda,
+  });
   final double height;
-  final bool lit;
+  final bool lit, showTitle;
+  final Widget veranda;
 
   @override
   Widget build(BuildContext context) => SizedBox(
@@ -329,14 +369,7 @@ class _Room extends StatelessWidget {
     child: Stack(
       fit: StackFit.expand,
       children: [
-        GardenScene(
-          companion: Companion.rabbit,
-          stage: 1,
-          view: HomeView.veranda,
-          height: height,
-          immersive: true,
-          showLabel: false,
-        ),
+        veranda,
         if (lit)
           const IgnorePointer(
             child: DecoratedBox(
@@ -353,29 +386,30 @@ class _Room extends StatelessWidget {
               ),
             ),
           ),
-        Positioned(
-          top: 14,
-          left: 15,
-          child: IgnorePointer(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: const Color(0xF7FFF6E3),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                child: Text(
-                  '暖廊的彩窗',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: ink,
-                    fontWeight: FontWeight.w800,
+        if (showTitle)
+          Positioned(
+            top: 14,
+            left: 15,
+            child: IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: const Color(0xF7FFF6E3),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  child: Text(
+                    '暖廊的彩窗',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: ink,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
       ],
     ),
   );

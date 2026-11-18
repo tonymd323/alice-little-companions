@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'package:path/path.dart' as p;
 
 import '../data/checkpoints.dart';
+import '../data/database.dart';
 import '../data/device.dart';
 import '../data/snapshot.dart';
 import '../domain/backup_codec.dart';
@@ -358,7 +359,7 @@ class TransferService {
         RegExp(r'^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$')
             .hasMatch(value);
     if (manifest['schema_version'] is int &&
-        (manifest['schema_version'] as int) > 2) {
+        (manifest['schema_version'] as int) > currentSchemaVersion) {
       throw const UserError('备份需要更新版本的 App。');
     }
     final assets = manifest['required_asset_ids'];

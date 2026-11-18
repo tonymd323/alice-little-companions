@@ -6,6 +6,7 @@ import 'package:alice_companions/application/family.dart';
 import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/domain/pin.dart';
 import 'package:alice_companions/domain/rules.dart';
+import 'package:alice_companions/domain/window_page.dart';
 import 'package:alice_companions/features/garden.dart';
 import 'package:alice_companions/main.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -26,6 +27,55 @@ Future<void> advanceScene(WidgetTester tester) async {
 }
 
 void main() {
+  testWidgets(
+    'the family home opens its own saved window chapter with the chosen companion',
+    (tester) async {
+      final stock = (await tester.runAsync(
+        () => TestFamily.create(pet: Companion.cat),
+      ))!;
+      final controller = FamilyController(
+        stock.device,
+        stock.rules,
+        assets: fixtureAssets,
+      )..service = stock.service;
+      addTearDown(() async {
+        controller.dispose();
+        await stock.dispose();
+      });
+      await tester.runAsync(() async {
+        await stock.service.saveWindowMathBookmark(WindowPage.missing, {});
+        await controller.refresh();
+      });
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(390, 844);
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(CompanionsApp(controller: controller));
+      await advanceScene(tester);
+      final entry = find.text('数学 · 暖廊的彩窗');
+      expect(entry.hitTestable(), findsOneWidget);
+      await tester.runAsync(() async {
+        await tester.tap(entry);
+        // Wait for the chapter read on Drift's background isolate before pumping navigation.
+        await stock.service.db.value('SELECT 1');
+      });
+      await advanceScene(tester);
+      expect(find.text('还差几片叶子？'), findsOneWidget);
+      expect(find.textContaining('团团已经嵌好了'), findsOneWidget);
+      final room = tester.widget<GardenScene>(find.byType(GardenScene));
+      expect(room.companion, Companion.cat);
+      expect(room.view, HomeView.veranda);
+      expect(room.stage, controller.family!.stage);
+      await tester.tap(find.byTooltip('回到小家'));
+      await advanceScene(tester);
+      expect(entry.hitTestable(), findsOneWidget);
+      expect(
+        tester.widget<GardenScene>(find.byType(GardenScene)).view,
+        HomeView.veranda,
+      );
+    },
+  );
+
   test('AC-26/34 active file failure can open the encrypted checkpoint through current PIN', () async {
     final fixture = await TestFamily.create();
     addTearDown(fixture.dispose);

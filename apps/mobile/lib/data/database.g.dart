@@ -854,6 +854,331 @@ class ChildProfilesCompanion extends UpdateCompanion<ChildProfile> {
   }
 }
 
+class WindowMathBookmarks extends Table
+    with TableInfo<WindowMathBookmarks, WindowMathBookmark> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  WindowMathBookmarks(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _childIdMeta = const VerificationMeta(
+    'childId',
+  );
+  late final GeneratedColumn<String> childId = GeneratedColumn<String>(
+    'child_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY REFERENCES child_profiles(id)',
+  );
+  static const VerificationMeta _pageMeta = const VerificationMeta('page');
+  late final GeneratedColumn<String> page = GeneratedColumn<String>(
+    'page',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (page IN (\'count\', \'missing\', \'sunny\', \'puzzle\', \'finished\'))',
+  );
+  static const VerificationMeta _firstPaneMeta = const VerificationMeta(
+    'firstPane',
+  );
+  late final GeneratedColumn<int> firstPane = GeneratedColumn<int>(
+    'first_pane',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _secondPaneMeta = const VerificationMeta(
+    'secondPane',
+  );
+  late final GeneratedColumn<int> secondPane = GeneratedColumn<int>(
+    'second_pane',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [childId, page, firstPane, secondPane];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'window_math_bookmarks';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<WindowMathBookmark> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('child_id')) {
+      context.handle(
+        _childIdMeta,
+        childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('page')) {
+      context.handle(
+        _pageMeta,
+        page.isAcceptableOrUnknown(data['page']!, _pageMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_pageMeta);
+    }
+    if (data.containsKey('first_pane')) {
+      context.handle(
+        _firstPaneMeta,
+        firstPane.isAcceptableOrUnknown(data['first_pane']!, _firstPaneMeta),
+      );
+    }
+    if (data.containsKey('second_pane')) {
+      context.handle(
+        _secondPaneMeta,
+        secondPane.isAcceptableOrUnknown(data['second_pane']!, _secondPaneMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {childId};
+  @override
+  WindowMathBookmark map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WindowMathBookmark(
+      childId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}child_id'],
+      )!,
+      page: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}page'],
+      )!,
+      firstPane: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}first_pane'],
+      ),
+      secondPane: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}second_pane'],
+      ),
+    );
+  }
+
+  @override
+  WindowMathBookmarks createAlias(String alias) {
+    return WindowMathBookmarks(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const [
+    'CHECK((page != \'finished\' AND first_pane IS NULL AND second_pane IS NULL)OR(page = \'finished\' AND first_pane IS NOT NULL AND second_pane IS NOT NULL AND first_pane BETWEEN 0 AND 3 AND second_pane BETWEEN 1 AND 4 AND first_pane < second_pane))',
+  ];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class WindowMathBookmark extends DataClass
+    implements Insertable<WindowMathBookmark> {
+  final String childId;
+  final String page;
+  final int? firstPane;
+  final int? secondPane;
+  const WindowMathBookmark({
+    required this.childId,
+    required this.page,
+    this.firstPane,
+    this.secondPane,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['child_id'] = Variable<String>(childId);
+    map['page'] = Variable<String>(page);
+    if (!nullToAbsent || firstPane != null) {
+      map['first_pane'] = Variable<int>(firstPane);
+    }
+    if (!nullToAbsent || secondPane != null) {
+      map['second_pane'] = Variable<int>(secondPane);
+    }
+    return map;
+  }
+
+  WindowMathBookmarksCompanion toCompanion(bool nullToAbsent) {
+    return WindowMathBookmarksCompanion(
+      childId: Value(childId),
+      page: Value(page),
+      firstPane: firstPane == null && nullToAbsent
+          ? const Value.absent()
+          : Value(firstPane),
+      secondPane: secondPane == null && nullToAbsent
+          ? const Value.absent()
+          : Value(secondPane),
+    );
+  }
+
+  factory WindowMathBookmark.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WindowMathBookmark(
+      childId: serializer.fromJson<String>(json['child_id']),
+      page: serializer.fromJson<String>(json['page']),
+      firstPane: serializer.fromJson<int?>(json['first_pane']),
+      secondPane: serializer.fromJson<int?>(json['second_pane']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'child_id': serializer.toJson<String>(childId),
+      'page': serializer.toJson<String>(page),
+      'first_pane': serializer.toJson<int?>(firstPane),
+      'second_pane': serializer.toJson<int?>(secondPane),
+    };
+  }
+
+  WindowMathBookmark copyWith({
+    String? childId,
+    String? page,
+    Value<int?> firstPane = const Value.absent(),
+    Value<int?> secondPane = const Value.absent(),
+  }) => WindowMathBookmark(
+    childId: childId ?? this.childId,
+    page: page ?? this.page,
+    firstPane: firstPane.present ? firstPane.value : this.firstPane,
+    secondPane: secondPane.present ? secondPane.value : this.secondPane,
+  );
+  WindowMathBookmark copyWithCompanion(WindowMathBookmarksCompanion data) {
+    return WindowMathBookmark(
+      childId: data.childId.present ? data.childId.value : this.childId,
+      page: data.page.present ? data.page.value : this.page,
+      firstPane: data.firstPane.present ? data.firstPane.value : this.firstPane,
+      secondPane: data.secondPane.present
+          ? data.secondPane.value
+          : this.secondPane,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WindowMathBookmark(')
+          ..write('childId: $childId, ')
+          ..write('page: $page, ')
+          ..write('firstPane: $firstPane, ')
+          ..write('secondPane: $secondPane')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(childId, page, firstPane, secondPane);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WindowMathBookmark &&
+          other.childId == this.childId &&
+          other.page == this.page &&
+          other.firstPane == this.firstPane &&
+          other.secondPane == this.secondPane);
+}
+
+class WindowMathBookmarksCompanion extends UpdateCompanion<WindowMathBookmark> {
+  final Value<String> childId;
+  final Value<String> page;
+  final Value<int?> firstPane;
+  final Value<int?> secondPane;
+  final Value<int> rowid;
+  const WindowMathBookmarksCompanion({
+    this.childId = const Value.absent(),
+    this.page = const Value.absent(),
+    this.firstPane = const Value.absent(),
+    this.secondPane = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WindowMathBookmarksCompanion.insert({
+    required String childId,
+    required String page,
+    this.firstPane = const Value.absent(),
+    this.secondPane = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : childId = Value(childId),
+       page = Value(page);
+  static Insertable<WindowMathBookmark> custom({
+    Expression<String>? childId,
+    Expression<String>? page,
+    Expression<int>? firstPane,
+    Expression<int>? secondPane,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (childId != null) 'child_id': childId,
+      if (page != null) 'page': page,
+      if (firstPane != null) 'first_pane': firstPane,
+      if (secondPane != null) 'second_pane': secondPane,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WindowMathBookmarksCompanion copyWith({
+    Value<String>? childId,
+    Value<String>? page,
+    Value<int?>? firstPane,
+    Value<int?>? secondPane,
+    Value<int>? rowid,
+  }) {
+    return WindowMathBookmarksCompanion(
+      childId: childId ?? this.childId,
+      page: page ?? this.page,
+      firstPane: firstPane ?? this.firstPane,
+      secondPane: secondPane ?? this.secondPane,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (childId.present) {
+      map['child_id'] = Variable<String>(childId.value);
+    }
+    if (page.present) {
+      map['page'] = Variable<String>(page.value);
+    }
+    if (firstPane.present) {
+      map['first_pane'] = Variable<int>(firstPane.value);
+    }
+    if (secondPane.present) {
+      map['second_pane'] = Variable<int>(secondPane.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WindowMathBookmarksCompanion(')
+          ..write('childId: $childId, ')
+          ..write('page: $page, ')
+          ..write('firstPane: $firstPane, ')
+          ..write('secondPane: $secondPane, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class Accounts extends Table with TableInfo<Accounts, Account> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -9978,6 +10303,9 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
   $FamilyDatabaseManager get managers => $FamilyDatabaseManager(this);
   late final Households households = Households(this);
   late final ChildProfiles childProfiles = ChildProfiles(this);
+  late final WindowMathBookmarks windowMathBookmarks = WindowMathBookmarks(
+    this,
+  );
   late final Accounts accounts = Accounts(this);
   late final TaskTemplates taskTemplates = TaskTemplates(this);
   late final TaskVersions taskVersions = TaskVersions(this);
@@ -10038,6 +10366,7 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     households,
     childProfiles,
+    windowMathBookmarks,
     accounts,
     taskTemplates,
     taskVersions,
@@ -10563,6 +10892,27 @@ final class $ChildProfilesReferences
     );
   }
 
+  static MultiTypedResultKey<WindowMathBookmarks, List<WindowMathBookmark>>
+  _windowMathBookmarksRefsTable(_$FamilyDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.windowMathBookmarks,
+        aliasName: 'child_profiles__id__window_math_bookmarks__child_id',
+      );
+
+  $WindowMathBookmarksProcessedTableManager get windowMathBookmarksRefs {
+    final manager = $WindowMathBookmarksTableManager(
+      $_db,
+      $_db.windowMathBookmarks,
+    ).filter((f) => f.childId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _windowMathBookmarksRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
   static MultiTypedResultKey<Accounts, List<Account>> _accountsRefsTable(
     _$FamilyDatabase db,
   ) => MultiTypedResultKey.fromTable(
@@ -10665,6 +11015,31 @@ class $ChildProfilesFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> windowMathBookmarksRefs(
+    Expression<bool> Function($WindowMathBookmarksFilterComposer f) f,
+  ) {
+    final $WindowMathBookmarksFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.windowMathBookmarks,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $WindowMathBookmarksFilterComposer(
+            $db: $db,
+            $table: $db.windowMathBookmarks,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 
   Expression<bool> accountsRefs(
@@ -10834,6 +11209,31 @@ class $ChildProfilesAnnotationComposer
     return composer;
   }
 
+  Expression<T> windowMathBookmarksRefs<T extends Object>(
+    Expression<T> Function($WindowMathBookmarksAnnotationComposer a) f,
+  ) {
+    final $WindowMathBookmarksAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.windowMathBookmarks,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $WindowMathBookmarksAnnotationComposer(
+            $db: $db,
+            $table: $db.windowMathBookmarks,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
   Expression<T> accountsRefs<T extends Object>(
     Expression<T> Function($AccountsAnnotationComposer a) f,
   ) {
@@ -10925,6 +11325,7 @@ class $ChildProfilesTableManager
           ChildProfile,
           PrefetchHooks Function({
             bool familyId,
+            bool windowMathBookmarksRefs,
             bool accountsRefs,
             bool growthAwardsRefs,
             bool wishesRefs,
@@ -10980,6 +11381,7 @@ class $ChildProfilesTableManager
           prefetchHooksCallback:
               ({
                 familyId = false,
+                windowMathBookmarksRefs = false,
                 accountsRefs = false,
                 growthAwardsRefs = false,
                 wishesRefs = false,
@@ -10987,6 +11389,7 @@ class $ChildProfilesTableManager
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
+                    if (windowMathBookmarksRefs) db.windowMathBookmarks,
                     if (accountsRefs) db.accounts,
                     if (growthAwardsRefs) db.growthAwards,
                     if (wishesRefs) db.wishes,
@@ -11023,6 +11426,26 @@ class $ChildProfilesTableManager
                       },
                   getPrefetchedDataCallback: (items) async {
                     return [
+                      if (windowMathBookmarksRefs)
+                        await $_getPrefetchedDataByColumns<
+                          ChildProfile,
+                          ChildProfiles,
+                          WindowMathBookmark,
+                          WindowMathBookmarks
+                        >(
+                          currentTable: table,
+                          referencedTable: $ChildProfilesReferences
+                              ._windowMathBookmarksRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $ChildProfilesReferences(
+                                db,
+                                table,
+                                p0,
+                              ).windowMathBookmarksRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'child_id',
+                          typedResults: items,
+                        ),
                       if (accountsRefs)
                         await $_getPrefetchedDataByColumns<
                           ChildProfile,
@@ -11105,10 +11528,320 @@ typedef $ChildProfilesProcessedTableManager =
       ChildProfile,
       PrefetchHooks Function({
         bool familyId,
+        bool windowMathBookmarksRefs,
         bool accountsRefs,
         bool growthAwardsRefs,
         bool wishesRefs,
       })
+    >;
+typedef $WindowMathBookmarksCreateCompanionBuilder =
+    WindowMathBookmarksCompanion Function({
+      required String childId,
+      required String page,
+      Value<int?> firstPane,
+      Value<int?> secondPane,
+      Value<int> rowid,
+    });
+typedef $WindowMathBookmarksUpdateCompanionBuilder =
+    WindowMathBookmarksCompanion Function({
+      Value<String> childId,
+      Value<String> page,
+      Value<int?> firstPane,
+      Value<int?> secondPane,
+      Value<int> rowid,
+    });
+
+final class $WindowMathBookmarksReferences
+    extends
+        BaseReferences<
+          _$FamilyDatabase,
+          WindowMathBookmarks,
+          WindowMathBookmark
+        > {
+  $WindowMathBookmarksReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static ChildProfiles _childIdTable(_$FamilyDatabase db) => db.childProfiles
+      .createAlias('window_math_bookmarks__child_id__child_profiles__id');
+
+  $ChildProfilesProcessedTableManager get childId {
+    final $_column = $_itemColumn<String>('child_id')!;
+
+    final manager = $ChildProfilesTableManager(
+      $_db,
+      $_db.childProfiles,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $WindowMathBookmarksFilterComposer
+    extends Composer<_$FamilyDatabase, WindowMathBookmarks> {
+  $WindowMathBookmarksFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get page => $composableBuilder(
+    column: $table.page,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get firstPane => $composableBuilder(
+    column: $table.firstPane,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get secondPane => $composableBuilder(
+    column: $table.secondPane,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $ChildProfilesFilterComposer get childId {
+    final $ChildProfilesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesFilterComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $WindowMathBookmarksOrderingComposer
+    extends Composer<_$FamilyDatabase, WindowMathBookmarks> {
+  $WindowMathBookmarksOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get page => $composableBuilder(
+    column: $table.page,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get firstPane => $composableBuilder(
+    column: $table.firstPane,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get secondPane => $composableBuilder(
+    column: $table.secondPane,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $ChildProfilesOrderingComposer get childId {
+    final $ChildProfilesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesOrderingComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $WindowMathBookmarksAnnotationComposer
+    extends Composer<_$FamilyDatabase, WindowMathBookmarks> {
+  $WindowMathBookmarksAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get page =>
+      $composableBuilder(column: $table.page, builder: (column) => column);
+
+  GeneratedColumn<int> get firstPane =>
+      $composableBuilder(column: $table.firstPane, builder: (column) => column);
+
+  GeneratedColumn<int> get secondPane => $composableBuilder(
+    column: $table.secondPane,
+    builder: (column) => column,
+  );
+
+  $ChildProfilesAnnotationComposer get childId {
+    final $ChildProfilesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesAnnotationComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $WindowMathBookmarksTableManager
+    extends
+        RootTableManager<
+          _$FamilyDatabase,
+          WindowMathBookmarks,
+          WindowMathBookmark,
+          $WindowMathBookmarksFilterComposer,
+          $WindowMathBookmarksOrderingComposer,
+          $WindowMathBookmarksAnnotationComposer,
+          $WindowMathBookmarksCreateCompanionBuilder,
+          $WindowMathBookmarksUpdateCompanionBuilder,
+          (WindowMathBookmark, $WindowMathBookmarksReferences),
+          WindowMathBookmark,
+          PrefetchHooks Function({bool childId})
+        > {
+  $WindowMathBookmarksTableManager(
+    _$FamilyDatabase db,
+    WindowMathBookmarks table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $WindowMathBookmarksFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $WindowMathBookmarksOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $WindowMathBookmarksAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> childId = const Value.absent(),
+                Value<String> page = const Value.absent(),
+                Value<int?> firstPane = const Value.absent(),
+                Value<int?> secondPane = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WindowMathBookmarksCompanion(
+                childId: childId,
+                page: page,
+                firstPane: firstPane,
+                secondPane: secondPane,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String childId,
+                required String page,
+                Value<int?> firstPane = const Value.absent(),
+                Value<int?> secondPane = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WindowMathBookmarksCompanion.insert(
+                childId: childId,
+                page: page,
+                firstPane: firstPane,
+                secondPane: secondPane,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<WindowMathBookmarks, WindowMathBookmark>(table),
+                  $WindowMathBookmarksReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (childId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.childId,
+                        referencedTable: $WindowMathBookmarksReferences
+                            ._childIdTable(db),
+                        referencedColumn: $WindowMathBookmarksReferences
+                            ._childIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $WindowMathBookmarksProcessedTableManager =
+    ProcessedTableManager<
+      _$FamilyDatabase,
+      WindowMathBookmarks,
+      WindowMathBookmark,
+      $WindowMathBookmarksFilterComposer,
+      $WindowMathBookmarksOrderingComposer,
+      $WindowMathBookmarksAnnotationComposer,
+      $WindowMathBookmarksCreateCompanionBuilder,
+      $WindowMathBookmarksUpdateCompanionBuilder,
+      (WindowMathBookmark, $WindowMathBookmarksReferences),
+      WindowMathBookmark,
+      PrefetchHooks Function({bool childId})
     >;
 typedef $AccountsCreateCompanionBuilder = AccountsCompanion Function({
   required String id,
@@ -20760,6 +21493,8 @@ class $FamilyDatabaseManager {
       $HouseholdsTableManager(_db, _db.households);
   $ChildProfilesTableManager get childProfiles =>
       $ChildProfilesTableManager(_db, _db.childProfiles);
+  $WindowMathBookmarksTableManager get windowMathBookmarks =>
+      $WindowMathBookmarksTableManager(_db, _db.windowMathBookmarks);
   $AccountsTableManager get accounts =>
       $AccountsTableManager(_db, _db.accounts);
   $TaskTemplatesTableManager get taskTemplates =>

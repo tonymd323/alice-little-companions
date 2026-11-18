@@ -83,11 +83,14 @@ Snapshot _check(
     db.execute('PRAGMA query_only = ON');
     db.execute('PRAGMA foreign_keys = ON');
     final version = db.userVersion;
-    if (version < 1 || version > 2) {
+    if (version < 1 || version > currentSchemaVersion) {
       throw const UserError('此存档结构需要兼容版本的 App。');
     }
     final expected = schema
         .where((row) => version != 1 || !v2Indexes.contains(row['name']))
+        .where(
+          (row) => version >= 3 || row['tbl_name'] != 'window_math_bookmarks',
+        )
         .toList();
     final actual = db
         .select(schemaQuery)
@@ -326,7 +329,10 @@ Snapshot _check(
     for (final row in actual.where((row) => row['type'] == 'table')) {
       final table = row['name'] as String;
       final records = db.select('SELECT * FROM "$table" ORDER BY rowid');
-      if (table == 'base_furnishings' && records.isEmpty) continue;
+      if (records.isEmpty &&
+          (table == 'base_furnishings' || table == 'window_math_bookmarks')) {
+        continue;
+      }
       content.add(utf8.encode('$table\n'));
       for (final record in records) {
         content.add(utf8.encode('${jsonEncode(record)}\n'));

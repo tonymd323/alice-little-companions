@@ -9,6 +9,7 @@ import 'garden.dart';
 import 'rewards.dart';
 import 'spaces.dart';
 import 'tasks.dart';
+import 'window_math.dart';
 
 class FamilyHome extends StatefulWidget {
   const FamilyHome({super.key, required this.controller});
@@ -20,6 +21,7 @@ class FamilyHome extends StatefulWidget {
 
 class _FamilyHomeState extends State<FamilyHome> {
   int tab = 0;
+  bool openingChapter = false;
   late HomeView view = widget.controller.homeLayout.isEmpty
       ? HomeView.courtyard
       : HomeView.veranda;
@@ -39,6 +41,49 @@ class _FamilyHomeState extends State<FamilyHome> {
     if (base == null) return;
     setState(() => view = HomeView.veranda);
     await openPage(context, LayoutPage(controller: controller, space: base));
+  }
+
+  GardenScene familyScene(
+    double height,
+    HomeView location, {
+    ValueChanged<HomeView>? changeView,
+  }) => GardenScene(
+    companion: family.companion,
+    stage: family.stage,
+    rules: controller.rules,
+    scene: SceneDefinition(controller.rules, 'base_room'),
+    pieces: controller.homeLayout.map(ScenePiece.fromRow).toList(),
+    outfit: outfitFiles(controller.outfit),
+    view: location,
+    onViewChanged: changeView,
+    showLabel: false,
+    immersive: true,
+    height: height,
+  );
+
+  Future<void> openMath() async {
+    final service = controller.service!;
+    if (openingChapter || service.frozen) return;
+    setState(() => openingChapter = true);
+    try {
+      final bookmark = await service.windowMathBookmark();
+      if (!mounted || controller.service != service || service.frozen) return;
+      setState(() => view = HomeView.veranda);
+      await openPage<void>(
+        context,
+        WindowMathChapter(
+          initialPage: bookmark.page,
+          initialPattern: bookmark.pattern,
+          companion: family.companion,
+          verandaBuilder: (height) => familyScene(height, HomeView.veranda),
+          save: service.saveWindowMathBookmark,
+        ),
+      );
+    } catch (_) {
+      if (mounted) showNotice(context, '暂时打不开彩窗，请再试一次。');
+    } finally {
+      if (mounted) setState(() => openingChapter = false);
+    }
   }
 
   @override
@@ -281,19 +326,32 @@ class _FamilyHomeState extends State<FamilyHome> {
     return LayoutBuilder(
       builder: (context, box) {
         final wide = box.maxWidth >= 840;
-        final scene = GardenScene(
-          companion: family.companion,
-          stage: family.stage,
-          rules: controller.rules,
-          scene: SceneDefinition(controller.rules, 'base_room'),
-          pieces: controller.homeLayout.map(ScenePiece.fromRow).toList(),
-          outfit: outfitFiles(controller.outfit),
-          view: view,
-          onViewChanged: (v) => setState(() => view = v),
-          immersive: true,
-          height: wide
-              ? box.maxHeight
-              : (box.maxHeight * .63).clamp(285.0, 625.0),
+        final height = wide
+            ? box.maxHeight
+            : (box.maxHeight * .63).clamp(285.0, 625.0);
+        final scene = Stack(
+          children: [
+            familyScene(
+              height,
+              view,
+              changeView: (v) => setState(() => view = v),
+            ),
+            Positioned(
+              left: 12,
+              top: 66,
+              child: FilledButton.icon(
+                onPressed: frozen || openingChapter ? null : openMath,
+                icon: const Icon(Icons.grid_view_rounded, size: 19),
+                label: const Text('数学 · 暖廊的彩窗'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: cream,
+                  foregroundColor: ink,
+                  side: const BorderSide(color: outline),
+                  elevation: 2,
+                ),
+              ),
+            ),
+          ],
         );
         if (wide) {
           return Row(

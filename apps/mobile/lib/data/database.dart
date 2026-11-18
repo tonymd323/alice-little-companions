@@ -6,6 +6,7 @@ import 'package:sqlite3/sqlite3.dart' as sqlite;
 
 part 'database.g.dart';
 
+const currentSchemaVersion = 3;
 const v2Indexes = [
   'ledger_day_kind_idx',
   'purchase_ledger_idx',
@@ -22,16 +23,21 @@ class FamilyDatabase extends _$FamilyDatabase {
   );
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => currentSchemaVersion;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onUpgrade: (migrator, from, to) async {
-      if (from != 1 || to != 2) throw StateError('Unsupported SQLite upgrade');
+      if (from < 1 || from >= to || to != currentSchemaVersion) {
+        throw StateError('Unsupported SQLite upgrade');
+      }
       await transaction(() async {
-        await migrator.createIndex(ledgerDayKindIdx);
-        await migrator.createIndex(purchaseLedgerIdx);
-        await migrator.createTable(baseFurnishings);
+        if (from == 1) {
+          await migrator.createIndex(ledgerDayKindIdx);
+          await migrator.createIndex(purchaseLedgerIdx);
+          await migrator.createTable(baseFurnishings);
+        }
+        await migrator.createTable(windowMathBookmarks);
       });
     },
     beforeOpen: (_) async {

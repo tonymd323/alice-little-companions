@@ -12,6 +12,7 @@ import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/pin.dart';
 import '../domain/rules.dart';
+import '../domain/window_page.dart';
 
 part 'decorations.dart';
 part 'economy.dart';
@@ -147,7 +148,7 @@ class FamilyService {
     final file = device.databaseFile(generation);
     if (protectUpgrade &&
         await file.exists() &&
-        await inspectSchemaVersion(file.path) == 1) {
+        await inspectSchemaVersion(file.path) < currentSchemaVersion) {
       await CheckpointStore(device).protectDatabase(file);
     }
     final db = await device.openGeneration(generation);
@@ -321,6 +322,43 @@ class FamilyService {
 
   void checkParent(ParentSession? session) {
     if (!pin.allows(session)) throw const UserError('请先验证家长 PIN。');
+  }
+
+  Future<({WindowPage page, Set<int> pattern})> windowMathBookmark() async {
+    final row = await db.row(
+      'SELECT page, first_pane, second_pane FROM window_math_bookmarks',
+    );
+    if (row == null) return (page: WindowPage.count, pattern: <int>{});
+    return (
+      page: WindowPage.values.byName(row['page'] as String),
+      pattern: {
+        if (row['first_pane'] case final int first) first,
+        if (row['second_pane'] case final int second) second,
+      },
+    );
+  }
+
+  Future<void> saveWindowMathBookmark(WindowPage page, Set<int> pattern) async {
+    final panes = pattern.toList()..sort();
+    if (panes.length != (page == WindowPage.finished ? 2 : 0) ||
+        panes.any((i) => i < 0 || i >= 5)) {
+      throw const UserError('窗花的位置无效。');
+    }
+    await _command('window_math_bookmark', [page.name, panes], null, (
+      _,
+      family,
+    ) async {
+      await db.customStatement(
+        '''
+        INSERT INTO window_math_bookmarks (child_id, page, first_pane, second_pane)
+        VALUES (?, ?, ?, ?)
+        ON CONFLICT(child_id) DO UPDATE SET page = excluded.page,
+          first_pane = excluded.first_pane, second_pane = excluded.second_pane
+        ''',
+        [family.childId, page.name, panes.firstOrNull, panes.lastOrNull],
+      );
+      return {};
+    });
   }
 
   Future<Json> selectCompanion(Companion companion, {String? commandId}) =>

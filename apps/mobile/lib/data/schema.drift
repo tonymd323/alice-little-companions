@@ -16,6 +16,16 @@ CREATE TABLE child_profiles (
   active_pet_id TEXT NOT NULL CHECK (active_pet_id IN ('fox', 'rabbit', 'cat'))
 );
 
+CREATE TABLE window_math_bookmarks (
+  child_id TEXT NOT NULL PRIMARY KEY REFERENCES child_profiles(id),
+  page TEXT NOT NULL CHECK (page IN ('count', 'missing', 'sunny', 'puzzle', 'finished')),
+  first_pane INTEGER,
+  second_pane INTEGER,
+  CHECK ((page != 'finished' AND first_pane IS NULL AND second_pane IS NULL) OR
+         (page = 'finished' AND first_pane IS NOT NULL AND second_pane IS NOT NULL AND
+          first_pane BETWEEN 0 AND 3 AND second_pane BETWEEN 1 AND 4 AND first_pane < second_pane))
+);
+
 CREATE TABLE accounts (
   id TEXT NOT NULL PRIMARY KEY,
   child_id TEXT NOT NULL UNIQUE REFERENCES child_profiles(id),
