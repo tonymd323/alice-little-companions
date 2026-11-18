@@ -9,9 +9,11 @@ import '../data/database.dart';
 import '../data/device.dart';
 import '../data/snapshot.dart';
 import '../domain/companions.dart';
+import '../domain/layout_rules.dart';
 import '../domain/pin.dart';
 import '../domain/rules.dart';
 
+part 'decorations.dart';
 part 'economy.dart';
 part 'task_rules.dart';
 

@@ -7,6 +7,7 @@ import 'backup_pages.dart';
 import 'common.dart';
 import 'garden.dart';
 import 'parent_access.dart';
+import 'rewards.dart';
 import 'task_editor.dart';
 import 'penalties.dart';
 
@@ -328,6 +329,13 @@ class ParentHome extends StatelessWidget {
                     onPressed: () =>
                         openPage(context, DataPage(controller: controller)),
                     child: const Text('备份与迁移'),
+                  ),
+                  OutlinedButton(
+                    onPressed: () => openPage(
+                      context,
+                      PurchaseHistoryPage(controller: controller, parent: true),
+                    ),
+                    child: const Text('兑换与退款'),
                   ),
                   OutlinedButton.icon(
                     onPressed: () =>

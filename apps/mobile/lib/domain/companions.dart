@@ -8,6 +8,37 @@ enum Companion {
   final String label;
   final String nickname;
 
+  double aspect(int stage, {bool reveal = false}) {
+    if (this == cat && stage == 4 && !reveal) return 480 / 451;
+    final (width, height) = switch (this) {
+      Companion.fox => const [
+        (153, 185),
+        (184, 231),
+        (214, 227),
+        (255, 304),
+        (265, 299),
+        (339, 290),
+      ],
+      Companion.rabbit => const [
+        (156, 141),
+        (181, 177),
+        (277, 191),
+        (242, 274),
+        (256, 289),
+        (310, 332),
+      ],
+      Companion.cat => const [
+        (144, 170),
+        (196, 198),
+        (173, 215),
+        (232, 214),
+        (340, 277),
+        (415, 356),
+      ],
+    }[stage - 1];
+    return width / height;
+  }
+
   String artwork(int stage, {bool reveal = false}) {
     final pose = this == cat && stage == 4 && !reveal ? '-rest' : '';
     return 'assets/art/$name-$stage$pose.webp';

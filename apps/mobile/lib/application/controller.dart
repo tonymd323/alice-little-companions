@@ -24,6 +24,10 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
   FamilyService? service;
   FamilyOverview? family;
   List<TaskEntry> tasks = [];
+  Json? baseSpace;
+  List<Json> homeLayout = [];
+  List<Json> outfit = [];
+  Json? wish;
   ParentSession? session;
   Timer? _expiration;
   Timer? _calendar;
@@ -92,9 +96,24 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
     _seenDay = active?.today;
     final loaded = await active?.overview();
     final entries = await active?.tasks() ?? <TaskEntry>[];
+    final spaces = await active?.spaces() ?? <Json>[];
+    final base = spaces
+        .where((space) => space['scene_id'] == 'base_room')
+        .singleOrNull;
+    final placed = base == null
+        ? <Json>[]
+        : await active!.layout(base['id'] as String);
+    final worn = loaded == null
+        ? <Json>[]
+        : await active!.wardrobe(loaded.companion);
+    final desired = await active?.wish();
     if (current != _refreshId) return;
     family = loaded;
     tasks = entries;
+    baseSpace = base;
+    homeLayout = placed;
+    outfit = worn;
+    wish = desired;
     notifyListeners();
   }
 

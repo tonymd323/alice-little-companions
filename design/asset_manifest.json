@@ -35,8 +35,14 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/scene_base_room_foreground.webp",
+      "sha256": "8220b6a76becf7a546337d57f7478f9b5a91b5105a1eb4f40b0dc22f6a3d5c82",
+      "runtime_size": [
+        1536,
+        1024
+      ],
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "scene_garden_background",
@@ -53,7 +59,8 @@
         768,
         512
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "scene_garden_foreground",
@@ -64,8 +71,14 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/scene_garden_foreground.webp",
+      "sha256": "7430f513063b7c46269c96e332657ae7dc627b789113d5ab6337832a41675e19",
+      "runtime_size": [
+        768,
+        512
+      ],
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "scene_treehouse_background",
@@ -82,7 +95,8 @@
         768,
         512
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "scene_treehouse_foreground",
@@ -93,8 +107,14 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/scene_treehouse_foreground.webp",
+      "sha256": "562c47357746e669646198a14795039c1cbb3fc6f967f57ebd960f0aa17cf19f",
+      "runtime_size": [
+        768,
+        512
+      ],
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "scene_pastry_shop_background",
@@ -111,7 +131,8 @@
         768,
         512
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "scene_pastry_shop_foreground",
@@ -122,8 +143,14 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/scene_pastry_shop_foreground.webp",
+      "sha256": "16d6426ad64f9433c9708e417df70de382cffe5492b1f4043b7e39e22aa61926",
+      "runtime_size": [
+        768,
+        512
+      ],
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "scene_flower_shop_background",
@@ -140,7 +167,8 @@
         768,
         512
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "scene_flower_shop_foreground",
@@ -151,8 +179,14 @@
       ],
       "alpha_required": true,
       "status": "planned",
-      "runtime_path": null,
-      "sha256": null
+      "runtime_path": "apps/mobile/assets/art/scene_flower_shop_foreground.webp",
+      "sha256": "05932f84ad7c07d4743ac2fb1e13f142694806b91ae6c59bf1245e8d181943b6",
+      "runtime_size": [
+        768,
+        512
+      ],
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_decor_vase",
@@ -169,7 +203,8 @@
         135,
         211
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_decor_cushion",
@@ -186,7 +221,8 @@
         199,
         143
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_decor_plant",
@@ -203,7 +239,8 @@
         211,
         212
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_decor_mobile",
@@ -220,7 +257,8 @@
         171,
         227
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_accessory_scarf",
@@ -237,7 +275,8 @@
         171,
         184
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_accessory_hat",
@@ -254,7 +293,8 @@
         210,
         146
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_accessory_bow",
@@ -271,7 +311,8 @@
         181,
         168
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_accessory_glasses",
@@ -288,7 +329,8 @@
         216,
         97
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_single_armchair",
@@ -305,7 +347,8 @@
         211,
         201
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_single_bed",
@@ -322,7 +365,8 @@
         214,
         192
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_single_coat",
@@ -339,7 +383,8 @@
         224,
         170
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_single_apron",
@@ -356,7 +401,8 @@
         197,
         222
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_bundle_forest",
@@ -373,7 +419,8 @@
         415,
         165
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_bundle_forest_chair",
@@ -390,7 +437,8 @@
         213,
         225
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_bundle_forest_table",
@@ -407,7 +455,8 @@
         185,
         187
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_bundle_forest_lamp",
@@ -424,7 +473,8 @@
         174,
         226
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_bundle_starlight",
@@ -441,7 +491,8 @@
         415,
         165
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_bundle_starlight_bed",
@@ -458,7 +509,8 @@
         228,
         200
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_bundle_starlight_cabinet",
@@ -475,7 +527,8 @@
         181,
         203
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_bundle_starlight_rug",
@@ -492,7 +545,8 @@
         246,
         134
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_garden",
@@ -509,7 +563,8 @@
         310,
         218
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_garden_bench",
@@ -526,7 +581,8 @@
         227,
         190
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_garden_planter",
@@ -543,7 +599,8 @@
         213,
         196
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_garden_path",
@@ -560,7 +617,8 @@
         191,
         167
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_treehouse",
@@ -577,7 +635,8 @@
         310,
         218
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_treehouse_bench",
@@ -594,7 +653,8 @@
         181,
         189
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_treehouse_shelf",
@@ -611,7 +671,8 @@
         204,
         212
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_treehouse_rug",
@@ -628,7 +689,8 @@
         218,
         149
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_pastry_shop",
@@ -645,7 +707,8 @@
         310,
         218
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_pastry_shop_counter",
@@ -662,7 +725,8 @@
         232,
         212
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_pastry_shop_table",
@@ -679,7 +743,8 @@
         185,
         187
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_pastry_shop_sign",
@@ -696,7 +761,8 @@
         182,
         203
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "item_flower_shop",
@@ -713,7 +779,8 @@
         310,
         218
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_flower_shop_counter",
@@ -730,7 +797,8 @@
         231,
         206
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_flower_shop_shelf",
@@ -747,7 +815,8 @@
         192,
         210
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "part_flower_shop_sign",
@@ -764,7 +833,8 @@
         169,
         204
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "base_bed",
@@ -781,7 +851,8 @@
         214,
         192
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "base_rug",
@@ -798,7 +869,8 @@
         218,
         149
       ],
-      "device_qa": "pending"
+      "device_qa": "pending",
+      "production_state": "packaged_pending_device_qa"
     },
     {
       "id": "pet_fox_1",

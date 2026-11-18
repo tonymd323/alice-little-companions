@@ -3,8 +3,11 @@ import 'package:material_ui/material_ui.dart';
 import '../application/controller.dart';
 import '../application/family.dart';
 import '../domain/companions.dart';
+import '../domain/layout_rules.dart';
 import 'common.dart';
 import 'garden.dart';
+import 'rewards.dart';
+import 'spaces.dart';
 import 'tasks.dart';
 
 class FamilyHome extends StatefulWidget {
@@ -60,14 +63,11 @@ class _FamilyHomeState extends State<FamilyHome> {
         const SizedBox(width: 4),
       ],
     ),
-    body: IndexedStack(
-      index: tab,
-      children: [
-        garden(),
-        TaskList(controller: controller),
-        GrowthPage(controller: controller),
-      ],
-    ),
+    body: switch (tab) {
+      0 => garden(),
+      1 => TaskList(controller: controller),
+      _ => GrowthPage(controller: controller),
+    },
     bottomNavigationBar: NavigationBar(
       selectedIndex: tab,
       onDestinationSelected: (value) => setState(() => tab = value),
@@ -99,7 +99,14 @@ class _FamilyHomeState extends State<FamilyHome> {
     final waiting = controller.tasks
         .where((task) => task.state == 'SUBMITTED')
         .length;
-    final scene = GardenScene(companion: family.companion, stage: family.stage);
+    final scene = GardenScene(
+      companion: family.companion,
+      stage: family.stage,
+      rules: controller.rules,
+      scene: SceneDefinition(controller.rules, 'base_room'),
+      pieces: controller.homeLayout.map(ScenePiece.fromRow).toList(),
+      outfit: outfitFiles(controller.outfit),
+    );
     final controls = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -146,6 +153,63 @@ class _FamilyHomeState extends State<FamilyHome> {
                   ),
                 ],
               ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        GardenCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Wrap(
+                spacing: 8,
+                runSpacing: 6,
+                children: [
+                  FilledButton.tonalIcon(
+                    onPressed: () =>
+                        openPage(context, CatalogPage(controller: controller)),
+                    icon: const Icon(Icons.redeem_outlined),
+                    label: const Text('成果兑换'),
+                  ),
+                  OutlinedButton(
+                    onPressed: () =>
+                        openPage(context, WardrobePage(controller: controller)),
+                    child: const Text('换装'),
+                  ),
+                  OutlinedButton(
+                    onPressed: () =>
+                        openPage(context, SpacesPage(controller: controller)),
+                    child: const Text('空间'),
+                  ),
+                  if (controller.baseSpace != null &&
+                      !controller.service!.frozen)
+                    OutlinedButton(
+                      onPressed: () => openPage(
+                        context,
+                        LayoutPage(
+                          controller: controller,
+                          space: controller.baseSpace!,
+                        ),
+                      ),
+                      child: const Text('布置'),
+                    ),
+                ],
+              ),
+              if (controller.wish case final wish?)
+                TextButton(
+                  onPressed: () {
+                    final product = controller.rules.catalog[wish['item_id']];
+                    if (product != null) {
+                      openPage(
+                        context,
+                        RewardPage(controller: controller, product: product),
+                      );
+                    }
+                  },
+                  child: Text(
+                    '心愿 · ${controller.rules.catalog[wish['item_id']]?['name']}',
+                  ),
+                ),
             ],
           ),
         ),
@@ -245,43 +309,62 @@ class GrowthPage extends StatelessWidget {
     final next = family.stage < 6
         ? controller.rules.thresholds[family.stage - 1]
         : null;
-    return PageBody(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          GardenCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('成长记录', style: Theme.of(context).textTheme.titleLarge),
-                const SizedBox(height: 8),
-                Text(
-                  '${family.companion.nickname} · ${stageNames[family.stage - 1]}',
-                ),
-                Text(
-                  '已有 ${family.days} 个成果日${next == null ? '' : ' · 下个外观 $next 天'}',
-                ),
-                const SizedBox(height: 8),
-                OutlinedButton(
-                  onPressed: () => openPage(
-                    context,
-                    AppearancePreview(
-                      initial: family.companion,
-                      initialStage: family.stage,
+    final history = records.toList(growable: false);
+    return SafeArea(
+      top: false,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: ListView.builder(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
+            itemCount: history.length + 1,
+            itemBuilder: (context, index) {
+              if (index > 0) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: TaskDetails(task: history[index - 1]),
+                );
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  GardenCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '成长记录',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '${family.companion.nickname} · ${stageNames[family.stage - 1]}',
+                        ),
+                        Text(
+                          '已有 ${family.days} 个成果日${next == null ? '' : ' · 下个外观 $next 天'}',
+                        ),
+                        const SizedBox(height: 8),
+                        OutlinedButton(
+                          onPressed: () => openPage(
+                            context,
+                            AppearancePreview(
+                              initial: family.companion,
+                              initialStage: family.stage,
+                            ),
+                          ),
+                          child: const Text('外观预览'),
+                        ),
+                      ],
                     ),
                   ),
-                  child: const Text('外观预览'),
-                ),
-              ],
-            ),
+                  const SizedBox(height: 14),
+                  if (history.isEmpty)
+                    const GardenCard(child: Text('家长确认的小事会留在这里。')),
+                ],
+              );
+            },
           ),
-          const SizedBox(height: 14),
-          if (records.isEmpty) const GardenCard(child: Text('家长确认的小事会留在这里。')),
-          for (final record in records) ...[
-            TaskDetails(task: record),
-            const SizedBox(height: 10),
-          ],
-        ],
+        ),
       ),
     );
   }

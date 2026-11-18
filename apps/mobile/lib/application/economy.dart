@@ -311,6 +311,13 @@ extension FamilyEconomy on FamilyService {
     if (row == null) throw const UserError('此兑换已退回或不存在。');
     final entitlementIds = 'SELECT id FROM entitlements WHERE purchase_id = ?';
     await db.customStatement(
+      """
+      UPDATE spaces SET layout_version = layout_version + 1
+      WHERE id IN (SELECT space_id FROM placements WHERE entitlement_id IN ($entitlementIds))
+      """,
+      [purchase],
+    );
+    await db.customStatement(
       'DELETE FROM pet_state WHERE entitlement_id IN ($entitlementIds)',
       [purchase],
     );

@@ -7,6 +7,7 @@ import 'package:drift/native.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 import '../domain/companions.dart';
+import '../domain/layout_rules.dart';
 import '../domain/pin.dart';
 import '../domain/rules.dart';
 import 'database.dart';
@@ -221,6 +222,7 @@ Snapshot _check(
         throw const UserError('备份中的空间需要兼容的目录。');
       }
       assets.add('scene_${name}_background');
+      // v1 and early v2 backup containers do not list optional foreground art.
     }
     if (scalar("SELECT COUNT(*) FROM spaces WHERE scene_id = 'base_room'") !=
         1) {
@@ -263,6 +265,19 @@ Snapshot _check(
         }
         assets.add(part['asset_id'] as String);
       }
+    }
+    for (final row in db.select("""
+      SELECT x.*, s.scene_id, e.asset_id, e.name FROM placements x
+      JOIN entitlements e ON e.id = x.entitlement_id JOIN spaces s ON s.id = x.space_id
+      """)) {
+      final place = Map<String, Object?>.from(row);
+      final scene = SceneDefinition(rules, row['scene_id'] as String);
+      if (row['rotation'] != 0) throw const UserError('备份包含当前版本无法显示的物品方向。');
+      scene.validate(
+        PlacementDraft.fromRow(place),
+        row['asset_id'] as String,
+        row['name'] as String,
+      );
     }
     if (version >= 2) {
       for (final row in db.select(

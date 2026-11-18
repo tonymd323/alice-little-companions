@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:material_ui/material_ui.dart';
 
 import '../domain/companions.dart';
+import '../domain/layout_rules.dart';
+import '../domain/rules.dart';
 
 const paper = Color(0xFFF7F3EA);
 const cream = Color(0xFFFFFCF5);
@@ -55,6 +59,17 @@ ThemeData gardenTheme() {
   );
 }
 
+class ScenePiece {
+  const ScenePiece(this.place, this.asset, this.name);
+  ScenePiece.fromRow(Json row)
+    : place = PlacementDraft.fromRow(row),
+      asset = row['asset_id'] as String,
+      name = freeFurnishings[row['item_id']] ?? row['name'] as String;
+  final PlacementDraft place;
+  final String asset;
+  final String name;
+}
+
 class GardenScene extends StatelessWidget {
   const GardenScene({
     super.key,
@@ -62,86 +77,249 @@ class GardenScene extends StatelessWidget {
     required this.stage,
     this.label = '银杏家园',
     this.reveal = false,
+    this.rules,
+    this.scene,
+    this.pieces = const [],
+    this.outfit = const {},
+    this.editing = false,
+    this.selected,
+    this.onSelect,
+    this.onFloor,
   });
 
   final Companion companion;
   final int stage;
   final String label;
   final bool reveal;
+  final Rules? rules;
+  final SceneDefinition? scene;
+  final List<ScenePiece> pieces;
+  final Map<String, String> outfit;
+  final bool editing;
+  final String? selected;
+  final ValueChanged<String>? onSelect;
+  final ValueChanged<Offset>? onFloor;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final height = constraints.maxWidth * 2 / 3;
+        final width = constraints.maxWidth;
+        final height = width * 2 / 3;
         final frame = height * [0.24, 0.27, 0.30, 0.34, 0.36, 0.39][stage - 1];
-        final center = constraints.maxWidth * .47;
+        final center = width * .47;
+        final actualHeight =
+            frame / max(1, companion.aspect(stage, reveal: reveal));
+        final petTop = height * .95 - (frame + actualHeight) / 2;
+        final background = scene?.background ?? 'assets/art/garden.webp';
+        final front = scene?.foreground;
+        final config = rules;
+
+        void at(Offset point) =>
+            onFloor?.call(Offset(point.dx / width, point.dy / height));
+
         return ClipRRect(
           borderRadius: BorderRadius.circular(24),
-          child: SizedBox(
-            height: height,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.asset('assets/art/garden.webp', fit: BoxFit.cover),
-                Positioned(
-                  left: center - frame * .37,
-                  bottom: height * .045,
-                  width: frame * .74,
-                  height: frame * .12,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(frame),
-                      gradient: RadialGradient(
-                        colors: [
-                          const Color(0x63333B22),
-                          const Color(0x00333B22),
-                        ],
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTapUp: onFloor == null
+                ? null
+                : (event) => at(event.localPosition),
+            onPanUpdate: onFloor == null
+                ? null
+                : (event) => at(event.localPosition),
+            child: SizedBox(
+              height: height,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(
+                    background,
+                    fit: BoxFit.cover,
+                    excludeFromSemantics: true,
+                  ),
+                  if (editing && scene != null)
+                    IgnorePointer(
+                      child: CustomPaint(
+                        painter: _FloorGuide(scene!.floor, scene!.mounts),
+                      ),
+                    ),
+                  for (final piece in pieces) _layer(piece, width, height),
+                  IgnorePointer(
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: center - frame * .37,
+                          bottom: height * .045,
+                          width: frame * .74,
+                          height: frame * .12,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(frame),
+                              gradient: const RadialGradient(
+                                colors: [Color(0x63333B22), Color(0x00333B22)],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: center - frame / 2,
+                          top: petTop,
+                          width: frame,
+                          height: frame,
+                          child: Image.asset(
+                            companion.artwork(stage, reveal: reveal),
+                            fit: BoxFit.contain,
+                            semanticLabel:
+                                '${companion.label} · ${stageNames[stage - 1]}',
+                          ),
+                        ),
+                        if (config != null)
+                          for (final slot in ['body', 'neck', 'head', 'face'])
+                            if (outfit.containsKey(slot))
+                              _wear(
+                                config,
+                                slot,
+                                center - frame / 2,
+                                petTop,
+                                frame,
+                              ),
+                      ],
+                    ),
+                  ),
+                  if (front != null)
+                    IgnorePointer(
+                      child: Image.asset(
+                        front,
+                        fit: BoxFit.cover,
+                        excludeFromSemantics: true,
+                      ),
+                    ),
+                  Positioned(
+                    left: 12,
+                    top: 12,
+                    right: 12,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: cream,
+                          borderRadius: BorderRadius.circular(22),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          child: Text(
+                            label,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  left: center - frame / 2,
-                  bottom: height * .05,
-                  width: frame,
-                  height: frame,
-                  child: Image.asset(
-                    companion.artwork(stage, reveal: reveal),
-                    fit: BoxFit.contain,
-                    alignment: Alignment.bottomCenter,
-                    semanticLabel:
-                        '${companion.label} · ${stageNames[stage - 1]}',
-                  ),
-                ),
-                Positioned(
-                  left: 12,
-                  top: 12,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: cream,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      child: Text(
-                        label,
-                        style: const TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
       },
     );
   }
+
+  Widget _wear(
+    Rules rules,
+    String slot,
+    double left,
+    double top,
+    double frame,
+  ) {
+    final anchor = wearPoint(rules, companion, stage, slot);
+    final width = frame * anchor[2];
+    final image = outfit[slot]!;
+    final height = slot == 'face' ? width * .55 : width * .86;
+    return Positioned(
+      left: left + frame * anchor[0] - width / 2,
+      top: top + frame * anchor[1] - height / 2,
+      width: width,
+      height: height,
+      child: Image.asset(
+        artworkPath(image),
+        fit: BoxFit.contain,
+        excludeFromSemantics: true,
+      ),
+    );
+  }
+
+  Widget _layer(ScenePiece piece, double width, double height) {
+    final placement = piece.place;
+    final size = width * itemWidth(piece.asset);
+    final hanging = placement.mount != null;
+    final item = Image.asset(
+      artworkPath(piece.asset),
+      fit: BoxFit.contain,
+      alignment: hanging ? Alignment.topCenter : Alignment.bottomCenter,
+      semanticLabel: piece.name,
+    );
+    final content = placement.flipped
+        ? Transform.flip(flipX: true, child: item)
+        : item;
+    return Positioned(
+      left: placement.x * width - size / 2,
+      width: size,
+      height: size,
+      top: placement.y * height - (hanging ? 0 : size),
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: onSelect == null ? null : () => onSelect!(placement.id),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: selected == placement.id
+                ? Border.all(color: cream, width: 2)
+                : null,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: content,
+        ),
+      ),
+    );
+  }
+}
+
+class _FloorGuide extends CustomPainter {
+  const _FloorGuide(this.floor, this.mounts);
+  final List<(double, double)> floor;
+  final List<Json> mounts;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final boundary = Path()
+      ..addPolygon([
+        for (final point in floor)
+          Offset(point.$1 * size.width, point.$2 * size.height),
+      ], true);
+    canvas.drawPath(boundary, Paint()..color = const Color(0x4FFFFCF5));
+    final stroke = Paint()
+      ..color = cream
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    canvas.drawPath(boundary, stroke);
+    for (final mount in mounts) {
+      final xy = mount['position'] as List;
+      canvas.drawCircle(
+        Offset((xy[0] as num) * size.width, (xy[1] as num) * size.height),
+        6,
+        stroke,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(_FloorGuide oldDelegate) =>
+      oldDelegate.floor != floor || oldDelegate.mounts != mounts;
 }
 
 class GardenCard extends StatelessWidget {
