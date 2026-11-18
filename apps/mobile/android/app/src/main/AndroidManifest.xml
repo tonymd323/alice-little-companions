@@ -1,13 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="小小伙伴"
+        android:label="${appLabel}"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:dataExtractionRules="@xml/local_data_rules"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
-            android:name=".MainActivity"
+            android:name="local.family.alice_companions.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:taskAffinity=""

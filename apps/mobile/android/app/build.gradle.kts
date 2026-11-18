@@ -7,6 +7,8 @@ plugins {
 }
 
 val familySigningFile = rootProject.file("key.properties")
+val mathPreview = providers.gradleProperty("target").orNull
+    ?.substringAfterLast('/') == "main_window_math.dart"
 val familySigning = Properties().apply {
     if (familySigningFile.isFile) familySigningFile.inputStream().use { stream -> load(stream) }
 }
@@ -22,7 +24,8 @@ android {
     }
 
     defaultConfig {
-        applicationId = "local.family.alice_companions"
+        applicationId = if (mathPreview) "local.family.alice_companions.windowmath" else "local.family.alice_companions"
+        manifestPlaceholders["appLabel"] = if (mathPreview) "暖廊的彩窗" else "小小伙伴"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 26
