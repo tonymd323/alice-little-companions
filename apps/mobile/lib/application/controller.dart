@@ -18,6 +18,8 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
   List<TaskEntry> tasks = [];
   ParentSession? session;
   Timer? _expiration;
+  Timer? _calendar;
+  String? _seenDay;
   int _refreshId = 0;
 
   bool get parentUnlocked => service?.pin.allows(session) ?? false;
@@ -28,6 +30,9 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
       service = await FamilyService.load(device, generation, rules);
     }
     await refresh();
+    _calendar = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (service?.today != _seenDay) unawaited(refresh());
+    });
   }
 
   Future<void> create(
@@ -66,6 +71,8 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> refresh() async {
     final current = ++_refreshId;
     final active = service;
+    await active?.processCalendar();
+    _seenDay = active?.today;
     final loaded = await active?.overview();
     final entries = await active?.tasks() ?? <TaskEntry>[];
     if (current != _refreshId) return;
@@ -76,12 +83,17 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state != AppLifecycleState.resumed) lock();
+    if (state != AppLifecycleState.resumed) {
+      lock();
+    } else if (service?.today != _seenDay) {
+      unawaited(refresh());
+    }
   }
 
   @override
   void dispose() {
     _expiration?.cancel();
+    _calendar?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }

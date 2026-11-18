@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 
@@ -8,6 +9,9 @@ import '../data/device.dart';
 import '../domain/companions.dart';
 import '../domain/pin.dart';
 import '../domain/rules.dart';
+
+part 'economy.dart';
+part 'task_rules.dart';
 
 class FamilyOverview {
   FamilyOverview(Json row)
@@ -18,7 +22,8 @@ class FamilyOverview {
       balance = row['balance'] as int,
       stage = row['stage'] as int,
       days = row['growth_days'] as int,
-      revision = row['domain_revision'] as int;
+      revision = row['domain_revision'] as int,
+      latestDay = row['latest_local_day'] as String?;
   final String id;
   final String childId;
   final String nickname;
@@ -27,6 +32,7 @@ class FamilyOverview {
   final int stage;
   final int days;
   final int revision;
+  final String? latestDay;
 }
 
 class TaskDraft {
@@ -120,6 +126,8 @@ class FamilyService {
   final void Function(String phase)? fault;
   final serial = SerialWork();
   bool frozen = false;
+  final _undoClock = Stopwatch()..start();
+  final _childUndoStarts = <String, int>{};
   String get today => familyDay(_now());
   int get now => _now().millisecondsSinceEpoch;
 
@@ -256,6 +264,7 @@ class FamilyService {
         return jsonDecode(prior['result_json'] as String) as Json;
       }
       final result = await run(id, family);
+      if (parentRequired) checkParent(session);
       await db.insertRow('processed_commands', {
         'id': id,
         'payload_hash': hash,
@@ -444,6 +453,16 @@ class FamilyService {
       'feedback': textValue(feedback, 500),
       'approval_command_id': commandId,
     });
+    await db.customStatement(
+      """
+      UPDATE task_instances
+      SET state = CASE WHEN due_day < ? THEN 'EXPIRED' ELSE 'OPEN' END
+      WHERE state = 'WAITING' AND stage_id IS NOT NULL AND
+        version_id = (SELECT version_id FROM task_instances WHERE id = ? AND stage_id IS NOT NULL)
+        AND slot = (SELECT slot + 1 FROM task_instances WHERE id = ?)
+      """,
+      [today, instance, instance],
+    );
     final ledger = await _addLedger(
       commandId,
       entry.reward,
@@ -484,6 +503,7 @@ class FamilyService {
     String source,
     String actual, {
     String? reversalOf,
+    String? postedDay,
   }) async {
     final account = (await db.row('SELECT id, balance FROM accounts'))!;
     final balance = (account['balance'] as int) + delta;
@@ -503,7 +523,7 @@ class FamilyService {
       'source_key': source,
       'reversal_of': reversalOf,
       'actual_date': actual,
-      'posted_day': today,
+      'posted_day': postedDay ?? today,
       'created_at': now,
       'command_id': commandId,
     });

@@ -6,6 +6,8 @@ import '../domain/rules.dart';
 import 'common.dart';
 import 'garden.dart';
 import 'parent_access.dart';
+import 'task_editor.dart';
+import 'penalties.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({super.key, required this.task, required this.onTap});
@@ -261,6 +263,12 @@ class ParentHome extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
+                    if ((controller.family!.latestDay?.compareTo(
+                              controller.service!.today,
+                            ) ??
+                            0) >
+                        0)
+                      const Text('设备日期早于上次记账日期，请核对时间。'),
                     Text(
                       controller.service!.frozen ? '当前设备只读' : '当前设备可记账',
                       style: const TextStyle(color: mutedInk),
@@ -282,6 +290,38 @@ class ParentHome extends StatelessWidget {
                           ),
                     label: const Text('发布小事'),
                     icon: const Icon(Icons.add_rounded),
+                  ),
+                  OutlinedButton(
+                    onPressed: controller.service!.frozen
+                        ? null
+                        : () => openPage(
+                            context,
+                            ManageTasksPage(controller: controller),
+                          ),
+                    child: const Text('小事与计划'),
+                  ),
+                  OutlinedButton(
+                    onPressed: controller.service!.frozen
+                        ? null
+                        : () => openPage(
+                            context,
+                            PublishPage(controller: controller, backfill: true),
+                          ),
+                    child: const Text('补录成果'),
+                  ),
+                  OutlinedButton(
+                    onPressed: () => openPage(
+                      context,
+                      PenaltiesPage(controller: controller),
+                    ),
+                    child: const Text('扣分与撤销'),
+                  ),
+                  OutlinedButton(
+                    onPressed: () => openPage(
+                      context,
+                      CorrectionsPage(controller: controller),
+                    ),
+                    child: const Text('误奖更正'),
                   ),
                   OutlinedButton.icon(
                     onPressed: () =>
@@ -310,100 +350,6 @@ class ParentHome extends StatelessWidget {
           ),
         );
       },
-    ),
-  );
-}
-
-class PublishPage extends StatefulWidget {
-  const PublishPage({super.key, required this.controller});
-  final FamilyController controller;
-
-  @override
-  State<PublishPage> createState() => _PublishPageState();
-}
-
-class _PublishPageState extends State<PublishPage> {
-  final title = TextEditingController();
-  final content = TextEditingController();
-  final criteria = TextEditingController();
-  String type = 'light';
-  String? due;
-
-  @override
-  void dispose() {
-    title.dispose();
-    content.dispose();
-    criteria.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => ParentFrame(
-    controller: widget.controller,
-    title: '发布小事',
-    child: PageBody(
-      child: GardenCard(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            FormFieldLabel(label: '小事名称', controller: title, limit: 40),
-            FormFieldLabel(
-              label: '内容说明（选填）',
-              controller: content,
-              limit: 500,
-              lines: 2,
-            ),
-            FormFieldLabel(
-              label: '完成标准',
-              controller: criteria,
-              limit: 300,
-              lines: 2,
-            ),
-            TypeChoice(
-              rules: widget.controller.rules,
-              value: type,
-              onChanged: (value) => setState(() => type = value),
-            ),
-            const SizedBox(height: 12),
-            DayChoice(
-              label: '截止日期（选填）',
-              day: due,
-              today: widget.controller.service!.today,
-              future: true,
-              onChanged: (value) => setState(() => due = value),
-            ),
-            if (due != null)
-              TextButton(
-                onPressed: () => setState(() => due = null),
-                child: const Text('清除截止日期'),
-              ),
-            const SizedBox(height: 12),
-            Text('发布 1 件小事 · 共 ${widget.controller.rules.type(type).points} 分'),
-            const SizedBox(height: 12),
-            ActionButton(
-              label: '确认发布',
-              action: () async {
-                FocusScope.of(context).unfocus();
-                await widget.controller.service!.publish(
-                  TaskDraft(
-                    title.text,
-                    content.text,
-                    criteria.text,
-                    type,
-                    due: due,
-                  ),
-                  session: widget.controller.session,
-                );
-                await widget.controller.refresh();
-                if (context.mounted) {
-                  Navigator.pop(context);
-                  showNotice(context, '小事已发布。');
-                }
-              },
-            ),
-          ],
-        ),
-      ),
     ),
   );
 }
@@ -457,13 +403,20 @@ class DayChoice extends StatelessWidget {
   Widget build(BuildContext context) => OutlinedButton.icon(
     onPressed: () async {
       final now = parseDay(today);
-      final initial = parseDay(day ?? today);
+      final lower = future ? now : DateTime(1);
+      final upper = future ? DateTime(now.year + 20) : now;
+      final selected = parseDay(day ?? today);
+      final initial = selected.isBefore(lower)
+          ? lower
+          : selected.isAfter(upper)
+          ? upper
+          : selected;
       final date = await showDatePicker(
         context: context,
         initialDate: initial,
         currentDate: now,
-        firstDate: future ? now : DateTime(1900),
-        lastDate: future ? DateTime(now.year + 20) : now,
+        firstDate: lower,
+        lastDate: upper,
       );
       if (date != null && context.mounted) onChanged(dateKey(date));
     },
@@ -519,6 +472,7 @@ class _ApprovePageState extends State<ApprovePage> {
           ),
           ActionButton(
             label: '确认并入账 ${widget.task.reward} 分',
+            enabled: !widget.controller.service!.frozen,
             action: () async {
               FocusScope.of(context).unfocus();
               final result = await widget.controller.service!.approve(
@@ -533,6 +487,7 @@ class _ApprovePageState extends State<ApprovePage> {
                 context: context,
                 builder: (context) => AlertDialog(
                   title: const Text('成果已确认'),
+                  scrollable: true,
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -564,6 +519,21 @@ class _ApprovePageState extends State<ApprovePage> {
                   ],
                 ),
               );
+              if (context.mounted) Navigator.pop(context);
+            },
+          ),
+          const SizedBox(height: 8),
+          ActionButton(
+            label: '退回继续完成',
+            outlined: true,
+            enabled: !widget.controller.service!.frozen,
+            action: () async {
+              await widget.controller.service!.returnTask(
+                widget.task.id,
+                feedback.text,
+                session: widget.controller.session,
+              );
+              await widget.controller.refresh();
               if (context.mounted) Navigator.pop(context);
             },
           ),
@@ -599,9 +569,15 @@ class LedgerPage extends StatelessWidget {
             else
               for (final row in snapshot.data!)
                 ListTile(
-                  title: Text(
-                    row['kind'] == 'reward' ? '确认成果' : row['kind'].toString(),
-                  ),
+                  title: Text(switch (row['kind']) {
+                    'reward' => '确认成果',
+                    'penalty' => '扣分',
+                    'penalty_reversal' => '撤销扣分',
+                    'purchase' => '兑换成果',
+                    'refund' => '退回兑换',
+                    'correction' => '更正奖励',
+                    _ => '积分变动',
+                  }),
                   subtitle: Text(
                     '${row['posted_day']} · 余额 ${row['balance_after']} 分',
                   ),

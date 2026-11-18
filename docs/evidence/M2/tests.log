@@ -1,0 +1,13 @@
+00:00 +0: loading /workspace/alice-little-companions/apps/mobile/test/family_test.dart
+00:00 +0: /workspace/alice-little-companions/apps/mobile/test/family_test.dart: M1 AC-02/09/10 one atomic reward and completion survive reopen
+00:07 +1: /workspace/alice-little-companions/apps/mobile/test/widget_test.dart: all 18 previews load without changing app state
+00:09 +2: /workspace/alice-little-companions/apps/mobile/test/family_test.dart: AC-03 PIN session locks and five failures remain throttled after restart
+00:15 +3: /workspace/alice-little-companions/apps/mobile/test/family_test.dart: AC-03 PIN session locks and five failures remain throttled after restart
+00:24 +4: /workspace/alice-little-companions/apps/mobile/test/family_test.dart: AC-03 PIN session locks and five failures remain throttled after restart
+00:30 +5: /workspace/alice-little-companions/apps/mobile/test/rules_test.dart: AC-08/09 past-date backfill and overdue submission do not trigger extra points
+00:31 +6: /workspace/alice-little-companions/apps/mobile/test/rules_test.dart: AC-13/14 penalty is bounded and reversal does not release the cap
+00:37 +7: /workspace/alice-little-companions/apps/mobile/test/rules_test.dart: AC-15/43 correction records explicit shortfall with ownership retained
+00:43 +8: /workspace/alice-little-companions/apps/mobile/test/rules_test.dart: AC-17/18 all growth threshold boundaries and all companions remain shared
+00:49 +9: /workspace/alice-little-companions/apps/mobile/test/rules_test.dart: AC-11 simultaneous fixed purchases cannot overdraw or duplicate ownership
+00:54 +10: /workspace/alice-little-companions/apps/mobile/test/rules_test.dart: AC-12 transaction fault at balance, ledger and ownership rolls back after reopen
+01:07 +11: All tests passed!
