@@ -1,0 +1,2 @@
+PASS: Android 11 simulator / airplane mode / release 0.5.0+5
+PASS: 3-point state preserved by upgrade, backfill +5, 6-point product, place and save, reopen at 2 points.

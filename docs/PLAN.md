@@ -25,3 +25,16 @@
 ## 交接记录
 
 每次停工记下提交号、可运行 Demo、已执行 AC 编号、失败或阻塞的具体原因和恢复入口。正式版的目标系统、签名途径、资源与性能数据以实测记录为准。
+
+## 云端检查点
+
+| 阶段 | 源码标签 | 可运行版本及证据 |
+|---|---|---|
+| M0 | `alice-m0` | Android 0.1.0+1，三宠六阶段与 C 版机位，Android 模拟器四种视口。[记录](evidence/M0/README.md) |
+| M1 | `alice-m1` | Android 0.2.0+2，飞行模式建家到确认 3 分，强制停止与冷启动保留数据。[记录](evidence/M1/README.md) |
+| M2 | `alice-m2` | Android 0.3.0+3，重复、阶段、扣分、退款事务与明确纠错差额。[记录](evidence/M2/README.md) |
+| M3 | `alice-m3` | Android 0.4.0+4，格式向量与 37 分夹具，安卓系统文件选择器保存并独立回读。[记录](evidence/M3/README.md) |
+| M4 | `alice-m4` | Android 0.5.0+5，18 项兑换、5 个空间、67 项运行素材。[记录](evidence/M4/README.md) |
+| M5 | `alice-rc1` | Android 0.9.0+6，源码及测试交付。iPad 签名、实体机、性能和双向迁移维持 BLOCKED。[记录](evidence/M5/README.md) |
+
+从 0.9.0+6 向 Mac 和家庭设备交接时使用相同源码标签与锁文件，先做 iPad 编译、签名和安装，再补齐 [验收表](evidence/acceptance.csv) 的设备项目。家庭设备交接方式见 [交付说明](DELIVERY.md)。

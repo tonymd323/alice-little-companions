@@ -1,0 +1,3 @@
+Verifies
+Signer #1 certificate SHA-256 digest: c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05
+Signer #1 public key SHA-256 digest: be436cd74bc7cdec664348dbf56a6ee5005ec2b4a39ac5096944eef221e1a6a0

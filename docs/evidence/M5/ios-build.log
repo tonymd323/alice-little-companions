@@ -1,0 +1,7 @@
+Could not find a subcommand named "ipa" for "flutter build".
+
+Did you mean one of these?
+  apk
+
+
+Run 'flutter -h' (or 'flutter <command> -h') for available flutter commands and options.

@@ -1,0 +1,2 @@
+PASS: iOS plist, alicebackup UTType and all Runner target deployment/signing settings checked.
+BLOCKED: macOS, Xcode, Apple Team, iPad and physical Android device missing from selected cloud environment.
