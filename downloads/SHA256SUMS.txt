@@ -1,1 +1,2 @@
+e44fba0955052fac5c404ad8d9c3c036b465a49025d75ca680703a6ec60fdb9c  alice-0.11.0-android.apk
 96ef00d21506b49592bc962b57e62c741d690db5cd19c39012eb5d6b03045913  alice-window-math-0.1.0-android.apk
