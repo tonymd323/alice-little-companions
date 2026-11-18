@@ -1,0 +1,12 @@
+  compiling builders/aot
+  42s compiling builders/aot
+  0s drift_dev:preparing_builder on 1 input; lib/data/schema.drift
+  0s drift_dev:preparing_builder on 1 input: 1 output
+  0s drift_dev on 67 inputs; lib/application/controller.dart
+  5s drift_dev on 67 inputs: 1 output; spent 3s analyzing, 2s sdk; lib/application/family.dart
+  12s drift_dev on 67 inputs: 10 output; spent 8s analyzing, 2s resolving, 2s sdk; lib/features/first_run.dart
+  13s drift_dev on 67 inputs: 2 skipped, 33 output, 4 no-op; spent 9s analyzing, 2s resolving, 2s sdk; lib/data/database.dart.types.temp.dart
+  13s drift_dev on 67 inputs: 17 skipped, 33 output, 17 no-op; spent 9s analyzing, 2s resolving, 2s sdk
+  0s source_gen:combining_builder on 33 inputs; lib/application/controller.dart
+  0s source_gen:combining_builder on 33 inputs: 17 skipped, 1 output, 15 no-op
+  Built with build_runner/aot in 56s; wrote 36 outputs.

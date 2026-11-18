@@ -1,0 +1,5 @@
+00:00 +0: loading /workspace/alice-little-companions/apps/mobile/test/family_test.dart
+00:00 +0: /workspace/alice-little-companions/apps/mobile/test/family_test.dart: M1 AC-02/09/10 one atomic reward and completion survive reopen
+00:06 +1: /workspace/alice-little-companions/apps/mobile/test/widget_test.dart: all 18 previews load without changing app state
+00:07 +2: /workspace/alice-little-companions/apps/mobile/test/family_test.dart: AC-03 PIN session locks and five failures remain throttled after restart
+00:29 +3: All tests passed!

@@ -1,0 +1,222 @@
+CREATE TABLE households (
+  id TEXT NOT NULL PRIMARY KEY,
+  singleton INTEGER NOT NULL DEFAULT 1 UNIQUE CHECK (singleton = 1),
+  lineage_id TEXT NOT NULL,
+  timezone TEXT NOT NULL,
+  rules_version TEXT NOT NULL,
+  catalog_version TEXT NOT NULL,
+  domain_revision INTEGER NOT NULL DEFAULT 0,
+  latest_local_day TEXT
+);
+
+CREATE TABLE child_profiles (
+  id TEXT NOT NULL PRIMARY KEY,
+  family_id TEXT NOT NULL UNIQUE REFERENCES households(id),
+  nickname TEXT NOT NULL,
+  active_pet_id TEXT NOT NULL CHECK (active_pet_id IN ('fox', 'rabbit', 'cat'))
+);
+
+CREATE TABLE accounts (
+  id TEXT NOT NULL PRIMARY KEY,
+  child_id TEXT NOT NULL UNIQUE REFERENCES child_profiles(id),
+  balance INTEGER NOT NULL DEFAULT 0 CHECK (balance >= 0)
+);
+
+CREATE TABLE task_templates (
+  id TEXT NOT NULL PRIMARY KEY,
+  family_id TEXT NOT NULL REFERENCES households(id),
+  mode TEXT NOT NULL CHECK (mode IN ('once', 'recurring', 'staged')),
+  current_version INTEGER NOT NULL DEFAULT 1 CHECK (current_version >= 1),
+  paused INTEGER NOT NULL DEFAULT 0 CHECK (paused IN (0, 1))
+);
+
+CREATE TABLE task_versions (
+  id TEXT NOT NULL PRIMARY KEY,
+  template_id TEXT NOT NULL REFERENCES task_templates(id),
+  version INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  criteria TEXT NOT NULL,
+  task_type TEXT NOT NULL,
+  reward INTEGER NOT NULL CHECK (reward BETWEEN 2 AND 5),
+  rules_version TEXT NOT NULL,
+  schedule_json TEXT NOT NULL,
+  UNIQUE (template_id, version)
+);
+
+CREATE TABLE project_stages (
+  id TEXT NOT NULL PRIMARY KEY,
+  version_id TEXT NOT NULL REFERENCES task_versions(id),
+  sequence INTEGER NOT NULL CHECK (sequence >= 1),
+  title TEXT NOT NULL,
+  criteria TEXT NOT NULL,
+  task_type TEXT NOT NULL,
+  reward INTEGER NOT NULL CHECK (reward BETWEEN 2 AND 5),
+  UNIQUE (version_id, sequence)
+);
+
+CREATE TABLE task_instances (
+  id TEXT NOT NULL PRIMARY KEY,
+  instance_key TEXT NOT NULL UNIQUE,
+  template_id TEXT NOT NULL REFERENCES task_templates(id),
+  version_id TEXT NOT NULL REFERENCES task_versions(id),
+  stage_id TEXT REFERENCES project_stages(id),
+  prior_instance_id TEXT REFERENCES task_instances(id),
+  planned_day TEXT NOT NULL,
+  slot INTEGER NOT NULL DEFAULT 1,
+  due_day TEXT,
+  state TEXT NOT NULL CHECK (state IN ('OPEN', 'SUBMITTED', 'RETURNED', 'APPROVED', 'EXPIRED', 'CANCELLED', 'CORRECTED', 'WAITING')),
+  actual_date TEXT,
+  approved_at INTEGER,
+  resolution_note TEXT NOT NULL DEFAULT ''
+);
+
+CREATE INDEX task_state_idx ON task_instances(state, planned_day);
+CREATE INDEX task_plan_idx ON task_instances(template_id, planned_day, slot);
+
+CREATE TABLE submissions (
+  id TEXT NOT NULL PRIMARY KEY,
+  instance_id TEXT NOT NULL REFERENCES task_instances(id),
+  note TEXT NOT NULL,
+  actual_date TEXT NOT NULL,
+  created_at INTEGER NOT NULL
+);
+
+CREATE INDEX submission_instance_idx ON submissions(instance_id, created_at);
+
+CREATE TABLE completions (
+  id TEXT NOT NULL PRIMARY KEY,
+  instance_id TEXT NOT NULL UNIQUE REFERENCES task_instances(id),
+  actual_date TEXT NOT NULL,
+  feedback TEXT NOT NULL,
+  is_valid INTEGER NOT NULL DEFAULT 1 CHECK (is_valid IN (0, 1)),
+  approval_command_id TEXT NOT NULL UNIQUE
+);
+
+CREATE INDEX completion_date_idx ON completions(is_valid, actual_date);
+
+CREATE TABLE ledger_entries (
+  id TEXT NOT NULL PRIMARY KEY,
+  account_id TEXT NOT NULL REFERENCES accounts(id),
+  delta INTEGER NOT NULL,
+  balance_after INTEGER NOT NULL CHECK (balance_after >= 0),
+  kind TEXT NOT NULL CHECK (kind IN ('reward', 'penalty', 'penalty_reversal', 'purchase', 'refund', 'correction')),
+  source_key TEXT NOT NULL UNIQUE,
+  reversal_of TEXT UNIQUE REFERENCES ledger_entries(id),
+  actual_date TEXT NOT NULL,
+  posted_day TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
+  command_id TEXT NOT NULL
+);
+
+CREATE TABLE processed_commands (
+  id TEXT NOT NULL PRIMARY KEY,
+  payload_hash TEXT NOT NULL,
+  result_json TEXT NOT NULL,
+  created_at INTEGER NOT NULL
+);
+
+CREATE TABLE penalty_rules (
+  id TEXT NOT NULL PRIMARY KEY,
+  behavior TEXT NOT NULL,
+  condition_text TEXT NOT NULL,
+  points INTEGER NOT NULL CHECK (points BETWEEN 1 AND 3)
+);
+
+CREATE TABLE penalty_events (
+  id TEXT NOT NULL PRIMARY KEY,
+  rule_id TEXT NOT NULL REFERENCES penalty_rules(id),
+  fact TEXT NOT NULL,
+  actual_date TEXT NOT NULL,
+  posted_day TEXT NOT NULL,
+  planned_points INTEGER NOT NULL CHECK (planned_points BETWEEN 1 AND 3),
+  deducted INTEGER NOT NULL CHECK (deducted BETWEEN 0 AND planned_points),
+  ledger_id TEXT NOT NULL UNIQUE REFERENCES ledger_entries(id)
+);
+
+CREATE TABLE penalty_day_usage (
+  account_id TEXT NOT NULL REFERENCES accounts(id),
+  posted_day TEXT NOT NULL,
+  used INTEGER NOT NULL CHECK (used BETWEEN 0 AND 3),
+  PRIMARY KEY (account_id, posted_day)
+);
+
+CREATE TABLE purchases (
+  id TEXT NOT NULL PRIMARY KEY,
+  item_id TEXT NOT NULL,
+  name TEXT NOT NULL,
+  price_paid INTEGER NOT NULL CHECK (price_paid > 0),
+  ledger_id TEXT NOT NULL UNIQUE REFERENCES ledger_entries(id),
+  created_at INTEGER NOT NULL,
+  refunded_at INTEGER,
+  command_id TEXT NOT NULL UNIQUE,
+  asset_id TEXT NOT NULL
+);
+
+CREATE UNIQUE INDEX purchased_once ON purchases(item_id) WHERE refunded_at IS NULL;
+
+CREATE TABLE spaces (
+  id TEXT NOT NULL PRIMARY KEY,
+  scene_id TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL,
+  purchase_id TEXT REFERENCES purchases(id),
+  layout_version INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE entitlements (
+  id TEXT NOT NULL PRIMARY KEY,
+  purchase_id TEXT NOT NULL REFERENCES purchases(id),
+  item_id TEXT NOT NULL,
+  asset_id TEXT NOT NULL,
+  name TEXT NOT NULL,
+  slot TEXT CHECK (slot IN ('head', 'face', 'neck', 'body')),
+  bound_space TEXT REFERENCES spaces(id),
+  revoked INTEGER NOT NULL DEFAULT 0 CHECK (revoked IN (0, 1)),
+  UNIQUE (purchase_id, item_id)
+);
+
+CREATE UNIQUE INDEX active_entitlement ON entitlements(item_id) WHERE revoked = 0;
+
+CREATE TABLE placements (
+  entitlement_id TEXT NOT NULL PRIMARY KEY REFERENCES entitlements(id),
+  space_id TEXT NOT NULL REFERENCES spaces(id),
+  x REAL NOT NULL CHECK (x BETWEEN 0 AND 1),
+  y REAL NOT NULL CHECK (y BETWEEN 0 AND 1),
+  rotation INTEGER NOT NULL DEFAULT 0,
+  flipped INTEGER NOT NULL DEFAULT 0 CHECK (flipped IN (0, 1)),
+  z INTEGER NOT NULL,
+  mount_id TEXT,
+  UNIQUE (space_id, mount_id)
+);
+
+CREATE TABLE pet_state (
+  pet_id TEXT NOT NULL CHECK (pet_id IN ('fox', 'rabbit', 'cat')),
+  slot TEXT NOT NULL CHECK (slot IN ('head', 'face', 'neck', 'body')),
+  entitlement_id TEXT NOT NULL REFERENCES entitlements(id),
+  PRIMARY KEY (pet_id, slot)
+);
+
+CREATE TABLE growth_awards (
+  child_id TEXT NOT NULL REFERENCES child_profiles(id),
+  threshold INTEGER NOT NULL,
+  stage INTEGER NOT NULL CHECK (stage BETWEEN 2 AND 6),
+  awarded_at INTEGER NOT NULL,
+  PRIMARY KEY (child_id, threshold)
+);
+
+CREATE TABLE wishes (
+  child_id TEXT NOT NULL PRIMARY KEY REFERENCES child_profiles(id),
+  item_id TEXT NOT NULL,
+  selected_price INTEGER NOT NULL CHECK (selected_price > 0),
+  selected_at INTEGER NOT NULL
+);
+
+CREATE TABLE correction_records (
+  instance_id TEXT NOT NULL PRIMARY KEY REFERENCES task_instances(id),
+  original_reward_id TEXT NOT NULL UNIQUE REFERENCES ledger_entries(id),
+  recovered INTEGER NOT NULL CHECK (recovered >= 0),
+  shortfall INTEGER NOT NULL CHECK (shortfall >= 0),
+  reason TEXT NOT NULL,
+  refunded_purchase_ids TEXT NOT NULL,
+  command_id TEXT NOT NULL UNIQUE
+);
