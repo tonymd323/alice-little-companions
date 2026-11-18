@@ -12,6 +12,7 @@ import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/pin.dart';
 import '../domain/rules.dart';
+import '../domain/wind_progress.dart';
 import '../domain/window_page.dart';
 
 part 'decorations.dart';
@@ -331,6 +332,70 @@ class FamilyService {
 
   void checkParent(ParentSession? session) {
     if (!pin.allows(session)) throw const UserError('请先验证家长 PIN。');
+  }
+
+  Future<WindProgress> windProgress() async {
+    final row = await db.row(
+      'SELECT run_number, leaf_mask FROM wind_story_runs',
+    );
+    if (row == null) return const WindProgress();
+    return WindProgress(
+      run: row['run_number'] as int,
+      mask: row['leaf_mask'] as int,
+    );
+  }
+
+  Future<WindProgress> beginWindStory() async {
+    await _command('wind_begin', null, 'wind/begin', (_, family) async {
+      await db.customStatement(
+        'INSERT INTO wind_story_runs (child_id, run_number, leaf_mask) VALUES (?, 1, 0)',
+        [family.childId],
+      );
+      return {};
+    });
+    return windProgress();
+  }
+
+  Future<WindProgress> placeWindLeaf(int slot, {required int run}) async {
+    if (slot < 0 || slot >= WindProgress.slots || run < 1) {
+      throw const UserError('请选择本次故事中的空窗格。');
+    }
+    await _command('wind_leaf', [run, slot], 'wind/leaf/$run/$slot', (
+      _,
+      family,
+    ) async {
+      final progress = await windProgress();
+      if (progress.run != run) throw const UserError('请重新打开当前的暖廊故事。');
+      final mask = progress.mask | (1 << slot);
+      await db.customStatement(
+        'UPDATE wind_story_runs SET leaf_mask = ? WHERE child_id = ?',
+        [mask, family.childId],
+      );
+      if (mask == WindProgress.fullMask) {
+        await db.customStatement(
+          'INSERT OR IGNORE INTO window_story_milestones(child_id) VALUES (?)',
+          [family.childId],
+        );
+      }
+      return {};
+    });
+    // A duplicate tap may have been followed by other leaves or a replay.
+    return windProgress();
+  }
+
+  Future<WindProgress> replayWindStory({required int run}) async {
+    await _command('wind_replay', run, 'wind/replay/$run', (_, family) async {
+      final current = await windProgress();
+      if (run != current.run || !current.complete) {
+        throw const UserError('修复三扇窗后可以重新体验。');
+      }
+      await db.customStatement(
+        'UPDATE wind_story_runs SET run_number = run_number + 1, leaf_mask = 0 WHERE child_id = ?',
+        [family.childId],
+      );
+      return {};
+    });
+    return windProgress();
   }
 
   Future<({WindowPage page, Set<int> pattern, bool started})>

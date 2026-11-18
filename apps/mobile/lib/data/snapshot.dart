@@ -87,6 +87,7 @@ Snapshot _check(
       throw const UserError('此存档结构需要兼容版本的 App。');
     }
     final expected = schema
+        .where((row) => version >= 6 || row['tbl_name'] != 'wind_story_runs')
         .where(
           (row) => version >= 5 || row['tbl_name'] != 'window_story_milestones',
         )
@@ -112,6 +113,16 @@ Snapshot _check(
     }
     Object? scalar(String sql) => db.select(sql).single.values.single;
     bool invalid(String sql) => db.select(sql).isNotEmpty;
+
+    if (version >= 6 &&
+        invalid('''
+          SELECT 1 FROM wind_story_runs w
+          WHERE (w.leaf_mask = 31 OR w.run_number > 1) AND NOT EXISTS (
+            SELECT 1 FROM window_story_milestones m WHERE m.child_id = w.child_id
+          )
+        ''')) {
+      throw const UserError('暖廊的修复记录与窗格进度不一致。');
+    }
 
     final parent = db.select('''
       SELECT h.*, c.id AS child_id, c.nickname, c.active_pet_id, a.balance FROM households h
@@ -339,7 +350,8 @@ Snapshot _check(
       if (records.isEmpty &&
           (table == 'base_furnishings' ||
               table == 'window_math_bookmarks' ||
-              table == 'window_story_milestones')) {
+              table == 'window_story_milestones' ||
+              table == 'wind_story_runs')) {
         continue;
       }
       content.add(utf8.encode('$table\n'));

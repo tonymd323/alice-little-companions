@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:alice_companions/application/family.dart';
 import 'package:alice_companions/application/transfer.dart';
 import 'package:alice_companions/data/checkpoints.dart';
+import 'package:alice_companions/data/database.dart';
 import 'package:alice_companions/data/device.dart';
 import 'package:alice_companions/data/snapshot.dart';
 import 'package:alice_companions/domain/backup_codec.dart';
@@ -227,7 +228,7 @@ void main() {
     );
     final legacySql = sqlite3.open(oldDb.path);
     legacySql.execute(
-      'DROP TABLE window_story_milestones; DELETE FROM growth_awards WHERE stage > 2; PRAGMA user_version=3',
+      'DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DELETE FROM growth_awards WHERE stage > 2; PRAGMA user_version=3',
     );
     legacySql.close();
     final legacyInfo = await checkSnapshot(
@@ -356,7 +357,7 @@ void main() {
     await stock.service.close();
     final legacy = sqlite3.open(file.path);
     legacy.execute(
-      'DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; PRAGMA user_version = 2',
+      'DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; PRAGMA user_version = 2',
     );
     legacy.close();
     final schema = await expectedSchema();
@@ -365,7 +366,7 @@ void main() {
     stock.service = await FamilyService.load(stock.device, id, stock.rules);
     final service = stock.service;
     final after = await checkSnapshot(file.path, schema, stock.rules, assets);
-    expect(after.schemaVersion, 5);
+    expect(after.schemaVersion, currentSchemaVersion);
     expect(after.businessDigest, before.businessDigest);
     expect(after.summary, before.summary);
     expect(await CheckpointStore(stock.device).files(), hasLength(1));
@@ -385,6 +386,128 @@ void main() {
     expect(current.businessDigest, isNot(before.businessDigest));
     expect(current.summary, before.summary);
   });
+
+  test('Wind scene survives a v5 upgrade and partial encrypted handoff independently of the old chapter', () async {
+    final stock = await TestFamily.create();
+    addTearDown(stock.dispose);
+    await stock.service.saveWindowMathBookmark(WindowPage.finished, {0, 4});
+    final generation = stock.service.pin.generation;
+    final file = stock.device.databaseFile(generation);
+    await stock.service.close();
+    final legacy = sqlite3.open(file.path);
+    legacy.execute('DROP TABLE wind_story_runs; PRAGMA user_version=5');
+    legacy.close();
+    final schema = await expectedSchema();
+    final old = await checkSnapshot(file.path, schema, stock.rules, assets);
+    final oldFile = File(p.join(stock.root.path, 'v5.sqlite'));
+    await vacuumFile(file.path, oldFile.path);
+    stock.service = await FamilyService.load(
+      stock.device,
+      generation,
+      stock.rules,
+    );
+    final upgraded = await checkSnapshot(
+      file.path,
+      schema,
+      stock.rules,
+      assets,
+    );
+    expect(upgraded.businessDigest, old.businessDigest);
+    expect(upgraded.summary, old.summary);
+    expect((await stock.service.overview())!.windowsLit, isTrue);
+    expect((await stock.service.windProgress()).started, isFalse);
+    expect((await stock.service.windowMathBookmark()).pattern, {0, 4});
+
+    final run = (await stock.service.beginWindStory()).run;
+    await stock.service.placeWindLeaf(3, run: run);
+    await stock.service.placeWindLeaf(1, run: run);
+    final outgoing = transfers(stock);
+    final owner = await stock.service.pin.unlock(TestFamily.pin);
+    final ticket = await outgoing.prepareExport('migration', password, owner);
+    await outgoing.finishExport(ticket, SaveOutcome.handedToSystem);
+    await stock.reopen();
+    expect(stock.service.frozen, isTrue);
+    await fails(stock.service.placeWindLeaf(2, run: run));
+    await fails(stock.service.beginWindStory());
+    await fails(stock.service.replayWindStory(run: run));
+
+    final nextDevice = DeviceStore(
+      Directory(p.join(stock.root.path, 'wind-target')),
+      MemorySecureValues(),
+    );
+    final incoming = TransferService(
+      device: nextDevice,
+      rules: stock.rules,
+      availableAssets: assets,
+      current: () => null,
+    );
+    final preview = await incoming.inspect(ticket.file, password, null);
+    addTearDown(preview.close);
+    final oldArchive = File(p.join(stock.root.path, 'v5.alicebackup'));
+    await codec.write(
+      oldFile,
+      {
+        ...preview.manifest,
+        'schema_version': 5,
+        'summary': old.summary,
+        'snapshot_revision': old.revision,
+      },
+      password,
+      oldArchive,
+    );
+    final oldPreview = await incoming.inspect(oldArchive, password, null);
+    addTearDown(oldPreview.close);
+    expect(oldPreview.info.businessDigest, old.businessDigest);
+    expect(oldPreview.info.schemaVersion, 5);
+
+    // Install the imported v5 household into a fresh destination with the
+    // production activation path, then continue the original v6 handoff.
+    final oldDestination = TransferService(
+      device: DeviceStore(
+        Directory(p.join(stock.root.path, 'legacy-target')),
+        MemorySecureValues(),
+      ),
+      rules: stock.rules,
+      availableAssets: assets,
+      current: () => null,
+    );
+    final oldRestored = (await oldDestination.activate(
+      oldPreview,
+      pin,
+      PinGate.newRecoveryCode(),
+      session: null,
+      replace: false,
+    )).service;
+    try {
+      expect((await oldRestored.windProgress()).started, isFalse);
+      expect((await oldRestored.overview())!.windowsLit, isTrue);
+      expect((await oldRestored.windowMathBookmark()).pattern, {0, 4});
+    } finally {
+      await oldRestored.close();
+    }
+    final restored = (await incoming.activate(
+      preview,
+      pin,
+      PinGate.newRecoveryCode(),
+      session: null,
+      replace: false,
+    )).service;
+    addTearDown(restored.close);
+    final partial = await restored.windProgress();
+    expect((partial.run, partial.mask, partial.remaining), (1, 10, 3));
+    expect((await restored.windowMathBookmark()).pattern, {0, 4});
+    for (final slot in [0, 2, 4]) {
+      await restored.placeWindLeaf(slot, run: partial.run);
+    }
+    expect((await restored.windProgress()).complete, isTrue);
+    final family = (await restored.overview())!;
+    expect(
+      (family.windowsLit, family.balance, family.experience),
+      (true, 0, 0),
+    );
+    expect(await restored.ledger(), isEmpty);
+    expect((await stock.service.windProgress()).mask, 10);
+  }, timeout: const Timeout(Duration(minutes: 2)));
 
   test('AC-24/25/26/32/33 invalid input and interrupted activation preserve generation', () async {
     final fixture = await TestFamily.create();
@@ -519,11 +642,14 @@ void main() {
     await stock.service.close();
     final old = sqlite3.open(stock.device.databaseFile(id).path);
     old.execute(
-      'DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; DROP TABLE base_furnishings; DROP INDEX ledger_day_kind_idx; DROP INDEX purchase_ledger_idx; PRAGMA user_version = 1',
+      'DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; DROP TABLE base_furnishings; DROP INDEX ledger_day_kind_idx; DROP INDEX purchase_ledger_idx; PRAGMA user_version = 1',
     );
     old.close();
     stock.service = await FamilyService.load(stock.device, id, stock.rules);
-    expect(await stock.service.db.value('PRAGMA user_version'), 5);
+    expect(
+      await stock.service.db.value('PRAGMA user_version'),
+      currentSchemaVersion,
+    );
     expect((await stock.service.overview())!.balance, 0);
     expect(await stock.service.items(), hasLength(1));
     final backups = CheckpointStore(stock.device);

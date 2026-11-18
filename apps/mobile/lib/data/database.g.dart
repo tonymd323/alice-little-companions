@@ -10470,6 +10470,275 @@ class WindowStoryMilestonesCompanion
   }
 }
 
+class WindStoryRuns extends Table with TableInfo<WindStoryRuns, WindStoryRun> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  WindStoryRuns(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _childIdMeta = const VerificationMeta(
+    'childId',
+  );
+  late final GeneratedColumn<String> childId = GeneratedColumn<String>(
+    'child_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY REFERENCES child_profiles(id)',
+  );
+  static const VerificationMeta _runNumberMeta = const VerificationMeta(
+    'runNumber',
+  );
+  late final GeneratedColumn<int> runNumber = GeneratedColumn<int>(
+    'run_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL CHECK (typeof(run_number) = \'integer\' AND run_number >= 1)',
+  );
+  static const VerificationMeta _leafMaskMeta = const VerificationMeta(
+    'leafMask',
+  );
+  late final GeneratedColumn<int> leafMask = GeneratedColumn<int>(
+    'leaf_mask',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (typeof(leaf_mask) = \'integer\' AND leaf_mask BETWEEN 0 AND 31)',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [childId, runNumber, leafMask];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'wind_story_runs';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<WindStoryRun> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('child_id')) {
+      context.handle(
+        _childIdMeta,
+        childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('run_number')) {
+      context.handle(
+        _runNumberMeta,
+        runNumber.isAcceptableOrUnknown(data['run_number']!, _runNumberMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_runNumberMeta);
+    }
+    if (data.containsKey('leaf_mask')) {
+      context.handle(
+        _leafMaskMeta,
+        leafMask.isAcceptableOrUnknown(data['leaf_mask']!, _leafMaskMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_leafMaskMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {childId};
+  @override
+  WindStoryRun map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WindStoryRun(
+      childId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}child_id'],
+      )!,
+      runNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}run_number'],
+      )!,
+      leafMask: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}leaf_mask'],
+      )!,
+    );
+  }
+
+  @override
+  WindStoryRuns createAlias(String alias) {
+    return WindStoryRuns(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class WindStoryRun extends DataClass implements Insertable<WindStoryRun> {
+  final String childId;
+  final int runNumber;
+  final int leafMask;
+  const WindStoryRun({
+    required this.childId,
+    required this.runNumber,
+    required this.leafMask,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['child_id'] = Variable<String>(childId);
+    map['run_number'] = Variable<int>(runNumber);
+    map['leaf_mask'] = Variable<int>(leafMask);
+    return map;
+  }
+
+  WindStoryRunsCompanion toCompanion(bool nullToAbsent) {
+    return WindStoryRunsCompanion(
+      childId: Value(childId),
+      runNumber: Value(runNumber),
+      leafMask: Value(leafMask),
+    );
+  }
+
+  factory WindStoryRun.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WindStoryRun(
+      childId: serializer.fromJson<String>(json['child_id']),
+      runNumber: serializer.fromJson<int>(json['run_number']),
+      leafMask: serializer.fromJson<int>(json['leaf_mask']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'child_id': serializer.toJson<String>(childId),
+      'run_number': serializer.toJson<int>(runNumber),
+      'leaf_mask': serializer.toJson<int>(leafMask),
+    };
+  }
+
+  WindStoryRun copyWith({String? childId, int? runNumber, int? leafMask}) =>
+      WindStoryRun(
+        childId: childId ?? this.childId,
+        runNumber: runNumber ?? this.runNumber,
+        leafMask: leafMask ?? this.leafMask,
+      );
+  WindStoryRun copyWithCompanion(WindStoryRunsCompanion data) {
+    return WindStoryRun(
+      childId: data.childId.present ? data.childId.value : this.childId,
+      runNumber: data.runNumber.present ? data.runNumber.value : this.runNumber,
+      leafMask: data.leafMask.present ? data.leafMask.value : this.leafMask,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WindStoryRun(')
+          ..write('childId: $childId, ')
+          ..write('runNumber: $runNumber, ')
+          ..write('leafMask: $leafMask')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(childId, runNumber, leafMask);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WindStoryRun &&
+          other.childId == this.childId &&
+          other.runNumber == this.runNumber &&
+          other.leafMask == this.leafMask);
+}
+
+class WindStoryRunsCompanion extends UpdateCompanion<WindStoryRun> {
+  final Value<String> childId;
+  final Value<int> runNumber;
+  final Value<int> leafMask;
+  final Value<int> rowid;
+  const WindStoryRunsCompanion({
+    this.childId = const Value.absent(),
+    this.runNumber = const Value.absent(),
+    this.leafMask = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WindStoryRunsCompanion.insert({
+    required String childId,
+    required int runNumber,
+    required int leafMask,
+    this.rowid = const Value.absent(),
+  }) : childId = Value(childId),
+       runNumber = Value(runNumber),
+       leafMask = Value(leafMask);
+  static Insertable<WindStoryRun> custom({
+    Expression<String>? childId,
+    Expression<int>? runNumber,
+    Expression<int>? leafMask,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (childId != null) 'child_id': childId,
+      if (runNumber != null) 'run_number': runNumber,
+      if (leafMask != null) 'leaf_mask': leafMask,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WindStoryRunsCompanion copyWith({
+    Value<String>? childId,
+    Value<int>? runNumber,
+    Value<int>? leafMask,
+    Value<int>? rowid,
+  }) {
+    return WindStoryRunsCompanion(
+      childId: childId ?? this.childId,
+      runNumber: runNumber ?? this.runNumber,
+      leafMask: leafMask ?? this.leafMask,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (childId.present) {
+      map['child_id'] = Variable<String>(childId.value);
+    }
+    if (runNumber.present) {
+      map['run_number'] = Variable<int>(runNumber.value);
+    }
+    if (leafMask.present) {
+      map['leaf_mask'] = Variable<int>(leafMask.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WindStoryRunsCompanion(')
+          ..write('childId: $childId, ')
+          ..write('runNumber: $runNumber, ')
+          ..write('leafMask: $leafMask, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$FamilyDatabase extends GeneratedDatabase {
   _$FamilyDatabase(QueryExecutor e) : super(e);
   $FamilyDatabaseManager get managers => $FamilyDatabaseManager(this);
@@ -10533,6 +10802,7 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
   late final BaseFurnishings baseFurnishings = BaseFurnishings(this);
   late final WindowStoryMilestones windowStoryMilestones =
       WindowStoryMilestones(this);
+  late final WindStoryRuns windStoryRuns = WindStoryRuns(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -10571,6 +10841,7 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
     purchaseLedgerIdx,
     baseFurnishings,
     windowStoryMilestones,
+    windStoryRuns,
   ];
 }
 
@@ -11164,6 +11435,24 @@ final class $ChildProfilesReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<WindStoryRuns, List<WindStoryRun>>
+  _windStoryRunsRefsTable(_$FamilyDatabase db) => MultiTypedResultKey.fromTable(
+    db.windStoryRuns,
+    aliasName: 'child_profiles__id__wind_story_runs__child_id',
+  );
+
+  $WindStoryRunsProcessedTableManager get windStoryRunsRefs {
+    final manager = $WindStoryRunsTableManager(
+      $_db,
+      $_db.windStoryRuns,
+    ).filter((f) => f.childId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_windStoryRunsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $ChildProfilesFilterComposer
@@ -11329,6 +11618,31 @@ class $ChildProfilesFilterComposer
           }) => $WindowStoryMilestonesFilterComposer(
             $db: $db,
             $table: $db.windowStoryMilestones,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> windStoryRunsRefs(
+    Expression<bool> Function($WindStoryRunsFilterComposer f) f,
+  ) {
+    final $WindStoryRunsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.windStoryRuns,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $WindStoryRunsFilterComposer(
+            $db: $db,
+            $table: $db.windStoryRuns,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -11554,6 +11868,31 @@ class $ChildProfilesAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> windStoryRunsRefs<T extends Object>(
+    Expression<T> Function($WindStoryRunsAnnotationComposer a) f,
+  ) {
+    final $WindStoryRunsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.windStoryRuns,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $WindStoryRunsAnnotationComposer(
+            $db: $db,
+            $table: $db.windStoryRuns,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $ChildProfilesTableManager
@@ -11576,6 +11915,7 @@ class $ChildProfilesTableManager
             bool growthAwardsRefs,
             bool wishesRefs,
             bool windowStoryMilestonesRefs,
+            bool windStoryRunsRefs,
           })
         > {
   $ChildProfilesTableManager(_$FamilyDatabase db, ChildProfiles table)
@@ -11633,6 +11973,7 @@ class $ChildProfilesTableManager
                 growthAwardsRefs = false,
                 wishesRefs = false,
                 windowStoryMilestonesRefs = false,
+                windStoryRunsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -11642,6 +11983,7 @@ class $ChildProfilesTableManager
                     if (growthAwardsRefs) db.growthAwards,
                     if (wishesRefs) db.wishes,
                     if (windowStoryMilestonesRefs) db.windowStoryMilestones,
+                    if (windStoryRunsRefs) db.windStoryRuns,
                   ],
                   addJoins:
                       <
@@ -11775,6 +12117,26 @@ class $ChildProfilesTableManager
                           referencedColumn: 'child_id',
                           typedResults: items,
                         ),
+                      if (windStoryRunsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          ChildProfile,
+                          ChildProfiles,
+                          WindStoryRun,
+                          WindStoryRuns
+                        >(
+                          currentTable: table,
+                          referencedTable: $ChildProfilesReferences
+                              ._windStoryRunsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $ChildProfilesReferences(
+                                db,
+                                table,
+                                p0,
+                              ).windStoryRunsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'child_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -11802,6 +12164,7 @@ typedef $ChildProfilesProcessedTableManager =
         bool growthAwardsRefs,
         bool wishesRefs,
         bool windowStoryMilestonesRefs,
+        bool windStoryRunsRefs,
       })
     >;
 typedef $WindowMathBookmarksCreateCompanionBuilder =
@@ -22003,6 +22366,282 @@ typedef $WindowStoryMilestonesProcessedTableManager =
       WindowStoryMilestone,
       PrefetchHooks Function({bool childId})
     >;
+typedef $WindStoryRunsCreateCompanionBuilder = WindStoryRunsCompanion Function({
+  required String childId,
+  required int runNumber,
+  required int leafMask,
+  Value<int> rowid,
+});
+typedef $WindStoryRunsUpdateCompanionBuilder = WindStoryRunsCompanion Function({
+  Value<String> childId,
+  Value<int> runNumber,
+  Value<int> leafMask,
+  Value<int> rowid,
+});
+
+final class $WindStoryRunsReferences
+    extends BaseReferences<_$FamilyDatabase, WindStoryRuns, WindStoryRun> {
+  $WindStoryRunsReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static ChildProfiles _childIdTable(_$FamilyDatabase db) => db.childProfiles
+      .createAlias('wind_story_runs__child_id__child_profiles__id');
+
+  $ChildProfilesProcessedTableManager get childId {
+    final $_column = $_itemColumn<String>('child_id')!;
+
+    final manager = $ChildProfilesTableManager(
+      $_db,
+      $_db.childProfiles,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $WindStoryRunsFilterComposer
+    extends Composer<_$FamilyDatabase, WindStoryRuns> {
+  $WindStoryRunsFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get runNumber => $composableBuilder(
+    column: $table.runNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get leafMask => $composableBuilder(
+    column: $table.leafMask,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $ChildProfilesFilterComposer get childId {
+    final $ChildProfilesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesFilterComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $WindStoryRunsOrderingComposer
+    extends Composer<_$FamilyDatabase, WindStoryRuns> {
+  $WindStoryRunsOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get runNumber => $composableBuilder(
+    column: $table.runNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get leafMask => $composableBuilder(
+    column: $table.leafMask,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $ChildProfilesOrderingComposer get childId {
+    final $ChildProfilesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesOrderingComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $WindStoryRunsAnnotationComposer
+    extends Composer<_$FamilyDatabase, WindStoryRuns> {
+  $WindStoryRunsAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get runNumber =>
+      $composableBuilder(column: $table.runNumber, builder: (column) => column);
+
+  GeneratedColumn<int> get leafMask =>
+      $composableBuilder(column: $table.leafMask, builder: (column) => column);
+
+  $ChildProfilesAnnotationComposer get childId {
+    final $ChildProfilesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesAnnotationComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $WindStoryRunsTableManager
+    extends
+        RootTableManager<
+          _$FamilyDatabase,
+          WindStoryRuns,
+          WindStoryRun,
+          $WindStoryRunsFilterComposer,
+          $WindStoryRunsOrderingComposer,
+          $WindStoryRunsAnnotationComposer,
+          $WindStoryRunsCreateCompanionBuilder,
+          $WindStoryRunsUpdateCompanionBuilder,
+          (WindStoryRun, $WindStoryRunsReferences),
+          WindStoryRun,
+          PrefetchHooks Function({bool childId})
+        > {
+  $WindStoryRunsTableManager(_$FamilyDatabase db, WindStoryRuns table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $WindStoryRunsFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $WindStoryRunsOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $WindStoryRunsAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> childId = const Value.absent(),
+                Value<int> runNumber = const Value.absent(),
+                Value<int> leafMask = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WindStoryRunsCompanion(
+                childId: childId,
+                runNumber: runNumber,
+                leafMask: leafMask,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String childId,
+                required int runNumber,
+                required int leafMask,
+                Value<int> rowid = const Value.absent(),
+              }) => WindStoryRunsCompanion.insert(
+                childId: childId,
+                runNumber: runNumber,
+                leafMask: leafMask,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<WindStoryRuns, WindStoryRun>(table),
+                  $WindStoryRunsReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (childId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.childId,
+                        referencedTable: $WindStoryRunsReferences._childIdTable(
+                          db,
+                        ),
+                        referencedColumn: $WindStoryRunsReferences
+                            ._childIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $WindStoryRunsProcessedTableManager =
+    ProcessedTableManager<
+      _$FamilyDatabase,
+      WindStoryRuns,
+      WindStoryRun,
+      $WindStoryRunsFilterComposer,
+      $WindStoryRunsOrderingComposer,
+      $WindStoryRunsAnnotationComposer,
+      $WindStoryRunsCreateCompanionBuilder,
+      $WindStoryRunsUpdateCompanionBuilder,
+      (WindStoryRun, $WindStoryRunsReferences),
+      WindStoryRun,
+      PrefetchHooks Function({bool childId})
+    >;
 
 class $FamilyDatabaseManager {
   final _$FamilyDatabase _db;
@@ -22055,4 +22694,6 @@ class $FamilyDatabaseManager {
       $BaseFurnishingsTableManager(_db, _db.baseFurnishings);
   $WindowStoryMilestonesTableManager get windowStoryMilestones =>
       $WindowStoryMilestonesTableManager(_db, _db.windowStoryMilestones);
+  $WindStoryRunsTableManager get windStoryRuns =>
+      $WindStoryRunsTableManager(_db, _db.windStoryRuns);
 }

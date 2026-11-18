@@ -247,3 +247,9 @@ CREATE TABLE base_furnishings (
 CREATE TABLE window_story_milestones (
   child_id TEXT NOT NULL PRIMARY KEY REFERENCES child_profiles(id)
 );
+
+CREATE TABLE wind_story_runs (
+  child_id TEXT NOT NULL PRIMARY KEY REFERENCES child_profiles(id),
+  run_number INTEGER NOT NULL CHECK (typeof(run_number) = 'integer' AND run_number >= 1),
+  leaf_mask INTEGER NOT NULL CHECK (typeof(leaf_mask) = 'integer' AND leaf_mask BETWEEN 0 AND 31)
+);
