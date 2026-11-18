@@ -1,0 +1,239 @@
+{
+  "size": [
+    1086,
+    1448
+  ],
+  "base": {
+    "path": "assets/wind/room/room-base.webp",
+    "rect": [
+      0.0,
+      0.0,
+      1.0,
+      1.0
+    ]
+  },
+  "cells": [
+    {
+      "window": 0,
+      "cell": 0,
+      "path": "assets/wind/room/glass-1-1.webp",
+      "rect": [
+        0.08839779,
+        0.20441989,
+        0.21086556,
+        0.32872928
+      ]
+    },
+    {
+      "window": 0,
+      "cell": 1,
+      "path": "assets/wind/room/glass-1-2.webp",
+      "rect": [
+        0.21823204,
+        0.20441989,
+        0.34069982,
+        0.32872928
+      ]
+    },
+    {
+      "window": 0,
+      "cell": 2,
+      "path": "assets/wind/room/glass-1-3.webp",
+      "rect": [
+        0.08839779,
+        0.33356354,
+        0.21086556,
+        0.45925414
+      ]
+    },
+    {
+      "window": 0,
+      "cell": 3,
+      "path": "assets/wind/room/glass-1-4.webp",
+      "rect": [
+        0.21823204,
+        0.33356354,
+        0.34069982,
+        0.45925414
+      ]
+    },
+    {
+      "window": 1,
+      "cell": 0,
+      "path": "assets/wind/room/glass-2-1.webp",
+      "rect": [
+        0.38489871,
+        0.20441989,
+        0.50276243,
+        0.32872928
+      ]
+    },
+    {
+      "window": 1,
+      "cell": 1,
+      "path": "assets/wind/room/glass-2-2.webp",
+      "rect": [
+        0.50828729,
+        0.20441989,
+        0.62891344,
+        0.32872928
+      ]
+    },
+    {
+      "window": 1,
+      "cell": 2,
+      "path": "assets/wind/room/glass-2-3.webp",
+      "rect": [
+        0.3839779,
+        0.33356354,
+        0.50276243,
+        0.45925414
+      ]
+    },
+    {
+      "window": 1,
+      "cell": 3,
+      "path": "assets/wind/room/glass-2-4.webp",
+      "rect": [
+        0.50736648,
+        0.33356354,
+        0.62891344,
+        0.45925414
+      ]
+    },
+    {
+      "window": 2,
+      "cell": 0,
+      "path": "assets/wind/room/glass-3-1.webp",
+      "rect": [
+        0.6694291,
+        0.20441989,
+        0.78821363,
+        0.32872928
+      ]
+    },
+    {
+      "window": 2,
+      "cell": 1,
+      "path": "assets/wind/room/glass-3-2.webp",
+      "rect": [
+        0.79373849,
+        0.20441989,
+        0.91160221,
+        0.32872928
+      ]
+    },
+    {
+      "window": 2,
+      "cell": 2,
+      "path": "assets/wind/room/glass-3-3.webp",
+      "rect": [
+        0.66850829,
+        0.33356354,
+        0.78821363,
+        0.45925414
+      ]
+    },
+    {
+      "window": 2,
+      "cell": 3,
+      "path": "assets/wind/room/glass-3-4.webp",
+      "rect": [
+        0.79281768,
+        0.33356354,
+        0.91160221,
+        0.45925414
+      ]
+    }
+  ],
+  "lights": [
+    {
+      "window": 0,
+      "path": "assets/wind/room/light-1.webp",
+      "rect": [
+        0.0,
+        0.52140884,
+        0.3839779,
+        1.0
+      ]
+    },
+    {
+      "window": 1,
+      "path": "assets/wind/room/light-2.webp",
+      "rect": [
+        0.26519337,
+        0.51450276,
+        0.72928177,
+        0.98687845
+      ]
+    },
+    {
+      "window": 2,
+      "path": "assets/wind/room/light-3.webp",
+      "rect": [
+        0.60220994,
+        0.51864641,
+        1.0,
+        0.98480663
+      ]
+    }
+  ],
+  "rail": {
+    "path": "assets/wind/room/bridge-rail.webp",
+    "rect": [
+      0.13535912,
+      0.50138122,
+      0.86464088,
+      0.59668508
+    ]
+  },
+  "bridge": [
+    [
+      0.164,
+      0.594
+    ],
+    [
+      0.33,
+      0.562
+    ],
+    [
+      0.49,
+      0.549
+    ],
+    [
+      0.66,
+      0.557
+    ],
+    [
+      0.816,
+      0.593
+    ]
+  ],
+  "actors": {
+    "rabbit": [
+      0.37,
+      0.87
+    ],
+    "basket": [
+      0.62,
+      0.875
+    ],
+    "door": [
+      0.94,
+      0.82
+    ]
+  },
+  "home": {
+    "path": "assets/wind/room/home-restored.webp",
+    "rect": [
+      0.0,
+      0.0,
+      1.0,
+      1.0
+    ],
+    "size": [
+      1536,
+      1024
+    ]
+  }
+}
