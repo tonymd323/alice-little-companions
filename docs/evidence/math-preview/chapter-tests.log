@@ -1,0 +1,5 @@
+00:00 +0: loading /workspace/scratch/alice-window-math/apps/mobile/test/window_math_test.dart
+00:00 +0: child completes both opening puzzles, explores hints and solves the optional window in their own arrangement
+00:02 +1: another session can stop after the basic story, return from the stretch puzzle or replay
+00:02 +2: saved stage and exact finished panes reload; invalid progress opens the first puzzle
+00:02 +3: All tests passed!

@@ -1,0 +1,8 @@
+Reference family package SHA-256 5e0a4e7d4edee28445b178ac8a0fff5aad02fef50b872b688fe56462c155539c
+System: Android 11, x86_64, cloud emulator
+PASS: Android airplane mode 1 throughout the run.
+PASS: installed independent preview local.family.alice_companions.windowmath with SHA-256 96ef00d21506b49592bc962b57e62c741d690db5cd19c39012eb5d6b03045913
+PASS: child retried after an incorrect answer, counted grouped leaves, added the missing leaves and reached the ordinary ending offline.
+PASS: first and fifth panes switched to five leaves; exactly 19 leaves unlocked the stretch ending.
+PASS: cold launch restored the completed chapter and the exact two chosen five-leaf panes.
+PASS: 0.10.0 family APK remains independently installed with its original hash.

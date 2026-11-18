@@ -92,6 +92,16 @@ void main() {
       expect(finalPattern, {0, 4});
       expect(find.bySemanticsLabel('第 1 格，5 片金叶'), findsOneWidget);
       expect(find.bySemanticsLabel('第 5 格，5 片金叶'), findsOneWidget);
+      for (var first = 1; first <= 4; first++) {
+        for (var second = first + 1; second <= 5; second++) {
+          await press(tester, find.text('试试另一种排法'));
+          await press(tester, find.bySemanticsLabel('第 $first 格，3 片金叶'));
+          await press(tester, find.bySemanticsLabel('第 $second 格，3 片金叶'));
+          await press(tester, find.text('试着装上窗花'));
+          expect(find.text('两种花纹，一扇彩窗'), findsOneWidget);
+          expect(finalPattern, {first - 1, second - 1});
+        }
+      }
       expect(tester.takeException(), isNull);
     },
   );

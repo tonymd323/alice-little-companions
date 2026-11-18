@@ -1,0 +1,21 @@
+{
+  "source": "0b794662e026a650835cb9493f13a842ce794def",
+  "android": [
+    "package: name='local.family.alice_companions.windowmath' versionCode='1' versionName='0.1.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+    "application-label:'暖廊的彩窗'",
+    "launchable-activity: name='local.family.alice_companions.MainActivity'  label='' icon=''",
+    "native-code: 'arm64-v8a' 'armeabi-v7a' 'x86_64'"
+  ],
+  "verified_signer_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+  "zipalign_16k": true,
+  "files": {
+    "alice-window-math-0.1.0-android.apk": {
+      "bytes": 56181186,
+      "sha256": "96ef00d21506b49592bc962b57e62c741d690db5cd19c39012eb5d6b03045913"
+    },
+    "alice-window-math-0.1.0-android.zip": {
+      "bytes": 28979571,
+      "sha256": "f484e29cd2f795380097433493100b106fa202a1555fec0c7e71f5e44b171ad8"
+    }
+  }
+}

@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 285 项通过。下面列出逐项结果。
+- 本次准备检查 302 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -65,6 +65,8 @@
 - 内部链接有效：docs/PLAN.md → evidence/M6/README.md
 - 内部链接有效：docs/PLAN.md → evidence/acceptance.csv
 - 内部链接有效：docs/PLAN.md → DELIVERY.md
+- 内部链接有效：docs/PLAN.md → RULES.md
+- 内部链接有效：docs/PLAN.md → evidence/math-preview/README.md
 - 内部链接有效：docs/evidence/M0/README.md → flutter-version.json
 - 内部链接有效：docs/evidence/M0/README.md → SHA256SUMS
 - 内部链接有效：docs/evidence/M0/README.md → android-390x844.png
@@ -150,6 +152,21 @@
 - 内部链接有效：docs/evidence/M6/README.md → preflight.json
 - 内部链接有效：docs/evidence/M6/README.md → ../acceptance.csv
 - 内部链接有效：docs/evidence/M6/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/math-preview/README.md → installation.json
+- 内部链接有效：docs/evidence/math-preview/README.md → ../../RULES.md
+- 内部链接有效：docs/evidence/math-preview/README.md → opening.png
+- 内部链接有效：docs/evidence/math-preview/README.md → missing.png
+- 内部链接有效：docs/evidence/math-preview/README.md → challenge.png
+- 内部链接有效：docs/evidence/math-preview/README.md → finished.png
+- 内部链接有效：docs/evidence/math-preview/README.md → analyze.log
+- 内部链接有效：docs/evidence/math-preview/README.md → full-tests.log
+- 内部链接有效：docs/evidence/math-preview/README.md → chapter-tests.log
+- 内部链接有效：docs/evidence/math-preview/README.md → ../../../apps/mobile/test/window_math_test.dart
+- 内部链接有效：docs/evidence/math-preview/README.md → android-flow.log
+- 内部链接有效：docs/evidence/math-preview/README.md → android-build.log
+- 内部链接有效：docs/evidence/math-preview/README.md → installation.json
+- 内部链接有效：docs/evidence/math-preview/README.md → ../../../apps/mobile/lib/main_window_math.dart
+- 内部链接有效：docs/evidence/math-preview/README.md → ../../../apps/mobile/lib/features/window_math.dart
 - 内部链接有效：references/SOURCES.md → ../docs/ENVIRONMENT.md
 - 任务分值2/3/5一致
 - 单积分且无游戏产币
