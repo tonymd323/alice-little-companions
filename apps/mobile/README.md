@@ -1,17 +1,18 @@
-# alice_companions
+# 小小伙伴 Flutter 工程
 
-A new Flutter project.
+目标 Android 8+、iOS/iPadOS 16+。Flutter 固定版本见 `.flutter-version`，Dart 包版本见 `pubspec.lock`。
 
-## Getting Started
+在此目录运行：
 
-This project is a starting point for a Flutter application.
+```sh
+flutter --version --machine
+flutter pub get --enforce-lockfile
+dart run build_runner build
+flutter analyze
+flutter test --reporter expanded
+flutter build apk --release
+```
 
-A few resources to get you started if this is your first Flutter project:
+`integration_test/preview_and_storage_test.dart` 在设备上探测平台安全存储和真实 SQLite，并对三宠六阶段的预览前后状态做比较。设备命令为 `flutter test integration_test -d <DEVICE_ID>`。
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Mac 签名、安装及安卓发布密钥配置见 [交付说明](../../docs/DELIVERY.md)。用户的文件操作流程见 [家庭备份与换机](../../docs/BACKUP_MIGRATION.md)。

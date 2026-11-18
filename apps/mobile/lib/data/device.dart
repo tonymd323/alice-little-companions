@@ -56,14 +56,22 @@ class DeviceStore {
       File(p.join(root.path, 'generations', id, 'device.json'));
   String newGeneration() => uuid.v4();
 
-  Future<String?> activeGeneration() async {
+  Future<String?> recordedGeneration() async {
     if (!await pointer.exists()) return null;
-    final record =
-        jsonDecode(await pointer.readAsString()) as Map<String, dynamic>;
-    final id = record['active'] as String;
-    if (!RegExp(r'^[a-f0-9-]{36}$').hasMatch(id) ||
-        !await databaseFile(id).exists()) {
-      throw const UserError('无法读取当前存档，请保留应用数据并联系家长。');
+    final record = jsonDecode(await pointer.readAsString()) as Json;
+    final id = record['active'] as String?;
+    if (id == null ||
+        !RegExp(r'^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$')
+            .hasMatch(id)) {
+      throw const UserError('无法读取当前数据代。');
+    }
+    return id;
+  }
+
+  Future<String?> activeGeneration() async {
+    final id = await recordedGeneration();
+    if (id != null && !await databaseFile(id).exists()) {
+      throw const UserError('当前存档文件无法打开。');
     }
     return id;
   }

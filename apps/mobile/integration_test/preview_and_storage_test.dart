@@ -7,6 +7,7 @@ import 'package:alice_companions/main.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -67,7 +68,7 @@ void main() {
           );
         }
       }
-      await tester.pageBack();
+      await tester.tap(find.byType(BackButton));
       await tester.pumpAndSettle();
       final after = (await controller.service!.overview())!;
       expect(

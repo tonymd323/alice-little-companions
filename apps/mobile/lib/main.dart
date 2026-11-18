@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 import 'application/controller.dart';
 import 'data/device.dart';
 import 'domain/rules.dart';
+import 'features/backup_pages.dart';
 import 'features/first_run.dart';
 import 'features/garden.dart';
 import 'features/home.dart';
@@ -73,9 +74,12 @@ class CompanionsApp extends StatelessWidget {
           ? const AppearancePreview()
           : ListenableBuilder(
               listenable: model,
-              builder: (context, _) => model.family == null
-                  ? FirstRunPage(controller: model)
-                  : FamilyHome(controller: model),
+              builder: (context, _) {
+                if (model.needsRepair) return RepairHome(controller: model);
+                return model.family == null
+                    ? FirstRunPage(controller: model)
+                    : FamilyHome(controller: model);
+              },
             ),
     );
   }

@@ -17,11 +17,15 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
     rules: rules,
     availableAssets: assets,
     current: () => service,
+    repairPin: () => repairGate,
   );
 
   final DeviceStore device;
   final Rules rules;
   FamilyService? service;
+  PinGate? repairGate;
+  PinGate? get parentGate => service?.pin ?? repairGate;
+  bool get needsRepair => repairGate != null;
   FamilyOverview? family;
   List<TaskEntry> tasks = [];
   Json? baseSpace;
@@ -34,12 +38,26 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
   String? _seenDay;
   int _refreshId = 0;
 
-  bool get parentUnlocked => service?.pin.allows(session) ?? false;
+  bool get parentUnlocked => parentGate?.allows(session) ?? false;
 
   Future<void> open() async {
-    final generation = await device.activeGeneration();
+    final generation = await device.recordedGeneration();
     if (generation != null) {
-      service = await FamilyService.load(device, generation, rules);
+      try {
+        await device.activeGeneration();
+        service = await FamilyService.load(device, generation, rules);
+        if (await service!.overview() == null) {
+          throw const UserError('当前小家存档不完整。');
+        }
+      } catch (_) {
+        await service?.close();
+        service = null;
+        repairGate = PinGate(
+          device.secure,
+          generation,
+          iterations: rules.pinIterations,
+        );
+      }
     }
     await refresh();
     _calendar = Timer.periodic(const Duration(minutes: 1), (_) {
@@ -69,19 +87,20 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
     final previous = service;
     lock();
     service = activated.service;
+    repairGate = null;
     await refresh();
     await previous?.close();
   }
 
   Future<void> unlock(String pin) async {
-    session = await service!.pin.unlock(pin);
+    session = await parentGate!.unlock(pin);
     _expiration?.cancel();
     _expiration = Timer(const Duration(minutes: 10), lock);
     notifyListeners();
   }
 
   void lock() {
-    service?.pin.lock();
+    parentGate?.lock();
     _expiration?.cancel();
     if (session != null) {
       session = null;

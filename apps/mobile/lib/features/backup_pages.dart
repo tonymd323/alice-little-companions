@@ -411,6 +411,16 @@ class _RestorePageState extends State<RestorePage> {
       );
       if (!ok) return;
     }
+    if (controller.needsRepair) {
+      if (!mounted) return;
+      final ok = await confirmChoice(
+        context,
+        '恢复小家存档？',
+        '原存档文件会保留。激活后从选定的恢复点继续。',
+        '确认恢复',
+      );
+      if (!ok) return;
+    }
     if (mounted) setState(() => recovery = PinGate.newRecoveryCode());
   }
 
@@ -420,7 +430,7 @@ class _RestorePageState extends State<RestorePage> {
       pin.text,
       recovery!,
       session: controller.session,
-      replace: controller.family != null,
+      replace: controller.family != null || controller.needsRepair,
       protection: protection,
     );
     await controller.acceptActivation(result);
@@ -449,7 +459,7 @@ class _RestorePageState extends State<RestorePage> {
           ? previewForm()
           : selectForm(),
     );
-    return controller.family == null
+    return controller.family == null && !controller.needsRepair
         ? Scaffold(
             appBar: AppBar(title: Text(title)),
             body: body,
@@ -593,4 +603,45 @@ class _RestorePageState extends State<RestorePage> {
       ],
     );
   }
+}
+
+class RepairHome extends StatelessWidget {
+  const RepairHome({super.key, required this.controller});
+  final FamilyController controller;
+
+  @override
+  Widget build(BuildContext context) => ParentFrame(
+    controller: controller,
+    title: '恢复小家',
+    child: PageBody(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const GardenCard(child: Text('当前存档无法读取。原文件已保留，请选择可验证的恢复点。')),
+          const SizedBox(height: 12),
+          OutlinedButton(
+            onPressed: () =>
+                openPage(context, RestorePage(controller: controller)),
+            child: const Text('从外部备份恢复'),
+          ),
+          FutureBuilder(
+            future: controller.transfer.checkpoints.files(),
+            builder: (context, result) => Column(
+              children: [
+                for (final file in result.data ?? <File>[])
+                  ListTile(
+                    leading: const Icon(Icons.history),
+                    title: Text(checkpointTime(file)),
+                    onTap: () => openPage(
+                      context,
+                      RestorePage(controller: controller, checkpoint: file),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

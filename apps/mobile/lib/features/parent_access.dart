@@ -138,7 +138,7 @@ class _ResetPinPageState extends State<ResetPinPage> {
               code: recovery!,
               label: '重设 PIN',
               onReady: () async {
-                await widget.controller.service!.pin.reset(
+                await widget.controller.parentGate!.reset(
                   old.text,
                   pin.text,
                   recovery!,

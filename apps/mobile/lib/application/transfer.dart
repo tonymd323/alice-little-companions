@@ -57,12 +57,14 @@ class TransferService {
     required this.availableAssets,
     required this.current,
     this.fault,
+    this.repairPin,
   });
 
   final DeviceStore device;
   final Rules rules;
   final Set<String> availableAssets;
   final FamilyService? Function() current;
+  final PinGate? Function()? repairPin;
   final void Function(String phase)? fault;
   final _noFamily = SerialWork();
 
@@ -71,7 +73,7 @@ class TransferService {
   CheckpointStore get checkpoints => CheckpointStore(device);
 
   Future<Json> status() async {
-    final generation = await device.activeGeneration();
+    final generation = await device.recordedGeneration();
     return generation == null ? {} : device.control(generation);
   }
 
@@ -286,7 +288,7 @@ class TransferService {
     String password,
     ParentSession? session,
   ) async {
-    current()?.checkParent(session);
+    _allowPreview(session);
     final folder = await device.temporaryDirectory();
     try {
       final database = File(p.join(folder.path, 'snapshot.sqlite'));
@@ -304,9 +306,7 @@ class TransferService {
     File selected,
     ParentSession? session,
   ) async {
-    final family = current();
-    if (family == null) throw const UserError('请先验证此设备的家长权限。');
-    family.checkParent(session);
+    _allowPreview(session, requireExisting: true);
     final folder = await device.temporaryDirectory();
     try {
       final database = File(p.join(folder.path, 'snapshot.sqlite'));
@@ -318,6 +318,19 @@ class TransferService {
     } catch (_) {
       await cleanDirectory(folder);
       rethrow;
+    }
+  }
+
+  void _allowPreview(ParentSession? session, {bool requireExisting = false}) {
+    final family = current();
+    if (family != null) {
+      family.checkParent(session);
+      return;
+    }
+    final guard = repairPin?.call();
+    if ((guard != null || requireExisting) &&
+        !(guard?.allows(session) ?? false)) {
+      throw const UserError('请先验证此设备的家长 PIN。');
     }
   }
 
@@ -416,8 +429,16 @@ class TransferService {
     final active = current();
     return (active?.serial ?? _noFamily).run(() async {
       active?.checkParent(session);
-      final previous = await device.activeGeneration();
-      if (previous != active?.pin.generation) {
+      final previous = await device.recordedGeneration();
+      final guard = repairPin?.call();
+      if (active == null && previous != null) {
+        if (guard == null ||
+            guard.generation != previous ||
+            !guard.allows(session) ||
+            !replace) {
+          throw const UserError('请验证家长 PIN 并确认恢复。');
+        }
+      } else if (previous != active?.pin.generation) {
         throw const UserError('当前存档已变化，请重新预览。');
       }
       if (active != null) {
@@ -469,7 +490,7 @@ class TransferService {
           'last_import_id': preview.backupId,
           'last_import_revision': verified.revision,
         });
-        active?.checkParent(session);
+        _allowPreview(session);
         fault?.call('before_pointer');
         await device.activate(next, previous: previous);
         switched = true;
