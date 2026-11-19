@@ -4,7 +4,7 @@
 
 **0.16.0+14 云端候选**已接入第一阶段奶油从站起、换向到收步坐回的三种日常走动。尾尖在身体停稳后跟上，转身时蝴蝶结随同一只耳朵换面。第一阶段桃桃的庭院短跳已留同机位基线，接下来制作起跳前蓄力、前爪接地、后爪收跟及耳尖回落。[奶油检查点](evidence/fox-walk/README.md) · [桃桃基线](evidence/rabbit-hop/README.md) · [动作技术方案](TECH_SPEC.md#小家动画与主线接入) · [画面验收](ACCEPTANCE.md#小家画面与剧情验收)
 
-下一批开发基线为奶油候选 `e014029`。原家庭安装入口提供 **0.14.1+12**。庭院木梯已有固定镜头回归，上中下踏板连续 125 帧静止，叶簇和树冠仍动。[团团检查点](evidence/cat-walk/README.md) · [奶油分层原画](../design/production/fox-walk/README.md)
+下一批开发基线为奶油候选 `e014029`。原家庭安装入口提供 **0.15.0+13**，原签名构建机已离线实测从 0.14.1 覆盖。庭院木梯已有固定镜头回归，上中下踏板连续 125 帧静止，叶簇和树冠仍动。[团团覆盖实测](evidence/cat-walk/family-upgrade.json) · [奶油分层原画](../design/production/fox-walk/README.md)
 
 家庭离线闭环、共享经验、扣分纠错、兑换、重启恢复和加密备份已有实现与测试。《风过暖廊》已有角色动机、两种补窗路径和回家后的窗光；旧数学书签与十九片叶子的章后挑战仍可进入。亲密度及伙伴回忆尚待设计。Android 有可覆盖安装的包，iPad 安装、双向真机迁移及实体设备性能仍待实测。[家庭实测](evidence/daily/README.md) · [现有主线](evidence/wind/README.md) · [设备验收记录](evidence/acceptance.csv)
 
@@ -22,7 +22,7 @@
 
 阶段 1 的原装原画已通过无特效独立试玩。阶段 2 在原家庭版接入点地、「过来」及自主走动。独立复看后修复了转面重影和透明边缘拦住点地的问题。固定镜头、衣橱两套组合、减少动态效果和假家庭重启均已复核。源码为 `9f9b51b`。[候选证据](evidence/cat-walk/README.md)
 
-阶段 2 的家庭覆盖包需要 0.14.1 使用的签名证书，SHA-256 以 `c046191e` 开头。云端用试装证书验证候选。原 GitHub 下载入口当前提供 0.14.1。可使用原签名的构建机接续同签发布验证。下一批的动作与画面从此检查点继续，真实两端迁移等接入设备后执行。[安卓与 iPad 安装](DELIVERY.md) · [原家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.14.1-android.apk?raw=true)
+阶段 2 的安卓家庭包由发布 0.14.1 的原签名机重建。Android 9 模拟器在飞行模式覆盖更新和冷启动后，测试家庭的 26 张业务表摘要相同。转向时第 42–44 帧仍可见短暂前腿交叉。实体设备覆盖和双向迁移待验。[家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.15.0-android.apk?raw=true) · [签名机交接](DELIVERY.md#新会话接续安卓签名)
 
 ### 奶油 0.16.0+14 检查点
 

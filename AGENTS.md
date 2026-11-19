@@ -25,7 +25,7 @@
 
 游戏内容制作由主会话担任制作人，按需调用[游戏制作组](docs/GAME_STUDIO.md)登记的岗位。简短修复可直接完成。并行写文件时使用独立工作树并明确归属，视听或叙事的作者将样片交由独立试玩者评审。仓库规则和家庭验收安排适用于所有岗位。
 
-首段可玩样片《风过暖廊》及第一阶段团团、奶油的步态已有可运行版本和实测记录。由 [开发计划](docs/PLAN.md#当前开发顺序) 的最新检查点继续，按 [小家画面验收](docs/ACCEPTANCE.md#小家画面与剧情验收) 记录功能、表演与设备结果。[现有主线](docs/evidence/wind/README.md) · [团团步态](docs/evidence/cat-walk/README.md) · [奶油步态](docs/evidence/fox-walk/README.md)
+《风过暖廊》和第一阶段团团步态已进入安卓家庭版 0.15.0+13，第一阶段奶油步态已有 0.16.0+14 云端候选。由[开发计划](docs/PLAN.md#当前开发顺序)接续，按[小家画面验收](docs/ACCEPTANCE.md#小家画面与剧情验收)分别记录功能、表演与设备结果。[现有主线](docs/evidence/wind/README.md) · [团团覆盖实测](docs/evidence/cat-walk/README.md) · [奶油步态](docs/evidence/fox-walk/README.md) · [签名交接](docs/DELIVERY.md#新会话接续安卓签名)
 
 ## 实现约束
 

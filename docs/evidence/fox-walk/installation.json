@@ -12,9 +12,12 @@
   "verified_signer_sha256": "66c137a4464a0905b6a3e5f207cb9e9d6df044aaf530c80db8e1d29d5c77ff56",
   "zipalign_16k": true,
   "family_baseline": {
-    "version": "0.14.1+12",
+    "version": "0.15.0+13",
+    "sha256": "734fb4bceba326777d5af503c9fa73a33a57d2c3bf7e21cb8a397bda2307c5d5",
     "verified_signer_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
-    "download_ref": "android-downloads/downloads/alice-0.14.1-android.apk"
+    "download_ref": "android-downloads/downloads/alice-0.15.0-android.apk",
+    "download_commit": "368e3c3083864822a245fbd444c617747aeaea81",
+    "independently_fetched_and_verified": true
   },
   "cloud_cover_install_probe": {
     "environment": "Android 9 x86_64 cloud software emulator",

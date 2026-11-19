@@ -24,7 +24,7 @@
 
 0.16.0+14 云端试装包使用测试证书，核对 247 个日常资源 ID、58 个暖廊文件及 16 KiB APK 对齐。Android 9 x86_64 在飞行模式从 0.15.0+13 更新到首个 0.16.0 候选，再以最终包原位更新。两次均保留包 UID 和首次安装时间。最终安装的 APK 与交付文件字节一致。点草地、呼唤并结束进程再打开，测试家庭仍是奶油第一阶段、0 分、0 经验。[包及签名](installation.json) · [构建](build.log) · [日常素材](packaged-art.json) · [暖廊素材](packaged-wind.json) · [庭院](android-courtyard.png) · [点地与呼唤](android-move.jpg) · [重开后](android-reopened.png)
 
-原家庭 APK 入口继续提供 0.14.1。家庭覆盖发布需要可用的原签名。iPad 安装需匹配的 Mac/Xcode、Apple Team 和 iPad，双向迁移还需安卓真机。[安装交接](../../DELIVERY.md)
+原家庭 APK 入口提供同签的 0.15.0，从 0.14.1 覆盖的记录已归档。0.16.0 家庭覆盖发布需要可用的原签名。iPad 安装需匹配的 Mac/Xcode、Apple Team 和 iPad，双向迁移还需安卓真机。[家庭覆盖实测](../cat-walk/family-upgrade.json) · [安装交接](../../DELIVERY.md)
 
 ## 复录
 
