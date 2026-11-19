@@ -1,0 +1,179 @@
+{
+  "android": "9 / API 28",
+  "serial": "emulator-5558",
+  "fixture": "0.13.0+10 新建合成家庭",
+  "files": [
+    {
+      "file": "old-home.png",
+      "bytes": 307694,
+      "sha256": "9e865c8687e57a921a0ba7ae9919d3236cc9f4940079301c461b2cc9e6bf4b42",
+      "repository_file": "old-home.png"
+    },
+    {
+      "file": "new-home-old-family.png",
+      "bytes": 307432,
+      "sha256": "8b6311ec224aca0e75a418c60d3dcadd9db9b961454315fa8f1785bab0f24d03",
+      "repository_file": "new-home-old-family.png"
+    },
+    {
+      "file": "installed-build.json",
+      "bytes": 230,
+      "sha256": "7dba59a164e23c8bb27cc2c40461bf84d3b518cd1826288f7541c14c5c4a5993",
+      "repository_file": "installed-build.json"
+    },
+    {
+      "file": "01-entry-introduction.mp4",
+      "bytes": 426523,
+      "sha256": "3fb80fdf8f98a914673053b5448730816cbfe31d5bad2cac93fd9722db76ad6f",
+      "width": 384,
+      "height": 832,
+      "duration_s": 61.381,
+      "stored_frames": 66,
+      "repository_file": "opening.mp4"
+    },
+    {
+      "file": "02b-basket.png",
+      "bytes": 499669,
+      "sha256": "5110aaf9f58444f679b955e3759c0a7af0cb422d21c4d48c461ff59eba489907",
+      "repository_file": "push-basket.png"
+    },
+    {
+      "file": "03-start.png",
+      "bytes": 498036,
+      "sha256": "6af121c1d4a6b3c1bd1b520f0689f8edcbde7ec5f57548b77d9ba24ddb703180",
+      "repository_file": "seven-panes.png"
+    },
+    {
+      "file": "02-far-first-before-restart.mp4",
+      "bytes": 269641,
+      "sha256": "8f15ef826ce5867d712610fc02ee2d0eb1a39a39c4262e3e928fd90af80b0db7",
+      "width": 384,
+      "height": 832,
+      "duration_s": 35.271,
+      "stored_frames": 24,
+      "repository_file": "before-restart.mp4"
+    },
+    {
+      "file": "04-no-caption-start.png",
+      "bytes": 488861,
+      "sha256": "4a18d937c50c0c0fe624ada1d9b51d74fbf91c16e8f2b9ed00218271b0e82270",
+      "repository_file": "without-dialogue.png"
+    },
+    {
+      "file": "05-two-far-leaves.png",
+      "bytes": 490510,
+      "sha256": "ae4b58bf9023abc2d9310256ae1097a7ebc92a9d762ac832df562dd740bc5ea6",
+      "repository_file": "two-leaves.png"
+    },
+    {
+      "file": "07-recovered-leaves.png",
+      "bytes": 497868,
+      "sha256": "bb77e5c2f499c51f0aebdb2dd69604e5c93206ef796869d454f4aa7f562d1e68",
+      "repository_file": "reopened.png"
+    },
+    {
+      "file": "03-far-lit-gap-and-reunion.mp4",
+      "bytes": 428898,
+      "sha256": "acc4b56f16541fc75f3d18f5844a0aed5b67194ce74b4df4fdc2d86913dcf1bd",
+      "width": 384,
+      "height": 832,
+      "duration_s": 71.487,
+      "stored_frames": 54,
+      "repository_file": "far-first-reunion.mp4"
+    },
+    {
+      "file": "08-far-lit-fox-waits.png",
+      "bytes": 492987,
+      "sha256": "b21023356a0c538eb2c060e10d9acede597118c6c12c95f668364baa20ab700b",
+      "repository_file": "far-first.png"
+    },
+    {
+      "file": "10-reunion-no-caption.png",
+      "bytes": 500248,
+      "sha256": "d335e9dbfce309afbbe70454c28cddc944a7ca5e4b7a890fb896d8add99e82fe",
+      "repository_file": "reunion.png"
+    },
+    {
+      "file": "far-reunion-contact.jpg",
+      "bytes": 233171,
+      "sha256": "cc61ac4dd9e38a005a4ddce03e821fabe2e0db4abd77d2ad5b81283afcd46b57",
+      "repository_file": "entering-the-room.jpg"
+    },
+    {
+      "file": "11-home-repaired.png",
+      "bytes": 306221,
+      "sha256": "f20c12f9deb94740abe360716328c6bcc89a43e0a3e3a44e3af36d7717098d86",
+      "repository_file": "repaired-home.png"
+    },
+    {
+      "file": "12-cold-home-repaired.png",
+      "bytes": 306302,
+      "sha256": "86ddd1b56af5993d119d2b62b65982d7d1469bfe1bc037d944f4989a22be819f",
+      "repository_file": "cold-repaired-home.png"
+    },
+    {
+      "file": "04-full-middle-first-replay.mp4",
+      "bytes": 746040,
+      "sha256": "c208627d29dc4acf27a43d99c544639f8227f759884c5f59b5795d6137fd9cda",
+      "width": 384,
+      "height": 832,
+      "duration_s": 148.944,
+      "stored_frames": 114,
+      "repository_file": "middle-first-replay.mp4"
+    },
+    {
+      "file": "13-replay-start.png",
+      "bytes": 498002,
+      "sha256": "a98a76524de6ee93166957d46157b5521b7486f793792eba80d9bd7dbe27b740",
+      "repository_file": "replay-start.png"
+    },
+    {
+      "file": "14-middle-lit-fox-at-next-gap.png",
+      "bytes": 500399,
+      "sha256": "97ea1d19382c885e5fddf66e182aa24e98727e1512f117c036155ba09098e5c8",
+      "repository_file": "middle-first.png"
+    },
+    {
+      "file": "16-reunion-with-captions.png",
+      "bytes": 508673,
+      "sha256": "ba24de01516f3d91f318b15909d0c0280597e6f0e252ffee2fc7d9163b846a3c",
+      "repository_file": "second-reunion.png"
+    },
+    {
+      "file": "17-cold-home-after-replay.png",
+      "bytes": 306245,
+      "sha256": "cf4e1c56fc51e2177f36b06df002c77c8381eec2ffef6e1c0e70da039e2840d1",
+      "repository_file": "cold-home-after-replay.png"
+    },
+    {
+      "file": "实装分支同机位对照.jpg",
+      "bytes": 216565,
+      "sha256": "476de769c0055eba13f37ebbcda4b5e8d53a356908a0c42a58bb14a175a61e9d",
+      "repository_file": "branches.jpg"
+    },
+    {
+      "file": "实装暖廊修复前后.jpg",
+      "bytes": 270520,
+      "sha256": "57e310612971ecd1f0083ec79f1e5ff6310deb3a366b3552e137f33db9f98ecc",
+      "repository_file": "home-comparison.jpg"
+    },
+    {
+      "file": "middle-move-contact.jpg",
+      "bytes": 116255,
+      "sha256": "9154bf4903996e049587ec765d5b2cd8e5de6947cd2ec6065651fbfdfd16fead",
+      "repository_file": "middle-steps.jpg"
+    },
+    {
+      "file": "middle-reunion-contact.jpg",
+      "bytes": 256531,
+      "sha256": "2b94a6346d93d7f6bdbff094a660ce38c74ea70d9aa336c9b882364c9268a64f",
+      "repository_file": "middle-ending.jpg"
+    },
+    {
+      "file": "device-results.md",
+      "bytes": 4158,
+      "sha256": "9ea28e5852632b0110f7234764a5376d33286efda9d668f73160e86d40ccb458",
+      "repository_file": "playtest.md"
+    }
+  ]
+}

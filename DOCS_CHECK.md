@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 126}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 717 项通过。下面列出逐项结果。
+- 本次准备检查 719 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -299,6 +299,8 @@
 - 内部链接有效：docs/evidence/wind/README.md → android/home-comparison.jpg
 - 内部链接有效：docs/evidence/wind/README.md → android/cold-home-after-replay.png
 - 内部链接有效：docs/evidence/wind/README.md → android/media.json
+- 内部链接有效：docs/evidence/wind/README.md → android/playtest.md
+- 内部链接有效：docs/evidence/wind/README.md → android/original-capture.json
 - 内部链接有效：docs/evidence/wind/README.md → ../../BACKUP_MIGRATION.md
 - 内部链接有效：docs/evidence/wind/README.md → ../../DELIVERY.md
 - 内部链接有效：docs/evidence/wind/README.md → installation.json
