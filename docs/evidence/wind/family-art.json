@@ -1,0 +1,25 @@
+{
+  "apk_sha256": "493b3939daddef425f941a545d01569f435589640651eb419f3d3cffcc14a623",
+  "verified_asset_ids": 193,
+  "by_kind": {
+    "scene_background": 5,
+    "scene_foreground": 5,
+    "decoration": 4,
+    "accessory": 4,
+    "furniture": 2,
+    "garment": 2,
+    "bundle": 2,
+    "included_item": 18,
+    "zone": 2,
+    "shop": 2,
+    "free_base_item": 2,
+    "pet": 19,
+    "room_layer": 8,
+    "furnished_scene": 4,
+    "wearable_texture": 4,
+    "costumed_pet": 38,
+    "pet_action": 54,
+    "fitted_accessory": 18
+  },
+  "alpha_verified_for_all_new_paintings": true
+}

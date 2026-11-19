@@ -14,7 +14,7 @@ Alice 在飞行模式下打开家园，免费选择银杏狐、月牙耳兔或�
 | 积分、兑换和升级如何计算 | [业务规则](docs/RULES.md)、[任务配置](config/rules.json)、[兑换目录](config/catalog.json) |
 | 实现应做到什么样子 | [Demo 与正式版差异](docs/DEMO_TO_APP.md)、[新版交互 Demo](https://alice-little-companions-demo.tonymei323.chatgpt.site/?pet=rabbit&stage=4)、[美术规范](docs/DESIGN_SPEC.md)、[素材清单](design/asset_manifest.json) |
 | 怎样离线工作并完整换机 | [技术规格](docs/TECH_SPEC.md)、[备份协议](docs/BACKUP_FORMAT.md)、[数据交接](docs/DATA_HANDOFF.md) |
-| 接下来谁来负责美术、表演和剧情 | [游戏制作组、试玩反馈与第一段样片提案](docs/GAME_STUDIO.md) |
+| 接下来谁来负责美术、表演和剧情 | [游戏制作组、试玩反馈与首段样片](docs/GAME_STUDIO.md) |
 | 在哪里开发 | [开发环境及开工命令](docs/ENVIRONMENT.md)、[云端工具盘点](docs/evidence/cloud-preflight.json) |
 | 做到什么程度可以交给家长 | [家长验收单](docs/OWNER_WALKTHROUGH.md)、[逐项验收](docs/ACCEPTANCE.md)、[验收执行表](docs/evidence/acceptance.csv)、[项目约定](AGENTS.md) |
 | 本包已检查什么 | [准备工作校验结果](DOCS_CHECK.md)、[交付文件摘要](MANIFEST.json) |
@@ -22,7 +22,7 @@ Alice 在飞行模式下打开家园，免费选择银杏狐、月牙耳兔或�
 ## 已确认的产品方向
 
 - 家长决定任务内容。只有家长确认后，真实成果才进入记录并获得积分。只使用一种积分，只能兑换 App 内的物品、布置和空间。
-- 日常陪伴与升级有明确的视觉区别。三只伙伴各有六阶段，每次升级都有可辨认的外观变化。长大的纪念来自现实成果，开店、点击宠物和在线时长不产分。
+- 每件经家长确认的有效成果增加 1 经验。三只伙伴共用累积经验，在 3、10、20、35、55 经验时依次进化，各有六种外观。剧情、触摸和试穿都可以反复体验，积分和经验来自家庭成果。
 - C 版银杏家园采用手绘笔触、明亮色彩和可交互的独立图层。免费家园里的桥、树屋是背景；兑换的功能区和店铺可进入、命名，内有专属手绘陈设。
 - 已安装的 App 能离线完成首次建家和日常操作。外部加密备份可由家长保管，并可在 iPad 和安卓之间双向完整迁移。
 
@@ -38,9 +38,9 @@ Alice 在飞行模式下打开家园，免费选择银杏狐、月牙耳兔或�
 
 ## 交付状态
 
-Android 家庭日用版 0.13.0+10 可以直接覆盖已有家庭版。呼唤、摸摸或长按伙伴，点专属技能查看它跃起；到「成长」查看经验、回看进化和阅读《银杏家园手记》。从「主线 · 暖廊的彩窗」出发赴约，完成数学挑战后，修好的窗花会留在小家里。0.12.0 保留供单独验收。
+安卓 0.14.0+11 将《风过暖廊》接入原来的小家。从「主线 · 风过暖廊」进门，看桃桃听风压住围巾，把叶篮推到手边。点篮子取一片，再点要补的空窗格。先修中窗或先修远窗，奶油会看到不同的回家路。回暖廊后，彩窗和木地板会留下修好的光影。0.13 的家庭、兑换、经验和数学书签可继续使用。
 
-[下载 0.13.0 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.13.0-android.apk?raw=true) · [下载 0.12.0 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.12.0-android.apk?raw=true) · [日用版记录](docs/evidence/daily/README.md) · [世界观与伙伴](docs/WORLD_AND_COMPANIONS.md) · [备份与换机](docs/BACKUP_MIGRATION.md)
+[下载 0.14.0 安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.14.0-android.apk?raw=true) · [样片、录屏与检查](docs/evidence/wind/README.md) · [历次 APK](https://github.com/tonymd323/alice-little-companions/tree/android-downloads/downloads) · [备份与换机](docs/BACKUP_MIGRATION.md)
 
 真机 iPad 安装、设备性能与双向实机迁移需要匹配的 Mac、Apple Team 及家庭设备。开发顺序与逐项验收条件见[开发计划](docs/PLAN.md)。
 

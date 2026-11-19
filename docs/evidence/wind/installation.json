@@ -1,0 +1,23 @@
+{
+  "filename": "alice-0.14.0-android.apk",
+  "bytes": 80517060,
+  "sha256": "493b3939daddef425f941a545d01569f435589640651eb419f3d3cffcc14a623",
+  "verified_signer_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+  "same_signer_as_0_13": true,
+  "zipalign_16k": true,
+  "android": [
+    "package: name='local.family.alice_companions' versionCode='11' versionName='0.14.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+    "sdkVersion:'26'",
+    "targetSdkVersion:'36'",
+    "application-label:'小小伙伴'",
+    "native-code: 'arm64-v8a' 'armeabi-v7a' 'x86_64'"
+  ],
+  "declares_internet": false,
+  "signature_versions": [
+    "Verified using v1 scheme (JAR signing): false",
+    "Verified using v2 scheme (APK Signature Scheme v2): true",
+    "Verified using v3 scheme (APK Signature Scheme v3): false",
+    "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+    "Verified using v4 scheme (APK Signature Scheme v4): false"
+  ]
+}

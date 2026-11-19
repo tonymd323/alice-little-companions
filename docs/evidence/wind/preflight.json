@@ -1,0 +1,34 @@
+{
+  "host": "Linux",
+  "architecture": "x86_64",
+  "scope": "tools on PATH; devices, signing and building untested",
+  "tools": {
+    "git": {
+      "status": "available",
+      "version_output": "git version 2.52.0"
+    },
+    "flutter": {
+      "status": "available",
+      "version_output": "Flutter 3.50.0 • channel [user-branch] • https://github.com/flutter/flutter.git"
+    },
+    "dart": {
+      "status": "available",
+      "version_output": "Dart SDK version: 3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on \"linux_x64\""
+    },
+    "java": {
+      "status": "available",
+      "version_output": "openjdk version \"21.0.13\" 2026-10-20 LTS"
+    },
+    "adb": {
+      "status": "available",
+      "version_output": "Android Debug Bridge version 1.0.41"
+    },
+    "sdkmanager": {
+      "status": "available",
+      "version_output": "1.1.16919734 (Android CLI)"
+    },
+    "xcodebuild": {
+      "status": "not_on_path"
+    }
+  }
+}

@@ -3509,5 +3509,14 @@
     ],
     "sha256": "346b8dfea82b38940a8a670613bab2c31416e665a43d36bdeb2fa20b2840578f",
     "device_qa": "pending"
+  },
+  "wind_veranda": {
+    "first_family_version": "0.14.0+11",
+    "runtime_directory": "apps/mobile/assets/wind",
+    "room_placements": "apps/mobile/assets/wind/room/room.json",
+    "actor_poses": "apps/mobile/assets/wind/actors/poses.json",
+    "art_and_audio_sources": "design/production/wind",
+    "apk_verifier": "tools/check_wind_release.py",
+    "evidence": "docs/evidence/wind/README.md"
   }
 }

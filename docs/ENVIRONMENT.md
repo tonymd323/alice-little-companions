@@ -91,3 +91,7 @@ M0 的环境记录放在 `docs/evidence/M0/`，包含工具版本、代码提交
 ## M0 云端实测
 
 原生工程位于 `apps/mobile`。使用 Flutter 3.50.0 的 `ab2912035e160d9cad6306df307576da6128ebdb` 提交，内含 Dart 3.14.0。Android 工具为 JDK 21、Gradle 9.5.0、AGP 9.3.1、Kotlin 2.4.20、compile/target SDK 36、min SDK 26、NDK 28.2.13676358。iOS 工程部署目标 16.0。云电脑使用位于工作区 scratch 的 SDK，需加载该机的环境脚本后执行 Flutter 命令。Android 构建用 `flutter build apk --release`，让 Flutter 按 release 模式重新注册插件。[M0 实测记录](evidence/M0/README.md)
+
+## 风过暖廊构建环境
+
+0.14 家庭版沿用 Flutter 3.50.0/Dart 3.14.0 和 Android 36。云电脑使用 Android 11 x86_64 软件模拟。真机安装、持续帧率与 iPad 签名留给对应设备验证。已锁定的依赖可以用 `flutter pub get --offline --enforce-lockfile` 检查。在同一份检出内先跑完 `flutter test --no-pub`，再执行 `flutter build apk --release`。Flutter 3.50 在这次 release 命令中按发布配置重新生成 Android 插件注册表，移除开发专用的 integration_test。[本轮工具检查](evidence/wind/preflight.json) · [构建与试玩](evidence/wind/README.md)
