@@ -154,13 +154,37 @@ def hash_inputs_and_evidence(folder):
     )
 
 
+def capture_routes(folder, font, serif):
+    # Each widget test gets its own fresh engine, isolate and fake test clock.
+    folder.mkdir(parents=True, exist_ok=True)
+    for route in ("far-first", "middle-first"):
+        log = folder / f"{route}-test.log"
+        print(f"Recording {route} ({log})", flush=True)
+        with log.open("w", encoding="utf-8") as output:
+            subprocess.run(
+                ["flutter", "test", "--no-pub", "--reporter", "expanded",
+                 "--plain-name", f"record production chapter {route}",
+                 f"--dart-define=ALICE_WIND_OUTPUT={folder}",
+                 f"--dart-define=ALICE_CJK_FONT={font.resolve()}",
+                 f"--dart-define=ALICE_CJK_SERIF={serif.resolve()}",
+                 "tool/capture_wind_test.dart"],
+                cwd=ROOT / "apps/mobile", stdout=output, stderr=subprocess.STDOUT, check=True,
+            )
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("folder", type=Path)
     parser.add_argument("--font", type=Path,
                         default=Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"))
+    parser.add_argument("--serif", type=Path,
+                        default=Path("/usr/share/fonts/opentype/noto/NotoSerifCJK-Regular.ttc"))
+    parser.add_argument("--capture", action="store_true",
+                        help="record both routes in separate Flutter test processes before encoding")
     args = parser.parse_args()
-    folder = args.folder
+    folder = args.folder.resolve()
+    if args.capture:
+        capture_routes(folder, args.font, args.serif)
     routes = {name: json.loads((folder / f"{name}.json").read_text(encoding="utf-8"))
               for name in ("far-first", "middle-first")}
     far = routes["far-first"]

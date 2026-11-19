@@ -1,8 +1,6 @@
-// From apps/mobile:
-// flutter test tool/capture_wind_test.dart --dart-define=ALICE_WIND_OUTPUT=/abs/path
-//   --dart-define=ALICE_CJK_FONT=/abs/path/NotoSansCJK-Regular.ttc
-//   --dart-define=ALICE_CJK_SERIF=/abs/path/NotoSerifCJK-Regular.ttc
-// Then, at the repository root: python3 tools/capture_wind_video.py /abs/path
+// At the repository root, with Flutter on PATH:
+// python3 tools/capture_wind_video.py --capture /absolute/output/directory
+// Each route uses its own flutter test process and an isolated SQLite family.
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
