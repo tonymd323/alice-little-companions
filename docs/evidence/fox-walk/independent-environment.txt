@@ -1,0 +1,7 @@
+Candidate raw frames 234–358, 25 fps, fixed camera. RGB pixel differences compared with frame 234.
+lower tread (98, 434, 128, 443): 0/125 crops changed
+middle tread (139, 393, 182, 401): 0/125 crops changed
+upper tread (188, 360, 229, 367): 0/125 crops changed
+railing (265, 295, 332, 317): 0/125 crops changed
+canopy (470, 50, 557, 115): 124/125 crops changed
+hanging leaves above the ladder (137, 248, 154, 261): 124/125 crops changed

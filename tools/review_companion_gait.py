@@ -16,6 +16,7 @@ LEGS = ("near-hind", "near-front", "far-hind", "far-front")
 WALKS = ("点草地", "过来", "自主走动")
 CROP = (66, 300, 689, 615)
 WOOD_FRAMES = range(234, 359)
+SOLE_SCALE = 320 * .343 * 2 / 440
 
 
 def load_rows(folder, name):
@@ -38,7 +39,7 @@ def walk_intervals(rows):
     return intervals
 
 
-def texture_at_contact(folder, number, position, x, y, companion):
+def texture_at_contact(folder, number, position, x, y):
     x, y = round(x), round(y)
     with Image.open(frame(folder / "paws", number)) as source:
         matte = np.asarray(source, dtype=np.int16)
@@ -49,17 +50,32 @@ def texture_at_contact(folder, number, position, x, y, companion):
     toes = matte[y0 - top:y1 - top, x0 - left:x1 - left]
     if toes.shape != (8, 9, 4):
         return None
-    # Use actual paint from the most opaque area. Cream highlights distinguish
-    # Tuantuan's paw from blue fur. The fox also has dark painted toes.
-    mask = toes[..., 3] > 230
-    if companion == "cat":
-        mask &= (toes[..., 0] > 104) & (toes[..., 0] > toes[..., 2] - 40)
+    # Cream highlights distinguish Tuantuan's paw from the blue fur.
+    mask = (toes[..., 3] > 230) & (toes[..., 0] > 104) & (toes[..., 0] > toes[..., 2] - 40)
     if mask.sum() < 29:
         return None
     return (rect, mask)
 
 
-def find_sole(scene, rect, mask, reference):
+def painted_sole(image, x, y, facing):
+    """Sample the authored sole at the same pixel centers as the courtyard."""
+    cx, cy = round(x), round(y)
+    rect = (cx - 13, cy - 12, cx + 14, cy + 3)
+    x0, y0, x1, y1 = rect
+    # The pixel centers of the 128 × 100 sheet are numbered from zero.
+    # The painted ground contact is at (64, 84) in image coordinates.
+    u = 63.5 + (np.arange(x0, x1) + .5 - x) * facing / SOLE_SCALE
+    v = 83.5 + (np.arange(y0, y1) + .5 - y) / SOLE_SCALE
+    col, row = np.floor(u).astype(int), np.floor(v).astype(int)
+    dx, dy = (u - col)[None, :, None], (v - row)[:, None, None]
+    top = (1 - dx) * image[row[:, None], col] + dx * image[row[:, None], col + 1]
+    bottom = (1 - dx) * image[row[:, None] + 1, col] + dx * image[row[:, None] + 1, col + 1]
+    rgba = (1 - dy) * top + dy * bottom
+    mask = rgba[..., 3] >= 253
+    return (rect, mask, rgba[..., :3][mask]) if mask.sum() >= 40 else None
+
+
+def find_sole(scene, rect, mask, reference, max_error=8):
     x0, y0, x1, y1 = rect
     fits = []
     for dy in range(-4, 5):
@@ -71,10 +87,16 @@ def find_sole(scene, rect, mask, reference):
     if not fits:
         return None
     error, _, dx, dy = min(fits)
-    return (dx, dy) if error < 8 else None
+    return (dx, dy) if error < max_error else None
 
 
 def contacts(folder, positions, companion):
+    layers = {}
+    if companion == "fox":
+        folder_art = Path(__file__).resolve().parents[1] / "apps/mobile/assets/fox_walk"
+        for leg in LEGS:
+            with Image.open(folder_art / f"paw-{leg}.webp") as source:
+                layers[leg] = np.asarray(source.convert("RGBA"), dtype=np.float32)
     stations = []
     ongoing = {}
     images = {}
@@ -101,8 +123,25 @@ def contacts(folder, positions, companion):
             with Image.open(frame(folder, number)) as source:
                 scene = np.asarray(source.convert("RGB"), dtype=np.int16)
             current_number = number
+        if leg in layers:
+            # A dark rear sole can be covered by the other paw. Identify the
+            # matching painted layer before counting any comparison, including
+            # after the turn changes the direction of the visible paint.
+            sample = painted_sole(layers[leg], x, y, int(position["facing"]))
+            offset = None if sample is None else find_sole(scene, *sample, max_error=6)
+            if offset is not None:
+                drawn = (x + offset[0], y + offset[1])
+                if "reference_frame" not in run:
+                    run["reference_frame"] = number
+                    run["visible_origin"] = drawn
+                else:
+                    run["matched"] += 1
+                    run["visible_max_px"] = max(
+                        run["visible_max_px"], math.dist(run["visible_origin"], drawn)
+                    )
+            continue
         if leg not in images:
-            texture = texture_at_contact(folder, number, position, x, y, companion)
+            texture = texture_at_contact(folder, number, position, x, y)
             if texture is not None:
                 rect, mask = texture
                 x0, y0, x1, y1 = rect
@@ -136,6 +175,8 @@ def main():
     for action, (start, end) in zip(WALKS, turns):
         runs = [run for run in stations if start <= run["first"] <= end]
         matched = [run for run in runs if run["matched"] > 0]
+        if not matched:
+            raise ValueError(f"No visible planted-sole matches for {action}")
         per_walk[action] = {
             "frames": [start, end],
             "contacts": len(runs),

@@ -1,0 +1,19 @@
+lib/illustration/companion_walk.dart: OK
+lib/illustration/companion_walk_art.dart: OK
+lib/illustration/living_scene.dart: OK
+lib/illustration/puppet.dart: OK
+lib/illustration/tailoring.dart: OK
+pubspec.lock: OK
+pubspec.yaml: OK
+test/support/families.dart: OK
+Resolving dependencies...
+Downloading packages...
+Got dependencies!
+.dart_tool/hooks_runner/shared/sqlite3/build/download-0a658527/libsqlite3.so: OK
+00:00 +0: loading test/fox_home_playtest.dart
+00:00 +0: the first-stage fox walks from the real home three ways and retains a seeded family on reopen
+fox origins in 390×844 logical viewport: home=186.26, tap=41.86, call=240.41, auto=132.11
+seeded state unchanged across all moves and reopen: score 2, experience 2, stage 1, asset count 1, ledger count 3; revision, rows, and wardrobe match
+00:17 +1: near-vertical grass tap in the real family courtyard reaches both coordinates
+depth walk in normal home: displacement (-28.88, -75.81), both coordinates matched, settled into seated posture
+00:23 +2: All tests passed!

@@ -34,9 +34,11 @@ void main() {
     const font = String.fromEnvironment('ALICE_CJK_FONT');
     const compare = bool.fromEnvironment('COURTYARD_COMPARE_GAIT');
     const gait = bool.fromEnvironment('COURTYARD_RECORD_CONTACTS');
-    const companion = String.fromEnvironment('COURTYARD_COMPANION') == 'fox'
-        ? Companion.fox
-        : Companion.cat;
+    const companionName = String.fromEnvironment(
+      'COURTYARD_COMPANION',
+      defaultValue: 'cat',
+    );
+    final companion = Companion.values.byName(companionName);
     final name = companion.name;
     const wardrobe = String.fromEnvironment('COURTYARD_OUTFIT');
     final outfit = switch (wardrobe) {

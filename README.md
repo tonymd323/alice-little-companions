@@ -2,7 +2,7 @@
 
 2026-11-18　｜　交付基线 2.0　｜　iOS、iPadOS、Android
 
-把本目录作为家庭 App 独立项目的根目录打开，在 Codex 中使用 [启动指令](START_CODEX.md)。第一阶段团团的三种普通走动已接入 0.15.0 候选。固定镜头和独立试玩的记录已归档，原家庭 APK 入口提供 0.14.1。家长负责最终体验验收。[开发计划](docs/PLAN.md) · [团团步态证据](docs/evidence/cat-walk/README.md) · [家庭安装](docs/DELIVERY.md)
+把本目录作为家庭 App 独立项目的根目录打开，在 Codex 中使用 [启动指令](START_CODEX.md)。第一阶段团团和奶油的三种日常走动已接入 0.16.0 候选。固定镜头和独立试玩的记录已归档，原家庭 APK 入口提供 0.14.1。家长负责最终体验验收。[开发计划](docs/PLAN.md) · [奶油步态](docs/evidence/fox-walk/README.md) · [团团步态](docs/evidence/cat-walk/README.md) · [家庭安装](docs/DELIVERY.md)
 
 ## 家庭离线闭环
 
@@ -40,7 +40,7 @@ Alice 在飞行模式下打开家园，免费选择银杏狐、月牙耳兔或�
 
 安卓 0.14.0+11 将《风过暖廊》接入原来的小家。从「主线 · 风过暖廊」进门，看桃桃听风压住围巾，把叶篮推到手边。点篮子取一片，再点要补的空窗格。先修中窗或先修远窗，奶油会看到不同的回家路。回暖廊后，彩窗和木地板会留下修好的光影。0.13 的家庭、兑换、经验和数学书签可继续使用。
 
-0.14.1 修复了小家庭院左侧木梯随风弯曲的问题。团团第一阶段的三种日常走动已录下作对照，普通行走原画待补。[下载 0.14.1 安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.14.1-android.apk?raw=true) · [木梯、猫爪和补画清单](docs/evidence/courtyard-motion/README.md)
+0.14.1 修复了小家庭院左侧木梯随风弯曲的问题，留下早期步态对照。[下载 0.14.1 安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.14.1-android.apk?raw=true) · [木梯和步态基线](docs/evidence/courtyard-motion/README.md)
 
 [0.14.0 安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.14.0-android.apk?raw=true) · [风过暖廊样片与检查](docs/evidence/wind/README.md) · [历次 APK](https://github.com/tonymd323/alice-little-companions/tree/android-downloads/downloads) · [备份与换机](docs/BACKUP_MIGRATION.md)
 

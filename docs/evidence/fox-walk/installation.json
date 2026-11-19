@@ -1,0 +1,40 @@
+{
+  "runtime_source": "e014029e0d19b34c3e68d666a1d7ed022ed1d67e",
+  "filename": "alice-0.16.0-fox-preview.apk",
+  "mode": "release build with cloud test signer",
+  "application_id": "local.family.alice_companions",
+  "version_name": "0.16.0",
+  "version_code": 14,
+  "min_sdk": 26,
+  "target_sdk": 36,
+  "bytes": 81890160,
+  "sha256": "dc878a7f17c00ab72a46796465f32384c8ba3d215f195463d92d82b1d80806be",
+  "verified_signer_sha256": "66c137a4464a0905b6a3e5f207cb9e9d6df044aaf530c80db8e1d29d5c77ff56",
+  "zipalign_16k": true,
+  "family_baseline": {
+    "version": "0.14.1+12",
+    "verified_signer_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+    "download_ref": "android-downloads/downloads/alice-0.14.1-android.apk"
+  },
+  "cloud_cover_install_probe": {
+    "environment": "Android 9 x86_64 cloud software emulator",
+    "airplane_mode": true,
+    "from_version": "0.15.0+13",
+    "first_update_source": "cb78609109a97e83ad5f465e1f0c3469fc226817",
+    "first_update_package_manager_result": "Success",
+    "installed_version": "0.16.0+14",
+    "final_same_version_package_manager_result": "Success",
+    "installed_base_apk_sha256": "dc878a7f17c00ab72a46796465f32384c8ba3d215f195463d92d82b1d80806be",
+    "package_user_id_unchanged": true,
+    "package_first_install_time_unchanged": true,
+    "saved_companion_before_final_install_and_after_reopen": "fox",
+    "test_family_stage": 1,
+    "test_family_balance": 0,
+    "test_family_experience": 0,
+    "ground_tap_and_call_screens": "android-move.jpg",
+    "courtyard_screen": "android-courtyard.png",
+    "force_stop_and_reopen_screen": "android-reopened.png"
+  },
+  "family_release_status": "BLOCKED_ORIGINAL_SIGNER",
+  "ipad_and_physical_roundtrip_status": "BLOCKED_HARDWARE"
+}

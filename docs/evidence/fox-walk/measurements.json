@@ -1,0 +1,1964 @@
+{
+  "scene_width_px": 960,
+  "frames_per_second": 25,
+  "before_intervals": [
+    [
+      30,
+      68
+    ],
+    [
+      145,
+      188
+    ],
+    [
+      497,
+      527
+    ]
+  ],
+  "after_intervals": {
+    "点草地": {
+      "frames": [
+        30,
+        127
+      ],
+      "contacts": 38,
+      "visually_measured_intervals": 32,
+      "visible_frame_comparisons": 158,
+      "visible_max_px": 0.0,
+      "runtime_max_px": 0.0
+    },
+    "过来": {
+      "frames": [
+        145,
+        256
+      ],
+      "contacts": 41,
+      "visually_measured_intervals": 37,
+      "visible_frame_comparisons": 193,
+      "visible_max_px": 0.0,
+      "runtime_max_px": 0.0
+    },
+    "自主走动": {
+      "frames": [
+        497,
+        581
+      ],
+      "contacts": 32,
+      "visually_measured_intervals": 26,
+      "visible_frame_comparisons": 119,
+      "visible_max_px": 0.0,
+      "runtime_max_px": 0.0
+    }
+  },
+  "support_intervals": [
+    {
+      "leg": "near-front",
+      "first": 30,
+      "last": 31,
+      "origin": [
+        469.16072727272734,
+        596.1876363636364
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 1,
+      "visible_max_px": 0.0,
+      "reference_frame": 30,
+      "visible_origin": [
+        469.16072727272734,
+        596.1876363636364
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 30,
+      "last": 33,
+      "origin": [
+        509.0734545454546,
+        590.2007272727274
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "far-front",
+      "first": 30,
+      "last": 35,
+      "origin": [
+        494.1061818181819,
+        594.6909090909091
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "near-hind",
+      "first": 33,
+      "last": 39,
+      "origin": [
+        398.8145454545455,
+        599.6800000000001
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 6,
+      "visible_max_px": 0.0,
+      "reference_frame": 33,
+      "visible_origin": [
+        398.8145454545455,
+        599.6800000000001
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 35,
+      "last": 40,
+      "origin": [
+        509.0734545454546,
+        599.6800000000001
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 5,
+      "visible_max_px": 0.0,
+      "reference_frame": 35,
+      "visible_origin": [
+        509.0734545454546,
+        599.6800000000001
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 37,
+      "last": 42,
+      "origin": [
+        419.76872727272735,
+        589.7018181818182
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 2,
+      "visible_max_px": 0.0,
+      "reference_frame": 37,
+      "visible_origin": [
+        419.76872727272735,
+        589.7018181818182
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 40,
+      "last": 44,
+      "origin": [
+        529.0298181818182,
+        589.7018181818182
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 2,
+      "visible_max_px": 0.0,
+      "reference_frame": 42,
+      "visible_origin": [
+        529.0298181818182,
+        589.7018181818182
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 43,
+      "last": 47,
+      "origin": [
+        428.56905117931854,
+        583.6753721487191
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "near-front",
+      "first": 45,
+      "last": 49,
+      "origin": [
+        417.2548950786498,
+        599.6800000000001
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 45,
+      "visible_origin": [
+        417.2548950786498,
+        599.6800000000001
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 46,
+      "last": 51,
+      "origin": [
+        493.4921315702446,
+        581.3347551547236
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 3,
+      "visible_max_px": 0.0,
+      "reference_frame": 47,
+      "visible_origin": [
+        493.4921315702446,
+        581.3347551547236
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 48,
+      "last": 53,
+      "origin": [
+        452.3427363574779,
+        596.3694055604723
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 5,
+      "visible_max_px": 0.0,
+      "reference_frame": 48,
+      "visible_origin": [
+        452.3427363574779,
+        596.3694055604723
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 52,
+      "last": 56,
+      "origin": [
+        487.3540380507163,
+        599.4524689994456
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 52,
+      "visible_origin": [
+        487.3540380507163,
+        599.4524689994456
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 53,
+      "last": 64,
+      "origin": [
+        383.31325526635055,
+        591.943945981149
+      ],
+      "runtime_max_px": 1.6077746776921858e-13,
+      "matched": 11,
+      "visible_max_px": 1.6077746776921858e-13,
+      "reference_frame": 53,
+      "visible_origin": [
+        383.31325526635055,
+        591.943945981149
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 55,
+      "last": 68,
+      "origin": [
+        490.09376647234575,
+        590.572380603975
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 6,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 62,
+      "visible_origin": [
+        490.0937664723457,
+        590.5723806039749
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 57,
+      "last": 70,
+      "origin": [
+        398.54507355580364,
+        582.8363265851239
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 4,
+      "visible_max_px": 5.684341886080802e-14,
+      "reference_frame": 66,
+      "visible_origin": [
+        398.54507355580364,
+        582.8363265851239
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 65,
+      "last": 73,
+      "origin": [
+        456.4038430339459,
+        590.25338325835
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 8,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 65,
+      "visible_origin": [
+        456.4038430339459,
+        590.25338325835
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 69,
+      "last": 75,
+      "origin": [
+        337.76391165676387,
+        578.405668852744
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 6,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 69,
+      "visible_origin": [
+        337.76391165676387,
+        578.405668852744
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 71,
+      "last": 78,
+      "origin": [
+        429.9452742699429,
+        572.6949120882607
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 5,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 71,
+      "visible_origin": [
+        429.9452742699429,
+        572.6949120882607
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 74,
+      "last": 81,
+      "origin": [
+        323.7974327605846,
+        560.6196666821004
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 3,
+      "visible_max_px": 1.6077746776921858e-13,
+      "reference_frame": 78,
+      "visible_origin": [
+        323.7974327605845,
+        560.6196666821004
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 76,
+      "last": 83,
+      "origin": [
+        398.0072486626811,
+        572.8966177091129
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 7,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 76,
+      "visible_origin": [
+        398.0072486626811,
+        572.8966177091129
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 79,
+      "last": 86,
+      "origin": [
+        279.3673172854991,
+        561.0489033035069
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 7,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 79,
+      "visible_origin": [
+        279.3673172854991,
+        561.0489033035069
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 82,
+      "last": 88,
+      "origin": [
+        371.5486798986781,
+        555.3381465390237
+      ],
+      "runtime_max_px": 5.684341886080802e-14,
+      "matched": 3,
+      "visible_max_px": 5.684341886080802e-14,
+      "reference_frame": 82,
+      "visible_origin": [
+        371.5486798986781,
+        555.3381465390237
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 84,
+      "last": 91,
+      "origin": [
+        265.4008383893198,
+        543.2629011328634
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 3,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 88,
+      "visible_origin": [
+        265.40083838931974,
+        543.2629011328634
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 87,
+      "last": 94,
+      "origin": [
+        339.61065429141627,
+        555.5398521598757
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 7,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 87,
+      "visible_origin": [
+        339.61065429141627,
+        555.5398521598757
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 89,
+      "last": 96,
+      "origin": [
+        220.97072291423422,
+        543.6921377542699
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 7,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 89,
+      "visible_origin": [
+        220.97072291423422,
+        543.6921377542699
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 92,
+      "last": 99,
+      "origin": [
+        313.15208552741313,
+        537.9813809897865
+      ],
+      "runtime_max_px": 5.684341886080802e-14,
+      "matched": 5,
+      "visible_max_px": 5.684341886080802e-14,
+      "reference_frame": 92,
+      "visible_origin": [
+        313.15208552741313,
+        537.9813809897865
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 95,
+      "last": 103,
+      "origin": [
+        207.00424401805483,
+        525.9061355836262
+      ],
+      "runtime_max_px": 1.1718571004216928e-13,
+      "matched": 4,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 99,
+      "visible_origin": [
+        207.0042440180548,
+        525.9061355836262
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 97,
+      "last": 110,
+      "origin": [
+        281.2140599201513,
+        538.1830866106386
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 13,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 97,
+      "visible_origin": [
+        281.2140599201513,
+        538.1830866106386
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 100,
+      "last": 111,
+      "origin": [
+        162.5741285429693,
+        526.3353722050329
+      ],
+      "runtime_max_px": 1.1718571004216928e-13,
+      "matched": 11,
+      "visible_max_px": 1.1718571004216928e-13,
+      "reference_frame": 100,
+      "visible_origin": [
+        162.5741285429693,
+        526.3353722050329
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 104,
+      "last": 113,
+      "origin": [
+        259.6937664723457,
+        522.0923806039748
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "far-front",
+      "first": 111,
+      "last": 114,
+      "origin": [
+        168.14507355580363,
+        514.3563265851237
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "near-hind",
+      "first": 114,
+      "last": 117,
+      "origin": [
+        273.18545454545455,
+        531.1999999999999
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 3,
+      "visible_max_px": 0.0,
+      "reference_frame": 114,
+      "visible_origin": [
+        273.18545454545455,
+        531.1999999999999
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 115,
+      "last": 119,
+      "origin": [
+        162.92654545454545,
+        531.1999999999999
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 115,
+      "visible_origin": [
+        162.92654545454545,
+        531.1999999999999
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 116,
+      "last": 121,
+      "origin": [
+        252.23127272727274,
+        521.2218181818181
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 1,
+      "visible_max_px": 0.0,
+      "reference_frame": 116,
+      "visible_origin": [
+        252.23127272727274,
+        521.2218181818181
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 118,
+      "last": 123,
+      "origin": [
+        142.97018181818183,
+        521.2218181818181
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 2,
+      "visible_max_px": 0.0,
+      "reference_frame": 121,
+      "visible_origin": [
+        142.97018181818183,
+        521.2218181818181
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 122,
+      "last": 126,
+      "origin": [
+        232.77381818181817,
+        527.2087272727272
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 122,
+      "visible_origin": [
+        232.77381818181817,
+        527.2087272727272
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 124,
+      "last": 126,
+      "origin": [
+        202.83927272727274,
+        527.7076363636363
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 2,
+      "visible_max_px": 0.0,
+      "reference_frame": 124,
+      "visible_origin": [
+        202.83927272727274,
+        527.7076363636363
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 126,
+      "last": 126,
+      "origin": [
+        162.92654545454545,
+        521.7207272727272
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "near-front",
+      "first": 145,
+      "last": 146,
+      "origin": [
+        202.83927272727274,
+        527.7076363636363
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 1,
+      "visible_max_px": 0.0,
+      "reference_frame": 145,
+      "visible_origin": [
+        202.83927272727274,
+        527.7076363636363
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 145,
+      "last": 148,
+      "origin": [
+        162.92654545454545,
+        521.7207272727272
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "far-front",
+      "first": 145,
+      "last": 150,
+      "origin": [
+        177.89381818181818,
+        526.210909090909
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "near-hind",
+      "first": 148,
+      "last": 154,
+      "origin": [
+        273.18545454545455,
+        531.1999999999999
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 6,
+      "visible_max_px": 0.0,
+      "reference_frame": 148,
+      "visible_origin": [
+        273.18545454545455,
+        531.1999999999999
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 150,
+      "last": 155,
+      "origin": [
+        162.92654545454545,
+        531.1999999999999
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 5,
+      "visible_max_px": 0.0,
+      "reference_frame": 150,
+      "visible_origin": [
+        162.92654545454545,
+        531.1999999999999
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 152,
+      "last": 157,
+      "origin": [
+        252.23127272727274,
+        521.2218181818181
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 152,
+      "visible_origin": [
+        252.23127272727274,
+        521.2218181818181
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 155,
+      "last": 159,
+      "origin": [
+        142.97018181818183,
+        521.2218181818181
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 2,
+      "visible_max_px": 0.0,
+      "reference_frame": 157,
+      "visible_origin": [
+        142.97018181818183,
+        521.2218181818181
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 158,
+      "last": 162,
+      "origin": [
+        188.0266410331746,
+        514.7645874236842
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "near-front",
+      "first": 160,
+      "last": 164,
+      "origin": [
+        196.473212936816,
+        531.1999999999999
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 160,
+      "visible_origin": [
+        196.473212936816,
+        531.1999999999999
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 161,
+      "last": 166,
+      "origin": [
+        258.5105157954067,
+        514.176830658377
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 5,
+      "visible_max_px": 0.0,
+      "reference_frame": 161,
+      "visible_origin": [
+        258.5105157954067,
+        514.176830658377
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 163,
+      "last": 167,
+      "origin": [
+        236.13720944431907,
+        529.6161576240069
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 3,
+      "visible_max_px": 0.0,
+      "reference_frame": 163,
+      "visible_origin": [
+        236.13720944431907,
+        529.6161576240069
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 166,
+      "last": 171,
+      "origin": [
+        164.55356881459363,
+        529.2637705128315
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 5,
+      "visible_max_px": 0.0,
+      "reference_frame": 166,
+      "visible_origin": [
+        164.55356881459363,
+        529.2637705128315
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 168,
+      "last": 180,
+      "origin": [
+        275.80755493866997,
+        531.1999999999999
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 12,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 168,
+      "visible_origin": [
+        275.80755493866997,
+        531.1999999999999
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 170,
+      "last": 184,
+      "origin": [
+        193.81134240759891,
+        519.3548313726162
+      ],
+      "runtime_max_px": 2.842170943040401e-14,
+      "matched": 6,
+      "visible_max_px": 2.842170943040401e-14,
+      "reference_frame": 170,
+      "visible_origin": [
+        193.81134240759891,
+        519.3548313726162
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 171,
+      "last": 187,
+      "origin": [
+        300.4366701266099,
+        521.1737136181382
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 12,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 171,
+      "visible_origin": [
+        300.4366701266099,
+        521.1737136181382
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 181,
+      "last": 190,
+      "origin": [
+        201.05165811803988,
+        531.7707099801388
+      ],
+      "runtime_max_px": 5.684341886080802e-14,
+      "matched": 9,
+      "visible_max_px": 5.684341886080802e-14,
+      "reference_frame": 181,
+      "visible_origin": [
+        201.05165811803988,
+        531.7707099801388
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 185,
+      "last": 193,
+      "origin": [
+        329.52172410223244,
+        534.8894580839617
+      ],
+      "runtime_max_px": 2.2737367544323206e-13,
+      "matched": 8,
+      "visible_max_px": 2.2737367544323206e-13,
+      "reference_frame": 185,
+      "visible_origin": [
+        329.52172410223244,
+        534.8894580839617
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 188,
+      "last": 196,
+      "origin": [
+        264.7415914312776,
+        524.2268080732325
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 4,
+      "visible_max_px": 5.684341886080802e-14,
+      "reference_frame": 188,
+      "visible_origin": [
+        264.7415914312776,
+        524.2268080732325
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 191,
+      "last": 199,
+      "origin": [
+        388.5829990104047,
+        527.2282089354089
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 3,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 191,
+      "visible_origin": [
+        388.5829990104047,
+        527.2282089354089
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 194,
+      "last": 201,
+      "origin": [
+        269.9159775585046,
+        536.5007844467566
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 7,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 194,
+      "visible_origin": [
+        269.9159775585046,
+        536.5007844467566
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 197,
+      "last": 204,
+      "origin": [
+        398.38604354269705,
+        539.6195325505796
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 7,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 197,
+      "visible_origin": [
+        398.38604354269705,
+        539.6195325505796
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 200,
+      "last": 207,
+      "origin": [
+        333.6059108717422,
+        528.9568825398503
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 3,
+      "visible_max_px": 0.0,
+      "reference_frame": 200,
+      "visible_origin": [
+        333.6059108717422,
+        528.9568825398503
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 202,
+      "last": 210,
+      "origin": [
+        457.4473184508694,
+        531.9582834020267
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 4,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 202,
+      "visible_origin": [
+        457.4473184508694,
+        531.9582834020267
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 205,
+      "last": 213,
+      "origin": [
+        338.78029699896933,
+        541.2308589133744
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 8,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 205,
+      "visible_origin": [
+        338.78029699896933,
+        541.2308589133744
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 208,
+      "last": 215,
+      "origin": [
+        467.2503629831618,
+        544.3496070171974
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 7,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 208,
+      "visible_origin": [
+        467.2503629831618,
+        544.3496070171974
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 211,
+      "last": 218,
+      "origin": [
+        402.470230312207,
+        533.6869570064681
+      ],
+      "runtime_max_px": 1.6077746776921858e-13,
+      "matched": 3,
+      "visible_max_px": 5.684341886080802e-14,
+      "reference_frame": 211,
+      "visible_origin": [
+        402.470230312207,
+        533.6869570064681
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 214,
+      "last": 221,
+      "origin": [
+        526.3116378913342,
+        536.6883578686445
+      ],
+      "runtime_max_px": 1.6077746776921858e-13,
+      "matched": 3,
+      "visible_max_px": 1.6077746776921858e-13,
+      "reference_frame": 214,
+      "visible_origin": [
+        526.3116378913342,
+        536.6883578686445
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 216,
+      "last": 224,
+      "origin": [
+        407.6446164394339,
+        545.9609333799923
+      ],
+      "runtime_max_px": 1.6077746776921858e-13,
+      "matched": 8,
+      "visible_max_px": 1.6077746776921858e-13,
+      "reference_frame": 216,
+      "visible_origin": [
+        407.6446164394339,
+        545.9609333799923
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 219,
+      "last": 228,
+      "origin": [
+        536.1146824236264,
+        549.0796814838151
+      ],
+      "runtime_max_px": 2.5421149729252077e-13,
+      "matched": 9,
+      "visible_max_px": 2.5421149729252077e-13,
+      "reference_frame": 219,
+      "visible_origin": [
+        536.1146824236264,
+        549.0796814838151
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 222,
+      "last": 233,
+      "origin": [
+        471.33454975267165,
+        538.4170314730859
+      ],
+      "runtime_max_px": 1.7053025658242404e-13,
+      "matched": 4,
+      "visible_max_px": 1.7053025658242404e-13,
+      "reference_frame": 222,
+      "visible_origin": [
+        471.33454975267165,
+        538.4170314730859
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 225,
+      "last": 243,
+      "origin": [
+        595.1759573317988,
+        541.4184323352624
+      ],
+      "runtime_max_px": 2.2737367544323206e-13,
+      "matched": 5,
+      "visible_max_px": 1.6077746776921858e-13,
+      "reference_frame": 225,
+      "visible_origin": [
+        595.1759573317988,
+        541.4184323352624
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 229,
+      "last": 239,
+      "origin": [
+        476.5089358798986,
+        550.69100784661
+      ],
+      "runtime_max_px": 1.6077746776921858e-13,
+      "matched": 10,
+      "visible_max_px": 1.6077746776921858e-13,
+      "reference_frame": 229,
+      "visible_origin": [
+        476.5089358798986,
+        550.69100784661
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 234,
+      "last": 240,
+      "origin": [
+        592.60755493867,
+        552.96
+      ],
+      "runtime_max_px": 1.6077746776921858e-13,
+      "matched": 6,
+      "visible_max_px": 1.6077746776921858e-13,
+      "reference_frame": 234,
+      "visible_origin": [
+        592.60755493867,
+        552.96
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 240,
+      "last": 242,
+      "origin": [
+        510.61134240759895,
+        541.1148313726163
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 2,
+      "visible_max_px": 0.0,
+      "reference_frame": 240,
+      "visible_origin": [
+        510.61134240759895,
+        541.1148313726163
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 243,
+      "last": 246,
+      "origin": [
+        485.2145454545455,
+        552.96
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 3,
+      "visible_max_px": 0.0,
+      "reference_frame": 243,
+      "visible_origin": [
+        485.2145454545455,
+        552.96
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 244,
+      "last": 248,
+      "origin": [
+        595.4734545454546,
+        552.96
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 244,
+      "visible_origin": [
+        595.4734545454546,
+        552.96
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 245,
+      "last": 250,
+      "origin": [
+        506.1687272727273,
+        542.9818181818182
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 1,
+      "visible_max_px": 0.0,
+      "reference_frame": 245,
+      "visible_origin": [
+        506.1687272727273,
+        542.9818181818182
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 247,
+      "last": 252,
+      "origin": [
+        615.4298181818182,
+        542.9818181818182
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 247,
+      "visible_origin": [
+        615.4298181818182,
+        542.9818181818182
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 251,
+      "last": 255,
+      "origin": [
+        525.6261818181819,
+        548.9687272727274
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 251,
+      "visible_origin": [
+        525.6261818181819,
+        548.9687272727274
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 253,
+      "last": 255,
+      "origin": [
+        555.5607272727273,
+        549.4676363636364
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 2,
+      "visible_max_px": 0.0,
+      "reference_frame": 253,
+      "visible_origin": [
+        555.5607272727273,
+        549.4676363636364
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 255,
+      "last": 255,
+      "origin": [
+        595.4734545454546,
+        543.4807272727273
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "near-front",
+      "first": 497,
+      "last": 498,
+      "origin": [
+        555.5607272727273,
+        549.4676363636364
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 1,
+      "visible_max_px": 0.0,
+      "reference_frame": 497,
+      "visible_origin": [
+        555.5607272727273,
+        549.4676363636364
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 497,
+      "last": 500,
+      "origin": [
+        595.4734545454546,
+        543.4807272727273
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "far-front",
+      "first": 497,
+      "last": 502,
+      "origin": [
+        580.5061818181819,
+        547.9709090909091
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "near-hind",
+      "first": 500,
+      "last": 506,
+      "origin": [
+        485.2145454545455,
+        552.96
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 6,
+      "visible_max_px": 0.0,
+      "reference_frame": 500,
+      "visible_origin": [
+        485.2145454545455,
+        552.96
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 502,
+      "last": 507,
+      "origin": [
+        595.4734545454546,
+        552.96
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 5,
+      "visible_max_px": 0.0,
+      "reference_frame": 502,
+      "visible_origin": [
+        595.4734545454546,
+        552.96
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 504,
+      "last": 509,
+      "origin": [
+        506.1687272727273,
+        542.9818181818182
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 2,
+      "visible_max_px": 0.0,
+      "reference_frame": 504,
+      "visible_origin": [
+        506.1687272727273,
+        542.9818181818182
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 507,
+      "last": 511,
+      "origin": [
+        615.4298181818182,
+        542.9818181818182
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 507,
+      "visible_origin": [
+        615.4298181818182,
+        542.9818181818182
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 510,
+      "last": 514,
+      "origin": [
+        500.68212944400796,
+        536.4990180493314
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0,
+      "reference_frame": 510,
+      "visible_origin": [
+        500.68212944400796,
+        536.4990180493314
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 512,
+      "last": 516,
+      "origin": [
+        517.7577364600016,
+        552.96
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 512,
+      "visible_origin": [
+        517.7577364600016,
+        552.96
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 513,
+      "last": 518,
+      "origin": [
+        572.9130692032841,
+        536.3079702692472
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    },
+    {
+      "leg": "far-front",
+      "first": 515,
+      "last": 519,
+      "origin": [
+        559.0428780794073,
+        551.7713169501783
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 515,
+      "visible_origin": [
+        559.0428780794073,
+        551.7713169501783
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 519,
+      "last": 523,
+      "origin": [
+        588.5717546663224,
+        552.3296578962006
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 519,
+      "visible_origin": [
+        588.5717546663224,
+        552.3296578962006
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 520,
+      "last": 531,
+      "origin": [
+        478.9667235811343,
+        552.96
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 11,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 520,
+      "visible_origin": [
+        478.9667235811343,
+        552.96
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 522,
+      "last": 534,
+      "origin": [
+        570.3835197803295,
+        542.3587918906469
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 2,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 532,
+      "visible_origin": [
+        570.3835197803295,
+        542.3587918906468
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 524,
+      "last": 537,
+      "origin": [
+        460.59129619158887,
+        542.9509314427008
+      ],
+      "runtime_max_px": 1.6077746776921858e-13,
+      "matched": 3,
+      "visible_max_px": 5.684341886080802e-14,
+      "reference_frame": 534,
+      "visible_origin": [
+        460.59129619158887,
+        542.9509314427007
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 532,
+      "last": 541,
+      "origin": [
+        550.9902275504328,
+        553.1648029432203
+      ],
+      "runtime_max_px": 1.6077746776921858e-13,
+      "matched": 9,
+      "visible_max_px": 1.6077746776921858e-13,
+      "reference_frame": 532,
+      "visible_origin": [
+        550.9902275504328,
+        553.1648029432203
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 535,
+      "last": 544,
+      "origin": [
+        423.6580610332213,
+        554.1890813899536
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 9,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 535,
+      "visible_origin": [
+        423.6580610332213,
+        554.1890813899536
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 538,
+      "last": 547,
+      "origin": [
+        497.347721800393,
+        543.9818096235343
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 4,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 538,
+      "visible_origin": [
+        497.347721800393,
+        543.9818096235343
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 542,
+      "last": 550,
+      "origin": [
+        369.82836277962895,
+        544.967885518522
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 3,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 542,
+      "visible_origin": [
+        369.82836277962895,
+        544.967885518522
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 545,
+      "last": 554,
+      "origin": [
+        480.0816858223392,
+        554.7405483149557
+      ],
+      "runtime_max_px": 1.1368683772161603e-13,
+      "matched": 9,
+      "visible_max_px": 1.1368683772161603e-13,
+      "reference_frame": 545,
+      "visible_origin": [
+        480.0816858223392,
+        554.7405483149557
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 548,
+      "last": 557,
+      "origin": [
+        352.74951930512765,
+        555.7648267616889
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 9,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 548,
+      "visible_origin": [
+        352.74951930512765,
+        555.7648267616889
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 551,
+      "last": 567,
+      "origin": [
+        426.43918007229945,
+        545.5575549952697
+      ],
+      "runtime_max_px": 1.6077746776921858e-13,
+      "matched": 4,
+      "visible_max_px": 1.6077746776921858e-13,
+      "reference_frame": 551,
+      "visible_origin": [
+        426.43918007229945,
+        545.5575549952697
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 555,
+      "last": 568,
+      "origin": [
+        298.9198210515352,
+        546.5436308902575
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 4,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 555,
+      "visible_origin": [
+        298.9198210515352,
+        546.5436308902575
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 558,
+      "last": 564,
+      "origin": [
+        415.77175466632247,
+        556.1696578962005
+      ],
+      "runtime_max_px": 1.2710574864626038e-13,
+      "matched": 6,
+      "visible_max_px": 1.2710574864626038e-13,
+      "reference_frame": 558,
+      "visible_origin": [
+        415.77175466632247,
+        556.1696578962005
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 565,
+      "last": 566,
+      "origin": [
+        306.16672358113436,
+        556.8
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 1,
+      "visible_max_px": 0.0,
+      "reference_frame": 565,
+      "visible_origin": [
+        306.16672358113436,
+        556.8
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 568,
+      "last": 571,
+      "origin": [
+        417.1854545454546,
+        556.8
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 3,
+      "visible_max_px": 0.0,
+      "reference_frame": 568,
+      "visible_origin": [
+        417.1854545454546,
+        556.8
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 569,
+      "last": 573,
+      "origin": [
+        306.92654545454553,
+        556.8
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 569,
+      "visible_origin": [
+        306.92654545454553,
+        556.8
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 571,
+      "last": 575,
+      "origin": [
+        396.23127272727277,
+        546.8218181818181
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0,
+      "reference_frame": 571,
+      "visible_origin": [
+        396.23127272727277,
+        546.8218181818181
+      ]
+    },
+    {
+      "leg": "far-front",
+      "first": 572,
+      "last": 577,
+      "origin": [
+        286.9701818181819,
+        546.8218181818181
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 2,
+      "visible_max_px": 0.0,
+      "reference_frame": 575,
+      "visible_origin": [
+        286.9701818181819,
+        546.8218181818181
+      ]
+    },
+    {
+      "leg": "near-hind",
+      "first": 576,
+      "last": 580,
+      "origin": [
+        376.7738181818182,
+        552.8087272727273
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 4,
+      "visible_max_px": 0.0,
+      "reference_frame": 576,
+      "visible_origin": [
+        376.7738181818182,
+        552.8087272727273
+      ]
+    },
+    {
+      "leg": "near-front",
+      "first": 578,
+      "last": 580,
+      "origin": [
+        346.83927272727277,
+        553.3076363636363
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 2,
+      "visible_max_px": 0.0,
+      "reference_frame": 578,
+      "visible_origin": [
+        346.83927272727277,
+        553.3076363636363
+      ]
+    },
+    {
+      "leg": "far-hind",
+      "first": 580,
+      "last": 580,
+      "origin": [
+        306.92654545454553,
+        547.3207272727273
+      ],
+      "runtime_max_px": 0.0,
+      "matched": 0,
+      "visible_max_px": 0.0
+    }
+  ],
+  "background_sample_points": {
+    "upper_tread": [
+      207,
+      328
+    ],
+    "middle_tread": [
+      159,
+      379
+    ],
+    "lower_tread": [
+      135,
+      424
+    ],
+    "hanging_leaves": [
+      145,
+      254
+    ],
+    "canopy": [
+      572,
+      80
+    ],
+    "platform": [
+      336,
+      323
+    ]
+  },
+  "background": {
+    "before": {
+      "upper_tread": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      },
+      "middle_tread": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      },
+      "lower_tread": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      },
+      "hanging_leaves": {
+        "horizontal_span_px": 6,
+        "vertical_span_px": 2,
+        "identical_patches_out_of_125": 1
+      },
+      "canopy": {
+        "horizontal_span_px": 21,
+        "vertical_span_px": 7,
+        "identical_patches_out_of_125": 1
+      },
+      "platform": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      }
+    },
+    "after": {
+      "upper_tread": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      },
+      "middle_tread": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      },
+      "lower_tread": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      },
+      "hanging_leaves": {
+        "horizontal_span_px": 6,
+        "vertical_span_px": 2,
+        "identical_patches_out_of_125": 1
+      },
+      "canopy": {
+        "horizontal_span_px": 21,
+        "vertical_span_px": 7,
+        "identical_patches_out_of_125": 1
+      },
+      "platform": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      }
+    }
+  }
+}

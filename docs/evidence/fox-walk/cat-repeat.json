@@ -1,0 +1,14 @@
+{
+  "baseline": "9f9b51b",
+  "runtime_source": "e014029",
+  "scene": {
+    "frames": 517,
+    "identical": 517
+  },
+  "sprite": {
+    "frames": 517,
+    "identical": 517
+  },
+  "positions.csv": true,
+  "contacts.csv": true
+}
