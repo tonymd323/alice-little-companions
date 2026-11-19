@@ -136,8 +136,6 @@ class _WindChapterState extends State<WindChapter> with WidgetsBindingObserver {
           line = '刚好嵌进去了。篮里还有 ${state.remaining} 片。';
         }
       });
-      cue('seatLeaf');
-      if (middle || far) cue('windowLight');
     } catch (error) {
       failed(error);
     } finally {
