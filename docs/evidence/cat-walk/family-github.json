@@ -1,0 +1,10 @@
+{
+  "repository": "tonymd323/alice-little-companions",
+  "branch": "android-downloads",
+  "commit": "368e3c3083864822a245fbd444c617747aeaea81",
+  "path": "downloads/alice-0.15.0-android.apk",
+  "method": "GitHub fetch to a separate initially empty Git repository, read APK bytes at the published commit",
+  "bytes": 81323760,
+  "sha256": "734fb4bceba326777d5af503c9fa73a33a57d2c3bf7e21cb8a397bda2307c5d5",
+  "verified_signer_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05"
+}
