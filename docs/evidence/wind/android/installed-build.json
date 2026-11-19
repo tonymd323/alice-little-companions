@@ -1,0 +1,8 @@
+{
+  "package": "local.family.alice_companions",
+  "old": "0.13.0+10",
+  "new": "0.14.0+11",
+  "sha256": "493b3939daddef425f941a545d01569f435589640651eb419f3d3cffcc14a623",
+  "same_first_install": true,
+  "same_android_uid": true
+}

@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 126}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 698 项通过。下面列出逐项结果。
+- 本次准备检查 717 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -272,14 +272,33 @@
 - 内部链接有效：docs/evidence/math-preview/README.md → ../../../apps/mobile/lib/main_window_math.dart
 - 内部链接有效：docs/evidence/math-preview/README.md → ../../../apps/mobile/lib/features/window_math.dart
 - 内部链接有效：docs/evidence/wind/README.md → capture/wind-veranda.mp4
-- 内部链接有效：docs/evidence/wind/README.md → capture/wind-contact-sheet.jpg
 - 内部链接有效：docs/evidence/wind/README.md → capture/README.md
+- 内部链接有效：docs/evidence/wind/README.md → capture/wind-contact-sheet.jpg
 - 内部链接有效：docs/evidence/wind/README.md → ../../../design/production/wind/actors/README.md
 - 内部链接有效：docs/evidence/wind/README.md → ../../../design/production/wind/room/README.md
 - 内部链接有效：docs/evidence/wind/README.md → wardrobe.jpg
 - 内部链接有效：docs/evidence/wind/README.md → ../../../design/production/wind/audio/README.md
 - 内部链接有效：docs/evidence/wind/README.md → paw-contact.jpg
 - 内部链接有效：docs/evidence/wind/README.md → bridge-contact.jpg
+- 内部链接有效：docs/evidence/wind/README.md → android/old-home.png
+- 内部链接有效：docs/evidence/wind/README.md → android/new-home-old-family.png
+- 内部链接有效：docs/evidence/wind/README.md → android/installed-build.json
+- 内部链接有效：docs/evidence/wind/README.md → android/opening.mp4
+- 内部链接有效：docs/evidence/wind/README.md → android/push-basket.png
+- 内部链接有效：docs/evidence/wind/README.md → android/seven-panes.png
+- 内部链接有效：docs/evidence/wind/README.md → android/two-leaves.png
+- 内部链接有效：docs/evidence/wind/README.md → android/reopened.png
+- 内部链接有效：docs/evidence/wind/README.md → android/before-restart.mp4
+- 内部链接有效：docs/evidence/wind/README.md → android/far-first.png
+- 内部链接有效：docs/evidence/wind/README.md → android/far-first-reunion.mp4
+- 内部链接有效：docs/evidence/wind/README.md → android/entering-the-room.jpg
+- 内部链接有效：docs/evidence/wind/README.md → android/middle-first.png
+- 内部链接有效：docs/evidence/wind/README.md → android/branches.jpg
+- 内部链接有效：docs/evidence/wind/README.md → android/middle-first-replay.mp4
+- 内部链接有效：docs/evidence/wind/README.md → android/repaired-home.png
+- 内部链接有效：docs/evidence/wind/README.md → android/home-comparison.jpg
+- 内部链接有效：docs/evidence/wind/README.md → android/cold-home-after-replay.png
+- 内部链接有效：docs/evidence/wind/README.md → android/media.json
 - 内部链接有效：docs/evidence/wind/README.md → ../../BACKUP_MIGRATION.md
 - 内部链接有效：docs/evidence/wind/README.md → ../../DELIVERY.md
 - 内部链接有效：docs/evidence/wind/README.md → installation.json

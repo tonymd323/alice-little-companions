@@ -2,7 +2,9 @@
 
 从原来的「小小伙伴」打开 **小家 → 主线 · 风过暖廊**。故事里的桃桃处于第三阶段，家里的伙伴、穿戴和共享经验由原存档决定。修窗、重玩、观看和试戴都不会产生积分、经验或新物品。
 
-[56 秒完整试玩，含动作声](capture/wind-veranda.mp4) · [两种修窗顺序对照](capture/wind-contact-sheet.jpg) · [取帧方法与原始操作记录](capture/README.md)
+[56 秒游戏画面，固定步长取帧并还原动作声](capture/wind-veranda.mp4) · [取帧方法与两种顺序的原始操作记录](capture/README.md)
+
+![固定机位里桃桃压围巾、推篮，Alice 修窗，奶油在不同桥段等候并回家](capture/wind-contact-sheet.jpg)
 
 ## 一次试玩可以看什么
 
@@ -17,6 +19,22 @@
 右上角喇叭可静音，在同一设备重开也会记住。右上角「章节选项」可收起对白。此章采用逐姿绘画和局部形变，动作音来自七种离线拟音。[角色分层与动作预演](../../../design/production/wind/actors/README.md) · [场景原稿与四种窗光](../../../design/production/wind/room/README.md) · [围巾的六幅家庭穿戴成画](wardrobe.jpg) · [声音来源与试听](../../../design/production/wind/audio/README.md)
 
 同一机位的四张静帧分别取自桃桃刚探爪、双爪贴到篮沿、后腿蹬伸以及迎到奶油的时刻。它们来自 Flutter 绘制的角色与场景。[推篮与迎接的接触帧](paw-contact.jpg) · [奶油等待、望远、跑动和进门](bridge-contact.jpg)
+
+## 已安装的安卓家庭版
+
+在 Android 9 AOSP 云模拟器上，用正式 0.13.0+10 APK 经应用界面新建测试家庭，选择月牙耳兔。从 0.13 原地更新到 0.14.0+11 时，Android 保留首次安装时间和应用 UID。冷启动后，同一家庭仍显示第一阶段桃桃、余额 0、经验 0，首页的主线入口变为《风过暖廊》。从设备取回的 base.apk 摘要与 GitHub 安装包相同。测试时关闭 Wi-Fi 和移动数据。[旧版小家](android/old-home.png) · [新版冷启动](android/new-home-old-family.png) · [同签覆盖记录](android/installed-build.json)
+
+| 已安装应用内的操作 | 实际屏幕证据 |
+|---|---|
+| 首页进章，看桃桃把叶篮推到窗边 | [连续录屏](android/opening.mp4) · [爪与篮沿接触](android/push-basket.png) · [开场七片玻璃](android/seven-panes.png) |
+| 静音并收起对白，补右窗上排两片，中途关闭应用 | [补完两片](android/two-leaves.png) · [冷启动后重新进章](android/reopened.png) · [取叶与落位录屏](android/before-restart.mp4) |
+| 先补满右窗，再补中窗最后一片 | [右窗满、狐狸留在缺口](android/far-first.png) · [过桥与进门连续录屏](android/far-first-reunion.mp4) · [实际视频中的脚步与团聚](android/entering-the-room.jpg) |
+| 重演时先补中窗，右窗仍空 | 奶油从左侧断口跑到下一段桥柱，原屏横向移动约 100 像素。[中窗亮起的原屏](android/middle-first.png) · [两条路线同机位实装对照](android/branches.jpg) · [重演、补中窗至团聚连续录像](android/middle-first-replay.mp4) |
+| 团聚后回到自己的暖廊，再冷启动 | [返回小家的实际画面](android/repaired-home.png) · [同一家庭修前修后](android/home-comparison.jpg) · [重演后再次冷启动，余额与经验均为 0](android/cold-home-after-replay.png) |
+
+实际手机视口为 390 × 844，Android 系统录像输出 384 × 832。开场的系统录像长 61.38 秒，共采到 66 帧。在远窗路线录像里，约 32.8 秒远窗已满、中窗仍缺一格，约 60.5 秒桥路连通，随后奶油跑过桥，在 67 秒左右抵达叶篮边。这个云端软件模拟器适合检查实际点击、画面和存档。手机上的连续帧率、声画延迟与手感仍待实体设备验证。最初使用的 Android 11 测试镜像出现系统网络服务重复重启，本次安装与交互证据取自 Android 9。[安卓原始画面摘要、各段时长与帧数](android/media.json)
+
+独立试玩在静音时靠窗格位置和奶油的姿态分清了修窗进度。小屏上桥面局部变亮较淡，桥上的奶油偏小。竖屏收起对白后，下方仍留有原来的对白空间。
 
 ## 家庭数据
 
