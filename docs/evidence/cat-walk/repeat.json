@@ -1,0 +1,13 @@
+{
+  "source": "9f9b51bc07af962b90600f09eda7fbd241679012",
+  "scenes": {
+    "frames": 517,
+    "identical_frames": 517
+  },
+  "transparent_sprites": {
+    "frames": 517,
+    "identical_frames": 517
+  },
+  "positions.csv": true,
+  "contacts.csv": true
+}

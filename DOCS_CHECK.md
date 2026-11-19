@@ -3,10 +3,10 @@
 2026-11-18 开工基线。本检查读取文档、配置和交付素材；原生 App 的执行记录单独保存在验收执行表中。
 
 - 13 项产品需求、35 条业务规则、43 项原生验收用例。
-- 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 126}。
+- 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 153}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 785 项通过。下面列出逐项结果。
+- 本次准备检查 872 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -18,8 +18,8 @@
 - 内部链接有效：AGENTS.md → docs/evidence/courtyard-motion/README.md
 - 内部链接有效：README.md → START_CODEX.md
 - 内部链接有效：README.md → docs/PLAN.md
-- 内部链接有效：README.md → docs/TECH_SPEC.md
-- 内部链接有效：README.md → docs/ACCEPTANCE.md
+- 内部链接有效：README.md → docs/evidence/cat-walk/README.md
+- 内部链接有效：README.md → docs/DELIVERY.md
 - 内部链接有效：README.md → docs/evidence/daily/README.md
 - 内部链接有效：README.md → docs/PRD.md
 - 内部链接有效：README.md → docs/UX_SPEC.md
@@ -51,9 +51,11 @@
 - 内部链接有效：design/ART_PROMPTS.md → references/garden-color.png
 - 内部链接有效：design/ART_PROMPTS.md → asset_manifest.json
 - 内部链接有效：docs/ACCEPTANCE.md → evidence/courtyard-motion/README.md
+- 内部链接有效：docs/ACCEPTANCE.md → evidence/cat-walk/README.md
 - 内部链接有效：docs/ACCEPTANCE.md → PLAN.md
 - 内部链接有效：docs/ACCEPTANCE.md → evidence/acceptance.csv
 - 内部链接有效：docs/BACKUP_MIGRATION.md → evidence/wind/README.md
+- 内部链接有效：docs/DELIVERY.md → evidence/cat-walk/README.md
 - 内部链接有效：docs/DELIVERY.md → evidence/acceptance.csv
 - 内部链接有效：docs/DELIVERY.md → evidence/wind/README.md
 - 内部链接有效：docs/DELIVERY.md → evidence/daily/README.md
@@ -61,7 +63,7 @@
 - 内部链接有效：docs/DELIVERY.md → evidence/M5/README.md
 - 内部链接有效：docs/DELIVERY.md → OWNER_WALKTHROUGH.md
 - 内部链接有效：docs/DELIVERY.md → BACKUP_MIGRATION.md
-- 内部链接有效：docs/DELIVERY.md → evidence/wind/README.md
+- 内部链接有效：docs/DELIVERY.md → evidence/courtyard-motion/README.md
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/references/pet-stages.png
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/references/garden-color.png
 - 内部链接有效：docs/DESIGN_SPEC.md → TECH_SPEC.md
@@ -114,6 +116,9 @@
 - 内部链接有效：docs/PLAN.md → evidence/daily/README.md
 - 内部链接有效：docs/PLAN.md → evidence/wind/README.md
 - 内部链接有效：docs/PLAN.md → evidence/acceptance.csv
+- 内部链接有效：docs/PLAN.md → evidence/cat-walk/README.md
+- 内部链接有效：docs/PLAN.md → DELIVERY.md
+- 内部链接有效：docs/PLAN.md → ../design/production/fox-walk/README.md
 - 内部链接有效：docs/PLAN.md → WORLD_AND_COMPANIONS.md
 - 内部链接有效：docs/PLAN.md → GAME_STUDIO.md
 - 内部链接有效：docs/PLAN.md → BACKUP_MIGRATION.md
@@ -138,7 +143,8 @@
 - 内部链接有效：docs/PRD.md → RULES.md
 - 内部链接有效：docs/PRD.md → WORLD_AND_COMPANIONS.md
 - 内部链接有效：docs/TECH_SPEC.md → ../apps/mobile/lib/illustration/living_scene.dart
-- 内部链接有效：docs/TECH_SPEC.md → ../apps/mobile/lib/illustration/puppet.dart
+- 内部链接有效：docs/TECH_SPEC.md → ../apps/mobile/lib/illustration/cat_walk.dart
+- 内部链接有效：docs/TECH_SPEC.md → evidence/cat-walk/README.md
 - 内部链接有效：docs/TECH_SPEC.md → ../design/production/wind/actors/README.md
 - 内部链接有效：docs/TECH_SPEC.md → ../apps/mobile/lib/illustration/tailoring.dart
 - 内部链接有效：docs/TECH_SPEC.md → ../apps/mobile/lib/illustration/animated_backdrop.dart
@@ -235,6 +241,33 @@
 - 内部链接有效：docs/evidence/M6/README.md → preflight.json
 - 内部链接有效：docs/evidence/M6/README.md → ../acceptance.csv
 - 内部链接有效：docs/evidence/M6/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/cat-walk/README.md → ../../../design/production/cat-walk/acting-rehearsal.mp4
+- 内部链接有效：docs/evidence/cat-walk/README.md → ../../../design/production/cat-walk/README.md
+- 内部链接有效：docs/evidence/cat-walk/README.md → three-walks.mp4
+- 内部链接有效：docs/evidence/cat-walk/README.md → stairs-and-leaves.mp4
+- 内部链接有效：docs/evidence/cat-walk/README.md → wardrobe.mp4
+- 内部链接有效：docs/evidence/cat-walk/README.md → measurements.json
+- 内部链接有效：docs/evidence/cat-walk/README.md → independent.md
+- 内部链接有效：docs/evidence/cat-walk/README.md → independent.md
+- 内部链接有效：docs/evidence/cat-walk/README.md → ../acceptance.csv
+- 内部链接有效：docs/evidence/cat-walk/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/cat-walk/README.md → repeat.json
+- 内部链接有效：docs/evidence/cat-walk/README.md → analyze.log
+- 内部链接有效：docs/evidence/cat-walk/README.md → flutter-tests.log
+- 内部链接有效：docs/evidence/cat-walk/README.md → independent.log
+- 内部链接有效：docs/evidence/cat-walk/README.md → build.log
+- 内部链接有效：docs/evidence/cat-walk/README.md → installation.json
+- 内部链接有效：docs/evidence/cat-walk/README.md → packaged-art.json
+- 内部链接有效：docs/evidence/cat-walk/README.md → packaged-wind.json
+- 内部链接有效：docs/evidence/cat-walk/README.md → ../../DELIVERY.md
+- 内部链接有效：docs/evidence/cat-walk/README.md → android-first-run.png
+- 内部链接有效：docs/evidence/cat-walk/README.md → android-courtyard.png
+- 内部链接有效：docs/evidence/cat-walk/README.md → android-move.jpg
+- 内部链接有效：docs/evidence/cat-walk/README.md → android-reopened.png
+- 内部链接有效：docs/evidence/cat-walk/README.md → android-install.log
+- 内部链接有效：docs/evidence/cat-walk/independent.md → independent-source-sha256.txt
+- 内部链接有效：docs/evidence/cat-walk/independent.md → independent.log
+- 内部链接有效：docs/evidence/cat-walk/independent.md → depth-walk.png
 - 内部链接有效：docs/evidence/courtyard-motion/README.md → courtyard-stairs.mp4
 - 内部链接有效：docs/evidence/courtyard-motion/README.md → cat-three-walks.mp4
 - 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../apps/mobile/assets/art/garden.webp
@@ -776,6 +809,60 @@
 - 正式素材文件可验证 fitted-scarf-rabbit-flight
 - 素材状态有效 fitted-scarf-rabbit-rest
 - 正式素材文件可验证 fitted-scarf-rabbit-rest
+- 素材状态有效 cat-walk-head-away
+- 正式素材文件可验证 cat-walk-head-away
+- 素材状态有效 cat-walk-head-front
+- 正式素材文件可验证 cat-walk-head-front
+- 素材状态有效 cat-walk-head
+- 正式素材文件可验证 cat-walk-head
+- 素材状态有效 cat-walk-leg-far-front-lower
+- 正式素材文件可验证 cat-walk-leg-far-front-lower
+- 素材状态有效 cat-walk-leg-far-front-upper
+- 正式素材文件可验证 cat-walk-leg-far-front-upper
+- 素材状态有效 cat-walk-leg-far-hind-lower
+- 正式素材文件可验证 cat-walk-leg-far-hind-lower
+- 素材状态有效 cat-walk-leg-far-hind-upper
+- 正式素材文件可验证 cat-walk-leg-far-hind-upper
+- 素材状态有效 cat-walk-leg-near-front-lower
+- 正式素材文件可验证 cat-walk-leg-near-front-lower
+- 素材状态有效 cat-walk-leg-near-front-upper
+- 正式素材文件可验证 cat-walk-leg-near-front-upper
+- 素材状态有效 cat-walk-leg-near-hind-lower
+- 正式素材文件可验证 cat-walk-leg-near-hind-lower
+- 素材状态有效 cat-walk-leg-near-hind-upper
+- 正式素材文件可验证 cat-walk-leg-near-hind-upper
+- 素材状态有效 cat-walk-paw-far-front
+- 正式素材文件可验证 cat-walk-paw-far-front
+- 素材状态有效 cat-walk-paw-far-hind
+- 正式素材文件可验证 cat-walk-paw-far-hind
+- 素材状态有效 cat-walk-paw-near-front
+- 正式素材文件可验证 cat-walk-paw-near-front
+- 素材状态有效 cat-walk-paw-near-hind
+- 正式素材文件可验证 cat-walk-paw-near-hind
+- 素材状态有效 cat-walk-tail
+- 正式素材文件可验证 cat-walk-tail
+- 素材状态有效 cat-walk-torso-apron
+- 正式素材文件可验证 cat-walk-torso-apron
+- 素材状态有效 cat-walk-torso-away-apron
+- 正式素材文件可验证 cat-walk-torso-away-apron
+- 素材状态有效 cat-walk-torso-away-coat
+- 正式素材文件可验证 cat-walk-torso-away-coat
+- 素材状态有效 cat-walk-torso-away
+- 正式素材文件可验证 cat-walk-torso-away
+- 素材状态有效 cat-walk-torso-coat
+- 正式素材文件可验证 cat-walk-torso-coat
+- 素材状态有效 cat-walk-torso-front-apron
+- 正式素材文件可验证 cat-walk-torso-front-apron
+- 素材状态有效 cat-walk-torso-front-coat
+- 正式素材文件可验证 cat-walk-torso-front-coat
+- 素材状态有效 cat-walk-torso-front
+- 正式素材文件可验证 cat-walk-torso-front
+- 素材状态有效 cat-walk-torso
+- 正式素材文件可验证 cat-walk-torso
+- 素材状态有效 cat-walk-trim-apron
+- 正式素材文件可验证 cat-walk-trim-apron
+- 素材状态有效 cat-walk-trim-coat
+- 正式素材文件可验证 cat-walk-trim-coat
 - 场景 C 参考图摘要
 - 美术成长表与积分规则阈值一致
 - 方向参考图片hash正确

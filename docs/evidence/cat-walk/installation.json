@@ -1,0 +1,44 @@
+{
+  "runtime_source": "9f9b51bc07af962b90600f09eda7fbd241679012",
+  "filename": "alice-0.15.0-cat-preview.apk",
+  "mode": "release build with cloud test signer",
+  "application_id": "local.family.alice_companions",
+  "version_name": "0.15.0",
+  "version_code": 13,
+  "min_sdk": 26,
+  "target_sdk": 36,
+  "bytes": 81323760,
+  "sha256": "6c474d9f47a8267267d546e6bb481bb1579728102d5ec7b947b38a3c1f1d0f68",
+  "verified_signer_sha256": "66c137a4464a0905b6a3e5f207cb9e9d6df044aaf530c80db8e1d29d5c77ff56",
+  "zipalign_16k": true,
+  "family_baseline": {
+    "version": "0.14.1+12",
+    "sha256": "145d2229bdfc0429c5e018596f0a4ccbd1ebf2b5375c78302c7fb9da0cb6f2b4",
+    "verified_signer_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+    "download_ref": "android-downloads/downloads/alice-0.14.1-android.apk"
+  },
+  "cover_install_probe": {
+    "environment": "Android 9 x86_64 cloud software emulator",
+    "result": "INSTALL_FAILED_UPDATE_INCOMPATIBLE",
+    "installed_version_after_attempt": "0.14.1+12"
+  },
+  "fresh_install_probe": {
+    "environment": "Android 9 x86_64 cloud software emulator",
+    "package_manager_result": "Success",
+    "installed_version": "0.15.0+13",
+    "airplane_mode": true,
+    "foreground_activity": "local.family.alice_companions/.MainActivity",
+    "first_run_screen": "android-first-run.png",
+    "test_family_home_screen": "android-courtyard.png",
+    "test_family_initial_stage": 1,
+    "test_family_initial_balance": 0,
+    "test_family_initial_experience": 0,
+    "ground_tap_and_call_screens": "android-move.jpg",
+    "force_stop_and_reopen_screen": "android-reopened.png",
+    "reopen_stage": 1,
+    "reopen_balance": 0,
+    "reopen_experience": 0
+  },
+  "family_release_status": "BLOCKED_ORIGINAL_SIGNER",
+  "ipad_and_physical_roundtrip_status": "BLOCKED_HARDWARE"
+}

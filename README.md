@@ -2,7 +2,7 @@
 
 2026-11-18　｜　交付基线 2.0　｜　iOS、iPadOS、Android
 
-把本目录作为家庭 App 独立项目的根目录打开，在 Codex 中使用 [启动指令](START_CODEX.md)。当前从 0.14.1 的小家庭院继续，下一次家庭更新先交付第一阶段团团可信的普通走动。家长主要体验最终安装版本。[开发计划](docs/PLAN.md) · [动作技术方案](docs/TECH_SPEC.md#小家动画与主线接入) · [画面验收](docs/ACCEPTANCE.md#小家画面与剧情验收)
+把本目录作为家庭 App 独立项目的根目录打开，在 Codex 中使用 [启动指令](START_CODEX.md)。第一阶段团团的三种普通走动已接入 0.15.0 候选。固定镜头和独立试玩的记录已归档，原家庭 APK 入口提供 0.14.1。家长负责最终体验验收。[开发计划](docs/PLAN.md) · [团团步态证据](docs/evidence/cat-walk/README.md) · [家庭安装](docs/DELIVERY.md)
 
 ## 家庭离线闭环
 

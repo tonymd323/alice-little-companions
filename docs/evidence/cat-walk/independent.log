@@ -1,0 +1,7 @@
+00:00 +0: loading test/playtest.dart
+00:00 +0: test/playtest.dart: independent player enters family courtyard and gives three ordinary walk cues
+00:16 +0: test/visible_ground.dart: near-vertical cue on clearly visible grass beside the cat
+grass cue: starting=186.26351999999997, destination=142.94256000000001, actual=142.94256000000001
+00:16 +1: test/playtest.dart: independent player enters family courtyard and gives three ordinary walk cues
+Home positions in logical pixels: rest=186.26351999999997, tap=41.86031999999998, call=240.41472000000005, wait=132.11232
+00:18 +2: All tests passed!

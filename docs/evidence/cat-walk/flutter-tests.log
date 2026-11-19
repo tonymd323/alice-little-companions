@@ -1,0 +1,640 @@
+00:00 +0: loading test/window_math_test.dart
+00:00 +0: test/window_math_test.dart: child completes both opening puzzles, explores hints and solves the optional window in their own arrangement
+00:02 +1: test/window_math_test.dart: child completes both opening puzzles, explores hints and solves the optional window in their own arrangement
+00:05 +2: test/fixed_furnishings_test.dart: all catalogue previews and the starter room at zero balance are read-only
+00:05 +3: test/rules_test.dart: AC-04/05 staged project unlocks in order and totals ten
+00:05 +4: test/rules_test.dart: AC-04/05 staged project unlocks in order and totals ten
+00:05 +5: test/rules_test.dart: AC-04/05 staged project unlocks in order and totals ten
+00:07 +6: test/rules_test.dart: AC-04/05 staged project unlocks in order and totals ten
+00:07 +7: test/rules_test.dart: AC-04/05 staged project unlocks in order and totals ten
+00:08 +8: test/rules_test.dart: AC-04/05 staged project unlocks in order and totals ten
+00:08 +9: test/rules_test.dart: AC-04/05 staged project unlocks in order and totals ten
+00:10 +10: test/rules_test.dart: AC-04/05 staged project unlocks in order and totals ten
+00:12 +11: test/rules_test.dart: AC-04/05 staged project unlocks in order and totals ten
+00:12 +12: test/delivery_test.dart: the home story repairs actual panes in either order and keeps a permanent light with zero income
+00:14 +13: test/delivery_test.dart: the home story repairs actual panes in either order and keeps a permanent light with zero income
+00:16 +14: test/delivery_test.dart: the home story repairs actual panes in either order and keeps a permanent light with zero income
+00:21 +15: test/fixed_furnishings_test.dart: new and legacy furniture, auto wear, retry, refund and reopening share one ledger
+00:22 +16: test/fixed_furnishings_test.dart: new and legacy furniture, auto wear, retry, refund and reopening share one ledger
+00:23 +17: test/fixed_furnishings_test.dart: new and legacy furniture, auto wear, retry, refund and reopening share one ledger
+00:25 +18: test/rules_test.dart: AC-06/07 repeat slots survive edit, pause, date rollback and cancel
+00:27 +19: test/rules_test.dart: AC-06/07 repeat slots survive edit, pause, date rollback and cancel
+00:30 +20: test/rules_test.dart: AC-06/07 repeat slots survive edit, pause, date rollback and cancel
+00:31 +21: test/rules_test.dart: AC-06/07 repeat slots survive edit, pause, date rollback and cancel
+00:33 +22: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+00:33 +23: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+00:34 +24: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+00:34 +25: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+00:35 +26: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+00:36 +27: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+00:38 +28: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+00:44 +29: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+00:50 +29: test/delivery_test.dart: AC-26/34 active file failure can open the encrypted checkpoint through current PIN
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      TransferService.schema (package:alice_companions/application/transfer.dart:73:48)
+#7      TransferService._read (package:alice_companions/application/transfer.dart:82:38)
+#8      TransferService.protectCurrent.<anonymous closure> (package:alice_companions/application/transfer.dart:409:15)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file://test/delivery_test.dart:267:20)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:51 +30: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+00:51 +31: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+00:52 +32: test/delivery_test.dart: AC-26/34 active file failure can open the encrypted checkpoint through current PIN
+00:55 +33: test/delivery_test.dart: AC-26/34 active file failure can open the encrypted checkpoint through current PIN
+00:55 +34: test/delivery_test.dart: AC-26/34 active file failure can open the encrypted checkpoint through current PIN
+00:56 +35: test/delivery_test.dart: AC-26/34 active file failure can open the encrypted checkpoint through current PIN
+01:03 +36: test/decoration_test.dart: AC-16 child can undo the original charge once in the current session
+01:05 +37: test/decoration_test.dart: AC-16 child can undo the original charge once in the current session
+01:05 +38: test/rules_test.dart: AC-15/43 correction records explicit shortfall with ownership retained
+01:05 +39: test/rules_test.dart: AC-15/43 correction records explicit shortfall with ownership retained
+01:09 +40: test/wind_progress_test.dart: every socket persists once, both orders reach home, replay keeps it lit
+01:12 +41: test/delivery_test.dart: AC-18/35 preview for an existing family leaves the entire SQLite command state unchanged
+01:22 +42: test/backup_test.dart: AC-23/24/28 ALICEBK1 exact published vector and authentication failures
+01:22 +43: test/backup_test.dart: AC-23/24/28 ALICEBK1 exact published vector and authentication failures
+01:27 +44: test/backup_test.dart: AC-23/24/28 ALICEBK1 exact published vector and authentication failures
+01:31 +45: test/rules_test.dart: AC-11 simultaneous fixed purchases cannot overdraw or duplicate ownership
+01:32 +46: test/family_test.dart: AC-03 PIN session locks and five failures remain throttled after restart
+01:42 +46: test/backup_test.dart: AC-22/27/28/31 fixed 37-point replica, freeze, fresh credentials and reward to 42
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      TransferService.schema (package:alice_companions/application/transfer.dart:73:48)
+#7      TransferService._read (package:alice_companions/application/transfer.dart:82:38)
+#8      TransferService.prepareExport.<anonymous closure> (package:alice_companions/application/transfer.dart:136:28)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file://test/backup_test.dart:188:20)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+01:52 +47: test/family_test.dart: AC-03 PIN session locks and five failures remain throttled after restart
+01:58 +47: test/backup_test.dart: AC-22/27/28/31 fixed 37-point replica, freeze, fresh credentials and reward to 42
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      TransferService.schema (package:alice_companions/application/transfer.dart:73:48)
+#7      TransferService._read (package:alice_companions/application/transfer.dart:82:38)
+#8      TransferService.inspect (package:alice_companions/application/transfer.dart:297:26)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file://test/backup_test.dart:214:21)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      main.<anonymous closure> (file://test/backup_test.dart:236:13)
+<asynchronous suspension>
+#7      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#8      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#9      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+01:58 +48: test/backup_test.dart: AC-22/27/28/31 fixed 37-point replica, freeze, fresh credentials and reward to 42
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      new FamilyDatabase.open (package:alice_companions/data/database.dart:21:45)
+#6      DeviceStore.openGeneration (package:alice_companions/data/device.dart:82:27)
+<asynchronous suspension>
+#7      FamilyService.load (package:alice_companions/application/family.dart:162:16)
+<asynchronous suspension>
+#8      TransferService.activate.<anonymous closure> (package:alice_companions/application/transfer.dart:473:23)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file://test/backup_test.dart:263:22)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      TransferService.schema (package:alice_companions/application/transfer.dart:73:48)
+#7      TransferService._read (package:alice_companions/application/transfer.dart:82:38)
+#8      TransferService.activate.<anonymous closure> (package:alice_companions/application/transfer.dart:484:32)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file://test/backup_test.dart:263:22)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      main.<anonymous closure> (file://test/backup_test.dart:284:13)
+<asynchronous suspension>
+#7      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#8      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#9      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      new FamilyDatabase.open (package:alice_companions/data/database.dart:21:45)
+#6      DeviceStore.openGeneration (package:alice_companions/data/device.dart:82:27)
+<asynchronous suspension>
+#7      FamilyService.load (package:alice_companions/application/family.dart:162:16)
+<asynchronous suspension>
+#8      TransferService.activate.<anonymous closure> (package:alice_companions/application/transfer.dart:473:23)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file://test/backup_test.dart:289:22)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+02:14 +49: test/backup_test.dart: 0.10 family upgrades with an empty chapter, keeps its ledger and restores the bookmark on restart
+02:19 +50: test/backup_test.dart: Wind scene survives a v5 upgrade and partial encrypted handoff independently of the old chapter
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      TransferService.schema (package:alice_companions/application/transfer.dart:73:48)
+#7      TransferService._read (package:alice_companions/application/transfer.dart:82:38)
+#8      TransferService.prepareExport.<anonymous closure> (package:alice_companions/application/transfer.dart:136:28)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file://test/backup_test.dart:426:20)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      TransferService.schema (package:alice_companions/application/transfer.dart:73:48)
+#7      TransferService._read (package:alice_companions/application/transfer.dart:82:38)
+#8      TransferService.inspect (package:alice_companions/application/transfer.dart:297:26)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file://test/backup_test.dart:444:21)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      new FamilyDatabase.open (package:alice_companions/data/database.dart:21:45)
+#6      DeviceStore.openGeneration (package:alice_companions/data/device.dart:82:27)
+<asynchronous suspension>
+#7      FamilyService.load (package:alice_companions/application/family.dart:162:16)
+<asynchronous suspension>
+#8      TransferService.activate.<anonymous closure> (package:alice_companions/application/transfer.dart:473:23)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file://test/backup_test.dart:474:26)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      TransferService.schema (package:alice_companions/application/transfer.dart:73:48)
+#7      TransferService._read (package:alice_companions/application/transfer.dart:82:38)
+#8      TransferService.activate.<anonymous closure> (package:alice_companions/application/transfer.dart:484:32)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file://test/backup_test.dart:474:26)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      new FamilyDatabase.open (package:alice_companions/data/database.dart:21:45)
+#6      DeviceStore.openGeneration (package:alice_companions/data/device.dart:82:27)
+<asynchronous suspension>
+#7      FamilyService.load (package:alice_companions/application/family.dart:162:16)
+<asynchronous suspension>
+#8      TransferService.activate.<anonymous closure> (package:alice_companions/application/transfer.dart:473:23)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file://test/backup_test.dart:488:23)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+02:43 +51: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      TransferService.schema (package:alice_companions/application/transfer.dart:73:48)
+#7      TransferService._read (package:alice_companions/application/transfer.dart:82:38)
+#8      TransferService.prepareExport.<anonymous closure> (package:alice_companions/application/transfer.dart:136:28)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file://test/backup_test.dart:524:20)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      TransferService.schema (package:alice_companions/application/transfer.dart:73:48)
+#7      TransferService._read (package:alice_companions/application/transfer.dart:82:38)
+#8      TransferService.inspect (package:alice_companions/application/transfer.dart:297:26)
+<asynchronous suspension>
+#9      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#10     _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#11     StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#12     expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#13     main.<anonymous closure> (file://test/backup_test.dart:539:5)
+<asynchronous suspension>
+#14     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#15     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#16     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      new FamilyDatabase.open (package:alice_companions/data/database.dart:21:45)
+#6      DeviceStore.openGeneration (package:alice_companions/data/device.dart:82:27)
+<asynchronous suspension>
+#7      FamilyService.load (package:alice_companions/application/family.dart:162:16)
+<asynchronous suspension>
+#8      main.<anonymous closure> (file://test/backup_test.dart:617:24)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#11     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      new FamilyDatabase.open (package:alice_companions/data/database.dart:21:45)
+#6      DeviceStore.openGeneration (package:alice_companions/data/device.dart:82:27)
+<asynchronous suspension>
+#7      FamilyService.load (package:alice_companions/application/family.dart:162:16)
+<asynchronous suspension>
+#8      TransferService.activate.<anonymous closure> (package:alice_companions/application/transfer.dart:473:23)
+<asynchronous suspension>
+#9      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#10     _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#11     StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#12     expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#13     main.<anonymous closure> (file://test/backup_test.dart:604:7)
+<asynchronous suspension>
+#14     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#15     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#16     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      new FamilyDatabase.open (package:alice_companions/data/database.dart:21:45)
+#6      DeviceStore.openGeneration (package:alice_companions/data/device.dart:82:27)
+<asynchronous suspension>
+#7      FamilyService.load (package:alice_companions/application/family.dart:162:16)
+<asynchronous suspension>
+#8      main.<anonymous closure> (file://test/backup_test.dart:617:24)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#11     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      new FamilyDatabase.open (package:alice_companions/data/database.dart:21:45)
+#6      DeviceStore.openGeneration (package:alice_companions/data/device.dart:82:27)
+<asynchronous suspension>
+#7      FamilyService.load (package:alice_companions/application/family.dart:162:16)
+<asynchronous suspension>
+#8      TransferService.activate.<anonymous closure> (package:alice_companions/application/transfer.dart:473:23)
+<asynchronous suspension>
+#9      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#10     _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#11     StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#12     expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#13     main.<anonymous closure> (file://test/backup_test.dart:604:7)
+<asynchronous suspension>
+#14     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#15     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#16     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      TransferService.schema (package:alice_companions/application/transfer.dart:73:48)
+#7      TransferService._read (package:alice_companions/application/transfer.dart:82:38)
+#8      TransferService.activate.<anonymous closure> (package:alice_companions/application/transfer.dart:484:32)
+<asynchronous suspension>
+#9      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#10     _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#11     StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#12     expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#13     main.<anonymous closure> (file://test/backup_test.dart:604:7)
+<asynchronous suspension>
+#14     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#15     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#16     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      new FamilyDatabase.open (package:alice_companions/data/database.dart:21:45)
+#6      DeviceStore.openGeneration (package:alice_companions/data/device.dart:82:27)
+<asynchronous suspension>
+#7      FamilyService.load (package:alice_companions/application/family.dart:162:16)
+<asynchronous suspension>
+#8      main.<anonymous closure> (file://test/backup_test.dart:617:24)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#11     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      new FamilyDatabase.open (package:alice_companions/data/database.dart:21:45)
+#6      DeviceStore.openGeneration (package:alice_companions/data/device.dart:82:27)
+<asynchronous suspension>
+#7      FamilyService.load (package:alice_companions/application/family.dart:162:16)
+<asynchronous suspension>
+#8      TransferService.activate.<anonymous closure> (package:alice_companions/application/transfer.dart:473:23)
+<asynchronous suspension>
+#9      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#10     _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#11     StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#12     expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#13     main.<anonymous closure> (file://test/backup_test.dart:604:7)
+<asynchronous suspension>
+#14     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#15     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#16     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      expectedSchema (package:alice_companions/data/snapshot.dart:39:20)
+#6      TransferService.schema (package:alice_companions/application/transfer.dart:73:48)
+#7      TransferService._read (package:alice_companions/application/transfer.dart:82:38)
+#8      TransferService.activate.<anonymous closure> (package:alice_companions/application/transfer.dart:484:32)
+<asynchronous suspension>
+#9      Throws._matchFuture (package:matcher/src/expect/throws_matcher.dart:103:19)
+<asynchronous suspension>
+#10     _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+#11     StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+#12     expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#13     main.<anonymous closure> (file://test/backup_test.dart:604:7)
+<asynchronous suspension>
+#14     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#15     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#16     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+WARNING (drift): It looks like you've created the database class FamilyDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database.
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new _$FamilyDatabase (package:alice_companions/data/database.g.dart:10743:39)
+#4      new FamilyDatabase (package:alice_companions/data/database.dart)
+#5      new FamilyDatabase.open (package:alice_companions/data/database.dart:21:45)
+#6      DeviceStore.openGeneration (package:alice_companions/data/device.dart:82:27)
+<asynchronous suspension>
+#7      FamilyService.load (package:alice_companions/application/family.dart:162:16)
+<asynchronous suspension>
+#8      main.<anonymous closure> (file://test/backup_test.dart:617:24)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#11     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+03:30 +52: test/backup_test.dart: AC-34 schema upgrade keeps balance, ownership and at most five encrypted restore points
+03:37 +53: All tests passed!

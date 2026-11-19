@@ -1,0 +1,19 @@
+Android 9 x86_64 software emulator, dedicated test install.
+0.14.1 baseline from android-downloads verified with apksigner and SHA-256.
+0.15.0+13 release test build, application local.family.alice_companions.
+
+Performing Push Install
+Failure [INSTALL_FAILED_UPDATE_INCOMPATIBLE: Package local.family.alice_companions signatures do not match previously installed version; ignoring!]
+install_exit=1
+    versionCode=12 minSdk=26 targetSdk=36
+    versionName=0.14.1
+
+Fresh install after removing the empty test package:
+Performing Push Install
+Success
+Android release: 9
+airplane_mode_on: 1
+    versionCode=13 minSdk=26 targetSdk=36
+    versionName=0.15.0
+Starting: Intent { cmp=local.family.alice_companions/.MainActivity }
+Foreground: local.family.alice_companions/.MainActivity
