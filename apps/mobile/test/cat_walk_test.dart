@@ -3,9 +3,12 @@ import 'dart:math' as math;
 import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/illustration/cat_walk.dart';
 import 'package:alice_companions/illustration/cat_walk_art.dart';
+import 'package:alice_companions/illustration/living_scene.dart';
+import 'package:alice_companions/illustration/puppet.dart';
 import 'package:alice_companions/illustration/tailoring.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -91,6 +94,53 @@ void main() {
     expect(redirected.at(redirected.end).root, root + const Offset(-180, -38));
     expect(stroked.at(stroked.end).root, sample.root);
   });
+
+  testWidgets(
+    'courtyard depth tap and reduced motion use the same destinations',
+    (tester) async {
+      tester.view.physicalSize = const Size(480, 430);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      Widget home({required bool reduced}) => MaterialApp(
+        home: MediaQuery(
+          data: MediaQueryData(disableAnimations: reduced),
+          child: Scaffold(
+            body: GardenScene(
+              companion: Companion.cat,
+              stage: 1,
+              showLabel: false,
+              immersive: true,
+              height: 375,
+              onViewChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(home(reduced: false));
+      await tester.pump(const Duration(milliseconds: 40));
+      final actor = find.byType(IllustratedPet);
+      CatWalkPose? pose() => tester.widget<IllustratedPet>(actor).catWalk!();
+      const grass = Offset(480 * .398, 320 * .75);
+      await tester.tapAt(grass);
+      await tester.pump(const Duration(milliseconds: 40));
+      expect(pose()?.stage, CatWalkStage.rise);
+      for (var frame = 0; frame < 100; frame++) {
+        await tester.pump(const Duration(milliseconds: 40));
+      }
+      expect(tester.getCenter(actor).dx, closeTo(grass.dx, .01));
+      expect(pose(), isNull);
+
+      await tester.pumpWidget(home(reduced: true));
+      await tester.tap(find.text('过来'));
+      await tester.pump();
+      expect(tester.getCenter(actor).dx, closeTo(480 * .56, .01));
+      expect(pose(), isNull);
+      expect(find.text('团团来到你身边'), findsOneWidget);
+    },
+  );
 
   test(
     'all 36 existing costume combinations resolve to bundled walk layers',

@@ -434,8 +434,33 @@ class _GardenSceneState extends State<GardenScene>
     return Rect.fromLTWH(foot.dx - side / 2, foot.dy - side, side, side);
   }
 
+  bool _touchesPet(Offset point, SceneProjection map, {double padding = 0}) {
+    final box = _petBox(map);
+    if (!_hasCatWalk) return box.inflate(padding).contains(point);
+    // Let taps outside the painted head, body and tail reach the grass.
+    final p = (point - box.topLeft) / box.width;
+    final margin = padding / box.width;
+    final pose = _catPose;
+    final side = pose == null ? (_left ? -1.0 : 1.0) : math.cos(pose.yaw);
+    final standing = pose == null ? 0.0 : (1 - pose.crouch) * pose.ink;
+    bool oval(double x, double y, double rx, double ry) {
+      final dx = (p.dx - x) / (rx + margin);
+      final dy = (p.dy - y) / (ry + margin);
+      return dx * dx + dy * dy <= 1;
+    }
+
+    return oval(.5 + side * (.12 + standing * .16), .31, .30, .33) ||
+        oval(.5 - side * standing * .07, .74, .26 + standing * .12, .26) ||
+        oval(
+          .5 - side * (.31 + standing * .12),
+          .80 - standing * .13,
+          .14,
+          .19,
+        );
+  }
+
   void _tap(Offset point, SceneProjection map) {
-    if (_petBox(map).contains(point) || widget.focus) {
+    if (_touchesPet(point, map) || widget.focus) {
       _greet();
       return;
     }
@@ -692,12 +717,10 @@ class _GardenSceneState extends State<GardenScene>
                     behavior: HitTestBehavior.opaque,
                     onTapUp: (d) => _tap(d.localPosition, map),
                     onLongPressStart: (d) {
-                      if (_petBox(map).contains(d.localPosition)) _nuzzle();
+                      if (_touchesPet(d.localPosition, map)) _nuzzle();
                     },
                     onHorizontalDragStart: (d) {
-                      _stroking = _petBox(map)
-                          .inflate(4)
-                          .contains(d.localPosition);
+                      _stroking = _touchesPet(d.localPosition, map, padding: 4);
                     },
                     onHorizontalDragUpdate: (d) {
                       if (_stroking) {
