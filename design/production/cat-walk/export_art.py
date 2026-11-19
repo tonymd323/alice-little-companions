@@ -130,7 +130,8 @@ def step_marks(phase: float) -> tuple[list[tuple], list[bool]]:
             dx, lift = stride * (.375 - elapsed), 0
         else:
             swing = (elapsed - .75) / .25
-            dx = stride * (-.375 + 1.04 * swing - .29 * swing * swing)
+            release = swing * swing * (3 - 2 * swing)
+            dx = stride * (.375 + release - elapsed)
             lift = (24 if i % 2 == 0 else 30) * math.sin(math.pi * swing)
         feet.append((x + dx, y - lift))
         support.append(planted)
