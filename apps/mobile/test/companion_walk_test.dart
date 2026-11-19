@@ -89,6 +89,11 @@ void main() {
         final sample = outward.at(1.0);
         expect(sample.stage, WalkStage.walk);
         final reversing = WalkPlan.to(0, seated, root - const Offset(280, 0));
+        if (pet == Companion.fox) {
+          final midpoint = reversing.at(rig.rise + .53 * .65);
+          expect(midpoint.yaw, closeTo(math.pi / 2, 1e-8));
+          expect(midpoint.paws.every((paw) => paw.planted), isTrue);
+        }
         final inFlight = Iterable.generate(240, (i) => reversing.at(i / 240))
             .firstWhere(
               (pose) =>

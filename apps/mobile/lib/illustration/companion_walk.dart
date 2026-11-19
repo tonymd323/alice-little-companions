@@ -38,14 +38,13 @@ class WalkRig {
     required this.sit,
     this.front,
     this.away,
-    this.track = 35,
     this.turnArc = 0,
   });
 
   final List<WalkJoints> joints;
   final List<Offset> seatedPads;
   final List<WalkDepthJoints>? front, away;
-  final double sideStride, depthStride, speed, rise, sit, track, turnArc;
+  final double sideStride, depthStride, speed, rise, sit, turnArc;
 
   WalkDepthJoints? depthJoints(WalkLeg leg, double depth) =>
       (depth < 0 ? away : front)?[leg.index];
@@ -57,7 +56,7 @@ class WalkRig {
       return Offset(pad.dx * side, pad.dy * side.abs()) + angled * depth.abs();
     }
     return Offset(
-      pad.dx * side + (leg.near ? -track : track) * depth,
+      pad.dx * side + (leg.near ? -35 : 35) * depth,
       pad.dy * side.abs() + pad.dx * depth * .33,
     );
   }
@@ -200,14 +199,34 @@ class WalkPlan {
     final movingPaws = _differentPaws(prepared, aligned);
     if (turn.abs() > .04 || movingPaws) {
       final turning = turn.abs() > .16;
-      segments.add(
-        _Transition(
-          prepared,
-          aligned,
-          turning ? WalkStage.turn : WalkStage.gather,
-          turning ? .21 + .32 * (turn.abs() / math.pi).clamp(0.0, 1.0) : .25,
-        ),
-      );
+      final duration = turning
+          ? .21 + .32 * (turn.abs() / math.pi).clamp(0.0, 1.0)
+          : .25;
+      if (rig == WalkRig.fox && turn.abs() > 1.65) {
+        // Set all four paws in the middle view before swinging the shoulders
+        // through a reversal. The longer front legs can stay under the chest.
+        final middle = _standing(
+          rig,
+          from.root,
+          prepared.yaw + turn / 2,
+          from.scale,
+        );
+        segments.add(
+          _Transition(prepared, middle, WalkStage.turn, duration * .65),
+        );
+        segments.add(
+          _Transition(middle, aligned, WalkStage.turn, duration * .65),
+        );
+      } else {
+        segments.add(
+          _Transition(
+            prepared,
+            aligned,
+            turning ? WalkStage.turn : WalkStage.gather,
+            duration,
+          ),
+        );
+      }
     }
     final travel = _Travel(aligned, destination);
     segments.add(travel);
