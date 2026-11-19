@@ -96,7 +96,9 @@ void main() {
       ]),
     );
     await tester.pump();
-    final picture = context.findRenderObject()! as RenderRepaintBoundary;
+    final picture = tester.renderObject<RenderRepaintBoundary>(
+      find.byKey(screen),
+    );
     final actor = find.byType(IllustratedPet);
     final sprite = tester.renderObject<RenderRepaintBoundary>(
       find.descendant(of: actor, matching: find.byType(RepaintBoundary)).first,
@@ -128,10 +130,11 @@ void main() {
       positions.writeln(
         '$frame,${pet.seconds()},${center.dx},$footY,${origin.dx},$facing,$walking',
       );
-      if (const {0, 90, 165, 510}.contains(frame))
+      if (const {0, 90, 165, 510}.contains(frame)) {
         destinations[frame] = center.dx;
+      }
       // Keep the clock running through the unsampled idle wait.
-        if (frame > 285 && frame < 425) continue;
+      if (frame > 285 && frame < 425) continue;
       final suffix = frame.toString().padLeft(4, '0');
       await tester.runAsync(() async {
         await _saveFrame(picture, '$output/frame-$suffix.png');

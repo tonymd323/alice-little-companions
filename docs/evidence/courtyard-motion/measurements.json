@@ -1,0 +1,184 @@
+{
+  "source_size_px": [
+    960,
+    748
+  ],
+  "fps": 25,
+  "background_clip_frames": [
+    150,
+    274
+  ],
+  "probes_px": {
+    "upper_tread": [
+      207,
+      328
+    ],
+    "middle_tread": [
+      159,
+      379
+    ],
+    "lower_tread": [
+      135,
+      424
+    ],
+    "hanging_leaves": [
+      145,
+      254
+    ],
+    "canopy": [
+      572,
+      80
+    ],
+    "platform": [
+      336,
+      323
+    ]
+  },
+  "background": {
+    "before": {
+      "upper_tread": {
+        "horizontal_span_px": 9,
+        "vertical_span_px": 3,
+        "identical_patches_out_of_125": 1
+      },
+      "middle_tread": {
+        "horizontal_span_px": 13,
+        "vertical_span_px": 4,
+        "identical_patches_out_of_125": 1
+      },
+      "lower_tread": {
+        "horizontal_span_px": 3,
+        "vertical_span_px": 1,
+        "identical_patches_out_of_125": 1
+      },
+      "hanging_leaves": {
+        "horizontal_span_px": 4,
+        "vertical_span_px": 1,
+        "identical_patches_out_of_125": 1
+      },
+      "canopy": {
+        "horizontal_span_px": 18,
+        "vertical_span_px": 6,
+        "identical_patches_out_of_125": 1
+      },
+      "platform": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      }
+    },
+    "after": {
+      "upper_tread": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      },
+      "middle_tread": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      },
+      "lower_tread": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      },
+      "hanging_leaves": {
+        "horizontal_span_px": 4,
+        "vertical_span_px": 1,
+        "identical_patches_out_of_125": 1
+      },
+      "canopy": {
+        "horizontal_span_px": 18,
+        "vertical_span_px": 6,
+        "identical_patches_out_of_125": 1
+      },
+      "platform": {
+        "horizontal_span_px": 0,
+        "vertical_span_px": 0,
+        "identical_patches_out_of_125": 125
+      }
+    }
+  },
+  "low_paw": {
+    "before": {
+      "点地": {
+        "walking_frames": [
+          30,
+          68
+        ],
+        "low_adjacent_pairs": 4,
+        "largest_horizontal_change_px": 6.9,
+        "example_frames": [
+          54,
+          55
+        ]
+      },
+      "过来": {
+        "walking_frames": [
+          100,
+          143
+        ],
+        "low_adjacent_pairs": 5,
+        "largest_horizontal_change_px": 13.8,
+        "example_frames": [
+          124,
+          125
+        ]
+      },
+      "自主走动": {
+        "walking_frames": [
+          452,
+          482
+        ],
+        "low_adjacent_pairs": 3,
+        "largest_horizontal_change_px": 10.0,
+        "example_frames": [
+          470,
+          471
+        ]
+      }
+    },
+    "after": {
+      "点地": {
+        "walking_frames": [
+          30,
+          68
+        ],
+        "low_adjacent_pairs": 4,
+        "largest_horizontal_change_px": 6.9,
+        "example_frames": [
+          54,
+          55
+        ]
+      },
+      "过来": {
+        "walking_frames": [
+          100,
+          143
+        ],
+        "low_adjacent_pairs": 5,
+        "largest_horizontal_change_px": 13.8,
+        "example_frames": [
+          124,
+          125
+        ]
+      },
+      "自主走动": {
+        "walking_frames": [
+          452,
+          482
+        ],
+        "low_adjacent_pairs": 3,
+        "largest_horizontal_change_px": 10.0,
+        "example_frames": [
+          470,
+          471
+        ]
+      }
+    }
+  },
+  "sampled_actor_frames": 372,
+  "identical_actor_frames": 372,
+  "identical_actor_trajectory": true
+}
