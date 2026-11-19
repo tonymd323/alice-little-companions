@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="464" viewBox="0 0 512 464">
+  <title>团团一阶 · 看向 Alice 和朝庭院里走</title>
+  <defs>
+    <linearGradient id="blue-fur" x1=".15" x2=".5" y1="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#aeb9dc"/>
+      <stop offset=".53" stop-color="#aab8dc"/>
+      <stop offset="1" stop-color="#8196c8"/>
+    </linearGradient>
+    <linearGradient id="cream-fur" x1=".1" x2=".4" y1=".06" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#fff9ed"/>
+      <stop offset=".75" stop-color="#fff9ef"/>
+      <stop offset="1" stop-color="#e4e0de"/>
+    </linearGradient>
+    <linearGradient id="ear-shell" x1=".15" x2=".9" y1=".14" y2=".93" gradientUnits="objectBoundingBox">
+      <stop stop-color="#454777"/>
+      <stop offset=".47" stop-color="#5970ae"/>
+      <stop offset="1" stop-color="#95a7d0"/>
+    </linearGradient>
+    <linearGradient id="ear-light" x1=".1" x2=".87" y1="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#fbc3a4"/>
+      <stop offset=".66" stop-color="#f6af9b"/>
+      <stop offset="1" stop-color="#bc8197"/>
+    </linearGradient>
+    <linearGradient id="iris" x1="0" x2=".3" y1="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#343269"/>
+      <stop offset=".47" stop-color="#395897"/>
+      <stop offset="1" stop-color="#53bedb"/>
+    </linearGradient>
+    <path id="face-outer" d="M131 184 Q120 165 131 147 Q151 116 178 110 Q198 106 216 109 Q203 91 229 97 Q238 99 244 109 Q250 91 262 88 Q261 101 273 107 Q297 100 320 107 Q350 111 374 136 Q389 153 381 175 L389 185 L378 189 Q390 204 384 219 Q382 241 362 249 Q344 269 307 271 Q300 283 311 296 L300 292 Q302 310 289 317 L284 309 Q278 325 257 330 L256 321 Q248 322 239 319 Q230 312 224 303 L219 312 Q208 301 210 279 Q176 276 151 264 Q139 259 129 249 L143 250 Q114 238 118 222 L130 224 Q119 215 122 202 Q127 197 134 195Z"/>
+    <clipPath id="face-clip"><use xlink:href="#face-outer"/></clipPath>
+    <g id="front-ear">
+      <path d="M130 163 C99 130 98 67 112 31 Q117 18 132 25 C154 35 195 63 214 93 Q225 114 222 126Z" fill="url(#ear-shell)" stroke="#35365e" stroke-width="4.8" stroke-linejoin="round"/>
+      <path d="M131 140 C113 112 112 67 121 44 Q125 33 136 39 Q164 55 184 81 Q198 95 203 112Z" fill="url(#ear-light)" stroke="#745a79" stroke-width="2.8"/>
+      <path d="M119 46 Q121 33 133 37 Q172 62 187 88 Q162 85 153 75 Q143 60 119 46Z" fill="#c7848c" opacity=".60"/>
+      <path d="M137 117 L152 117 L143 102 Q159 102 174 109 L168 96 Q186 99 201 111 Q186 137 153 150Z" fill="#879acf" stroke="#5b638c" stroke-width="2.7" stroke-linejoin="round"/>
+    </g>
+    <g id="rear-ear">
+      <path d="M134 161 C100 135 99 74 111 41 Q116 19 132 26 C160 38 193 65 216 102 Q223 113 216 126Z" fill="url(#ear-shell)" stroke="#383b64" stroke-width="4.8" stroke-linejoin="round"/>
+      <path d="M118 49 Q118 37 128 38 Q148 45 164 64 Q148 65 143 91 Q125 78 118 49Z" fill="#c98c9d" opacity=".42"/>
+      <path d="M144 138 Q133 121 131 103 M150 74 Q161 85 167 96" fill="none" stroke="#b7c0e3" stroke-width="4.4" stroke-linecap="round" opacity=".67"/>
+    </g>
+    <g id="front-eye">
+      <path d="M-34 14 C-33 -12 -20 -33 -2 -35 Q22 -37 33 -11 Q42 11 26 26 Q14 37 -8 34 Q-26 33 -34 14Z" fill="#fffaf0"/>
+      <path d="M-24 15 C-23 -12 -13 -30 3 -31 C23 -33 34 -15 33 6 Q33 27 15 32 Q-9 38 -24 15Z" fill="url(#iris)" stroke="#354777" stroke-width="2.7"/>
+      <path d="M-20 15 Q-5 31 19 24 Q-1 41 -15 27Z" fill="#70cde7" opacity=".81"/>
+      <path d="M-10 -9 Q-7 -30 4 -30 Q18 -28 20 -8 Q20 14 9 18 Q-5 21 -10 -9Z" fill="#261f4d"/>
+      <path d="M-33 19 Q-39 2 -29 -17 C-20 -35 3 -42 20 -32 Q31 -25 34 -10 C22 -30 4 -35 -13 -24 Q-31 -11 -33 19Z" fill="#231e37"/>
+      <ellipse cx="-5" cy="-21" rx="10" ry="9" fill="#fffbee"/>
+      <ellipse cx="20" cy="17" rx="4.2" ry="5.1" fill="#9ad8e8" opacity=".74"/>
+    </g>
+  </defs>
+
+  <g id="head-front">
+    <use xlink:href="#front-ear"/>
+    <use xlink:href="#front-ear" transform="translate(512 0) scale(-1 1)"/>
+    <use xlink:href="#face-outer" fill="url(#blue-fur)"/>
+    <g clip-path="url(#face-clip)">
+      <path d="M121 153 Q142 114 171 114 Q152 142 150 169 Q145 196 124 211Z M369 137 Q394 167 393 206 Q373 193 362 159Z" fill="#7790c2" opacity=".65"/>
+      <path d="M116 211 Q155 192 187 214 Q207 226 227 214 Q247 200 256 166 Q269 196 287 211 Q301 225 324 215 Q352 197 385 212 L388 258 Q369 267 330 275 L318 330 L253 342 L205 318 L201 278 Q150 276 120 247Z" fill="url(#cream-fur)"/>
+      <path d="M143 235 Q157 239 164 239 L156 246 Q170 247 181 252 Q163 253 147 251Z M367 231 Q357 241 343 244 L350 247 Q338 253 328 256 L362 253Z" fill="#acb8d8" opacity=".59"/>
+      <path d="M229 280 Q253 293 284 279 Q268 296 282 302 Q275 313 260 312 Q235 306 229 280Z" fill="#bcc3d1" opacity=".36"/>
+      <path d="M186 139 Q200 124 214 137 M299 137 Q313 123 326 138" fill="none" stroke="#637cb2" stroke-width="4.1" stroke-linecap="round" opacity=".8"/>
+      <use xlink:href="#front-eye" transform="translate(207 179) rotate(6)"/>
+      <use xlink:href="#front-eye" transform="translate(306 179) rotate(-6) scale(.985 .982)"/>
+      <path d="M245 207 Q256 201 267 207 Q266 213 256 218 Q247 214 245 207Z" fill="#ec947e" stroke="#cc7a73" stroke-width="1.9"/>
+      <path d="M241 230 Q249 231 256 222 Q263 231 276 229 C275 246 265 259 256 258 Q246 258 241 230Z" fill="#792f45" stroke="#743244" stroke-width="2.8"/>
+      <path d="M249 245 Q260 239 268 247 Q263 256 256 257 Q250 254 249 245Z" fill="#f29b90"/>
+      <path d="M241 230 Q233 231 231 226 M276 229 Q281 229 284 224" fill="none" stroke="#71394e" stroke-linecap="round" stroke-width="3"/>
+      <path d="M163 226 Q174 220 185 227 M327 227 Q338 221 348 225" fill="none" stroke="#dfa69f" stroke-width="3" stroke-linecap="round" opacity=".65"/>
+    </g>
+    <path d="M133 214 Q103 204 91 211 M130 227 Q100 226 88 236 M379 213 Q409 202 423 207 M383 227 Q412 224 426 235" fill="none" stroke="#485475" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M131 184 Q120 165 131 147 Q151 116 178 110 Q198 106 216 109 Q203 91 229 97 Q238 99 244 109 Q250 91 262 88 Q261 101 273 107 Q297 100 320 107 Q350 111 374 136 Q389 153 381 175 L389 185 L378 189 Q390 204 384 219 Q382 241 362 249 Q344 269 307 271 M210 279 Q176 276 151 264 Q139 259 129 249 L143 250 Q114 238 118 222 L130 224 Q119 215 122 202 Q127 197 134 195 L131 184" fill="none" stroke="#38365a" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+
+  <g id="head-away">
+    <use xlink:href="#rear-ear" transform="translate(13 -2)"/>
+    <use xlink:href="#rear-ear" transform="translate(504 -7) scale(-1 1)"/>
+    <path d="M134 182 Q119 150 149 124 Q170 104 204 109 L220 112 Q218 101 214 96 Q230 94 239 109 Q244 92 262 92 Q263 103 273 111 Q303 103 334 113 Q368 121 386 157 Q394 169 385 187 L395 200 L380 200 Q389 219 382 234 L370 233 Q365 259 322 272 Q307 282 309 301 Q283 297 272 309 Q241 309 213 302 Q216 289 197 269 Q153 264 139 247 L126 251 L133 233 Q114 219 123 204 L133 202 L127 195Z" fill="url(#blue-fur)" stroke="#373b67" stroke-width="4.7" stroke-linejoin="round"/>
+    <path d="M128 207 Q138 210 150 207 Q141 216 151 227 Q160 238 177 243 Q171 247 164 246 Q183 254 191 264 Q158 260 140 246 L130 249 L135 231 Q122 221 128 207Z" fill="#d6dbeb"/>
+    <path d="M379 212 Q389 219 382 231 L370 233 Q365 251 341 261 Q323 266 318 272 Q335 254 342 247 Q356 243 360 230 Q363 220 379 212Z" fill="#d2d9ea"/>
+    <path d="M149 151 Q170 115 205 116 Q187 131 181 150 Q173 166 161 169 Q151 167 149 151Z M332 119 Q357 124 374 150 Q375 166 367 174 Q357 179 349 162 Q344 145 332 119Z" fill="#667fb8" opacity=".65"/>
+    <path d="M226 115 Q239 130 241 143 Q244 158 251 161 Q260 154 259 142 Q260 128 270 114 Q266 105 261 97 Q248 99 241 111Z M262 176 Q268 169 272 176 Q281 189 279 202 Q275 208 267 197 Q267 186 262 176Z" fill="#7a91c7" opacity=".72"/>
+    <path d="M159 188 Q168 176 185 175 M202 234 Q228 252 257 247 M309 192 Q326 181 342 184" fill="none" stroke="#d3d9ed" stroke-width="4" stroke-linecap="round" opacity=".45"/>
+  </g>
+</svg>

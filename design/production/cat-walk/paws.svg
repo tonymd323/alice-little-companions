@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="100" viewBox="0 0 128 100">
+  <title>团团一阶 · 四块脚垫的右向画稿</title>
+  <defs>
+    <linearGradient id="near" x1="0" x2=".3" y1="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#fff9eb"/>
+      <stop offset=".68" stop-color="#fff8e9"/>
+      <stop offset="1" stop-color="#d5d2d9"/>
+    </linearGradient>
+    <linearGradient id="far" x1="0" x2=".2" y1="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#e6e1db"/>
+      <stop offset=".66" stop-color="#eee9df"/>
+      <stop offset="1" stop-color="#b9bbcc"/>
+    </linearGradient>
+    <path id="back" d="M46 45 Q61 35 74 44 Q81 52 87 56 Q99 61 98 70 Q96 79 84 81 Q75 84 66 81 Q53 84 43 80 Q32 78 31 70 Q31 56 46 45Z"/>
+    <path id="back-line" d="M42 49 Q28 61 32 72 Q36 82 54 82 Q61 83 66 81 Q75 84 84 81 Q97 79 98 70 Q99 61 87 56 Q82 54 81 51"/>
+    <path id="back-toes" d="M68 68 Q75 74 66 81 M84 66 Q91 73 84 80"/>
+    <path id="front" d="M46 46 Q63 34 80 45 Q86 50 87 57 Q96 62 97 70 Q96 79 86 81 Q80 84 69 81 Q55 84 44 81 Q34 78 34 69 Q34 55 46 46Z"/>
+    <path id="front-line" d="M43 49 Q31 60 34 71 Q37 80 49 82 Q59 83 69 81 Q80 84 86 81 Q96 79 97 70 Q96 63 87 57 L84 52"/>
+    <path id="front-toes" d="M69 69 Q75 75 69 81 M85 66 Q91 73 86 80"/>
+  </defs>
+  <g id="paw-near-hind">
+    <use xlink:href="#back" fill="url(#near)"/>
+    <use xlink:href="#back-line" fill="none" stroke="#393d64" stroke-width="3.5" stroke-linecap="round"/>
+    <use xlink:href="#back-toes" fill="none" stroke="#9c9cb4" stroke-width="2.9" stroke-linecap="round"/>
+  </g>
+  <g id="paw-near-front">
+    <use xlink:href="#front" fill="url(#near)"/>
+    <use xlink:href="#front-line" fill="none" stroke="#3e426a" stroke-width="3.5" stroke-linecap="round"/>
+    <use xlink:href="#front-toes" fill="none" stroke="#a1a0b4" stroke-width="2.9" stroke-linecap="round"/>
+  </g>
+  <g id="paw-far-hind">
+    <use xlink:href="#back" fill="url(#far)"/>
+    <use xlink:href="#back-line" fill="none" stroke="#424b73" stroke-width="3.4" stroke-linecap="round"/>
+    <use xlink:href="#back-toes" fill="none" stroke="#9297b0" stroke-width="2.8" stroke-linecap="round"/>
+  </g>
+  <g id="paw-far-front">
+    <use xlink:href="#front" fill="url(#far)"/>
+    <use xlink:href="#front-line" fill="none" stroke="#444c75" stroke-width="3.4" stroke-linecap="round"/>
+    <use xlink:href="#front-toes" fill="none" stroke="#969ab1" stroke-width="2.8" stroke-linecap="round"/>
+  </g>
+</svg>

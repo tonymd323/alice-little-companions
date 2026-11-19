@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="160" viewBox="0 0 128 160">
+  <title>团团一阶 · 四条腿的八段原画</title>
+  <defs>
+    <linearGradient id="near-violet" x1="0" x2=".85" y1="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#a4b1d6"/>
+      <stop offset=".55" stop-color="#a1afd6"/>
+      <stop offset="1" stop-color="#7e93c8"/>
+    </linearGradient>
+    <linearGradient id="far-violet" x1="0" x2=".72" y1="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#8b9bc8"/>
+      <stop offset=".6" stop-color="#8194c2"/>
+      <stop offset="1" stop-color="#6278af"/>
+    </linearGradient>
+    <linearGradient id="near-ivory" x1="0" x2=".15" y1="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#fff9ef"/>
+      <stop offset="1" stop-color="#d8d6d8"/>
+    </linearGradient>
+    <linearGradient id="far-ivory" x1="0" x2=".3" y1="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#ece7df"/>
+      <stop offset="1" stop-color="#b8bccd"/>
+    </linearGradient>
+    <path id="hind-upper" d="M41 23 C51 7 74 7 87 21 C103 37 105 59 90 80 Q83 95 82 112 L83 133 Q74 143 60 141 Q46 141 45 131 L44 104 C25 91 22 68 27 47 Q30 32 41 23Z"/>
+    <path id="hind-upper-mark" d="M29 47 Q37 20 63 18 Q87 14 99 42 L96 54 Q77 32 53 42 Q36 47 27 65Z"/>
+    <path id="hind-upper-line" d="M41 24 C25 41 21 71 30 90 Q36 102 47 108 L46 133 M90 29 Q102 49 95 66 Q83 87 81 114 L83 134"/>
+    <path id="hind-lower" d="M45 24 Q66 14 82 27 L81 55 Q81 77 76 98 L83 130 Q77 142 64 145 Q54 145 47 135 L43 106 Q40 92 43 72 Q47 50 45 24Z"/>
+    <path id="hind-sock" d="M43 94 L51 101 L57 94 L63 105 L72 98 L76 103 L83 130 Q77 142 64 145 Q54 145 47 135 L43 106Z"/>
+    <path id="hind-lower-line" d="M45 32 Q45 52 43 72 Q40 91 43 106 L47 132 M81 34 L81 55 Q81 75 76 98 L83 130"/>
+    <path id="front-upper" d="M37 22 Q49 11 65 15 Q88 15 94 32 Q99 48 89 71 C83 88 80 111 81 129 Q72 142 62 141 Q48 141 45 131 C48 109 44 91 37 77 Q22 52 37 22Z"/>
+    <path id="front-upper-mark" d="M37 31 Q44 21 63 21 Q85 21 92 41 Q80 33 64 38 Q45 42 31 55Z"/>
+    <path id="front-upper-line" d="M39 26 Q24 43 29 62 Q33 74 39 81 Q48 103 45 130 M92 33 Q98 45 91 65 Q80 88 81 129"/>
+    <path id="front-lower" d="M45 25 Q64 17 82 26 L79 62 Q78 86 82 113 L84 135 Q76 143 61 143 Q49 144 44 135 L45 111 Q47 77 45 57Z"/>
+    <path id="front-sock" d="M45 86 L52 92 L59 87 L66 100 L73 92 L80 101 L84 135 Q76 143 61 143 Q49 144 44 135 L45 111Z"/>
+    <path id="front-lower-line" d="M45 34 L45 55 Q47 78 45 111 L44 131 M82 32 L79 62 Q77 85 82 113 L84 132"/>
+  </defs>
+
+  <g id="leg-near-hind-upper">
+    <use xlink:href="#hind-upper" fill="url(#near-violet)"/>
+    <use xlink:href="#hind-upper-mark" fill="#b8c3e0" opacity=".56"/>
+    <path d="M34 65 Q36 97 57 109 L56 132" fill="none" stroke="#6f87bd" stroke-width="9" stroke-linecap="round" opacity=".64"/>
+    <use xlink:href="#hind-upper-line" fill="none" stroke="#373d68" stroke-width="3.9" stroke-linecap="round"/>
+  </g>
+  <g id="leg-near-hind-lower">
+    <use xlink:href="#hind-lower" fill="url(#near-violet)"/>
+    <use xlink:href="#hind-sock" fill="url(#near-ivory)"/>
+    <path d="M52 44 Q49 74 51 84" fill="none" stroke="#c2cee7" stroke-width="3.7" stroke-linecap="round" opacity=".64"/>
+    <use xlink:href="#hind-lower-line" fill="none" stroke="#3e4368" stroke-width="3.8" stroke-linecap="round"/>
+  </g>
+  <g id="leg-near-front-upper">
+    <use xlink:href="#front-upper" fill="url(#near-violet)"/>
+    <use xlink:href="#front-upper-mark" fill="#c2cbe5" opacity=".40"/>
+    <path d="M37 49 Q34 63 44 80 Q51 98 52 118" fill="none" stroke="#8197c9" stroke-width="6.4" stroke-linecap="round" opacity=".66"/>
+    <use xlink:href="#front-upper-line" fill="none" stroke="#3b4067" stroke-width="3.8" stroke-linecap="round"/>
+  </g>
+  <g id="leg-near-front-lower">
+    <use xlink:href="#front-lower" fill="url(#near-violet)"/>
+    <use xlink:href="#front-sock" fill="url(#near-ivory)"/>
+    <path d="M53 46 Q52 66 53 82" fill="none" stroke="#d5dcf0" stroke-width="3.4" stroke-linecap="round" opacity=".52"/>
+    <use xlink:href="#front-lower-line" fill="none" stroke="#3b4067" stroke-width="3.8" stroke-linecap="round"/>
+  </g>
+  <g id="leg-far-hind-upper">
+    <use xlink:href="#hind-upper" fill="url(#far-violet)"/>
+    <use xlink:href="#hind-upper-mark" fill="#adbbd8" opacity=".38"/>
+    <use xlink:href="#hind-upper-line" fill="none" stroke="#444b77" stroke-width="3.7" stroke-linecap="round"/>
+  </g>
+  <g id="leg-far-hind-lower">
+    <use xlink:href="#hind-lower" fill="url(#far-violet)"/>
+    <use xlink:href="#hind-sock" fill="url(#far-ivory)"/>
+    <use xlink:href="#hind-lower-line" fill="none" stroke="#444b77" stroke-width="3.8" stroke-linecap="round"/>
+  </g>
+  <g id="leg-far-front-upper">
+    <use xlink:href="#front-upper" fill="url(#far-violet)"/>
+    <use xlink:href="#front-upper-mark" fill="#aab6d6" opacity=".44"/>
+    <use xlink:href="#front-upper-line" fill="none" stroke="#414870" stroke-width="3.8" stroke-linecap="round"/>
+  </g>
+  <g id="leg-far-front-lower">
+    <use xlink:href="#front-lower" fill="url(#far-violet)"/>
+    <use xlink:href="#front-sock" fill="url(#far-ivory)"/>
+    <use xlink:href="#front-lower-line" fill="none" stroke="#414870" stroke-width="3.8" stroke-linecap="round"/>
+  </g>
+</svg>
