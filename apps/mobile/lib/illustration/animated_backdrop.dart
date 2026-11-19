@@ -98,7 +98,9 @@ class _SceneryMesh {
 
         final (leaves, water) = switch (place) {
           'courtyard' => (
-            area(.65, .12, .41, .24) + area(.12, .53, .15, .16),
+            // The small spray hangs above the stairs. Leave a full mesh row
+            // between its last moving vertex and the first wooden tread.
+            area(.65, .12, .41, .24) + .33 * area(.15, .40, .047, .035),
             area(.84, .83, .22, .16),
           ),
           'veranda' => (
