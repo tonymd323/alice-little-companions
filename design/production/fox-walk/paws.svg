@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="100" viewBox="0 0 128 100">
+  <title>奶油一阶 · 四爪与掌线</title>
+  <defs>
+    <linearGradient id="cream-paw" x1=".2" y1="0" x2=".35" y2="1">
+      <stop stop-color="#fff4d6"/><stop offset=".58" stop-color="#f5dbb6"/><stop offset="1" stop-color="#d9ae91"/>
+    </linearGradient>
+    <linearGradient id="far-cream-paw" x1=".2" y1="0" x2=".41" y2="1">
+      <stop stop-color="#efd6b7"/><stop offset=".58" stop-color="#d1b08e"/><stop offset="1" stop-color="#b58b75"/>
+    </linearGradient>
+    <linearGradient id="rust-paw" x1=".1" y1="0" x2=".35" y2="1">
+      <stop stop-color="#c66d50"/><stop offset=".58" stop-color="#a35244"/><stop offset="1" stop-color="#7e3a31"/>
+    </linearGradient>
+    <linearGradient id="far-rust-paw" x1=".15" y1="0" x2=".32" y2="1">
+      <stop stop-color="#ad604a"/><stop offset=".6" stop-color="#8f473b"/><stop offset="1" stop-color="#71352e"/>
+    </linearGradient>
+    <path id="hind-pad" d="M48 42 Q60 36 79 43 Q81 53 86 58 Q100 63 99 72 Q98 80 89 81 Q82 84 74 82 Q69 84 62 83 Q55 85 48 81 Q36 78 39 68 Q42 60 48 56Z"/>
+    <path id="hind-edge" d="M48 45 Q48 55 42 61 Q38 67 39 73 Q40 79 48 81 Q55 85 62 83 Q69 84 74 82 Q82 84 89 81 Q97 79 99 74 Q101 66 86 58 Q81 53 79 44"/>
+    <path id="front-pad" d="M46 40 Q58 35 77 42 Q76 52 83 57 Q95 63 98 70 Q101 78 91 81 Q84 84 75 82 Q70 85 62 83 Q53 84 46 81 Q37 79 39 68 Q42 62 46 55Z"/>
+    <path id="front-edge" d="M46 44 Q46 54 43 60 Q38 65 39 73 Q40 80 46 81 Q53 84 62 83 Q70 85 75 82 Q84 84 91 81 Q100 79 99 73 Q97 64 83 57 Q76 52 77 43"/>
+    <path id="toe-detail" d="M71 72 Q78 75 75 81 M83 71 Q90 74 89 79"/>
+  </defs>
+  <g id="paw-near-hind">
+    <use xlink:href="#hind-pad" fill="url(#rust-paw)"/>
+    <path d="M49 62 Q60 53 70 55 Q78 56 84 64 Q67 60 56 71 Q50 75 45 72Z" fill="#de9a78" opacity=".4"/>
+    <use xlink:href="#hind-edge" fill="none" stroke="#66332a" stroke-width="3" stroke-linecap="round"/>
+    <use xlink:href="#toe-detail" fill="none" stroke="#763e34" stroke-width="2.2" stroke-linecap="round"/>
+  </g>
+  <g id="paw-near-front">
+    <use xlink:href="#front-pad" fill="url(#cream-paw)"/>
+    <path d="M48 65 Q59 53 72 59 Q78 61 80 64 Q63 60 51 73 Q47 75 45 71Z" fill="#fff6df" opacity=".68"/>
+    <use xlink:href="#front-edge" fill="none" stroke="#86523a" stroke-width="3" stroke-linecap="round"/>
+    <use xlink:href="#toe-detail" fill="none" stroke="#ad7b63" stroke-width="2.1" stroke-linecap="round"/>
+  </g>
+  <g id="paw-far-hind">
+    <use xlink:href="#hind-pad" fill="url(#far-rust-paw)"/>
+    <path d="M49 62 Q62 54 77 62 Q62 60 51 71Z" fill="#c8896c" opacity=".45"/>
+    <use xlink:href="#hind-edge" fill="none" stroke="#64342b" stroke-width="3" stroke-linecap="round"/>
+    <use xlink:href="#toe-detail" fill="none" stroke="#733f33" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  <g id="paw-far-front">
+    <use xlink:href="#front-pad" fill="url(#far-cream-paw)"/>
+    <path d="M48 63 Q59 55 73 60 Q78 61 81 65 Q63 59 51 72Z" fill="#f4e0be" opacity=".52"/>
+    <use xlink:href="#front-edge" fill="none" stroke="#754d3d" stroke-width="3" stroke-linecap="round"/>
+    <use xlink:href="#toe-detail" fill="none" stroke="#996e56" stroke-width="2.1" stroke-linecap="round"/>
+  </g>
+</svg>

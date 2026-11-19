@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="464" viewBox="0 0 512 464">
+  <title>奶油一阶 · 头、栗色尾巴、躯干与衣饰</title>
+  <defs>
+    <linearGradient id="fox-fur" x1=".06" y1="0" x2=".29" y2="1">
+      <stop stop-color="#ffad55"/><stop offset=".45" stop-color="#f98233"/><stop offset="1" stop-color="#cb4e24"/>
+    </linearGradient>
+    <linearGradient id="cream" x1=".2" y1="0" x2=".32" y2="1">
+      <stop stop-color="#fff7dc"/><stop offset="1" stop-color="#e8bb90"/>
+    </linearGradient>
+    <linearGradient id="amber-cloth" x1=".12" y1="0" x2=".28" y2="1">
+      <stop stop-color="#ffc964"/><stop offset=".61" stop-color="#dd943c"/><stop offset="1" stop-color="#ad622b"/>
+    </linearGradient>
+    <linearGradient id="lavender-cloth" x1=".1" y1="0" x2=".25" y2="1">
+      <stop stop-color="#e3c0ec"/><stop offset=".55" stop-color="#b992cf"/><stop offset="1" stop-color="#8868a5"/>
+    </linearGradient>
+    <linearGradient id="ruff-cloth" x1=".12" y1="0" x2=".2" y2="1">
+      <stop stop-color="#fff8df"/><stop offset="1" stop-color="#e7ca9e"/>
+    </linearGradient>
+    <path id="side-body" d="M126 337 C130 310 143 292 165 282 C196 268 226 278 254 275 C287 270 313 250 349 246 C374 242 399 250 409 271 Q418 297 398 321 C378 344 343 354 318 355 Q294 355 273 349 C248 339 217 340 194 349 C169 362 149 380 133 366 Q120 356 126 337Z"/>
+    <path id="depth-body" d="M184 293 Q191 267 219 249 Q258 224 297 247 Q320 263 332 292 C345 320 336 352 311 363 Q257 388 199 363 Q174 351 184 293Z"/>
+    <clipPath id="side-body-mask"><use xlink:href="#side-body"/></clipPath>
+    <clipPath id="depth-body-mask"><use xlink:href="#depth-body"/></clipPath>
+    <clipPath id="head-cut">
+      <path d="M37 -6 H376 V272 Q326 270 293 280 Q289 291 302 303 L293 302 L295 312 L283 308 L290 323 L278 319 L276 333 L268 326 Q269 342 258 349 L252 341 Q248 352 239 356 L237 342 L225 343 L225 332 L215 337 L214 321 L206 325 L207 307 Q203 298 190 291 Q173 291 151 289 L135 280 L119 273 L103 265 L93 257 L84 250 L84 241 L98 227 L97 215 L37 198Z"/>
+    </clipPath>
+    <clipPath id="tail-cut">
+      <path d="M-5 238 H84 L84 252 L95 263 L106 271 L127 279 L144 289 Q158 305 158 322 Q148 341 141 356 Q132 377 129 395 L123 426 L106 440 H-5Z"/>
+    </clipPath>
+    <g id="gold-button">
+      <circle r="6.1" fill="#ffc449" stroke="#9b602d" stroke-width="2.6"/>
+      <path d="M-2.4 -1.6 L-.3 -3 M1.2 2.1 L2.6 .5" fill="none" stroke="#fff0a8" stroke-width="1.4" stroke-linecap="round"/>
+    </g>
+    <g id="pocket-flower" stroke="#a37b72" stroke-width="1.2">
+      <path d="M0 5 C-6 13 -15 7 -9 1 C-19 -4 -8 -13 -3 -8 C-1 -17 9 -12 8 -5 C17 -8 21 2 12 5 C13 13 3 13 0 5Z" fill="#fff2d7"/>
+      <circle cx="2" cy="0" r="5" fill="#f4c54a"/>
+    </g>
+  </defs>
+
+  <g id="tail">
+    <path d="M129 311 Q148 314 169 318 L169 334 Q145 358 115 352 Q97 341 110 320Z" fill="#a53e27"/>
+    <g transform="translate(32 -32) scale(.91)" clip-path="url(#tail-cut)">
+      <image xlink:href="face-source.png" x="0" y="0" width="369" height="451"/>
+    </g>
+  </g>
+
+  <g id="head" transform="translate(173 20) scale(.88)" clip-path="url(#head-cut)">
+    <image xlink:href="face-source.png" x="0" y="0" width="369" height="451"/>
+  </g>
+
+  <g id="torso">
+    <use xlink:href="#side-body" fill="url(#fox-fur)"/>
+    <g clip-path="url(#side-body-mask)">
+      <path d="M129 329 Q172 302 207 315 Q240 333 278 327 Q344 319 386 291 Q412 267 418 282 L415 365 L117 388Z" fill="#ac3c24" opacity=".38"/>
+      <path d="M132 311 C165 279 189 284 215 290 Q247 294 267 281 Q303 263 344 259 L332 275 Q289 286 271 300 Q248 313 209 301 Q169 294 136 322Z" fill="#ffc478" opacity=".5"/>
+      <path d="M251 346 Q271 333 303 335 L298 329 Q321 328 343 316 L337 312 Q361 306 383 286 L382 278 Q398 271 411 269 L419 301 L389 347 Q352 373 319 356 Q285 357 251 346Z" fill="url(#cream)"/>
+      <path d="M145 319 Q159 296 181 294 M198 287 Q218 287 238 291 M289 283 Q315 266 338 266 M161 350 Q172 341 190 338" fill="none" stroke="#ffd091" stroke-width="2.8" stroke-linecap="round" opacity=".55"/>
+      <path d="M144 334 q12 -13 26 -14 m25 8 q12 -6 26 -1 m86 13 q17 -2 29 -9 m38 -15 q9 -7 16 -16" fill="none" stroke="#ae4629" stroke-width="1.9" stroke-linecap="round" opacity=".6"/>
+    </g>
+    <use xlink:href="#side-body" fill="none" stroke="#723721" stroke-width="4.2" stroke-linejoin="round"/>
+  </g>
+
+  <g id="coat">
+    <path d="M136 311 C140 291 158 275 183 275 Q224 278 260 269 Q306 251 345 249 Q373 245 389 265 Q401 292 380 322 Q361 344 326 347 Q274 338 238 341 Q190 351 153 344 Q132 339 136 311Z" fill="url(#amber-cloth)" stroke="#845326" stroke-width="3.7"/>
+    <path d="M142 309 Q155 280 185 279 Q246 285 300 257 L311 258 Q293 273 272 279 Q229 294 184 288 Q163 291 149 319Z" fill="#ffda8b" opacity=".66"/>
+    <path d="M152 330 Q180 347 229 336 Q271 330 309 339 M290 265 Q298 294 282 333 M344 267 Q350 305 330 337" fill="none" stroke="#ae692d" stroke-width="3.3" stroke-linecap="round"/>
+    <path d="M180 301 Q204 292 228 297 L221 322 Q201 333 185 323Z" fill="#e7a449" stroke="#96612f" stroke-width="2.8"/>
+    <path d="M185 304 Q200 299 222 302 M191 319 Q203 323 216 319" fill="none" stroke="#ffcf7c" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M312 257 Q335 243 359 244 Q378 247 379 262 Q369 282 347 285 Q328 280 312 257Z" fill="url(#ruff-cloth)" stroke="#ae7e57" stroke-width="3.2"/>
+    <path d="M324 259 Q340 277 361 272" stroke="#f4ddab" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <use xlink:href="#gold-button" transform="translate(336 302)"/>
+    <use xlink:href="#gold-button" transform="translate(327 321) scale(.9)"/>
+  </g>
+
+  <g id="apron">
+    <path d="M132 326 Q141 297 155 282 Q185 268 225 280 Q263 280 292 263 Q342 243 372 263 Q393 280 373 316 Q352 350 311 347 Q259 350 224 337 Q190 334 153 352 Q139 359 126 349Z" fill="url(#lavender-cloth)" stroke="#71537e" stroke-width="3.7"/>
+    <path d="M146 304 Q175 281 207 286 Q223 294 247 286 M177 291 Q172 320 151 341 M208 288 Q206 313 195 331 M237 290 Q232 318 225 331 M263 284 Q263 312 250 332" fill="none" stroke="#875c9b" stroke-width="3" stroke-linecap="round"/>
+    <path d="M153 282 Q174 274 193 282 Q233 296 263 280 Q257 291 233 296 Q190 296 147 314Z" fill="#f0d5ef" opacity=".57"/>
+    <path d="M127 343 Q140 350 150 346 Q167 341 178 339 Q191 331 204 336 Q219 328 231 335 Q245 331 257 340 Q272 334 285 344 Q300 340 312 348 L309 354 Q298 361 289 353 Q281 362 269 352 Q261 358 250 350 Q240 358 229 348 Q216 355 205 346 Q196 355 184 349 Q173 358 163 353 Q154 363 143 356 Q132 363 125 353Z" fill="url(#ruff-cloth)" stroke="#987791" stroke-width="2.6"/>
+    <path d="M289 278 Q322 259 350 263 Q369 268 373 283 Q376 317 346 336 Q328 348 291 333 Q306 309 289 278Z" fill="#c1a0d6" stroke="#89619c" stroke-width="3"/>
+    <path d="M304 300 Q325 291 350 298 Q347 322 330 330 Q309 331 302 320Z" fill="#986cab" stroke="#78518e" stroke-width="2.6"/>
+    <use xlink:href="#pocket-flower" transform="translate(330 311) scale(.83)"/>
+    <path d="M163 284 Q149 265 136 266 Q120 268 126 282 Q135 293 157 287 Q132 299 125 314 L138 310 Q153 304 164 287 Q168 302 180 306 L188 301 Q174 290 174 286 Q200 295 203 276 Q202 259 186 261 Q170 262 163 284Z" fill="#d6b4e2" stroke="#755481" stroke-width="3.5"/>
+    <path d="M155 280 Q142 270 131 274 M176 278 Q189 267 197 269 M157 285 Q166 278 173 286 L170 291 Q163 295 157 289Z" fill="none" stroke="#8c68a3" stroke-width="2.7" stroke-linecap="round"/>
+  </g>
+
+  <g id="trim-coat">
+    <path d="M330 300 Q342 281 362 286 Q382 293 386 312 L384 328 Q364 343 338 337Z" fill="url(#amber-cloth)" stroke="#8d572e" stroke-width="3.3"/>
+    <path d="M336 301 Q347 290 365 293 Q353 300 346 312 L339 320Z" fill="#ffd687" opacity=".72"/>
+    <path d="M338 330 Q365 338 385 321 L386 333 Q369 349 340 339Z" fill="url(#ruff-cloth)" stroke="#a77550" stroke-width="2.6"/>
+  </g>
+  <g id="trim-apron">
+    <path d="M331 298 Q348 280 365 287 Q384 295 388 321 L384 328 Q361 342 337 328Z" fill="url(#lavender-cloth)" stroke="#775587" stroke-width="3.2"/>
+    <path d="M339 302 Q354 287 367 294 Q354 297 341 317Z" fill="#ecd4ee" opacity=".58"/>
+    <path d="M337 324 Q357 335 386 319 L389 327 Q382 338 374 334 Q368 345 359 338 Q349 344 342 335 Q333 339 334 330Z" fill="url(#ruff-cloth)" stroke="#9b7899" stroke-width="2.7"/>
+  </g>
+
+  <g id="torso-front">
+    <use xlink:href="#depth-body" fill="url(#fox-fur)"/>
+    <g clip-path="url(#depth-body-mask)">
+      <path d="M184 310 Q220 349 257 355 Q297 355 335 322 L337 381 H177Z" fill="#aa4028" opacity=".42"/>
+      <path d="M220 250 Q255 238 291 250 Q282 272 302 307 L290 302 Q296 321 284 333 L280 326 Q273 348 259 353 L252 347 L245 352 Q227 338 224 323 L214 331 Q216 317 211 312 L204 320 Q202 286 220 250Z" fill="url(#cream)"/>
+      <path d="M191 301 Q196 286 211 278 M303 273 Q318 287 323 303" fill="none" stroke="#ffc077" stroke-width="4" stroke-linecap="round" opacity=".53"/>
+    </g>
+    <use xlink:href="#depth-body" fill="none" stroke="#773d26" stroke-width="4.1"/>
+  </g>
+  <g id="torso-away">
+    <use xlink:href="#depth-body" fill="url(#fox-fur)"/>
+    <g clip-path="url(#depth-body-mask)">
+      <path d="M178 316 Q213 346 257 348 Q302 352 335 319 L341 382 H177Z" fill="#9a3928" opacity=".48"/>
+      <path d="M201 294 Q214 269 239 266 Q252 264 267 270 Q292 266 318 296 Q294 291 284 300 Q276 291 266 296 Q249 286 229 298 Q214 289 201 309Z" fill="#ffb46c" opacity=".53"/>
+      <path d="M194 314 Q206 332 226 338 M279 337 Q309 328 321 312" fill="none" stroke="#f29a55" stroke-width="3.6" stroke-linecap="round" opacity=".62"/>
+    </g>
+    <use xlink:href="#depth-body" fill="none" stroke="#763b25" stroke-width="4.1"/>
+  </g>
+
+  <g id="coat-front">
+    <path d="M185 283 Q211 243 237 243 Q279 236 299 245 Q321 257 333 282 Q341 310 331 341 Q320 354 302 349 Q253 366 208 351 Q190 358 179 340Z" fill="url(#amber-cloth)" stroke="#87532d" stroke-width="3.9"/>
+    <path d="M252 254 Q252 310 248 352 M205 281 Q201 310 212 330 M311 282 Q315 310 303 332" fill="none" stroke="#a76b32" stroke-width="3" stroke-linecap="round"/>
+    <path d="M206 255 Q235 237 254 249 Q271 240 304 253 Q292 280 271 284 Q263 286 255 270 Q251 287 236 285 Q212 275 206 255Z" fill="url(#ruff-cloth)" stroke="#b18357" stroke-width="2.9"/>
+    <path d="M183 336 Q196 340 209 333 L213 345 Q201 356 181 349Z M305 333 Q323 338 333 332 L333 344 Q322 355 304 345Z" fill="url(#ruff-cloth)" stroke="#9a6a47" stroke-width="2.8"/>
+    <use xlink:href="#gold-button" transform="translate(260 299)"/>
+    <use xlink:href="#gold-button" transform="translate(259 322) scale(.9)"/>
+  </g>
+  <g id="coat-away">
+    <path d="M184 283 Q202 250 230 243 Q257 233 285 243 Q315 251 332 282 Q344 307 333 337 Q325 352 301 349 Q255 363 210 350 Q189 355 180 338Z" fill="url(#amber-cloth)" stroke="#84552e" stroke-width="3.8"/>
+    <path d="M200 274 Q225 252 255 257 Q282 253 315 273 Q302 279 288 277 Q255 266 223 278 Q211 280 200 274Z" fill="url(#ruff-cloth)" stroke="#a6754c" stroke-width="3.2"/>
+    <path d="M254 279 Q253 317 260 351 M189 324 Q210 342 238 339 M275 341 Q309 340 329 324" fill="none" stroke="#b37334" stroke-width="3.1" stroke-linecap="round"/>
+  </g>
+  <g id="apron-front">
+    <path d="M184 283 Q200 250 223 245 Q262 234 293 244 Q322 252 331 279 Q338 310 332 343 Q319 362 299 352 Q254 368 207 352 Q187 358 179 343 Q173 310 184 283Z" fill="url(#lavender-cloth)" stroke="#745587" stroke-width="3.8"/>
+    <path d="M192 272 Q205 259 218 252 L230 284 Q258 273 280 285 L294 251 L312 266 Q300 292 299 314 Q299 338 316 347 Q259 368 199 348 Q213 338 212 312 Q212 289 192 272Z" fill="#caa9dc" stroke="#916ba1" stroke-width="3"/>
+    <path d="M221 309 Q257 297 290 309 Q287 333 260 342 Q235 341 224 328Z" fill="#9d74af" stroke="#765493" stroke-width="2.5"/>
+    <use xlink:href="#pocket-flower" transform="translate(255 321) scale(.89)"/>
+    <path d="M180 337 Q197 346 213 342 Q255 367 298 342 Q315 345 332 336 L332 345 Q327 356 317 350 Q312 364 302 355 Q291 367 281 360 Q265 372 253 365 Q238 372 228 361 Q215 368 206 354 Q193 363 186 352 Q177 358 176 345Z" fill="url(#ruff-cloth)" stroke="#9a7898" stroke-width="2.8"/>
+  </g>
+  <g id="apron-away">
+    <path d="M183 284 Q204 247 233 243 Q259 237 285 244 Q316 252 331 281 Q340 314 333 344 Q311 358 294 350 Q257 367 212 352 Q188 357 179 342Z" fill="url(#lavender-cloth)" stroke="#775487" stroke-width="3.7"/>
+    <path d="M203 255 Q215 268 239 286 Q251 292 263 299 Q276 286 309 254 M203 255 Q228 250 257 266 Q289 248 310 255" fill="none" stroke="#ede1eb" stroke-width="6.4" stroke-linecap="round"/>
+    <path d="M252 300 Q217 280 214 302 C215 317 236 320 247 311 Q230 329 223 338 L239 333 Q249 324 257 313 Q266 330 286 339 L292 331 Q273 319 267 312 Q296 322 301 305 Q300 282 281 288 Q266 287 259 299Z" fill="#d7b6e7" stroke="#795989" stroke-width="3.4"/>
+    <path d="M248 302 Q257 295 267 302 L267 312 Q256 319 248 311Z" fill="#aa84bc" stroke="#87649b" stroke-width="2.7"/>
+    <path d="M181 336 Q200 345 214 341 Q254 360 292 344 Q316 346 332 337 L336 346 Q326 357 316 350 Q304 361 295 355 Q286 365 274 359 Q263 371 251 363 Q236 370 225 359 Q213 365 204 353 Q192 360 182 350Z" fill="url(#ruff-cloth)" stroke="#97779a" stroke-width="2.7"/>
+  </g>
+</svg>

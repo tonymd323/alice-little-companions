@@ -1,0 +1,80 @@
+{
+  "canvas": [512, 464],
+  "root": [256, 440],
+  "seatedArtHeight": 451,
+  "tailPivot": [152, 322],
+  "head": {
+    "side": {
+      "source": "assets/art/fox-1.webp",
+      "sourceScale": 0.88,
+      "sourceOrigin": [173, 20],
+      "pivot": [403, 183],
+      "seatedPivot": [331, 180],
+      "crown": [391, 130],
+      "nearEar": [257, 135],
+      "neck": [410, 260],
+      "nearEye": [358, 190],
+      "farEye": [448, 176],
+      "skullWidth": 215
+    },
+    "front": {
+      "pivot": [256, 191],
+      "crown": [256, 132],
+      "nearEar": [171, 133],
+      "neck": [256, 269],
+      "nearEye": [210, 192],
+      "farEye": [301, 190],
+      "skullWidth": 229
+    },
+    "away": {
+      "pivot": [256, 191],
+      "crown": [256, 132],
+      "nearEar": [171, 128],
+      "neck": [256, 268],
+      "skullWidth": 229
+    }
+  },
+  "segment": {"size": [128, 160], "start": [64, 32], "end": [64, 128]},
+  "paw": {"size": [128, 100], "joint": [64, 55], "pad": [64, 84]},
+  "limbs": [
+    {"id": "near-hind", "hip": [153, 316], "bend": [180, 367], "pad": [151, 440], "seatedPad": [232, 432]},
+    {"id": "near-front", "hip": [359, 301], "bend": [351, 357], "pad": [372, 440], "seatedPad": [292, 433]},
+    {"id": "far-hind", "hip": [189, 304], "bend": [210, 351], "pad": [193, 420], "seatedPad": [372, 421]},
+    {"id": "far-front", "hip": [388, 291], "bend": [397, 344], "pad": [412, 420], "seatedPad": [342, 430]}
+  ],
+  "directions": {
+    "front": [
+      {"hip": [201, 296], "pad": [184, 407]},
+      {"hip": [222, 311], "pad": [214, 440]},
+      {"hip": [312, 293], "pad": [328, 407]},
+      {"hip": [294, 309], "pad": [296, 438]}
+    ],
+    "away": [
+      {"hip": [214, 316], "pad": [210, 439]},
+      {"hip": [202, 292], "pad": [184, 406]},
+      {"hip": [298, 315], "pad": [304, 439]},
+      {"hip": [311, 293], "pad": [329, 405]}
+    ]
+  },
+  "cycle": {
+    "stride": 144,
+    "depthStride": 96,
+    "strideUnits": "artwork px at full resolution",
+    "support": 0.75,
+    "keyPoses": [
+      {"label": "近后落地", "phase": 0, "hip": [-2, 4], "shoulder": [0, -1], "body": [-1, 2], "head": [-3, 2], "tailDegrees": 5},
+      {"label": "近前经过", "phase": 0.125, "hip": [1, -3], "shoulder": [3, -4], "body": [2, -3], "head": [5, -1], "tailDegrees": 8},
+      {"label": "近前落地", "phase": 0.25, "hip": [1, 0], "shoulder": [1, 5], "body": [1, 3], "head": [4, 5], "tailDegrees": 2},
+      {"label": "远后经过", "phase": 0.375, "hip": [4, -3], "shoulder": [2, -2], "body": [3, -2], "head": [3, -1], "tailDegrees": -5},
+      {"label": "远后落地", "phase": 0.5, "hip": [-1, 4], "shoulder": [-1, 1], "body": [-1, 2], "head": [-4, 3], "tailDegrees": -7},
+      {"label": "远前经过", "phase": 0.625, "hip": [-2, -2], "shoulder": [2, -4], "body": [0, -3], "head": [3, -3], "tailDegrees": -4},
+      {"label": "远前落地", "phase": 0.75, "hip": [-3, 2], "shoulder": [-1, 5], "body": [-1, 3], "head": [0, 5], "tailDegrees": 1},
+      {"label": "近后经过", "phase": 0.875, "hip": [-4, -4], "shoulder": [-3, -1], "body": [-3, -3], "head": [-4, 1], "tailDegrees": 6}
+    ]
+  },
+  "transitions": {
+    "stand": {"hip": [0, 0], "shoulder": [0, 0], "body": [0, 0], "head": [0, 0], "tailDegrees": 0},
+    "pushUp": {"hip": [37, 31], "shoulder": [-30, 12], "body": [1, 23], "head": [-55, 0], "tailDegrees": -8},
+    "sitBack": {"hip": [29, 28], "shoulder": [-17, 12], "body": [-2, 17], "head": [-35, 2], "tailDegrees": 9}
+  }
+}

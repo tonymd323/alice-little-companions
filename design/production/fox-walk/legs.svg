@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="128" height="160" viewBox="0 0 128 160">
+  <title>奶油一阶 · 狐狸的前腿、股部和飞节</title>
+  <defs>
+    <linearGradient id="near-fur" x1=".13" y1="0" x2=".32" y2="1">
+      <stop stop-color="#ffa25b"/><stop offset=".48" stop-color="#ed8138"/><stop offset="1" stop-color="#bd4c2c"/>
+    </linearGradient>
+    <linearGradient id="far-fur" x1=".15" y1="0" x2=".35" y2="1">
+      <stop stop-color="#d87942"/><stop offset=".58" stop-color="#be5b38"/><stop offset="1" stop-color="#9b4131"/>
+    </linearGradient>
+    <linearGradient id="hind-fur" x1=".13" y1="0" x2=".31" y2="1">
+      <stop stop-color="#e27a43"/><stop offset=".54" stop-color="#b65538"/><stop offset="1" stop-color="#89382d"/>
+    </linearGradient>
+    <linearGradient id="far-hind-fur" x1=".12" y1="0" x2=".26" y2="1">
+      <stop stop-color="#ba613d"/><stop offset=".53" stop-color="#a74834"/><stop offset="1" stop-color="#78342c"/>
+    </linearGradient>
+    <linearGradient id="sock" x1=".17" y1="0" x2=".24" y2="1">
+      <stop stop-color="#fff5d7"/><stop offset="1" stop-color="#e6bd9b"/>
+    </linearGradient>
+    <linearGradient id="far-sock" x1=".11" y1="0" x2=".33" y2="1">
+      <stop stop-color="#eac9a5"/><stop offset="1" stop-color="#be977a"/>
+    </linearGradient>
+    <path id="hind-upper" d="M40 20 Q63 5 82 17 C103 28 110 48 100 69 Q92 84 83 93 Q81 115 80 132 Q70 143 58 142 Q44 142 43 128 L45 109 Q33 101 24 79 Q16 60 26 42 Q30 29 40 20Z"/>
+    <path id="hind-haunch" d="M31 38 Q43 22 66 24 Q88 25 98 46 Q80 37 57 45 Q36 51 25 64 Q25 51 31 38Z"/>
+    <path id="hind-upper-outline" d="M43 20 Q28 30 25 44 Q16 62 26 81 Q35 100 45 109 L43 127 M91 25 Q107 39 102 58 Q97 79 84 92 Q80 111 80 131"/>
+    <path id="hind-lower" d="M43 22 Q64 13 84 24 Q87 45 81 70 Q76 88 75 108 L83 131 Q82 145 62 147 Q49 147 47 137 Q44 117 42 106 Q37 94 42 80 Q50 49 43 22Z"/>
+    <path id="hind-lower-outline" d="M45 28 Q49 48 45 66 L41 85 Q38 101 45 117 L47 135 M84 29 Q86 52 80 73 Q77 88 75 109 L82 132"/>
+    <path id="front-upper" d="M42 24 Q56 8 77 18 Q93 22 98 42 C100 61 87 79 83 92 Q80 110 82 129 Q75 143 61 143 Q48 142 44 133 Q47 111 43 95 Q40 82 35 73 Q26 54 32 43Z"/>
+    <path id="front-upper-outline" d="M44 25 Q32 38 31 50 Q29 64 38 81 Q45 96 44 129 M92 29 Q101 44 96 58 Q91 74 85 86 Q78 104 82 130"/>
+    <path id="front-lower" d="M45 22 Q61 13 81 22 C87 40 80 64 80 86 Q81 110 84 132 Q78 146 62 146 Q47 145 43 135 Q46 104 44 83 Q42 57 45 22Z"/>
+    <path id="front-sock" d="M44 92 L52 98 L56 91 L62 100 L68 94 L73 101 L81 98 L84 132 Q78 146 62 146 Q47 145 43 135Z"/>
+    <path id="front-lower-outline" d="M45 28 Q43 53 43 75 Q46 106 43 134 M82 29 Q85 46 80 73 Q79 99 84 132"/>
+  </defs>
+
+  <g id="leg-near-hind-upper">
+    <use xlink:href="#hind-upper" fill="url(#near-fur)"/>
+    <use xlink:href="#hind-haunch" fill="#ffbd78" opacity=".53"/>
+    <path d="M33 68 Q36 98 54 104 Q57 116 55 134" fill="none" stroke="#a7452b" stroke-width="7" stroke-linecap="round" opacity=".59"/>
+    <path d="M43 37 q11 -9 22 -8 m10 3 q11 3 15 12" fill="none" stroke="#ffc789" stroke-width="2.7" stroke-linecap="round" opacity=".56"/>
+    <use xlink:href="#hind-upper-outline" fill="none" stroke="#713521" stroke-width="4.1" stroke-linecap="round"/>
+  </g>
+  <g id="leg-near-hind-lower">
+    <use xlink:href="#hind-lower" fill="url(#hind-fur)"/>
+    <path d="M42 74 L51 85 L58 76 L63 88 L73 82 L76 101 L83 132 Q77 144 64 145 Q48 145 47 136 L43 108 Q38 95 42 74Z" fill="#9d4434" opacity=".7"/>
+    <path d="M52 51 Q53 66 49 80 M52 105 Q57 117 55 128" fill="none" stroke="#f7a264" stroke-width="3.1" stroke-linecap="round" opacity=".5"/>
+    <use xlink:href="#hind-lower-outline" fill="none" stroke="#713521" stroke-width="3.8" stroke-linecap="round"/>
+  </g>
+  <g id="leg-near-front-upper">
+    <use xlink:href="#front-upper" fill="url(#near-fur)"/>
+    <path d="M34 43 Q43 22 66 24 Q77 24 91 37 Q78 34 65 39 Q47 54 32 55Z" fill="#ffc080" opacity=".61"/>
+    <path d="M39 58 Q41 77 53 91 Q57 112 52 132" fill="none" stroke="#a94728" stroke-width="7" stroke-linecap="round" opacity=".56"/>
+    <use xlink:href="#front-upper-outline" fill="none" stroke="#743724" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g id="leg-near-front-lower">
+    <use xlink:href="#front-lower" fill="url(#near-fur)"/>
+    <use xlink:href="#front-sock" fill="url(#sock)"/>
+    <path d="M54 41 Q52 62 55 83 M54 106 L53 124" fill="none" stroke="#fbc58a" stroke-width="3.6" stroke-linecap="round" opacity=".66"/>
+    <use xlink:href="#front-lower-outline" fill="none" stroke="#75402b" stroke-width="3.7" stroke-linecap="round"/>
+  </g>
+  <g id="leg-far-hind-upper">
+    <use xlink:href="#hind-upper" fill="url(#far-fur)"/>
+    <use xlink:href="#hind-haunch" fill="#ec995e" opacity=".41"/>
+    <path d="M38 75 Q38 93 54 103 L52 132" fill="none" stroke="#88422e" stroke-width="7" stroke-linecap="round" opacity=".5"/>
+    <use xlink:href="#hind-upper-outline" fill="none" stroke="#70392c" stroke-width="3.8" stroke-linecap="round"/>
+  </g>
+  <g id="leg-far-hind-lower">
+    <use xlink:href="#hind-lower" fill="url(#far-hind-fur)"/>
+    <path d="M52 42 Q55 61 49 80" fill="none" stroke="#eb985b" stroke-width="3.5" stroke-linecap="round" opacity=".54"/>
+    <use xlink:href="#hind-lower-outline" fill="none" stroke="#70392c" stroke-width="3.8" stroke-linecap="round"/>
+  </g>
+  <g id="leg-far-front-upper">
+    <use xlink:href="#front-upper" fill="url(#far-fur)"/>
+    <path d="M36 39 Q46 24 63 25 Q82 24 90 38 Q72 32 55 40 Q42 47 33 49Z" fill="#efa265" opacity=".51"/>
+    <use xlink:href="#front-upper-outline" fill="none" stroke="#713b2a" stroke-width="3.8" stroke-linecap="round"/>
+  </g>
+  <g id="leg-far-front-lower">
+    <use xlink:href="#front-lower" fill="url(#far-fur)"/>
+    <use xlink:href="#front-sock" fill="url(#far-sock)"/>
+    <path d="M54 48 Q52 67 54 86" fill="none" stroke="#e9a96d" stroke-width="3.4" stroke-linecap="round" opacity=".58"/>
+    <use xlink:href="#front-lower-outline" fill="none" stroke="#794735" stroke-width="3.7" stroke-linecap="round"/>
+  </g>
+</svg>
