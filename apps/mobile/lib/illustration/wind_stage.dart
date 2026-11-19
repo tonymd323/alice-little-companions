@@ -47,12 +47,13 @@ class _WindStageState extends State<WindStage>
   bool failed = false, foreground = true, visible = true, still = false;
   bool finished = false, deferred = false;
   int request = 0, nextCue = 0;
+  int tappedLeaves = 0, pendingSeatSounds = 0, shownLeaves = 0, run = 0;
   Duration last = Duration.zero;
 
   static const openingCues = [
     (at: .65, name: 'wind'),
     (at: 2.65, name: 'scarf'),
-    (at: 5.5, name: 'basket'),
+    (at: 5.82, name: 'basket'),
   ];
   static const reunionCues = [
     (at: .85, name: 'footsteps'),
@@ -67,6 +68,8 @@ class _WindStageState extends State<WindStage>
     final state = WidgetsBinding.instance.lifecycleState;
     foreground = state == null || state == AppLifecycleState.resumed;
     shot.reset(widget.phase, widget.mask, widget.holding);
+    shownLeaves = shot.glazing.value;
+    shot.glazing.addListener(_glazingChanged);
   }
 
   @override
@@ -119,12 +122,66 @@ class _WindStageState extends State<WindStage>
   @override
   void didUpdateWidget(WindStage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    shot.update(widget.phase, widget.mask, widget.holding, still);
+    final gained = widget.mask & ~oldWidget.mask;
+    var placed = 0;
+    if (widget.mask & oldWidget.mask != oldWidget.mask ||
+        widget.phase == WindPhase.opening && widget.phase != oldWidget.phase) {
+      tappedLeaves = pendingSeatSounds = 0;
+      run++;
+    } else if (oldWidget.phase == WindPhase.playing &&
+        oldWidget.holding &&
+        !widget.holding) {
+      placed = tappedLeaves & gained;
+      pendingSeatSounds |= placed;
+      tappedLeaves = 0;
+    }
+    shot.update(
+      widget.phase,
+      widget.mask,
+      widget.holding,
+      still,
+      placed: placed != 0,
+    );
     if (oldWidget.phase != widget.phase) {
       finished = false;
       nextCue = 0;
     }
     _deferSync();
+  }
+
+  void _tapPane(int pane) {
+    if (widget.holding && pane >= 7 && !_filled(pane, widget.mask)) {
+      tappedLeaves |= 1 << (pane - 7);
+    }
+    widget.onPane(pane);
+  }
+
+  void _glazingChanged() {
+    final prior = shownLeaves, now = shot.glazing.value;
+    shownLeaves = now;
+    final seated = pendingSeatSounds & now & ~prior;
+    if (seated == 0) return;
+    pendingSeatSounds &= ~seated;
+    final generation = run;
+    // Restored glass is silent. Only a confirmed tap that has actually reached
+    // the leaded glass can sound, including the last tap that starts the reunion.
+    void play() {
+      if (!mounted || !foreground || !visible || generation != run) return;
+      for (var i = 0; i < _count(seated); i++) {
+        widget.onCue('seatLeaf');
+      }
+      if (seated & 1 != 0) widget.onCue('windowLight');
+      if (seated & 30 != 0 && prior & 30 != 30 && now & 30 == 30) {
+        widget.onCue('windowLight');
+      }
+    }
+
+    if (SchedulerBinding.instance.schedulerPhase ==
+        SchedulerPhase.persistentCallbacks) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => play());
+    } else {
+      play();
+    }
   }
 
   @override
@@ -198,6 +255,7 @@ class _WindStageState extends State<WindStage>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     ticker.dispose();
+    shot.glazing.removeListener(_glazingChanged);
     shot.dispose();
     paintings?.dispose();
     super.dispose();
@@ -256,6 +314,7 @@ class _WindStageState extends State<WindStage>
                 Positioned.fill(
                   child: RepaintBoundary(
                     child: ValueListenableBuilder<int>(
+                      key: const ValueKey('wind-painted-glass'),
                       valueListenable: shot.glazing,
                       builder: (context, mask, _) =>
                           CustomPaint(painter: _RoomPainter(art, mask)),
@@ -286,14 +345,14 @@ class _WindStageState extends State<WindStage>
                         label:
                             '第 ${pane ~/ 4 + 1} 扇窗，第 ${pane % 4 + 1} 格，'
                             '${_filled(pane, widget.mask) ? '已有金叶' : '空叶槽'}',
-                        onTap: () => widget.onPane(pane),
+                        onTap: () => _tapPane(pane),
                       ),
                     ),
                   Positioned.fromRect(
                     rect: project(
                       Rect.fromCenter(
-                        center: basket.translate(0, -.035),
-                        width: .30,
+                        center: basket.translate(0, -.048),
+                        width: _WindArt.basketWidth,
                         height: .15,
                       ),
                     ),

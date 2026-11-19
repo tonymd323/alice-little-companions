@@ -20,7 +20,7 @@ Offset _point(List values) =>
     Offset((values[0] as num).toDouble(), (values[1] as num).toDouble());
 
 class _WindArt {
-  _WindArt._(Map<String, dynamic> json)
+  _WindArt._(Map<String, dynamic> json, Map<String, dynamic> rig)
     : base = _Patch.fromJson(json['base'] as Map<String, dynamic>),
       panes = [
         for (final cell in json['cells'] as List)
@@ -35,7 +35,24 @@ class _WindArt {
       rabbit = _point(json['actors']['rabbit'] as List),
       basket = _point(json['actors']['basket'] as List),
       door = _point(json['actors']['door'] as List),
-      aspect = (json['size'][0] as num) / (json['size'][1] as num);
+      aspect = (json['size'][0] as num) / (json['size'][1] as num),
+      ground = _point(rig['ground'] as List),
+      actorHeightRatio = (rig['canvas'][1] as num) / (rig['canvas'][0] as num),
+      joints = {
+        for (final entry in (rig['actors'] as Map<String, dynamic>).entries)
+          entry.key: _PoseJoints(
+            entry.value['markers'] as Map<String, dynamic>,
+          ),
+      },
+      basketGround = _point(rig['props']['basket']['ground'] as List),
+      basketRim = _point(rig['props']['basket']['leftRim'] as List),
+      basketHeightRatio =
+          (rig['props']['basket']['size'][1] as num) /
+          (rig['props']['basket']['size'][0] as num),
+      basketLeaves = [
+        for (final p in rig['props']['basket']['interior'] as List)
+          _point(p as List),
+      ];
 
   static const _actors = 'assets/wind/actors/';
   static const _sprites = [
@@ -47,7 +64,9 @@ class _WindArt {
     'rabbit_reach',
     'rabbit_lower',
     'rabbit_push',
+    'rabbit_push_low',
     'rabbit_stretch',
+    'rabbit_stretch_low',
     'rabbit_recoil',
     'rabbit_wavelift',
     'rabbit_wave',
@@ -64,11 +83,13 @@ class _WindArt {
     'leaf',
   ];
 
-  final double aspect;
+  static const rabbitWidth = .49, basketWidth = .31, slideDistance = .094;
+  final double aspect, actorHeightRatio, basketHeightRatio;
   final _Patch base, rail;
   final List<_Patch> panes, lights;
-  final Offset rabbit, basket, door;
-  final List<Offset> bridge;
+  final Offset rabbit, basket, door, ground, basketGround, basketRim;
+  final List<Offset> bridge, basketLeaves;
+  final Map<String, _PoseJoints> joints;
   final images = <String, ui.Image>{};
   final _shaders = <String, ui.ImageShader>{};
 
@@ -87,10 +108,19 @@ class _WindArt {
     final json = jsonDecode(
       await bundle.loadString('assets/wind/room/room.json'),
     ) as Map<String, dynamic>;
-    final art = _WindArt._(json);
+    final rig = jsonDecode(
+      await bundle.loadString('${_actors}poses.json'),
+    ) as Map<String, dynamic>;
+    final art = _WindArt._(json, rig);
     if (art.panes.length != 12 ||
         art.lights.length != 3 ||
-        art.bridge.length < 2) {
+        art.bridge.length < 2 ||
+        art.basketLeaves.length != 5 ||
+        !_sprites
+            .where(
+              (name) => name.startsWith('rabbit_') || name.startsWith('fox_'),
+            )
+            .every(art.joints.containsKey)) {
       throw const FormatException('暖廊缺少窗格、光路或石桥画位');
     }
     final keys = <String, String>{
@@ -155,6 +185,29 @@ class _WindArt {
         .5;
   }
 
+  Offset actorOffset(Offset mark, double width) => Offset(
+    (mark.dx - ground.dx) * width,
+    (mark.dy - ground.dy) * width * aspect * actorHeightRatio,
+  );
+
+  Offset basketOffset(Offset mark) => Offset(
+    (mark.dx - basketGround.dx) * basketWidth,
+    (mark.dy - basketGround.dy) * basketWidth * aspect * basketHeightRatio,
+  );
+
+  // Both planted poses were painted against a rehearsal basket. Register the
+  // near paw to the real rim and leave the hind legs on the same floorboard.
+  late final Offset restingRabbit = Offset(
+    basket.dx +
+        basketOffset(basketRim).dx -
+        actorOffset(joints['rabbit_stretch_low']!.nearPaw, rabbitWidth).dx,
+    rabbit.dy,
+  );
+  late final double basketFloor =
+      rabbit.dy +
+      actorOffset(joints['rabbit_stretch_low']!.nearPaw, rabbitWidth).dy -
+      basketOffset(basketRim).dy;
+
   void dispose() {
     for (final shader in _shaders.values) {
       shader.dispose();
@@ -164,6 +217,28 @@ class _WindArt {
     }
     images.clear();
   }
+}
+
+// Order matches the influence radii in the skin. Near paw, far paw, nose, each
+// ear, scarf knot (fox tail) and eye are marked on every individual drawing.
+class _PoseJoints {
+  _PoseJoints(Map<String, dynamic> marks)
+    : points = [
+        for (final name in [
+          'nearPaw',
+          'farPaw',
+          'nose',
+          'nearEarTip',
+          'farEarTip',
+          if (marks.containsKey('knot')) 'knot' else 'tailTip',
+          'nearEye',
+        ])
+          _point(marks[name] as List),
+      ];
+
+  final List<Offset> points;
+  Offset get nearPaw => points[0];
+  Offset get nose => points[2];
 }
 
 double _fraction(double from, double to, double value) =>
@@ -177,6 +252,7 @@ class _WindShot extends ChangeNotifier {
   // continuous part of the road, regardless of the order Alice filled the glass.
   static const firstStop = .30, secondStop = .68;
   static const flightLength = .63, stepLength = 2.2;
+  static const atGlass = .91;
   static const never = -10000.0;
 
   WindPhase phase = WindPhase.opening;
@@ -185,7 +261,7 @@ class _WindShot extends ChangeNotifier {
   double now = 0, phaseAt = 0, movingUntil = 0;
   double takingAt = never, seatingAt = never, stepAt = never, lookAt = never;
   double stepFrom = firstStop, reunionFrom = firstStop;
-  int? flyingPane;
+  final flights = <int, ({double start, double lifted, int leaf})>{};
   double? footfallDue;
   double get age => now - phaseAt;
   final glazing = ValueNotifier<int>(0);
@@ -204,14 +280,22 @@ class _WindShot extends ChangeNotifier {
     takingAt = seatingAt = stepAt = lookAt = never;
     stepFrom = reunionFrom = leaves & 1 != 0 ? secondStop : firstStop;
     movingUntil = now;
-    flyingPane = null;
+    flights.clear();
     footfallDue = null;
     glazing.value = visibleMask;
   }
 
-  void update(WindPhase next, int leaves, bool held, bool reduced) {
+  void update(
+    WindPhase next,
+    int leaves,
+    bool held,
+    bool reduced, {
+    required bool placed,
+  }) {
     noMotion = reduced;
-    if (leaves & mask != mask || next == WindPhase.opening && next != phase) {
+    if (leaves & mask != mask ||
+        leaves != mask && !placed ||
+        next == WindPhase.opening && next != phase) {
       reset(next, leaves, held);
       return;
     }
@@ -219,7 +303,11 @@ class _WindShot extends ChangeNotifier {
     final changed = mask ^ leaves;
     if (phase == WindPhase.playing && changed != 0 && !reduced) {
       if (changed & (changed - 1) == 0) {
-        flyingPane = 7 + changed.bitLength - 1;
+        flights[7 + changed.bitLength - 1] = (
+          start: now,
+          lifted: _smooth(_fraction(0, .48, now - takingAt)),
+          leaf: (4 - _count(mask)).clamp(0, 4),
+        );
         seatingAt = now;
         movingUntil = math.max(movingUntil, now + 1.12);
       }
@@ -242,6 +330,9 @@ class _WindShot extends ChangeNotifier {
       if (next == WindPhase.reunion) {
         reunionFrom = foxBefore;
         footfallDue = null;
+      } else if (next == WindPhase.complete) {
+        flights.clear();
+        movingUntil = now;
       }
     }
     phase = next;
@@ -251,9 +342,9 @@ class _WindShot extends ChangeNotifier {
   }
 
   void settle() {
-    final changed = !noMotion || flyingPane != null || footfallDue != null;
+    final changed = !noMotion || flights.isNotEmpty || footfallDue != null;
     noMotion = true;
-    flyingPane = null;
+    flights.clear();
     footfallDue = null;
     stepAt = takingAt = seatingAt = lookAt = never;
     movingUntil = now;
@@ -264,17 +355,22 @@ class _WindShot extends ChangeNotifier {
   void advance(double dt) {
     noMotion = false;
     now += dt;
+    flights.removeWhere((_, flight) => now - flight.start >= flightLength);
     glazing.value = visibleMask;
     notifyListeners();
   }
 
-  double get flight => _fraction(seatingAt, seatingAt + flightLength, now);
+  double flight(double start) => _fraction(start, start + flightLength, now);
   int get visibleMask {
-    final pane = flyingPane;
-    if (pane != null && flight < .91 && !noMotion) {
-      return mask & ~(1 << (pane - 7));
+    var visible = mask;
+    if (!noMotion) {
+      for (final entry in flights.entries) {
+        if (flight(entry.value.start) < atGlass) {
+          visible &= ~(1 << (entry.key - 7));
+        }
+      }
     }
-    return mask;
+    return visible;
   }
 
   double get bridgeFraction {
@@ -289,8 +385,11 @@ class _WindShot extends ChangeNotifier {
 
   Offset basketAt(_WindArt art) {
     final slide = phase == WindPhase.opening && !noMotion
-        ? _smooth(_fraction(5.36, 7.23, age))
+        ? _smooth(_fraction(5.80, 7.06, age))
         : 1.0;
-    return art.basket.translate((slide - 1) * .085, (slide - 1) * .004);
+    return Offset(
+      art.basket.dx + (slide - 1) * _WindArt.slideDistance,
+      art.basketFloor + (slide - 1) * .002,
+    );
   }
 }

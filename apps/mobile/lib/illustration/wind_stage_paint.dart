@@ -49,13 +49,13 @@ const _opening = <_KeyPose>[
   (2.54, 'catch'),
   (2.96, 'guard'),
   (3.72, 'guard'),
-  (4.19, 'reach'),
-  (4.67, 'lower'),
-  (5.05, 'lower'),
-  (5.62, 'push'),
-  (6.08, 'push'),
-  (6.97, 'stretch'),
-  (7.42, 'stretch'),
+  (4.16, 'reach'),
+  (4.62, 'lower'),
+  (4.92, 'lower'),
+  (5.48, 'push_low'),
+  (5.80, 'push_low'),
+  (7.06, 'stretch_low'),
+  (7.42, 'stretch_low'),
   (7.92, 'recoil'),
   (8.43, 'idle'),
   (8.96, 'wavelift'),
@@ -76,9 +76,10 @@ const _reunion = <_KeyPose>[
   (5.55, 'wave'),
   (5.91, 'wavelift'),
   (6.30, 'wave'),
-  (6.72, 'wavelift'),
-  (7.16, 'recoil'),
-  (7.62, 'idle'),
+  (6.59, 'wavelift'),
+  (6.97, 'catch'),
+  (7.27, 'guard'),
+  (7.61, 'reach'),
 ];
 
 class _Exposure {
@@ -102,72 +103,16 @@ class _Exposure {
   }
 }
 
-// Letterboxed sprite space. Separate handles follow the ears, face and near
-// forepaw between the painted poses. Hind paws remain planted at the baseline.
-typedef _Joints = ({Offset ear, Offset face, Offset paw});
-
-const _rabbitJoints = <String, _Joints>{
-  'idle': (
-    ear: Offset(.39, .24),
-    face: Offset(.55, .48),
-    paw: Offset(.59, .75),
-  ),
-  'notice': (
-    ear: Offset(.36, .21),
-    face: Offset(.55, .46),
-    paw: Offset(.59, .73),
-  ),
-  'listen': (
-    ear: Offset(.38, .17),
-    face: Offset(.58, .44),
-    paw: Offset(.60, .72),
-  ),
-  'catch': (
-    ear: Offset(.40, .23),
-    face: Offset(.57, .50),
-    paw: Offset(.63, .63),
-  ),
-  'guard': (
-    ear: Offset(.40, .27),
-    face: Offset(.57, .53),
-    paw: Offset(.61, .61),
-  ),
-  'reach': (
-    ear: Offset(.40, .24),
-    face: Offset(.62, .51),
-    paw: Offset(.68, .66),
-  ),
-  'lower': (
-    ear: Offset(.39, .28),
-    face: Offset(.65, .55),
-    paw: Offset(.73, .74),
-  ),
-  'push': (
-    ear: Offset(.35, .29),
-    face: Offset(.65, .57),
-    paw: Offset(.78, .74),
-  ),
-  'stretch': (
-    ear: Offset(.32, .32),
-    face: Offset(.68, .57),
-    paw: Offset(.84, .74),
-  ),
-  'recoil': (
-    ear: Offset(.41, .23),
-    face: Offset(.56, .48),
-    paw: Offset(.64, .69),
-  ),
-  'wavelift': (
-    ear: Offset(.39, .22),
-    face: Offset(.55, .46),
-    paw: Offset(.65, .62),
-  ),
-  'wave': (
-    ear: Offset(.38, .22),
-    face: Offset(.56, .46),
-    paw: Offset(.70, .51),
-  ),
-};
+// Each influence lives in the painted actor's normalized frame.
+const _jointRadii = [
+  Offset(.18, .16),
+  Offset(.16, .15),
+  Offset(.22, .18),
+  Offset(.28, .23),
+  Offset(.27, .23),
+  Offset(.15, .16),
+  Offset(.24, .20),
+];
 
 const _meshCols = 14, _meshRows = 15;
 final _meshTriangles = Uint16List.fromList([
@@ -194,11 +139,38 @@ class _WindPainter extends CustomPainter {
     _bridgeActor(canvas);
     final basket = shot.basketAt(art);
     final rabbit = _rabbitExposure();
-    const rabbitWidth = .50;
-    final feet = _rabbitFeet(basket, rabbit, rabbitWidth);
+    const width = _WindArt.rabbitWidth;
+    final nearPaw = Offset.lerp(
+      art.joints['rabbit_${rabbit.from}']!.nearPaw,
+      art.joints['rabbit_${rabbit.to}']!.nearPaw,
+      rabbit.mix,
+    )!;
+    final contact = shot.phase == WindPhase.opening && !shot.noMotion
+        ? _smooth(_fraction(4.98, 5.46, shot.age)) *
+              (1 - _smooth(_fraction(7.42, 7.86, shot.age)))
+        : 0.0;
+    final rim = basket + art.basketOffset(art.basketRim);
+    final pawOffset = art.actorOffset(nearPaw, width);
+    final feet = Offset.lerp(art.restingRabbit, rim - pawOffset, contact)!;
     _shadow(canvas, feet.translate(-.003, -.001), .145, .014);
+    _actor(canvas, 'rabbit', feet, rabbit, width);
     _basket(canvas, basket);
-    _rabbit(canvas, feet, rabbit, rabbitWidth);
+    if (contact > 0) {
+      // The basket wall covers the far paw. The curled end of the near paw
+      // crosses the left wicker rim while the basket moves with it.
+      canvas.save();
+      canvas.clipPath(
+        Path()..addOval(
+          Rect.fromCenter(
+            center: feet + pawOffset + const Offset(-.011, -.005),
+            width: .060,
+            height: .036,
+          ),
+        ),
+      );
+      _actor(canvas, 'rabbit', feet, rabbit, width);
+      canvas.restore();
+    }
     _nearFox(canvas);
     _windblownLeaf(canvas);
     _carriedLeaf(canvas, basket);
@@ -210,17 +182,18 @@ class _WindPainter extends CustomPainter {
     String name,
     Offset foot,
     double width, {
-    Offset anchor = const Offset(.47, .90),
+    Offset? anchor,
     bool faceLeft = false,
   }) {
     final image = art.images[name]!;
     final height = width * art.aspect * image.height / image.width;
+    final pivot = anchor ?? art.ground;
     c.save();
     c.translate(foot.dx, foot.dy);
     if (faceLeft) c.scale(-1.0, 1.0);
     final dest = Rect.fromLTWH(
-      -width * anchor.dx,
-      -height * anchor.dy,
+      -width * pivot.dx,
+      -height * pivot.dy,
       width,
       height,
     );
@@ -305,19 +278,42 @@ class _WindPainter extends CustomPainter {
     final t = settle ? _WindShot.reunionLength : shot.age;
     if (t < 4.07) return;
     final run = _smooth(_fraction(4.07, 6.45, t));
-    final finalFoot = Offset(art.basket.dx + .152, art.rabbit.dy + .015);
-    final feet = Offset.lerp(Offset(1.16, art.door.dy), finalFoot, run)!;
-    final width = ui.lerpDouble(.33, .415, run)!;
+    const finalWidth = .415;
+    // On the floor, the fox turns back towards the rabbit and comes within a
+    // nose length. The basket remains visible behind the returning animal.
+    final rabbitNose =
+        art.restingRabbit +
+        art.actorOffset(art.joints['rabbit_reach']!.nose, _WindArt.rabbitWidth);
+    final foxNose = art.actorOffset(art.joints['fox_arrive']!.nose, finalWidth);
+    final home = Offset(
+      rabbitNose.dx + foxNose.dx + .007,
+      rabbitNose.dy - foxNose.dy,
+    );
+    final landing = home.translate(.042, .001);
+    final feet = run < 1
+        ? Offset.lerp(Offset(1.16, art.door.dy), landing, run)!
+        : Offset.lerp(landing, home, _smooth(_fraction(6.55, 7.22, t)))!;
+    final width = ui.lerpDouble(.33, finalWidth, run)!;
     _shadow(c, feet, .106 * (.8 + .2 * run), .011);
-    final frame = run < 1
-        ? _stride(t - 4.07)
-        : t < 6.97
-        ? 'fox_brake'
-        : 'fox_arrive';
-    _sprite(c, frame, feet, width, faceLeft: true);
+    if (run < 1) {
+      _sprite(c, _stride(t - 4.07), feet, width, faceLeft: true);
+    } else {
+      _actor(
+        c,
+        'fox',
+        feet,
+        _Exposure('brake', 'arrive', _smooth(_fraction(6.55, 7.22, t))),
+        width,
+        faceLeft: true,
+      );
+    }
   }
 
   _Exposure _rabbitExposure() {
+    if (shot.phase == WindPhase.complete ||
+        shot.phase == WindPhase.reunion && shot.noMotion) {
+      return const _Exposure.hold('reach');
+    }
     if (shot.noMotion) return const _Exposure.hold('idle');
     if (shot.phase == WindPhase.opening) {
       return _Exposure.at(_opening, shot.age);
@@ -336,68 +332,65 @@ class _WindPainter extends CustomPainter {
     if (since < 1.1) {
       return _Exposure.at(const [
         (0, 'listen'),
-        (.30, 'wavelift'),
-        (.55, 'wave'),
-        (.80, 'wavelift'),
+        (.25, 'push'),
+        (.51, 'stretch'),
+        (.81, 'wavelift'),
         (1.10, 'idle'),
       ], since);
     }
     return const _Exposure.hold('idle');
   }
 
-  Offset _rabbitFeet(Offset basket, _Exposure p, double width) {
-    if (shot.phase != WindPhase.opening || shot.noMotion) return art.rabbit;
-    final contact =
-        _smooth(_fraction(4.22, 5.32, shot.age)) *
-        (1 - _smooth(_fraction(7.32, 8.18, shot.age)));
-    final paw = Offset.lerp(
-      _rabbitJoints[p.from]!.paw,
-      _rabbitJoints[p.to]!.paw,
-      p.mix,
-    )!;
-    final basketEdge = basket.dx - .115;
-    final target = basketEdge - (paw.dx - .47) * width;
-    return Offset(
-      ui.lerpDouble(art.rabbit.dx, target, contact)!,
-      art.rabbit.dy,
-    );
-  }
-
-  void _rabbit(Canvas c, Offset foot, _Exposure p, double width) {
+  void _actor(
+    Canvas c,
+    String animal,
+    Offset foot,
+    _Exposure p,
+    double width, {
+    bool faceLeft = false,
+  }) {
     if (p.from == p.to || p.mix < .007 || p.mix > .993) {
-      _sprite(c, 'rabbit_${p.mix < .5 ? p.from : p.to}', foot, width);
+      _sprite(
+        c,
+        '${animal}_${p.mix < .5 ? p.from : p.to}',
+        foot,
+        width,
+        faceLeft: faceLeft,
+      );
       return;
     }
-    // Warp the ear, face and front paw to their common in-between positions.
+    // Warp the marked joints to their common in-between positions.
     // Expose one drawing at a time so the scarf edges stay opaque and legible.
     final first = p.mix < .5;
-    final name = 'rabbit_${first ? p.from : p.to}';
-    final joints = _rabbitJoints[first ? p.from : p.to]!;
-    final other = _rabbitJoints[first ? p.to : p.from]!;
+    final name = '${animal}_${first ? p.from : p.to}';
+    final joints = art.joints[name]!.points;
+    final other = art.joints['${animal}_${first ? p.to : p.from}']!.points;
     final strength = first ? p.mix : 1 - p.mix;
     final image = art.images[name]!;
     final widthPx = image.width.toDouble(), heightPx = image.height.toDouble();
     final height = width * art.aspect * heightPx / widthPx;
-    final origin = foot - Offset(width * .47, height * .90);
+    final origin = Offset(-width * art.ground.dx, -height * art.ground.dy);
     final coordinates = Float32List(2 * (_meshCols + 1) * (_meshRows + 1));
     final texture = Float32List(coordinates.length);
     var n = 0;
     for (var y = 0; y <= _meshRows; y++) {
       for (var x = 0; x <= _meshCols; x++) {
         final u = x / _meshCols, v = y / _meshRows;
-        double influence(Offset joint, double rx, double ry) {
-          final dx = (u - joint.dx) / rx, dy = (v - joint.dy) / ry;
-          final w = (1 - dx * dx - dy * dy).clamp(0.0, 1.0);
-          return w * w;
+        var dx = 0.0, dy = 0.0, weights = 0.0;
+        for (var j = 0; j < joints.length; j++) {
+          final handle = joints[j], radius = _jointRadii[j];
+          final xDist = (u - handle.dx) / radius.dx;
+          final yDist = (v - handle.dy) / radius.dy;
+          final w = 1 - xDist * xDist - yDist * yDist;
+          if (w <= 0) continue;
+          weights += w * w;
+          dx += (other[j].dx - handle.dx) * w * w;
+          dy += (other[j].dy - handle.dy) * w * w;
         }
-
-        final shift =
-            (other.ear - joints.ear) * influence(joints.ear, .33, .25) +
-            (other.face - joints.face) * influence(joints.face, .31, .24) +
-            (other.paw - joints.paw) * influence(joints.paw, .24, .17);
-        coordinates[n] = origin.dx + width * (u + shift.dx * strength);
+        final mix = strength / math.max(1.0, weights);
+        coordinates[n] = origin.dx + width * (u + dx * mix);
         texture[n++] = u * widthPx;
-        coordinates[n] = origin.dy + height * (v + shift.dy * strength);
+        coordinates[n] = origin.dy + height * (v + dy * mix);
         texture[n++] = v * heightPx;
       }
     }
@@ -407,6 +400,9 @@ class _WindPainter extends CustomPainter {
       textureCoordinates: texture,
       indices: _meshTriangles,
     );
+    c.save();
+    c.translate(foot.dx, foot.dy);
+    if (faceLeft) c.scale(-1.0, 1.0);
     c.drawVertices(
       mesh,
       BlendMode.srcOver,
@@ -414,29 +410,26 @@ class _WindPainter extends CustomPainter {
         ..color = const Color(0xffffffff)
         ..shader = art.shader(name),
     );
+    c.restore();
     mesh.dispose();
   }
 
-  static const _leafFan = <(double, double, double)>[
-    (-.32, -.02, -.6),
-    (-.12, -.11, -.36),
-    (.14, -.06, .48),
-    (.32, -.03, .67),
-    (.02, -.12, .08),
-  ];
+  static const _leafAngles = [-.61, -.19, .65, .41, -.35];
 
   void _basket(Canvas c, Offset foot) {
-    const width = .278;
-    final image = art.images['basket']!;
-    final height = width * art.aspect * image.height / image.width;
+    const width = _WindArt.basketWidth;
     _shadow(c, foot.translate(0, -.002), width * .48, .009);
-    _sprite(c, 'basket', foot, width, anchor: const Offset(.5, 1));
+    _sprite(c, 'basket', foot, width, anchor: art.basketGround);
     final remaining = 5 - _count(shot.mask) - (shot.holding ? 1 : 0);
     for (var i = 0; i < remaining; i++) {
-      final (x, y, angle) = _leafFan[i];
-      _leaf(c, foot.translate(x * width, (-.64 + y) * height), .060, angle);
+      _leaf(
+        c,
+        foot + art.basketOffset(art.basketLeaves[i]),
+        .066,
+        _leafAngles[i],
+      );
     }
-    _sprite(c, 'basket_front', foot, width, anchor: const Offset(.5, 1));
+    _sprite(c, 'basket_front', foot, width, anchor: art.basketGround);
   }
 
   void _leaf(
@@ -464,10 +457,11 @@ class _WindPainter extends CustomPainter {
   }
 
   void _windblownLeaf(Canvas c) {
-    if (shot.phase != WindPhase.opening || shot.noMotion || shot.age < .60) {
+    final alreadyLanded = shot.phase != WindPhase.opening || shot.noMotion;
+    if (!alreadyLanded && shot.age < .60) {
       return;
     }
-    final t = _fraction(.60, 4.18, shot.age);
+    final t = alreadyLanded ? 1.0 : _fraction(.60, 4.18, shot.age);
     final s = _smooth(t);
     final x =
         ui.lerpDouble(.91, .53, s)! +
@@ -487,26 +481,40 @@ class _WindPainter extends CustomPainter {
 
   void _carriedLeaf(Canvas c, Offset basket) {
     final heldAt = basket.translate(.023, -.17);
+    for (final entry in shot.flights.entries) {
+      final leaf = entry.value;
+      final flight = shot.flight(leaf.start);
+      if (flight >= _WindShot.atGlass) continue;
+      final t = _smooth(flight / _WindShot.atGlass);
+      final end = art.hitPane(entry.key).center;
+      final inBasket = basket + art.basketOffset(art.basketLeaves[leaf.leaf]);
+      final from = Offset.lerp(inBasket, heldAt, leaf.lifted)!;
+      final width = ui.lerpDouble(.066, .087, leaf.lifted)!;
+      final angle = ui.lerpDouble(_leafAngles[leaf.leaf], .16, leaf.lifted)!;
+      final center =
+          Offset.lerp(from, end, t)! +
+          const Offset(.045, -.10) * math.sin(t * math.pi);
+      _leaf(
+        c,
+        center,
+        ui.lerpDouble(width, .061, t)!,
+        angle - .5 * math.sin(t * math.pi),
+      );
+    }
     if (shot.holding) {
       final t = shot.noMotion
           ? 1.0
           : _smooth(_fraction(0, .48, shot.now - shot.takingAt));
-      final center = Offset.lerp(basket.translate(0, -.06), heldAt, t)!;
-      _leaf(c, center, .087, ui.lerpDouble(-.42, .16, t)!);
-      return;
+      final picked = (4 - _count(shot.mask)).clamp(0, 4);
+      final start = basket + art.basketOffset(art.basketLeaves[picked]);
+      final center = Offset.lerp(start, heldAt, t)!;
+      _leaf(
+        c,
+        center,
+        ui.lerpDouble(.066, .087, t)!,
+        ui.lerpDouble(_leafAngles[picked], .16, t)!,
+      );
     }
-    if (shot.noMotion || shot.flyingPane == null || shot.flight >= .91) return;
-    final t = _smooth(shot.flight / .91);
-    final end = art.hitPane(shot.flyingPane!).center;
-    final center =
-        Offset.lerp(heldAt, end, t)! +
-        Offset(.045, -.10) * math.sin(t * math.pi);
-    _leaf(
-      c,
-      center,
-      ui.lerpDouble(.087, .061, t)!,
-      .16 - .5 * math.sin(t * math.pi),
-    );
   }
 
   @override
