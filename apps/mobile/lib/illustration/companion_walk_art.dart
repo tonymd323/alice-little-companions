@@ -47,9 +47,26 @@ class WalkArt {
     if (clothes.isEmpty) return;
     _sideHead = _dress(_Head.side, clothes, headAsset);
     _frontHead = _dress(_Head.front, clothes, headAsset);
+    final foxBow = pet == Companion.fox && headAsset == 'item_accessory_bow';
+    if (foxBow) {
+      // The right ear is the far ear when the painted profile is mirrored.
+      _leftHead = _dress(
+        _Head.side,
+        clothes,
+        headAsset,
+        bowFit: (center: const Offset(439, 95), width: .35, angle: .14),
+      );
+    }
     final rearClothes = Map.of(clothes)..remove('face');
     if (rearClothes.isNotEmpty) {
-      _awayHead = _dress(_Head.away, rearClothes, headAsset);
+      _awayHead = _dress(
+        _Head.away,
+        rearClothes,
+        headAsset,
+        bowFit: foxBow
+            ? (center: const Offset(344, 118), width: .44, angle: .14)
+            : null,
+      );
     }
   }
 
@@ -57,15 +74,16 @@ class WalkArt {
   final Map<String, ui.Image> _images;
   final String _coat;
   late final _WalkFitting _fit = _fittings[pet]!;
-  DressedPortrait? _sideHead, _frontHead, _awayHead;
+  DressedPortrait? _sideHead, _leftHead, _frontHead, _awayHead;
 
   ui.Image _image(String name) => _images['${_walkFolder(pet)}$name.webp']!;
 
   DressedPortrait _dress(
     _Head view,
     Map<String, ui.Image> clothes,
-    String? headAsset,
-  ) {
+    String? headAsset, {
+    BowFit? bowFit,
+  }) {
     Offset normalized(Offset p) =>
         Offset(p.dx / walkCanvas.width, p.dy / walkCanvas.height);
     final fitting = _fit.heads[view.index];
@@ -78,6 +96,13 @@ class WalkArt {
       normalized(fitting.farEye),
       clothes,
       headAsset,
+      bowFit: bowFit == null
+          ? null
+          : (
+              center: normalized(bowFit.center),
+              width: bowFit.width,
+              angle: bowFit.angle,
+            ),
       fit: (
         crown: normalized(fitting.crown),
         ear: normalized(fitting.ear),
@@ -89,6 +114,7 @@ class WalkArt {
 
   void dispose() {
     _sideHead?.image.dispose();
+    _leftHead?.image.dispose();
     _frontHead?.image.dispose();
     _awayHead?.image.dispose();
   }
@@ -419,7 +445,7 @@ class _WalkPainting {
 
   void _drawHead(_Head view) {
     final dressed = switch (view) {
-      _Head.side => art._sideHead,
+      _Head.side => facing < 0 ? art._leftHead ?? art._sideHead : art._sideHead,
       _Head.front => art._frontHead,
       _Head.away => art._awayHead,
     };

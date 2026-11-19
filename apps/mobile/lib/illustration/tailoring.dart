@@ -83,6 +83,8 @@ const _heads = <Companion, List<(double, double, double, double, double)>>{
   ],
 };
 typedef AccessoryFit = ({Offset crown, Offset ear, Offset neck, double width});
+typedef BowFit = ({Offset center, double width, double angle});
+
 AccessoryFit _fit(
   Companion pet,
   int stage,
@@ -149,6 +151,7 @@ DressedPortrait applyAccessories(
   String? headAsset, {
   bool airborne = false,
   AccessoryFit? fit,
+  BowFit? bowFit,
 }) {
   final w = body.width.toDouble(), h = body.height.toDouble();
   final px = (w * .18).ceil(), py = (h * .20).ceil();
@@ -190,25 +193,28 @@ DressedPortrait applyAccessories(
   }
   if (clothes['head'] case final head?) {
     final bow = headAsset == 'item_accessory_bow';
-    final wide = skull * (bow ? .51 : .88);
+    final wide = skull * (bow ? bowFit?.width ?? .51 : .88);
     final height = math.min(
       wide * head.height / head.width,
       skull * (bow ? .49 : .48),
     );
-    final center = bow
-        ? Offset(
-            math.min(
-              anchor(anchors.ear).dx - wide * .07,
-              near.dx - wide * .55 - skull * .04,
-            ),
-            anchor(anchors.ear).dy - height * .02,
-          )
-        : anchor(anchors.crown) + Offset(-wide * .065, -height * .30);
+    final Offset center;
+    if (!bow) {
+      center = anchor(anchors.crown) + Offset(-wide * .065, -height * .30);
+    } else if (bowFit != null) {
+      center = anchor(bowFit.center);
+    } else {
+      final ear = anchor(anchors.ear);
+      center = Offset(
+        math.min(ear.dx - wide * .07, near.dx - wide * .55 - skull * .04),
+        ear.dy - height * .02,
+      );
+    }
     _draw(
       c,
       head,
       Rect.fromCenter(center: center, width: wide, height: height),
-      bow ? (airborne ? -.24 : -.14) : -.10,
+      bow ? bowFit?.angle ?? (airborne ? -.24 : -.14) : -.10,
     );
   }
   if (clothes.containsKey('face')) _spectacles(c, near, far, skull, airborne);

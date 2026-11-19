@@ -256,8 +256,8 @@ class IllustratedPet extends StatefulWidget {
 class _IllustratedPetState extends State<IllustratedPet> {
   final _streams = <String, (ImageStream, ImageStreamListener)>{};
   final _images = <String, ImageInfo>{};
-  _Mesh? mesh, leapMesh;
-  ui.Image? _dressed, _leapDressed;
+  _Mesh? mesh, leftMesh, leapMesh;
+  ui.Image? _dressed, _leftDressed, _leapDressed;
   WalkArt? _walkArt;
   List<String> get _walkAssets => widget.walkPose == null
       ? const []
@@ -329,13 +329,32 @@ class _IllustratedPetState extends State<IllustratedPet> {
           );
     _disposeTextures();
     _dressed = dressed?.image;
+    final bodySize = Size(body.width.toDouble(), body.height.toDouble());
     mesh = _Mesh(
       _dressed ?? body,
       rig,
       widget.pet,
-      Size(body.width.toDouble(), body.height.toDouble()),
+      bodySize,
       dressed?.padding ?? Offset.zero,
     );
+    if (widget.walkFacesLeft != null &&
+        widget.pet == Companion.fox &&
+        widget.stage == 1 &&
+        widget.outfit['head'] == 'item_accessory_bow') {
+      final left = applyAccessories(
+        body,
+        widget.pet,
+        widget.stage,
+        widget.reveal,
+        rig.leftEye,
+        rig.rightEye,
+        clothes,
+        widget.outfit['head'],
+        bowFit: (center: const Offset(.82, .19), width: .36, angle: .14),
+      );
+      _leftDressed = left.image;
+      leftMesh = _Mesh(left.image, rig, widget.pet, bodySize, left.padding);
+    }
     final leap = _images[leapPath]?.image;
     if (leap != null &&
         widget.actionPoses &&
@@ -391,10 +410,14 @@ class _IllustratedPetState extends State<IllustratedPet> {
   void _disposeTextures() {
     mesh?.shader.dispose();
     mesh = null;
+    leftMesh?.shader.dispose();
+    leftMesh = null;
     leapMesh?.shader.dispose();
     leapMesh = null;
     _dressed?.dispose();
     _dressed = null;
+    _leftDressed?.dispose();
+    _leftDressed = null;
     _leapDressed?.dispose();
     _leapDressed = null;
   }
@@ -457,19 +480,22 @@ class _IllustratedPetState extends State<IllustratedPet> {
 
   @override
   Widget build(BuildContext context) => RepaintBoundary(
-    child: CustomPaint(painter: _PetPainter(widget, mesh, leapMesh, _walkArt)),
+    child: CustomPaint(
+      painter: _PetPainter(widget, mesh, leftMesh, leapMesh, _walkArt),
+    ),
   );
 }
 
 class _PetPainter extends CustomPainter {
-  _PetPainter(this.actor, this.mesh, this.leapMesh, this.walkArt)
+  _PetPainter(this.actor, this.mesh, this.leftMesh, this.leapMesh, this.walkArt)
     : super(repaint: actor.clock);
   final IllustratedPet actor;
-  final _Mesh? mesh, leapMesh;
+  final _Mesh? mesh, leftMesh, leapMesh;
   final WalkArt? walkArt;
   @override
   void paint(Canvas canvas, Size size) {
-    final m = mesh;
+    final facesLeft = actor.walkFacesLeft?.call() ?? false;
+    final m = facesLeft ? leftMesh ?? mesh : mesh;
     if (m == null || size.isEmpty) return;
     final bounds = actor.walkPose == null
         ? Offset.zero & size
@@ -489,7 +515,7 @@ class _PetPainter extends CustomPainter {
       if (pose.ink == 1) return;
     }
     canvas.save();
-    if (actor.walkFacesLeft?.call() ?? false) {
+    if (facesLeft) {
       canvas.translate(size.width, 0);
       canvas.scale(-1, 1);
     }
