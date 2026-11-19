@@ -12,6 +12,7 @@ import 'package:alice_companions/features/rewards.dart';
 import 'package:alice_companions/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:alice_companions/illustration/puppet.dart';
+import 'package:alice_companions/illustration/wind_stage.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'support/families.dart';
@@ -28,9 +29,20 @@ Future<void> advanceScene(WidgetTester tester) async {
   await tester.pump(const Duration(milliseconds: 40));
 }
 
+// Drift and image decoding make progress outside the widget-test clock.
+Future<void> waitForScene(WidgetTester tester, Finder target) async {
+  for (var i = 0; i < 180 && target.evaluate().isEmpty; i++) {
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 40)),
+    );
+    await tester.pump(const Duration(milliseconds: 10));
+  }
+  expect(target, findsOneWidget);
+}
+
 void main() {
   testWidgets(
-    'fresh main story repairs the home windows, resumes after replay and stays separate from points',
+    'the home story repairs actual panes in either order and keeps a permanent light with zero income',
     (tester) async {
       final stock = (await tester.runAsync(TestFamily.create))!;
       final controller = FamilyController(
@@ -49,8 +61,7 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       await tester.pumpWidget(CompanionsApp(controller: controller));
       await advanceScene(tester);
-      Future<void> press(String text, {bool persist = false}) async {
-        final target = find.text(text);
+      Future<void> press(Finder target, {bool persist = false}) async {
         await tester.ensureVisible(target);
         if (persist) {
           await tester.runAsync(() async {
@@ -65,15 +76,27 @@ void main() {
         await advanceScene(tester);
       }
 
-      await press('主线 · 暖廊的彩窗', persist: true);
-      expect(find.text('石桥边的约定'), findsOneWidget);
-      await press('去暖廊修好彩窗', persist: true);
-      await press('12 片');
-      await press('和桃桃一起补叶片', persist: true);
-      await press('5 片');
-      await press('看看阳光下的彩窗', persist: true);
-      expect(find.textContaining('大家都赶上了暖廊的约定'), findsOneWidget);
-      await press('回家看窗花');
+      await press(find.text('主线 · 风过暖廊'), persist: true);
+      await waitForScene(tester, find.byType(WindStage));
+      await press(find.text('直接去窗边'), persist: true);
+      final basket = find.byKey(const ValueKey('wind-basket'));
+      await waitForScene(tester, basket);
+      for (final pane in [10, 9, 11, 8]) {
+        await press(basket);
+        await press(find.byKey(ValueKey('wind-pane-$pane')), persist: true);
+      }
+      expect(tester.widget<WindStage>(find.byType(WindStage)).mask, 30);
+      expect(find.textContaining('脚下这段还暗着'), findsOneWidget);
+      await press(basket);
+      await press(find.byKey(const ValueKey('wind-pane-7')), persist: true);
+      await press(find.text('看团聚结果'));
+      await press(find.text('再演一次'), persist: true);
+      await press(find.text('直接去窗边'), persist: true);
+      await press(basket);
+      await press(find.byKey(const ValueKey('wind-pane-7')), persist: true);
+      expect(tester.widget<WindStage>(find.byType(WindStage)).mask, 1);
+      expect(find.textContaining('走到下一段桥'), findsOneWidget);
+      await press(find.byTooltip('回到小家'), persist: true);
       expect(
         tester.widget<GardenScene>(find.byType(GardenScene)).windowsLit,
         isTrue,
@@ -82,6 +105,8 @@ void main() {
         await stock.service.saveWindowMathBookmark(WindowPage.count, {});
         await stock.reopen();
         final family = (await stock.service.overview())!;
+        final replay = await stock.service.windProgress();
+        expect((replay.run, replay.mask), (2, 1));
         expect(
           (family.windowsLit, family.balance, family.experience),
           (true, 0, 0),
@@ -117,7 +142,7 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
       await tester.pumpWidget(CompanionsApp(controller: controller));
       await advanceScene(tester);
-      final entry = find.text('主线 · 暖廊的彩窗');
+      final entry = find.text('主线 · 风过暖廊');
       expect(entry.hitTestable(), findsOneWidget);
       await tester.runAsync(() async {
         await tester.tap(entry);
@@ -125,12 +150,24 @@ void main() {
         await stock.service.db.value('SELECT 1');
       });
       await advanceScene(tester);
-      expect(find.text('还差几片叶子？'), findsOneWidget);
+      await waitForScene(tester, find.text('风过暖廊'));
+      await advanceScene(tester);
+      await tester.tap(find.byTooltip('章节选项'));
+      await advanceScene(tester);
+      await tester.runAsync(() async {
+        await tester.tap(find.text('继续原来的数学书签'));
+        await stock.service.db.value('SELECT 1');
+      });
+      await advanceScene(tester);
+      await waitForScene(tester, find.text('还差几片叶子？'));
+      await advanceScene(tester);
       expect(find.textContaining('团团已经嵌好了'), findsOneWidget);
       final room = tester.widget<GardenScene>(find.byType(GardenScene));
       expect(room.companion, Companion.cat);
       expect(room.view, HomeView.veranda);
       expect(room.stage, controller.family!.stage);
+      await tester.tap(find.byTooltip('回到风过暖廊'));
+      await advanceScene(tester);
       await tester.tap(find.byTooltip('回到小家'));
       await advanceScene(tester);
       expect(entry.hitTestable(), findsOneWidget);

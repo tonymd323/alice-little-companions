@@ -464,12 +464,18 @@ class _GardenSceneState extends State<GardenScene>
             children: [
               back,
               if (widget.windowsLit && _veranda)
-                Positioned.fill(
+                Positioned.fromRect(
+                  rect: frame,
                   child: IgnorePointer(
                     child: Semantics(
                       image: true,
                       label: '三扇彩窗已经点亮',
-                      child: CustomPaint(painter: _StoryWindows(map)),
+                      child: Image.asset(
+                        'assets/wind/room/home-restored.webp',
+                        fit: BoxFit.fill,
+                        filterQuality: FilterQuality.medium,
+                        excludeFromSemantics: true,
+                      ),
                     ),
                   ),
                 ),
@@ -724,55 +730,6 @@ class _GardenSceneState extends State<GardenScene>
       ),
     );
   }
-}
-
-class _StoryWindows extends CustomPainter {
-  const _StoryWindows(this.map);
-  final SceneProjection map;
-  @override
-  void paint(Canvas c, Size size) {
-    for (var i = 0; i < 3; i++) {
-      final center = map.screen(Offset(.197 + i * .077, .323));
-      final r = map.world.height * .025;
-      c.drawCircle(
-        center,
-        r * 1.55,
-        Paint()
-          ..shader = RadialGradient(
-            colors: const [Color(0xcaffef9b), Color(0x00ffeda8)],
-          ).createShader(Rect.fromCircle(center: center, radius: r * 1.55)),
-      );
-      for (var j = 0; j < 4; j++) {
-        final angle = j * math.pi * .5;
-        CompanionEffects.ginkgo(
-          c,
-          center + Offset(math.sin(angle), -math.cos(angle)) * r * .55,
-          r * .61,
-          angle,
-          const Color(0xffd99a33),
-        );
-      }
-      final tile = map.screen(Offset(.33 + i * .10, .80 + i * .025));
-      c.save();
-      c.translate(tile.dx, tile.dy);
-      c.scale(1, .33);
-      c.rotate(-.4);
-      for (var j = 0; j < 4; j++) {
-        final a = j * math.pi / 2;
-        CompanionEffects.ginkgo(
-          c,
-          Offset(math.sin(a), -math.cos(a)) * r,
-          r * .89,
-          a,
-          const Color(0x99ffdf7a),
-        );
-      }
-      c.restore();
-    }
-  }
-
-  @override
-  bool shouldRepaint(_StoryWindows old) => old.map != map;
 }
 
 class _PlayButton extends StatelessWidget {

@@ -5,10 +5,85 @@ import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/illustration/action_poses.dart';
 import 'package:alice_companions/illustration/puppet.dart';
 import 'package:alice_companions/illustration/tailoring.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+class _CostumeBundle extends CachingAssetBundle {
+  final textures = <String>{};
+
+  @override
+  Future<ByteData> load(String key) => rootBundle.load(key);
+
+  @override
+  Future<ui.ImmutableBuffer> loadBuffer(String key) {
+    textures.add(key);
+    return rootBundle.loadBuffer(key);
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  testWidgets(
+    'the home portrait and jump wear the scarf painted into each third-stage rabbit costume',
+    (tester) async {
+      final clock = ValueNotifier(0);
+      addTearDown(clock.dispose);
+      final bundle = _CostumeBundle();
+      Future<void> wear(String? garment, {required bool scarf}) async {
+        final outfit = {
+          if (garment != null) 'body': 'item_single_$garment',
+          if (scarf) 'neck': 'item_accessory_scarf',
+          'face': 'item_accessory_glasses',
+        };
+        await tester.pumpWidget(
+          DefaultAssetBundle(
+            bundle: bundle,
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: IllustratedPet(
+                pet: Companion.rabbit,
+                stage: 3,
+                reveal: false,
+                outfit: outfit,
+                clock: clock,
+                seconds: () => 0,
+                reaction: () => 0,
+                walking: () => 0,
+                gaze: () => 0,
+                still: true,
+                actionPoses: true,
+              ),
+            ),
+          ),
+        );
+        for (var i = 0; i < 30; i++) {
+          final suffix = garment == null ? '' : '-$garment';
+          final directory = scarf ? 'wind/wardrobe' : 'art';
+          final required = [
+            'assets/$directory/rabbit-3$suffix.webp',
+            'assets/$directory/leap-rabbit-3$suffix.webp',
+            'assets/art/worn_accessory_glasses.webp',
+          ];
+          if (bundle.textures.containsAll(required)) break;
+          await tester.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 20)),
+          );
+          await tester.pump();
+          if (i == 29) expect(bundle.textures, containsAll(required));
+        }
+      }
+
+      await wear(null, scarf: true);
+      await wear('coat', scarf: true);
+      await wear('apron', scarf: true);
+      expect(
+        bundle.textures.where((key) => key.contains('fitted-scarf')),
+        isEmpty,
+      );
+      await wear('apron', scarf: false);
+    },
+  );
   test('four fitted accessories share the 19 resting and 18 airborne paintings, also when wearing a coat or apron', () async {
     const captures = String.fromEnvironment('ALICE_ACCESSORY_EVIDENCE');
     final images = <String, ui.Image>{};

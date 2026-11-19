@@ -4,12 +4,14 @@ import '../application/controller.dart';
 import '../application/family.dart';
 import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
+import '../illustration/wind_sound.dart';
 import 'common.dart';
 import 'garden.dart';
 import 'rewards.dart';
 import 'spaces.dart';
 import 'tasks.dart';
 import 'storybook.dart';
+import 'wind_chapter.dart';
 import 'window_math.dart';
 
 class FamilyHome extends StatefulWidget {
@@ -76,24 +78,44 @@ class _FamilyHomeState extends State<FamilyHome> {
     setState(() => openingChapter = true);
     try {
       final bookmark = await service.windowMathBookmark();
+      final progress = await service.windProgress();
+      final muted = await WindSound.isMuted();
       if (!mounted || controller.service != service || service.frozen) return;
       setState(() => view = HomeView.veranda);
       await openPage<void>(
         context,
-        WindowMathChapter(
-          initialPage: bookmark.page,
-          mainStory: true,
-          openWithStory: !bookmark.started,
-          courtyardBuilder: (height) => familyScene(height, HomeView.courtyard),
-          initialPattern: bookmark.pattern,
-          companion: family.companion,
-          verandaBuilder: (height) => familyScene(height, HomeView.veranda),
-          save: (page, pattern) async {
-            await service.saveWindowMathBookmark(page, pattern);
-            if (controller.service == service) await controller.refresh();
+        WindChapter(
+          initial: progress,
+          initialMuted: muted,
+          service: service,
+          hasNotebook: bookmark.started,
+          openNotebook: (resume) async {
+            final saved = await service.windowMathBookmark();
+            if (!mounted || service.frozen || controller.service != service) {
+              return;
+            }
+            final page = resume || saved.page == WindowPage.finished
+                ? saved.page
+                : WindowPage.puzzle;
+            await openPage<void>(
+              context,
+              WindowMathChapter(
+                initialPage: page,
+                initialPattern: saved.page == page ? saved.pattern : const {},
+                companion: family.companion,
+                backLabel: '回到风过暖廊',
+                verandaBuilder: (height) =>
+                    familyScene(height, HomeView.veranda),
+                save: (next, pattern) async {
+                  await service.saveWindowMathBookmark(next, pattern);
+                  if (controller.service == service) await controller.refresh();
+                },
+              ),
+            );
           },
         ),
       );
+      if (mounted && controller.service == service) await controller.refresh();
     } catch (_) {
       if (mounted) showNotice(context, '暂时打不开彩窗，请再试一次。');
     } finally {
@@ -355,7 +377,7 @@ class _FamilyHomeState extends State<FamilyHome> {
           chapterButton: TextButton.icon(
             onPressed: frozen || openingChapter ? null : openMath,
             icon: const Icon(Icons.grid_view_rounded, size: 17),
-            label: const Text('主线 · 暖廊的彩窗'),
+            label: const Text('主线 · 风过暖廊'),
             style: TextButton.styleFrom(
               foregroundColor: ink,
               minimumSize: const Size(48, 44),

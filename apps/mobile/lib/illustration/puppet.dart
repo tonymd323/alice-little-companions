@@ -252,14 +252,28 @@ class _IllustratedPetState extends State<IllustratedPet> {
   final _images = <String, ImageInfo>{};
   _Mesh? mesh, leapMesh;
   ui.Image? _dressed, _leapDressed;
+  bool get _paintedScarf =>
+      widget.pet == Companion.rabbit &&
+      widget.stage == 3 &&
+      widget.outfit['neck'] == 'item_accessory_scarf';
+  String _costume(String artwork) => _paintedScarf
+      ? artwork.replaceFirst('assets/art/', 'assets/wind/wardrobe/')
+      : artwork;
+  Iterable<MapEntry<String, String>> get _accessories =>
+      widget.outfit.entries.where(
+        (entry) =>
+            entry.key != 'body' && !(_paintedScarf && entry.key == 'neck'),
+      );
   String get leapPath =>
-      actionArtwork(widget.pet, widget.stage, widget.outfit['body']);
+      _costume(actionArtwork(widget.pet, widget.stage, widget.outfit['body']));
   String? _requested;
-  String get path => portraitArtwork(
-    widget.pet,
-    widget.stage,
-    widget.reveal,
-    widget.outfit['body'],
+  String get path => _costume(
+    portraitArtwork(
+      widget.pet,
+      widget.stage,
+      widget.reveal,
+      widget.outfit['body'],
+    ),
   );
 
   @override
@@ -279,8 +293,7 @@ class _IllustratedPetState extends State<IllustratedPet> {
     if (body == null) return;
     final clothes = <String, ui.Image>{};
     final flightWear = <String, ui.Image>{};
-    for (final entry in widget.outfit.entries) {
-      if (entry.key == 'body') continue;
+    for (final entry in _accessories) {
       final image = _images[fittedAccessory(entry.value, widget.pet)]?.image;
       if (image == null) return;
       clothes[entry.key] = image;
@@ -363,12 +376,11 @@ class _IllustratedPetState extends State<IllustratedPet> {
     final needed = {
       path,
       if (widget.actionPoses) leapPath,
-      for (final entry in widget.outfit.entries)
-        if (entry.key != 'body') ...[
-          fittedAccessory(entry.value, widget.pet),
-          if (widget.actionPoses)
-            fittedAccessory(entry.value, widget.pet, airborne: true),
-        ],
+      for (final entry in _accessories) ...[
+        fittedAccessory(entry.value, widget.pet),
+        if (widget.actionPoses)
+          fittedAccessory(entry.value, widget.pet, airborne: true),
+      ],
     };
     final keyset = (needed.toList()..sort()).join('|');
     if (_requested == keyset) return;

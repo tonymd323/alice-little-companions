@@ -1,7 +1,7 @@
 name: alice_companions
 description: "小小伙伴 · 银杏家园"
 publish_to: none
-version: 0.13.0+10
+version: 0.14.0+11
 
 environment:
   sdk: ^3.14.0
@@ -38,3 +38,7 @@ flutter:
   assets:
     - assets/art/
     - assets/config/
+    - assets/wind/actors/
+    - assets/wind/room/
+    - assets/wind/audio/
+    - assets/wind/wardrobe/

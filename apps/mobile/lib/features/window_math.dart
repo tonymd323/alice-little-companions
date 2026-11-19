@@ -17,6 +17,7 @@ class WindowMathChapter extends StatefulWidget {
     this.courtyardBuilder,
     this.mainStory = false,
     this.openWithStory = false,
+    this.backLabel = '回到小家',
   });
 
   final WindowPage initialPage;
@@ -25,6 +26,7 @@ class WindowMathChapter extends StatefulWidget {
   final Companion companion;
   final Widget Function(double height)? verandaBuilder, courtyardBuilder;
   final bool mainStory, openWithStory;
+  final String backLabel;
 
   @override
   State<WindowMathChapter> createState() => _WindowMathChapterState();
@@ -135,7 +137,7 @@ class _WindowMathChapterState extends State<WindowMathChapter> {
     appBar: Navigator.canPop(context)
         ? AppBar(
             leading: IconButton(
-              tooltip: '回到小家',
+              tooltip: widget.backLabel,
               onPressed: () => Navigator.pop(context),
               icon: const Icon(Icons.arrow_back_rounded),
             ),
