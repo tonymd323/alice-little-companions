@@ -30,7 +30,7 @@ with zipfile.ZipFile(args.apk) as archive:
                 levels = picture.getchannel("A").histogram()
                 assert levels[0] > 100 and levels[255] > 1000, path
                 assert sum(levels[1:255]) > 130, path
-        if kind == "cat_walk":
+        if kind in ("cat_walk", "fox_walk"):
             with Image.open(io.BytesIO(data)) as picture:
                 assert list(picture.size) == entry["runtime_size"], path
                 levels = picture.getchannel("A").histogram()

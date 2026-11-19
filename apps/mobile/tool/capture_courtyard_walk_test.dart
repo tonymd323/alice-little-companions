@@ -34,6 +34,10 @@ void main() {
     const font = String.fromEnvironment('ALICE_CJK_FONT');
     const compare = bool.fromEnvironment('COURTYARD_COMPARE_GAIT');
     const gait = bool.fromEnvironment('COURTYARD_RECORD_CONTACTS');
+    const companion = String.fromEnvironment('COURTYARD_COMPANION') == 'fox'
+        ? Companion.fox
+        : Companion.cat;
+    final name = companion.name;
     const wardrobe = String.fromEnvironment('COURTYARD_OUTFIT');
     final outfit = switch (wardrobe) {
       'coat' => {
@@ -89,7 +93,7 @@ void main() {
             child: RepaintBoundary(
               key: screen,
               child: GardenScene(
-                companion: Companion.cat,
+                companion: companion,
                 stage: 1,
                 rules: rules,
                 scene: scene,
@@ -112,14 +116,14 @@ void main() {
         for (final path in [
           scene.background,
           scene.foreground,
-          'assets/art/cat-1.webp',
-          'assets/art/leap-cat-1.webp',
+          'assets/art/$name-1.webp',
+          'assets/art/leap-$name-1.webp',
           ...manifest.listAssets().where(
             (path) =>
-                path.startsWith('assets/cat_walk/') ||
-                path.contains('fitted-') && path.contains('-cat-') ||
+                path.startsWith('assets/${name}_walk/') ||
+                path.contains('fitted-') && path.contains('-$name-') ||
                 path.contains('worn_item_accessory_glasses') ||
-                path.contains('cat-1-'),
+                path.contains('$name-1-'),
           ),
         ])
           precacheImage(AssetImage(path), context),
@@ -159,12 +163,12 @@ void main() {
       final padding = gait ? sprite.size.width / 6 : 0;
       final footY = origin.dy + sprite.size.height - padding;
       // Dynamic only in this tool so the identical camera and input script
-      // can also compile against the original 0.14.1 snapshot.
+      // can also compile against a snapshot before this companion walked.
       final dynamic candidate = pet;
-      final dynamic pose = gait ? candidate.catWalk?.call() : null;
+      final dynamic pose = gait ? candidate.walkPose?.call() : null;
       final stage = pose?.stage as Enum?;
       final facing = gait
-          ? (candidate.catFacesLeft?.call() == true ? -1 : 1)
+          ? (candidate.walkFacesLeft?.call() == true ? -1 : 1)
           : (right.dx > origin.dx ? 1 : -1);
       positions.writeln(
         '$frame,${pet.seconds()},${center.dx},$footY,${origin.dx},$facing,$walking,'

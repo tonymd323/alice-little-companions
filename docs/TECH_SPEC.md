@@ -134,7 +134,7 @@ Android交付签名release APK供家庭安装；保留签名密钥以使后续�
 
 ## 小家动画与主线接入
 
-**技术选型。** 沿用家庭版 Flutter、Dart 和 `CustomPainter`。幼猫用手绘关键姿态表现重心与四肢动作，用分层腿部的局部补间维持接触；呼吸、耳尖和衣料可作小幅形变。工程落点是原游戏的 `GardenScene`。0.15.0 候选中第一阶段团团的三个走动入口共用一份接触计划。原画横向周期为 132 像素，纵深为 90 像素，两者按朝向插值。Live2D/Cubism 保留为后续可选方案。若多角色绑定的维护成本值得比较，用同一套幼猫素材、落脚用例和两端设备对照画质、性能、导出及授权成本，再决定是否采用。[当前小家](../apps/mobile/lib/illustration/living_scene.dart) · [团团的接触计划](../apps/mobile/lib/illustration/cat_walk.dart) · [候选实测](evidence/cat-walk/README.md)
+**技术选型。** 沿用家庭版 Flutter、Dart 和 `CustomPainter`。团团和奶油的第一阶段用分层腿部补间维持接触，肩颈和尾巴随姿态运动。`GardenScene` 的点地、呼唤、自主走动共用接触计划。团团的横向、纵深周期为 132 和 90 原画像素，奶油为 144 和 96 像素，两者按各自朝向插值。Live2D/Cubism 保留为后续可选方案。[当前小家](../apps/mobile/lib/illustration/living_scene.dart) · [接触计划](../apps/mobile/lib/illustration/companion_walk.dart) · [团团实测](evidence/cat-walk/README.md)
 
 ### 原画与运行素材
 

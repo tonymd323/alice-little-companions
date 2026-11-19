@@ -8,8 +8,8 @@ import '../domain/companions.dart';
 import 'tailoring.dart';
 import 'companion_motion.dart';
 import 'action_poses.dart';
-import 'cat_walk.dart';
-import 'cat_walk_art.dart';
+import 'companion_walk.dart';
+import 'companion_walk_art.dart';
 
 /// Coordinates in the tightly cropped illustration. The pupil and appendage
 /// anchors differ even between growth stages of the same companion.
@@ -237,15 +237,15 @@ class IllustratedPet extends StatefulWidget {
     required this.still,
     this.motion,
     this.actionPoses = false,
-    this.catWalk,
-    this.catFacesLeft,
+    this.walkPose,
+    this.walkFacesLeft,
   });
   final Companion pet;
   final int stage;
   final bool reveal, still, actionPoses;
   final PetMotion Function()? motion;
-  final CatWalkPose? Function()? catWalk;
-  final bool Function()? catFacesLeft;
+  final WalkPose? Function()? walkPose;
+  final bool Function()? walkFacesLeft;
   final Map<String, String> outfit;
   final Listenable clock;
   final double Function() seconds, reaction, walking, gaze;
@@ -258,9 +258,10 @@ class _IllustratedPetState extends State<IllustratedPet> {
   final _images = <String, ImageInfo>{};
   _Mesh? mesh, leapMesh;
   ui.Image? _dressed, _leapDressed;
-  CatWalkArt? _walkArt;
-  List<String> get _walkAssets =>
-      widget.catWalk == null ? const [] : catWalkAssets(widget.outfit['body']);
+  WalkArt? _walkArt;
+  List<String> get _walkAssets => widget.walkPose == null
+      ? const []
+      : walkAssets(widget.pet, widget.outfit['body']);
   bool get _paintedScarf =>
       widget.pet == Companion.rabbit &&
       widget.stage == 3 &&
@@ -378,7 +379,8 @@ class _IllustratedPetState extends State<IllustratedPet> {
         !paths.every(_images.containsKey)) {
       return;
     }
-    _walkArt = CatWalkArt(
+    _walkArt = WalkArt(
+      widget.pet,
       {for (final path in paths) path: _images[path]!.image},
       widget.outfit['body'],
       clothes,
@@ -464,12 +466,12 @@ class _PetPainter extends CustomPainter {
     : super(repaint: actor.clock);
   final IllustratedPet actor;
   final _Mesh? mesh, leapMesh;
-  final CatWalkArt? walkArt;
+  final WalkArt? walkArt;
   @override
   void paint(Canvas canvas, Size size) {
     final m = mesh;
     if (m == null || size.isEmpty) return;
-    final bounds = actor.catWalk == null
+    final bounds = actor.walkPose == null
         ? Offset.zero & size
         : (Offset.zero & size).deflate(size.width / 6);
     final dest = applyBoxFit(
@@ -478,7 +480,7 @@ class _PetPainter extends CustomPainter {
       bounds.size,
     ).destination;
     final rect = Alignment.bottomCenter.inscribe(dest, bounds);
-    final pose = walkArt == null || actor.still ? null : actor.catWalk?.call();
+    final pose = walkArt == null || actor.still ? null : actor.walkPose?.call();
     final motion = actor.still
         ? const PetMotion.rest()
         : actor.motion?.call() ?? const PetMotion.rest();
@@ -487,7 +489,7 @@ class _PetPainter extends CustomPainter {
       if (pose.ink == 1) return;
     }
     canvas.save();
-    if (actor.catFacesLeft?.call() ?? false) {
+    if (actor.walkFacesLeft?.call() ?? false) {
       canvas.translate(size.width, 0);
       canvas.scale(-1, 1);
     }

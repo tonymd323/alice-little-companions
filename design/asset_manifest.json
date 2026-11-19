@@ -3757,6 +3757,465 @@
         464
       ],
       "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-head-away",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/head-away.webp",
+      "sha256": "da66c73113782fb26c0de52701887b4883b79733aef343fa0ef27332d80f9a62",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-head-front",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/head-front.webp",
+      "sha256": "9f7674842679fda0c9ced5e3527069453f70ac42ef50e0e2eec3b1d59d327d28",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-head",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/head.webp",
+      "sha256": "ddb17bc5e2bcf433253a8839f65aba9d2221fbc2e279f9dca59b20a3422abeaa",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-leg-far-front-lower",
+      "kind": "fox_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/leg-far-front-lower.webp",
+      "sha256": "d2b124fff57d3d49cd1a1ba56039bc700b0ed5ee0ad7f5232fcfa61e37cbc156",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-leg-far-front-upper",
+      "kind": "fox_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/leg-far-front-upper.webp",
+      "sha256": "76c233393288e1d14186841fe7f6a129ac5f0a1e8b0c60c01a13d40eac00164c",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-leg-far-hind-lower",
+      "kind": "fox_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/leg-far-hind-lower.webp",
+      "sha256": "f961aa8e3a285d61f57b337e1bd53033cc69e707a5deba689abdc125be7629bf",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-leg-far-hind-upper",
+      "kind": "fox_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/leg-far-hind-upper.webp",
+      "sha256": "1dc8e8d7c7a2ecdc4d8a653016afc3f1c9dde429f3ec2f07a7652f1b21208eb0",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-leg-near-front-lower",
+      "kind": "fox_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/leg-near-front-lower.webp",
+      "sha256": "863aa282251db92c3bca7799e7e6596a9ea9593fc94f9c2530adfbc9157cd8b1",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-leg-near-front-upper",
+      "kind": "fox_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/leg-near-front-upper.webp",
+      "sha256": "ba8a61d56ae08f1b2a903168abf549029482a1e7aa9b54faa80d8799548f69dd",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-leg-near-hind-lower",
+      "kind": "fox_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/leg-near-hind-lower.webp",
+      "sha256": "3b7e65ee3e3814ede05fb7b7d6bc92dd850504bd679faa5e94b109061632d495",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-leg-near-hind-upper",
+      "kind": "fox_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/leg-near-hind-upper.webp",
+      "sha256": "ae31223838fb4a5df20cbebd82503f68c3637047dc9f4e1cc0ee4353871b5726",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-paw-far-front",
+      "kind": "fox_walk",
+      "expected_size": [
+        128,
+        100
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/paw-far-front.webp",
+      "sha256": "55af9e4738eb6dc9fc5455397df3c7f440631506a1ee890d66bf1ad27f32acc6",
+      "runtime_size": [
+        128,
+        100
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-paw-far-hind",
+      "kind": "fox_walk",
+      "expected_size": [
+        128,
+        100
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/paw-far-hind.webp",
+      "sha256": "d475f11879e2ae02fbbf35219058ed56e4b3b2439aa56ef50067bf91e09cef0c",
+      "runtime_size": [
+        128,
+        100
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-paw-near-front",
+      "kind": "fox_walk",
+      "expected_size": [
+        128,
+        100
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/paw-near-front.webp",
+      "sha256": "3b9aea2115acb6377109f2fbc6f69144c642e2cd90a3f58aaed6c21f436dc81b",
+      "runtime_size": [
+        128,
+        100
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-paw-near-hind",
+      "kind": "fox_walk",
+      "expected_size": [
+        128,
+        100
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/paw-near-hind.webp",
+      "sha256": "be15deecf6a0619a010f89c172215d1c6ec493b47953a622d671a74fe314ffc3",
+      "runtime_size": [
+        128,
+        100
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-tail",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/tail.webp",
+      "sha256": "394066b54a437ac5bdc69b48bee87133360f791796b2c66943f29a76ed18babe",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-torso-apron",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/torso-apron.webp",
+      "sha256": "7f7981ad489b4ce2e59919de457705ebeae333087fa0fba33eb48079703322f1",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-torso-away-apron",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/torso-away-apron.webp",
+      "sha256": "4a5934e9df1290aef882f0532315a11b702dcfbe2143e526af487e0b8b40fc8a",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-torso-away-coat",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/torso-away-coat.webp",
+      "sha256": "a5c81382ec3cd8afc0040d662c6763fa84beee5b26844f02725969b4b8c4fc54",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-torso-away",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/torso-away.webp",
+      "sha256": "4900423b9742c7bb666575e8eaf6d1ac89beb4d8afcfd3cb6bf5b2aa47011325",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-torso-coat",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/torso-coat.webp",
+      "sha256": "2e5f2269995cb82977c3947e2964cb2c9883270129adb7370e0e7835af31a7ff",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-torso-front-apron",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/torso-front-apron.webp",
+      "sha256": "62bc4950e3466103b53f8ff2557ea2ef18a9bb0b5a6be5b0bd1212e6c5a2e7c8",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-torso-front-coat",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/torso-front-coat.webp",
+      "sha256": "5033c6bf897a3984a84f1011f0b953b7bde8d537510913e3d390fcceab3c84cc",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-torso-front",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/torso-front.webp",
+      "sha256": "70d6cb50517cba0e61d756e05e612164a5428ad68e3d61a67c235f8a4b77667f",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-torso",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/torso.webp",
+      "sha256": "14c8f3ad11d7d9441b990151d225898303d58d167a135ee7aa9c5bc94b4f7411",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-trim-apron",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/trim-apron.webp",
+      "sha256": "686d21ee267773ac8d85b5a6ec96213a06dbb75b071f6ef016b3df243cdf78ae",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "fox-walk-trim-coat",
+      "kind": "fox_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/fox_walk/trim-coat.webp",
+      "sha256": "1e497a15f57ef40fc7bb0ee63da1a1db361a88622f1f3556ec0fa4618c935f67",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
     }
   ],
   "scene_reference": {
