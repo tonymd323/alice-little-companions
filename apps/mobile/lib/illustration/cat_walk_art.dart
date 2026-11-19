@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 
 import '../domain/companions.dart';
 import 'cat_walk.dart';
+import 'companion_motion.dart';
 import 'tailoring.dart';
 
 const _folder = 'assets/cat_walk/';
@@ -99,13 +100,13 @@ class CatWalkArt {
     _awayHead?.image.dispose();
   }
 
-  void paint(Canvas canvas, Rect box, CatWalkPose pose) {
+  void paint(Canvas canvas, Rect box, CatWalkPose pose, PetMotion motion) {
     final artScale = box.height / catWalkOrigin.dy;
     canvas.save();
     canvas.translate(box.center.dx, box.bottom);
     canvas.scale(artScale);
     canvas.translate(-catWalkOrigin.dx, -catWalkOrigin.dy);
-    _CatPosePainting(canvas, this, pose).paint();
+    _CatPosePainting(canvas, this, pose, motion).paint();
     canvas.restore();
   }
 }
@@ -121,11 +122,12 @@ enum _Head {
 }
 
 class _CatPosePainting {
-  _CatPosePainting(this.canvas, this.art, this.pose);
+  _CatPosePainting(this.canvas, this.art, this.pose, this.motion);
 
   final Canvas canvas;
   final CatWalkArt art;
   final CatWalkPose pose;
+  final PetMotion motion;
   final brush = Paint()..filterQuality = FilterQuality.medium;
 
   late final double side = math.cos(pose.yaw), depth = math.sin(pose.yaw);
@@ -259,9 +261,14 @@ class _CatPosePainting {
   }
 
   void _head() {
+    final nudge = motion.action == PetAction.nuzzle ? motion.lean : 0.0;
     final center = Offset(
-      catWalkOrigin.dx + side * (128 - 58.3 * pose.crouch),
-      154 + 9.05 * pose.crouch + shift.head.dy + depth.abs() * 20,
+      catWalkOrigin.dx + side * (128 - 58.3 * pose.crouch + nudge * 12),
+      154 +
+          9.05 * pose.crouch +
+          shift.head.dy +
+          depth.abs() * 20 +
+          nudge.abs() * 8,
     );
     canvas.save();
     canvas.translate(center.dx + shift.head.dx * facing, center.dy);

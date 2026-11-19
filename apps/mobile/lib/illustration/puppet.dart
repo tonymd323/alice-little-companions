@@ -479,8 +479,11 @@ class _PetPainter extends CustomPainter {
     ).destination;
     final rect = Alignment.bottomCenter.inscribe(dest, bounds);
     final pose = walkArt == null || actor.still ? null : actor.catWalk?.call();
+    final motion = actor.still
+        ? const PetMotion.rest()
+        : actor.motion?.call() ?? const PetMotion.rest();
     if (pose != null) {
-      if (pose.ink > 0) walkArt!.paint(canvas, bounds, pose);
+      if (pose.ink > 0) walkArt!.paint(canvas, bounds, pose, motion);
       if (pose.ink == 1) return;
     }
     canvas.save();
@@ -491,9 +494,6 @@ class _PetPainter extends CustomPainter {
     final t = actor.seconds(),
         reaction = actor.still ? 0.0 : actor.reaction(),
         walking = actor.still ? 0.0 : actor.walking();
-    final motion = actor.still
-        ? const PetMotion.rest()
-        : actor.motion?.call() ?? const PetMotion.rest();
     final mix = leapMesh == null ? 0.0 : motion.keyPose;
     if (mix < 1) {
       m.paint(

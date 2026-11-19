@@ -179,7 +179,7 @@ class _GardenSceneState extends State<GardenScene>
   void _nuzzle() {
     final ready = _stopWalking();
     _hello = -20;
-    _play(PetAction.nuzzle, 1.85, after: ready);
+    _play(PetAction.nuzzle, 1.85 + ready - _time.seconds);
     if (_still) _notice('${widget.companion.nickname}蹭了蹭你的手');
     _time.tick(0);
   }
