@@ -30,4 +30,6 @@ python3 design/production/wind/audio/render_foley.py
 
 `WindSound.setMuted(true)` 会停止当前声音并记住本机选择。Android 使用游戏媒体音量并与其他音频混合；iOS 采用 `.ambient` 混音和静音键。该偏好写入 Android SharedPreferences 或 iOS UserDefaults。每个 WAV 随应用打包，可以在飞行模式和系统静音下进行同一段操作。
 
+Android 独立包可依次点播七个事件、冷启读回本机静音选择、绕过 Dart 的静音缓存向原生发出播放请求，再以原声、静音与提前停止作对照。[复现探针](probe/README.md)
+
 苹果端实际构建、硬件静音键、与其他应用混音，以及家庭手机扬声器的主观听感，分别在对应设备上核验。
