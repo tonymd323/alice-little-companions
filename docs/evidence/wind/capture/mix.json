@@ -1,0 +1,8 @@
+{
+  "sampleRate": 32000,
+  "frameRate": 15,
+  "sourcePeakDbfs": -5.35,
+  "gain": 1.0,
+  "source": "apps/mobile/assets/wind/audio/*.wav",
+  "eventTimes": "far-first.json"
+}

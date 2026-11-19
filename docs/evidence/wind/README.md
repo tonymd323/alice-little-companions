@@ -2,6 +2,8 @@
 
 从原来的「小小伙伴」打开 **小家 → 主线 · 风过暖廊**。故事里的桃桃处于第三阶段，家里的伙伴、穿戴和共享经验由原存档决定。修窗、重玩、观看和试戴都不会产生积分、经验或新物品。
 
+[56 秒完整试玩，含动作声](capture/wind-veranda.mp4) · [两种修窗顺序对照](capture/wind-contact-sheet.jpg) · [取帧方法与原始操作记录](capture/README.md)
+
 ## 一次试玩可以看什么
 
 | 玩家操作 | 看画面中的哪一处 |
@@ -25,5 +27,7 @@
 候选 APK 为 0.14.0+11，80,517,060 字节。SHA-256 为 `493b3939daddef425f941a545d01569f435589640651eb419f3d3cffcc14a623`。家庭版包名为 `local.family.alice_companions`，签名证书和 0.13 相同。Android Build Tools 36 已验证签名、16 KB 对齐、Android 8+ 和三种 CPU 架构。[签名与构建信息](installation.json) · [构建日志](build.log) · [静态分析](analyze.log)
 
 将 APK 解包并逐文件对照本标签的 25 张角色及道具图、18 张场景图、6 张围巾穿戴成画、7 个 PCM 音效和 2 份坐标数据。另核对原家庭版的 193 个素材编号。[新增素材核查](packaged-art.json) · [家庭素材核查](family-art.json) · [舞台及连续帧检查](stage-frames.log)
+
+48 项 Flutter 自动测试全部通过，覆盖旧家庭与加密恢复、两种补窗顺序、快速连点、最后一片的声音时序、减少动态效果和试穿零入账。已从 GitHub 的全新检出取回安装文件，大小和字节与签名构建一致。[全量测试](flutter-tests.log) · [GitHub 取回校验](github-download.json)
 
 在仓库根目录可运行 `python3 tools/check_wind_release.py /path/to/family.apk`，在 `apps/mobile` 运行 `flutter test --no-pub --reporter expanded`。iPad 签名、双向真机迁移与实体设备性能仍需可用的 Mac、Apple Team、iPad 和安卓手机。[设备交接](../../DELIVERY.md)

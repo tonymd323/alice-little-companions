@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/tonymd323/alice-little-companions",
+  "branch": "android-downloads",
+  "commit": "867564eed30bb6e6edcdd296202fb7904fe123d7",
+  "path": "downloads/alice-0.14.0-android.apk",
+  "verification": "Fresh authenticated shallow Git clone, checkout of the remote file, then byte-for-byte comparison with the signed build.",
+  "bytes": 80517060,
+  "sha256": "493b3939daddef425f941a545d01569f435589640651eb419f3d3cffcc14a623"
+}

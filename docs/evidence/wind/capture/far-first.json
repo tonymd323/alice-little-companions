@@ -1,0 +1,215 @@
+{
+  "route": "far-first",
+  "muted": false,
+  "fps": 15,
+  "frames": 840,
+  "width": 780,
+  "height": 1688,
+  "stageRect": [
+    0,
+    112,
+    780,
+    1152
+  ],
+  "inputs": [
+    {
+      "frame": 214,
+      "target": "basket",
+      "mask": 0
+    },
+    {
+      "frame": 252,
+      "target": "pane-8",
+      "mask": 2
+    },
+    {
+      "frame": 314,
+      "target": "basket",
+      "mask": 2
+    },
+    {
+      "frame": 342,
+      "target": "pane-11",
+      "mask": 18
+    },
+    {
+      "frame": 400,
+      "target": "basket",
+      "mask": 18
+    },
+    {
+      "frame": 430,
+      "target": "pane-9",
+      "mask": 22
+    },
+    {
+      "frame": 510,
+      "target": "basket",
+      "mask": 22
+    },
+    {
+      "frame": 540,
+      "target": "pane-10",
+      "mask": 30
+    },
+    {
+      "frame": 646,
+      "target": "basket",
+      "mask": 30
+    },
+    {
+      "frame": 675,
+      "target": "pane-7",
+      "mask": 31
+    }
+  ],
+  "audio": [
+    {
+      "frame": 11,
+      "method": "play",
+      "argument": "wind"
+    },
+    {
+      "frame": 41,
+      "method": "play",
+      "argument": "scarf"
+    },
+    {
+      "frame": 89,
+      "method": "play",
+      "argument": "basket"
+    },
+    {
+      "frame": 214,
+      "method": "play",
+      "argument": "takeLeaf"
+    },
+    {
+      "frame": 262,
+      "method": "play",
+      "argument": "seatLeaf"
+    },
+    {
+      "frame": 314,
+      "method": "play",
+      "argument": "takeLeaf"
+    },
+    {
+      "frame": 352,
+      "method": "play",
+      "argument": "seatLeaf"
+    },
+    {
+      "frame": 400,
+      "method": "play",
+      "argument": "takeLeaf"
+    },
+    {
+      "frame": 440,
+      "method": "play",
+      "argument": "seatLeaf"
+    },
+    {
+      "frame": 510,
+      "method": "play",
+      "argument": "takeLeaf"
+    },
+    {
+      "frame": 550,
+      "method": "play",
+      "argument": "seatLeaf"
+    },
+    {
+      "frame": 550,
+      "method": "play",
+      "argument": "windowLight"
+    },
+    {
+      "frame": 646,
+      "method": "play",
+      "argument": "takeLeaf"
+    },
+    {
+      "frame": 685,
+      "method": "play",
+      "argument": "seatLeaf"
+    },
+    {
+      "frame": 685,
+      "method": "play",
+      "argument": "windowLight"
+    },
+    {
+      "frame": 689,
+      "method": "play",
+      "argument": "footsteps"
+    },
+    {
+      "frame": 740,
+      "method": "play",
+      "argument": "footsteps"
+    }
+  ],
+  "stills": [
+    {
+      "frame": 8,
+      "file": "opening.png",
+      "mask": 0,
+      "phase": "opening"
+    },
+    {
+      "frame": 59,
+      "file": "scarf.png",
+      "mask": 0,
+      "phase": "opening"
+    },
+    {
+      "frame": 97,
+      "file": "basket.png",
+      "mask": 0,
+      "phase": "opening"
+    },
+    {
+      "frame": 188,
+      "file": "window-gaps.png",
+      "mask": 0,
+      "phase": "playing"
+    },
+    {
+      "frame": 236,
+      "file": "leaf-in-hand.png",
+      "mask": 0,
+      "phase": "playing"
+    },
+    {
+      "frame": 571,
+      "file": "far-light-gap.png",
+      "mask": 30,
+      "phase": "playing"
+    },
+    {
+      "frame": 710,
+      "file": "crossing.png",
+      "mask": 31,
+      "phase": "reunion"
+    },
+    {
+      "frame": 750,
+      "file": "homecoming.png",
+      "mask": 31,
+      "phase": "reunion"
+    },
+    {
+      "frame": 810,
+      "file": "reunion.png",
+      "mask": 31,
+      "phase": "complete"
+    }
+  ],
+  "final": {
+    "mask": 31,
+    "windowsLit": true,
+    "experience": 0,
+    "balance": 0
+  }
+}

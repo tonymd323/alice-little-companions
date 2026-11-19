@@ -1,0 +1,48 @@
+00:00 +0: loading /workspace/scratch/alice-wind-progress/apps/mobile/tool/capture_wind_test.dart
+00:00 +0: record production chapter far-first (variant: TargetPlatform.android)
+[far-first] assets and SQLite fixture ready
+[far-first] opening is on screen
+[far-first] frame 0
+[far-first] frame 150
+[far-first] frame 252 placing pane 8
+[far-first] frame 300
+[far-first] frame 342 placing pane 11
+[far-first] frame 430 placing pane 9
+[far-first] frame 450
+[far-first] frame 540 placing pane 10
+[far-first] frame 600
+[far-first] frame 675 placing pane 7
+[far-first] frame 750
+[far-first] progress and cue report saved
+[far-first] chapter closed
+[far-first] capture finished
+05:21 +1: record production chapter middle-first (variant: TargetPlatform.android)
+[middle-first] assets and SQLite fixture ready
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+The chapter did not reach the expected state.
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      waitFor (file:///workspace/scratch/alice-wind-progress/apps/mobile/tool/capture_wind_test.dart:55:7)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///workspace/scratch/alice-wind-progress/apps/mobile/tool/capture_wind_test.dart:155:9)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1968:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  record production chapter middle-first (variant: TargetPlatform.android)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+05:58 +1 -1: record production chapter middle-first (variant: TargetPlatform.android) [E]
+  Test failed. See exception logs above.
+  The test description was: record production chapter middle-first (variant: TargetPlatform.android)
+
+05:58 +1 -1: Some tests failed.
+
+Failing tests:
+  /workspace/scratch/alice-wind-progress/apps/mobile/tool/capture_wind_test.dart: record production chapter middle-first (variant: TargetPlatform.android)

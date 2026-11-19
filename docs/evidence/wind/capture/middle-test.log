@@ -1,0 +1,19 @@
+00:00 +0: loading /workspace/scratch/alice-wind-progress/apps/mobile/tool/capture_wind_test.dart
+00:00 +0: record production chapter middle-first (variant: TargetPlatform.android)
+[middle-first] assets and SQLite fixture ready
+[middle-first] opening is on screen
+[middle-first] frame 0
+[middle-first] frame 150
+[middle-first] frame 252 placing pane 7
+[middle-first] frame 300
+[middle-first] frame 342 placing pane 11
+[middle-first] frame 430 placing pane 8
+[middle-first] frame 450
+[middle-first] frame 540 placing pane 10
+[middle-first] frame 600
+[middle-first] frame 675 placing pane 9
+[middle-first] frame 750
+[middle-first] progress and cue report saved
+[middle-first] chapter closed
+[middle-first] capture finished
+00:15 +1: All tests passed!

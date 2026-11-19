@@ -1,0 +1,99 @@
+{
+  "route": "middle-first",
+  "muted": true,
+  "fps": 15,
+  "frames": 840,
+  "width": 780,
+  "height": 1688,
+  "stageRect": [
+    0,
+    112,
+    780,
+    1152
+  ],
+  "inputs": [
+    {
+      "frame": 214,
+      "target": "basket",
+      "mask": 0
+    },
+    {
+      "frame": 252,
+      "target": "pane-7",
+      "mask": 1
+    },
+    {
+      "frame": 314,
+      "target": "basket",
+      "mask": 1
+    },
+    {
+      "frame": 342,
+      "target": "pane-11",
+      "mask": 17
+    },
+    {
+      "frame": 400,
+      "target": "basket",
+      "mask": 17
+    },
+    {
+      "frame": 430,
+      "target": "pane-8",
+      "mask": 19
+    },
+    {
+      "frame": 510,
+      "target": "basket",
+      "mask": 19
+    },
+    {
+      "frame": 540,
+      "target": "pane-10",
+      "mask": 27
+    },
+    {
+      "frame": 646,
+      "target": "basket",
+      "mask": 27
+    },
+    {
+      "frame": 675,
+      "target": "pane-9",
+      "mask": 31
+    }
+  ],
+  "audio": [
+    {
+      "frame": 0,
+      "method": "setMuted",
+      "argument": true
+    }
+  ],
+  "stills": [
+    {
+      "frame": 300,
+      "file": "middle-path.png",
+      "mask": 1,
+      "phase": "playing"
+    },
+    {
+      "frame": 571,
+      "file": "middle-first-four.png",
+      "mask": 27,
+      "phase": "playing"
+    },
+    {
+      "frame": 810,
+      "file": "middle-first-reunion.png",
+      "mask": 31,
+      "phase": "complete"
+    }
+  ],
+  "final": {
+    "mask": 31,
+    "windowsLit": true,
+    "experience": 0,
+    "balance": 0
+  }
+}

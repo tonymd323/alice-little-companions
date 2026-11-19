@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 126}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 674 项通过。下面列出逐项结果。
+- 本次准备检查 698 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -271,6 +271,9 @@
 - 内部链接有效：docs/evidence/math-preview/README.md → installation.json
 - 内部链接有效：docs/evidence/math-preview/README.md → ../../../apps/mobile/lib/main_window_math.dart
 - 内部链接有效：docs/evidence/math-preview/README.md → ../../../apps/mobile/lib/features/window_math.dart
+- 内部链接有效：docs/evidence/wind/README.md → capture/wind-veranda.mp4
+- 内部链接有效：docs/evidence/wind/README.md → capture/wind-contact-sheet.jpg
+- 内部链接有效：docs/evidence/wind/README.md → capture/README.md
 - 内部链接有效：docs/evidence/wind/README.md → ../../../design/production/wind/actors/README.md
 - 内部链接有效：docs/evidence/wind/README.md → ../../../design/production/wind/room/README.md
 - 内部链接有效：docs/evidence/wind/README.md → wardrobe.jpg
@@ -285,7 +288,28 @@
 - 内部链接有效：docs/evidence/wind/README.md → packaged-art.json
 - 内部链接有效：docs/evidence/wind/README.md → family-art.json
 - 内部链接有效：docs/evidence/wind/README.md → stage-frames.log
+- 内部链接有效：docs/evidence/wind/README.md → flutter-tests.log
+- 内部链接有效：docs/evidence/wind/README.md → github-download.json
 - 内部链接有效：docs/evidence/wind/README.md → ../../DELIVERY.md
+- 内部链接有效：docs/evidence/wind/capture/README.md → wind-veranda.mp4
+- 内部链接有效：docs/evidence/wind/capture/README.md → wind-contact-sheet.jpg
+- 内部链接有效：docs/evidence/wind/capture/README.md → far-first.json
+- 内部链接有效：docs/evidence/wind/capture/README.md → middle-first.json
+- 内部链接有效：docs/evidence/wind/capture/README.md → stills/scarf-contact.png
+- 内部链接有效：docs/evidence/wind/capture/README.md → stills/basket.png
+- 内部链接有效：docs/evidence/wind/capture/README.md → stills/far-light-gap.png
+- 内部链接有效：docs/evidence/wind/capture/README.md → stills/middle-path.png
+- 内部链接有效：docs/evidence/wind/capture/README.md → stills/crossing.png
+- 内部链接有效：docs/evidence/wind/capture/README.md → stills/homecoming.png
+- 内部链接有效：docs/evidence/wind/capture/README.md → stills/reunion.png
+- 内部链接有效：docs/evidence/wind/capture/README.md → stills/opening.png
+- 内部链接有效：docs/evidence/wind/capture/README.md → stills/scarf-contact.png
+- 内部链接有效：docs/evidence/wind/capture/README.md → stills/basket.png
+- 内部链接有效：docs/evidence/wind/capture/README.md → mix.json
+- 内部链接有效：docs/evidence/wind/capture/README.md → capture-sha256.json
+- 内部链接有效：docs/evidence/wind/capture/README.md → capture-test.log
+- 内部链接有效：docs/evidence/wind/capture/README.md → middle-test.log
+- 内部链接有效：docs/evidence/wind/capture/README.md → media-probe.json
 - 内部链接有效：references/SOURCES.md → ../docs/ENVIRONMENT.md
 - 任务分值2/3/5一致
 - 单积分且无游戏产币
