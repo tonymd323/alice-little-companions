@@ -8,6 +8,7 @@ import argparse
 import hashlib
 import json
 import math
+import shutil
 import subprocess
 import wave
 from pathlib import Path
@@ -72,7 +73,7 @@ def soundtrack(folder, route):
 def contact_sheet(folder, routes, font):
     shots = [
         ("opening.png", "风起，桥上还有缺口"),
-        ("scarf.png", "桃桃护住围巾"),
+        ("scarf-contact.png", "桃桃的前爪压住围巾"),
         ("basket.png", "两爪把叶篮推来"),
         ("window-gaps.png", "七片在窗上，五片在篮里"),
         ("leaf-in-hand.png", "从叶篮拿起第一片"),
@@ -85,6 +86,14 @@ def contact_sheet(folder, routes, font):
         still["file"]: (route, still)
         for route in routes.values() for still in route["stills"]
     }
+    # Select the actual contact from the emitted scarf cue, which precedes
+    # the held pose and subsequent reach in the continuous opening shot.
+    far = routes["far-first"]
+    contact = next(e for e in far["audio"] if e["method"] == "play" and e["argument"] == "scarf")
+    frame = contact["frame"]
+    shutil.copyfile(folder / "frames" / f"frame-{frame:04d}.png",
+                    folder / "stills/scarf-contact.png")
+    shot_index["scarf-contact.png"] = (far, {"frame": frame})
     cols, width, gap, pad = 3, 320, 18, 30
     height = round(width * 4 / 3)
     top, stride = 106, height + 65
