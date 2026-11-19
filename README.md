@@ -40,7 +40,9 @@ Alice 在飞行模式下打开家园，免费选择银杏狐、月牙耳兔或�
 
 安卓 0.14.0+11 将《风过暖廊》接入原来的小家。从「主线 · 风过暖廊」进门，看桃桃听风压住围巾，把叶篮推到手边。点篮子取一片，再点要补的空窗格。先修中窗或先修远窗，奶油会看到不同的回家路。回暖廊后，彩窗和木地板会留下修好的光影。0.13 的家庭、兑换、经验和数学书签可继续使用。
 
-[下载 0.14.0 安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.14.0-android.apk?raw=true) · [样片、录屏与检查](docs/evidence/wind/README.md) · [历次 APK](https://github.com/tonymd323/alice-little-companions/tree/android-downloads/downloads) · [备份与换机](docs/BACKUP_MIGRATION.md)
+0.14.1 修复了小家庭院左侧木梯随风弯曲的问题。团团第一阶段的三种日常走动已录下作对照，普通行走原画待补。[下载 0.14.1 安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.14.1-android.apk?raw=true) · [木梯、猫爪和补画清单](docs/evidence/courtyard-motion/README.md)
+
+[0.14.0 安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.14.0-android.apk?raw=true) · [风过暖廊样片与检查](docs/evidence/wind/README.md) · [历次 APK](https://github.com/tonymd323/alice-little-companions/tree/android-downloads/downloads) · [备份与换机](docs/BACKUP_MIGRATION.md)
 
 真机 iPad 安装、设备性能与双向实机迁移需要匹配的 Mac、Apple Team 及家庭设备。开发顺序与逐项验收条件见[开发计划](docs/PLAN.md)。
 

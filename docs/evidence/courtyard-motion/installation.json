@@ -1,0 +1,18 @@
+{
+  "filename": "alice-0.14.1-android.apk",
+  "bytes": 80517052,
+  "sha256": "145d2229bdfc0429c5e018596f0a4ccbd1ebf2b5375c78302c7fb9da0cb6f2b4",
+  "verified_signer_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+  "same_signer_as_0_14_0": true,
+  "version_name": "0.14.1",
+  "version_code": 12,
+  "application_id": "local.family.alice_companions",
+  "min_sdk": 26,
+  "zipalign_16k": true,
+  "same_garden_and_stage_one_cat_paintings": [
+    "garden.webp",
+    "cat-1.webp",
+    "leap-cat-1.webp"
+  ],
+  "runtime_source": "26b12e6"
+}

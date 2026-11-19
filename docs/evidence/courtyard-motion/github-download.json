@@ -1,0 +1,26 @@
+{
+  "repository": "tonymd323/alice-little-companions",
+  "independent_git_downloads": [
+    {
+      "branch": "android-downloads",
+      "commit": "fb4d1dc0a15ddefac8c7886bb380fa9a51130083",
+      "path": "downloads/alice-0.14.1-android.apk",
+      "bytes": 80517052,
+      "sha256": "145d2229bdfc0429c5e018596f0a4ccbd1ebf2b5375c78302c7fb9da0cb6f2b4"
+    },
+    {
+      "branch": "codex/native-app",
+      "commit": "1425c5d3bced2d2710dbafab1674b52ed1e22cf5",
+      "path": "docs/evidence/courtyard-motion/courtyard-stairs.mp4",
+      "bytes": 1685102,
+      "sha256": "3feed19ea477308e982353fb1817718b4e9469dc2d5e30a233220624763fd3fd"
+    },
+    {
+      "branch": "codex/native-app",
+      "commit": "1425c5d3bced2d2710dbafab1674b52ed1e22cf5",
+      "path": "docs/evidence/courtyard-motion/cat-three-walks.mp4",
+      "bytes": 3411747,
+      "sha256": "214f6eb4e0f8a8bbdd2c6a73021c2779f746a5cce3537548b8931507da675fff"
+    }
+  ]
+}

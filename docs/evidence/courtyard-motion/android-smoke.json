@@ -1,0 +1,20 @@
+{
+  "android_emulator": "9",
+  "airplane_mode_before_and_after": true,
+  "updated_in_place": [
+    "0.14.0+11",
+    "0.14.1+12"
+  ],
+  "application_id": "local.family.alice_companions",
+  "same_first_install_time_and_uid": true,
+  "cold_start_command": "am start -W initially returned Status: timeout; home UI subsequently observed in the foreground",
+  "home_controls_observed": [
+    "小家",
+    "庭院",
+    "过来"
+  ],
+  "courtyard_selected": true,
+  "selected_pet": "云翼猫 · 团团",
+  "stage": 1,
+  "device_frame_rate_measured": false
+}

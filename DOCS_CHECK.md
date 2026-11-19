@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 126}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 719 项通过。下面列出逐项结果。
+- 本次准备检查 745 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -35,6 +35,7 @@
 - 内部链接有效：README.md → AGENTS.md
 - 内部链接有效：README.md → DOCS_CHECK.md
 - 内部链接有效：README.md → MANIFEST.json
+- 内部链接有效：README.md → docs/evidence/courtyard-motion/README.md
 - 内部链接有效：README.md → docs/evidence/wind/README.md
 - 内部链接有效：README.md → docs/BACKUP_MIGRATION.md
 - 内部链接有效：README.md → docs/PLAN.md
@@ -92,6 +93,7 @@
 - 内部链接有效：docs/OWNER_WALKTHROUGH.md → ../fixtures/migration_roundtrip.json
 - 内部链接有效：docs/PLAN.md → GAME_STUDIO.md
 - 内部链接有效：docs/PLAN.md → evidence/wind/README.md
+- 内部链接有效：docs/PLAN.md → evidence/courtyard-motion/README.md
 - 内部链接有效：docs/PLAN.md → evidence/M0/README.md
 - 内部链接有效：docs/PLAN.md → evidence/M1/README.md
 - 内部链接有效：docs/PLAN.md → evidence/M2/README.md
@@ -193,6 +195,30 @@
 - 内部链接有效：docs/evidence/M6/README.md → preflight.json
 - 内部链接有效：docs/evidence/M6/README.md → ../acceptance.csv
 - 内部链接有效：docs/evidence/M6/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → courtyard-stairs.mp4
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → cat-three-walks.mp4
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../apps/mobile/assets/art/garden.webp
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../apps/mobile/lib/illustration/animated_backdrop.dart
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../apps/mobile/lib/illustration/living_scene.dart
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../apps/mobile/lib/illustration/puppet.dart
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../apps/mobile/assets/art/cat-1.webp
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../apps/mobile/assets/art/leap-cat-1.webp
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../design/references/pet-stages.png
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../design/production/wind/actors/README.md
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → measurements.json
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../apps/mobile/test/courtyard_wind_test.dart
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../apps/mobile/tool/capture_courtyard_walk_test.dart
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../tools/review_courtyard_motion.py
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → flutter-tests.log
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → analyze.log
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → repeat.json
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → android-courtyard.png
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → android-smoke.json
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → installation.json
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → github-download.json
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → build.log
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → packaged-art.json
+- 内部链接有效：docs/evidence/courtyard-motion/README.md → packaged-wind.json
 - 内部链接有效：docs/evidence/daily/README.md → installation.json
 - 内部链接有效：docs/evidence/daily/README.md → ../../BACKUP_MIGRATION.md
 - 内部链接有效：docs/evidence/daily/README.md → room-catalogue.jpg

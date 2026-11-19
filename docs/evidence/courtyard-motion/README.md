@@ -39,6 +39,14 @@
 
 取帧程序同时保存完整小家画面、透明角色和位置记录。对比工具从原始无损帧跟踪踏板、叶簇和平台上的绘画细节。它另在透明角色上取朝前白爪的掌缘，按实际朝向和位置换算成庭院像素。连续两帧都在静止参考轮廓的 4 像素以内时，才计入低位样本。当前素材没有定义承重区间，所以这里只能测可见掌缘的横移。[逐项测量](measurements.json) · [木梯回归测试](../../../apps/mobile/test/courtyard_wind_test.dart) · [取帧程序](../../../apps/mobile/tool/capture_courtyard_walk_test.dart) · [取样与剪辑程序](../../../tools/review_courtyard_motion.py)
 
+独立试玩者先观看成片，再选取另外三处踏板样块，每隔两帧与首帧比较。修复后的 62 次比较中，三处踏板和平台栏杆均静止，两处树叶均有变化。另以草地作参照检查前爪，在第 53→55、116→118、469→471 帧分别看到了向左约 11、向右约 21、向左约 18 像素的掌缘移动。这里每对画面相隔 80 毫秒。手机或 iPad 的实际帧率仍需真机测量。
+
+49 项常规 Flutter 测试和 1 项固定镜头取帧检查全部通过，静态分析通过。独立重跑最终取帧程序，372 张完整场景、372 张透明角色及全部坐标与交付录像使用的原始序列逐字节一致。测试日志保留了与基线相同的 Drift 多实例调试提示。[完整测试](flutter-tests.log) · [静态分析](analyze.log) · [重复取帧校验](repeat.json)
+
+Android 9 云端模拟器在飞行模式下从 0.14.0+11 覆盖至 0.14.1+12，签名、应用 UID 和首次安装时间一致。冷启动时系统的同步等待曾超时，随后实际画面与界面树都能确认进入小家，并在庭院选到第一阶段团团。APK 和两段 MP4 已从 GitHub 新检出并逐字节核对。[下载安卓补丁](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.14.1-android.apk?raw=true) · [安装版庭院实拍](android-courtyard.png) · [覆盖记录](android-smoke.json) · [签名与摘要](installation.json) · [GitHub 取回校验](github-download.json)
+
+发布构建另核对了 APK 内的 193 项日常素材标识，以及暖廊剧情所用的 58 个文件。[构建日志](build.log) · [日常素材](packaged-art.json) · [剧情素材](packaged-wind.json)
+
 分别在基线和补丁的 `apps/mobile` 中运行下列命令。基线使用补丁中的同一份取帧程序。把 `OUTPUT` 换成本次帧目录的绝对路径，`FONT` 换成本机中文字体文件。两次完成后，在补丁仓库根目录执行最后一条命令。
 
 ```sh
