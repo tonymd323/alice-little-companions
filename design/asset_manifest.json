@@ -3298,6 +3298,465 @@
         229
       ],
       "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-head-away",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/head-away.webp",
+      "sha256": "897a27951b7a4519f6ee1e42ca384656590553299cadf7c79a3e3a7883b72c4e",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-head-front",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/head-front.webp",
+      "sha256": "d7d1f3afdad3f2ab0b7a6058a20a539ad260d016febe227bb3af111eae6881e4",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-head",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/head.webp",
+      "sha256": "9e033575f33497d7e651a116c7c5aa288f675f217bc63e9f43d45b8326fc533f",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-leg-far-front-lower",
+      "kind": "cat_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/leg-far-front-lower.webp",
+      "sha256": "6a28e60ea99d1dba5fe17f5253fa939a8509fcc3530dc29925dd20f2787f2b35",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-leg-far-front-upper",
+      "kind": "cat_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/leg-far-front-upper.webp",
+      "sha256": "6bc7f06167f775f4aaa84997263131f61080c9ee020f257d8b6d46d67544246f",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-leg-far-hind-lower",
+      "kind": "cat_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/leg-far-hind-lower.webp",
+      "sha256": "7987a333d5afd3477c54d2d7893336f483791bcf2053a3564d2192c0728a3715",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-leg-far-hind-upper",
+      "kind": "cat_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/leg-far-hind-upper.webp",
+      "sha256": "459f303234eb3155f77131f53e7f791024eb350577533da7332b7eeef3c1a3fe",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-leg-near-front-lower",
+      "kind": "cat_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/leg-near-front-lower.webp",
+      "sha256": "c305dca96c8874589bfe40af0d9499dbcd637e1930f432c58412019133e62dee",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-leg-near-front-upper",
+      "kind": "cat_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/leg-near-front-upper.webp",
+      "sha256": "90ee66493b80487f324a733e965696583f1cb93391ef995544d64293e06c4bc8",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-leg-near-hind-lower",
+      "kind": "cat_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/leg-near-hind-lower.webp",
+      "sha256": "02b6ca4cf47140dc65f71f30e51d40336bb8992fe8cfdc1367d4240963295cce",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-leg-near-hind-upper",
+      "kind": "cat_walk",
+      "expected_size": [
+        128,
+        160
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/leg-near-hind-upper.webp",
+      "sha256": "30eef6f6ade6bbbd56989d667d835805c5197e3efeb29082da7ff14852029774",
+      "runtime_size": [
+        128,
+        160
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-paw-far-front",
+      "kind": "cat_walk",
+      "expected_size": [
+        128,
+        100
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/paw-far-front.webp",
+      "sha256": "c86605a35b9e48fc01dd19f93b8e1c1413acb6cce4422e3cc9cc1051c1e2bee2",
+      "runtime_size": [
+        128,
+        100
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-paw-far-hind",
+      "kind": "cat_walk",
+      "expected_size": [
+        128,
+        100
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/paw-far-hind.webp",
+      "sha256": "734a872bcd7f57e6179efd90177a14c1c147a6d13fdb19fc1bd23d45919f286c",
+      "runtime_size": [
+        128,
+        100
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-paw-near-front",
+      "kind": "cat_walk",
+      "expected_size": [
+        128,
+        100
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/paw-near-front.webp",
+      "sha256": "c27979d93635ce9762cdd345dd83a2f13f8f2eeafcf4e28c8612bcfe874ff2c4",
+      "runtime_size": [
+        128,
+        100
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-paw-near-hind",
+      "kind": "cat_walk",
+      "expected_size": [
+        128,
+        100
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/paw-near-hind.webp",
+      "sha256": "e8a111addfc08fe1173b0c57a95747f096cab709ea19c9687c43c37def1df06c",
+      "runtime_size": [
+        128,
+        100
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-tail",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/tail.webp",
+      "sha256": "b975eb33f5389d418863ec0c03f9dea845196bbcf5f11db05df18427d678adc9",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-torso-apron",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/torso-apron.webp",
+      "sha256": "91d1e9495eadc6816b3070c3dba9e321454adad2cc0c176ca7ddf884201acb9e",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-torso-away-apron",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/torso-away-apron.webp",
+      "sha256": "6bcfba17d81d3f491b49cb5c10b4540a9bd94bddf02cacb06581b01341f814ef",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-torso-away-coat",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/torso-away-coat.webp",
+      "sha256": "e565aafc7cd37642a0b193440e817f6a6641ad1cd8e1862c0f073b0d166cc22e",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-torso-away",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/torso-away.webp",
+      "sha256": "9e70a16be65d7e01980bc0bfc13d90172f696513979e5476ff16e28a85cecca7",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-torso-coat",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/torso-coat.webp",
+      "sha256": "ce332eae50acf8d8c3d9d7ddd163508cce6da3e33862c7463629396699d27ff6",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-torso-front-apron",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/torso-front-apron.webp",
+      "sha256": "3e3e9ea347d34e05a4333e901300df7b4c51f82f6f54911c680181d8a37af424",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-torso-front-coat",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/torso-front-coat.webp",
+      "sha256": "94e1f8906cbbb9163a523b5af49aa8298ceedd36b8abfade07b795f625e7a1f4",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-torso-front",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/torso-front.webp",
+      "sha256": "9c6b0783a3c975eb6e130113c058356b9d65381761eb4249e82187b1a59f42fe",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-torso",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/torso.webp",
+      "sha256": "318458f7149e16576bbae76305f767c5ff337502f9e92b3f7e5e0dd780fcb8db",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-trim-apron",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/trim-apron.webp",
+      "sha256": "292debcede6b411a9edcd1dd7bddd9da444552ef59b2e949fb00c1c8bb4d2be4",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
+    },
+    {
+      "id": "cat-walk-trim-coat",
+      "kind": "cat_walk",
+      "expected_size": [
+        512,
+        464
+      ],
+      "alpha_required": true,
+      "status": "ready",
+      "runtime_path": "apps/mobile/assets/cat_walk/trim-coat.webp",
+      "sha256": "56ce1664e3ec816d5bf17064b2d1841d141c8c89535fee115313d70464c14d00",
+      "runtime_size": [
+        512,
+        464
+      ],
+      "device_qa": "pending"
     }
   ],
   "scene_reference": {

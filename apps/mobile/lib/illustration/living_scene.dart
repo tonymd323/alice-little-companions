@@ -8,6 +8,7 @@ import '../domain/layout_rules.dart';
 import '../domain/rules.dart';
 import 'puppet.dart';
 import 'animated_backdrop.dart';
+import 'cat_walk.dart';
 import 'companion_motion.dart';
 
 import 'room_painting.dart';
@@ -121,24 +122,36 @@ class _GardenSceneState extends State<GardenScene>
   Offset _start = const Offset(.47, .932), _end = const Offset(.47, .932);
   bool _stroking = false, _left = false;
   PetAction _action = PetAction.rest;
+  CatWalkPlan? _catPlan;
+  CatWalkPose? _catPose;
   double _actionStart = -20, _actionLength = 1, _nextIdle = 5.8;
   int _idleTurn = 0;
   bool get _playable => widget.playable || widget.onViewChanged != null;
+  bool get _hasCatWalk =>
+      _playable &&
+      widget.companion == Companion.cat &&
+      widget.stage == 1 &&
+      !widget.reveal;
   PetMotion get _motion {
-    if (_still) return const PetMotion.rest();
+    if (_still || _time.seconds < _actionStart) return const PetMotion.rest();
     final k = ((_time.seconds - _actionStart) / _actionLength).clamp(0.0, 1.0);
     return k >= 1 ? const PetMotion.rest() : PetMotion(_action, k);
   }
 
-  void _play(PetAction action, double seconds) {
+  void _play(PetAction action, double seconds, {double? after}) {
     _action = action;
-    _actionStart = _time.seconds;
+    _actionStart = after ?? _time.seconds;
     _actionLength = seconds;
-    _nextIdle = _time.seconds + seconds + 5.8;
+    _nextIdle = _actionStart + seconds + 5.8;
   }
 
   void _restRoutine() {
-    if (!_playable || _stroking || _time.seconds < _nextIdle) return;
+    if (!_playable ||
+        _stroking ||
+        _catPlan != null ||
+        _time.seconds < _nextIdle) {
+      return;
+    }
     switch (_idleTurn++ % 4) {
       case 0:
         _play(PetAction.look, 1.8);
@@ -164,19 +177,17 @@ class _GardenSceneState extends State<GardenScene>
   }
 
   void _nuzzle() {
-    _start = _end = _foot;
-    _walkStart = -20;
+    final ready = _stopWalking();
     _hello = -20;
-    _play(PetAction.nuzzle, 1.85);
+    _play(PetAction.nuzzle, 1.85, after: ready);
     if (_still) _notice('${widget.companion.nickname}蹭了蹭你的手');
     _time.tick(0);
   }
 
   void _skill() {
-    _start = _end = _foot;
-    _walkStart = -20;
+    final ready = _stopWalking();
     _hello = -20;
-    _play(PetAction.skill, 2.85);
+    _play(PetAction.skill, 2.85, after: ready);
     if (_still) {
       _notice('${widget.companion.nickname}使出了${widget.companion.skillName}');
     }
@@ -200,11 +211,46 @@ class _GardenSceneState extends State<GardenScene>
   bool get _veranda =>
       _base && (widget.view == HomeView.veranda || widget.focus);
   bool get _outdoor => _base ? !_veranda : widget.scene!.id == 'garden';
-  double get _reaction => ((_time.seconds - _hello) / 1.35).clamp(0, 1);
+  double get _reaction => _time.seconds < _hello
+      ? 1
+      : ((_time.seconds - _hello) / 1.35).clamp(0, 1);
   double get _step =>
       ((_time.seconds - _walkStart) / _walkDuration).clamp(0, 1);
-  Offset get _foot =>
-      Offset.lerp(_start, _end, Curves.easeInOut.transform(_step))!;
+  Offset get _foot => _catPose != null
+      ? _catNormalized(_catPose!.root)
+      : Offset.lerp(_start, _end, Curves.easeInOut.transform(_step))!;
+
+  Offset _catWorld(Offset point) =>
+      Offset(point.dx * catWalkWorld.width, point.dy * catWalkWorld.height);
+
+  Offset _catNormalized(Offset point) =>
+      Offset(point.dx / catWalkWorld.width, point.dy / catWalkWorld.height);
+
+  void _advanceCat(double time) {
+    final plan = _catPlan;
+    if (plan == null) return;
+    final pose = plan.at(time);
+    _left = pose.left;
+    if (time >= plan.end) {
+      _catPlan = null;
+      _catPose = null;
+    } else {
+      _catPose = pose;
+    }
+  }
+
+  double _stopWalking() {
+    _start = _end = _foot;
+    _walkStart = -20;
+    if (_catPose case final pose?) {
+      final plan = CatWalkPlan.stop(_time.seconds, pose);
+      _catPlan = plan;
+      _advanceCat(_time.seconds);
+      return plan.end;
+    }
+    return _time.seconds;
+  }
+
   Offset get _rest => widget.focus
       ? const Offset(.508, .938)
       : _veranda
@@ -237,11 +283,11 @@ class _GardenSceneState extends State<GardenScene>
       _last = elapsed;
       if (!_stroking) _gaze *= .81;
       _restRoutine();
-      _time.tick(
-        previous == null
-            ? 0
-            : math.min(.35, (elapsed - previous).inMicroseconds / 1e6),
-      );
+      final dt = previous == null
+          ? 0.0
+          : math.min(.35, (elapsed - previous).inMicroseconds / 1e6);
+      _advanceCat(_time.seconds + dt);
+      _time.tick(dt);
     });
   }
 
@@ -251,7 +297,9 @@ class _GardenSceneState extends State<GardenScene>
     if (old.view != widget.view ||
         old.scene?.id != widget.scene?.id ||
         old.companion != widget.companion ||
-        old.stage != widget.stage) {
+        old.stage != widget.stage ||
+        old.focus != widget.focus ||
+        old.reveal != widget.reveal) {
       _start = _end = _rest;
       _hello = _walkStart = -20;
       _pan = 0;
@@ -259,6 +307,8 @@ class _GardenSceneState extends State<GardenScene>
       _gaze = 0;
       _action = PetAction.rest;
       _left = false;
+      _catPlan = null;
+      _catPose = null;
       _idleTurn = 0;
       _nextIdle = _time.seconds + 5.8;
     }
@@ -277,13 +327,17 @@ class _GardenSceneState extends State<GardenScene>
 
   void _sync() {
     final run = !_still && _active && _route;
+    if (_still && _catPlan != null) {
+      _catPlan = null;
+      _catPose = null;
+    }
     if (run && !_ticker.isActive) {
       _last = null;
       _ticker.start();
     } else if (!run && _ticker.isActive) {
       _ticker.stop();
       _last = null;
-      _start = _end;
+      if (!_hasCatWalk) _start = _end;
     }
   }
 
@@ -302,11 +356,10 @@ class _GardenSceneState extends State<GardenScene>
   }
 
   void _greet() {
-    _start = _end = _foot;
-    _walkStart = -20;
+    final ready = _stopWalking();
     _action = PetAction.rest;
-    _nextIdle = _time.seconds + 6.5;
-    _hello = _time.seconds;
+    _nextIdle = ready + 6.5;
+    _hello = ready;
     if (_still) {
       ScaffoldMessenger.maybeOf(context)?.showSnackBar(
         SnackBar(
@@ -337,6 +390,27 @@ class _GardenSceneState extends State<GardenScene>
     _action = PetAction.rest;
     _hello = -20;
     _nextIdle = _time.seconds + 7;
+    if (_hasCatWalk) {
+      if (_catPlan != null && p == _end) return;
+      final world = _catWorld(p);
+      final from =
+          _catPose ??
+          CatWalkPose.seated(
+            _catWorld(_foot),
+            _left,
+            catWalkWorld.height * _petFactor / catWalkOrigin.dy,
+          );
+      if ((world - from.root).distance < 1) return;
+      _start = _end = p;
+      if (_still) {
+        _left = p.dx < _catNormalized(from.root).dx;
+      } else {
+        _catPlan = CatWalkPlan.to(_time.seconds, from, world);
+        _advanceCat(_time.seconds);
+      }
+      _time.tick(0);
+      return;
+    }
     _start = _foot;
     _left = p.dx < _start.dx;
     _end = p;
@@ -346,14 +420,17 @@ class _GardenSceneState extends State<GardenScene>
     _time.tick(0);
   }
 
+  double get _petFactor =>
+      (widget.focus
+          ? .58
+          : widget.immersive
+          ? .343
+          : .338) +
+      (widget.stage - 1) * .023;
+
   Rect _petBox(SceneProjection map) {
     final foot = map.screen(_foot);
-    final factor = widget.focus
-        ? .58
-        : widget.immersive
-        ? .343
-        : .338;
-    final side = map.world.height * (factor + (widget.stage - 1) * .023);
+    final side = map.world.height * _petFactor;
     return Rect.fromLTWH(foot.dx - side / 2, foot.dy - side, side, side);
   }
 
@@ -407,10 +484,13 @@ class _GardenSceneState extends State<GardenScene>
         seconds: () => _time.seconds,
         reaction: () => _reaction,
         gaze: () => _gaze,
-        walking: () => _step < 1 ? 1 : 0,
+        walking: () =>
+            _hasCatWalk ? (_catPose == null ? 0 : 1) : (_step < 1 ? 1 : 0),
         still: _still,
         actionPoses: _playable,
         motion: () => _motion,
+        catWalk: _hasCatWalk ? () => _catPose : null,
+        catFacesLeft: _hasCatWalk ? () => _left : null,
       );
       final back = Positioned.fromRect(
         rect: frame,
@@ -493,6 +573,7 @@ class _GardenSceneState extends State<GardenScene>
                   final actorRect = rect.shift(
                     Offset(rect.width * travel, -rect.height * lift),
                   );
+                  final catPose = _catPose;
                   final showSkill = motion.action == PetAction.skill;
                   Widget effects(bool front) => Positioned.fill(
                     child: IgnorePointer(
@@ -530,10 +611,40 @@ class _GardenSceneState extends State<GardenScene>
                           ),
                         ),
                       ),
+                      if (catPose != null && catPose.ink > 0)
+                        for (final paw in catPose.paws)
+                          Positioned.fromRect(
+                            rect: Rect.fromCenter(
+                              center: map.screen(_catNormalized(paw.ground)),
+                              width: rect.width * .082,
+                              height: rect.height * .031,
+                            ),
+                            child: Opacity(
+                              opacity:
+                                  catPose.ink *
+                                  (1 - paw.lift / catPose.scale / 30).clamp(
+                                    0.0,
+                                    1.0,
+                                  ),
+                              child: CustomPaint(
+                                painter: _ContactShadow(
+                                  _outdoor
+                                      ? const Color(0x9c313C26)
+                                      : const Color(0x94573B2C),
+                                ),
+                              ),
+                            ),
+                          ),
                       if (showSkill) effects(false),
                       Positioned.fromRect(
-                        rect: actorRect,
-                        child: Transform.flip(flipX: _left, child: child!),
+                        key: const ValueKey('home-companion'),
+                        rect: _hasCatWalk
+                            ? actorRect.inflate(rect.width / 4)
+                            : actorRect,
+                        child: Transform.flip(
+                          flipX: !_hasCatWalk && _left,
+                          child: child!,
+                        ),
                       ),
                       if (showSkill) effects(true),
                       for (final layer in painting.layers.where(

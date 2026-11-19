@@ -30,6 +30,11 @@ with zipfile.ZipFile(args.apk) as archive:
                 levels = picture.getchannel("A").histogram()
                 assert levels[0] > 100 and levels[255] > 1000, path
                 assert sum(levels[1:255]) > 130, path
+        if kind == "cat_walk":
+            with Image.open(io.BytesIO(data)) as picture:
+                assert list(picture.size) == entry["runtime_size"], path
+                levels = picture.getchannel("A").histogram()
+                assert levels[0] > 100 and levels[255] > 0, path
     assert counts["pet_action"] == 54 and counts["fitted_accessory"] == 18
 print(json.dumps({"apk_sha256": hashlib.sha256(args.apk.read_bytes()).hexdigest(),
                   "verified_asset_ids": len(expected), "by_kind": counts,

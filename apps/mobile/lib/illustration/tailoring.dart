@@ -82,8 +82,8 @@ const _heads = <Companion, List<(double, double, double, double, double)>>{
     (.664, .224, .573, .28, .238),
   ],
 };
-typedef _Fit = ({Offset crown, Offset ear, Offset neck, double width});
-_Fit _fit(
+typedef AccessoryFit = ({Offset crown, Offset ear, Offset neck, double width});
+AccessoryFit _fit(
   Companion pet,
   int stage,
   bool reveal,
@@ -148,6 +148,7 @@ DressedPortrait applyAccessories(
   Map<String, ui.Image> clothes,
   String? headAsset, {
   bool airborne = false,
+  AccessoryFit? fit,
 }) {
   final w = body.width.toDouble(), h = body.height.toDouble();
   final px = (w * .18).ceil(), py = (h * .20).ceil();
@@ -157,11 +158,11 @@ DressedPortrait applyAccessories(
   c.drawImage(body, Offset.zero, brush);
   final near = Offset(leftEye.dx * w, leftEye.dy * h),
       far = Offset(rightEye.dx * w, rightEye.dy * h);
-  final fit = _fit(pet, stage, reveal, airborne, leftEye, rightEye);
+  final anchors = fit ?? _fit(pet, stage, reveal, airborne, leftEye, rightEye);
   Offset anchor(Offset p) => Offset(p.dx * w, p.dy * h);
-  final skull = fit.width * w;
+  final skull = anchors.width * w;
   if (clothes['neck'] case final scarf?) {
-    final collar = anchor(fit.neck);
+    final collar = anchor(anchors.neck);
     final wide = skull * (airborne ? .97 : .86);
     final height = math.min(
       wide * scarf.height / scarf.width,
@@ -197,12 +198,12 @@ DressedPortrait applyAccessories(
     final center = bow
         ? Offset(
             math.min(
-              anchor(fit.ear).dx - wide * .07,
+              anchor(anchors.ear).dx - wide * .07,
               near.dx - wide * .55 - skull * .04,
             ),
-            anchor(fit.ear).dy - height * .02,
+            anchor(anchors.ear).dy - height * .02,
           )
-        : anchor(fit.crown) + Offset(-wide * .065, -height * .30);
+        : anchor(anchors.crown) + Offset(-wide * .065, -height * .30);
     _draw(
       c,
       head,

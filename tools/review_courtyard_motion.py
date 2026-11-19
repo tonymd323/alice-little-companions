@@ -30,11 +30,11 @@ def frame(folder, number):
     return folder / f"frame-{number:04}.png"
 
 
-def background_motion(folder):
+def background_motion(folder, numbers=WOOD_FRAMES):
     samples = {name: [] for name in LANDMARKS}
     identical = dict.fromkeys(LANDMARKS, 0)
-    first = np.asarray(Image.open(frame(folder, WOOD_FRAMES.start)).convert("L"))
-    for number in WOOD_FRAMES:
+    first = np.asarray(Image.open(frame(folder, numbers.start)).convert("L"))
+    for number in numbers:
         current = np.asarray(Image.open(frame(folder, number)).convert("L"), dtype=np.int16)
         for name, (x, y) in LANDMARKS.items():
             reference = first[y - 6:y + 7, x - 8:x + 9]
@@ -97,7 +97,8 @@ def paw_motion(folder):
     return report
 
 
-def make_video(output, directories, segments, crop, detail, font_path):
+def make_video(output, directories, segments, crop, detail, font_path,
+               versions=("修改前   0.14.0+11", "修改后   0.14.1+12")):
     width, height = 1024, 758
     encoder = subprocess.Popen([
         "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
@@ -113,8 +114,8 @@ def make_video(output, directories, segments, crop, detail, font_path):
             layout = Image.new("RGB", (width, height), "#f7f2e8")
             text = ImageDraw.Draw(layout)
             text.text((16, 4), caption, font=title, fill="#392b24")
-            text.text((16, 47), "修改前   0.14.0+11", font=label, fill="#513e34")
-            text.text((520, 47), "修改后   0.14.1+12", font=label, fill="#513e34")
+            text.text((16, 47), versions[0], font=label, fill="#513e34")
+            text.text((520, 47), versions[1], font=label, fill="#513e34")
             text.text((16, 472), detail, font=label, fill="#513e34")
             for number in numbers:
                 canvas = layout.copy()

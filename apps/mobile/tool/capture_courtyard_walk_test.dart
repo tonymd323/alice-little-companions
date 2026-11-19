@@ -32,6 +32,26 @@ void main() {
     const output = String.fromEnvironment('COURTYARD_FRAMES');
     if (output.isEmpty) return;
     const font = String.fromEnvironment('ALICE_CJK_FONT');
+    const compare = bool.fromEnvironment('COURTYARD_COMPARE_GAIT');
+    const gait = bool.fromEnvironment('COURTYARD_RECORD_CONTACTS');
+    const wardrobe = String.fromEnvironment('COURTYARD_OUTFIT');
+    final outfit = switch (wardrobe) {
+      'coat' => {
+        'body': 'item_single_coat',
+        'head': 'item_accessory_hat',
+        'face': 'item_accessory_glasses',
+        'neck': 'item_accessory_scarf',
+      },
+      'apron' => {
+        'body': 'item_single_apron',
+        'head': 'item_accessory_bow',
+        'face': 'item_accessory_glasses',
+        'neck': 'item_accessory_scarf',
+      },
+      _ => <String, String>{},
+    };
+    const callFrame = compare ? 145 : 100;
+    const lastFrame = compare ? 590 : 510;
     const family = 'Courtyard Review';
     await tester.runAsync(() async {
       final bytes = await File(font).readAsBytes();
@@ -73,6 +93,7 @@ void main() {
                 stage: 1,
                 rules: rules,
                 scene: scene,
+                outfit: outfit,
                 immersive: true,
                 showLabel: false,
                 onViewChanged: (_) {},
@@ -83,18 +104,27 @@ void main() {
         ),
       ),
     );
-    final context = screen.currentContext!;
-    await tester.runAsync(
-      () => Future.wait([
+    await tester.runAsync(() async {
+      final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+      final context = screen.currentContext!;
+      if (!context.mounted) throw StateError('The courtyard was removed');
+      await Future.wait([
         for (final path in [
           scene.background,
           scene.foreground,
           'assets/art/cat-1.webp',
           'assets/art/leap-cat-1.webp',
+          ...manifest.listAssets().where(
+            (path) =>
+                path.startsWith('assets/cat_walk/') ||
+                path.contains('fitted-') && path.contains('-cat-') ||
+                path.contains('worn_item_accessory_glasses') ||
+                path.contains('cat-1-'),
+          ),
         ])
           precacheImage(AssetImage(path), context),
-      ]),
-    );
+      ]);
+    });
     await tester.pump();
     final picture = tester.renderObject<RenderRepaintBoundary>(
       find.byKey(screen),
@@ -104,16 +134,17 @@ void main() {
       find.descendant(of: actor, matching: find.byType(RepaintBoundary)).first,
     );
     final positions = StringBuffer(
-      'frame,time,rootX,rootY,spriteLeft,facing,walking\n',
+      'frame,time,rootX,rootY,spriteLeft,facing,walking,stage,phase,ink\n',
     );
+    final contacts = StringBuffer('frame,leg,x,y,lift,planted\n');
     final destinations = <int, double>{};
     final walkStarts = <int>[];
     var wasWalking = false;
-    for (var frame = 0; frame <= 510; frame++) {
+    for (var frame = 0; frame <= lastFrame; frame++) {
       if (frame == 30) {
         await tester.tapAt(const Offset(_width * .23, _gardenHeight * .83));
       }
-      if (frame == 100) await tester.tap(find.text('过来'));
+      if (frame == callFrame) await tester.tap(find.text('过来'));
       await tester.pump(_interval);
       final pet = tester.widget<IllustratedPet>(actor);
       final walking = pet.walking() > 0;
@@ -125,16 +156,39 @@ void main() {
         ancestor: picture,
       );
       final center = tester.getCenter(actor);
-      final footY = origin.dy + sprite.size.height;
-      final facing = right.dx > origin.dx ? 1 : -1;
+      final padding = gait ? sprite.size.width / 6 : 0;
+      final footY = origin.dy + sprite.size.height - padding;
+      // Dynamic only in this tool so the identical camera and input script
+      // can also compile against the original 0.14.1 snapshot.
+      final dynamic candidate = pet;
+      final dynamic pose = gait ? candidate.catWalk?.call() : null;
+      final stage = pose?.stage as Enum?;
+      final facing = gait
+          ? (candidate.catFacesLeft?.call() == true ? -1 : 1)
+          : (right.dx > origin.dx ? 1 : -1);
       positions.writeln(
-        '$frame,${pet.seconds()},${center.dx},$footY,${origin.dx},$facing,$walking',
+        '$frame,${pet.seconds()},${center.dx},$footY,${origin.dx},$facing,$walking,'
+        '${stage?.name ?? ''},${pose?.phase ?? ''},${pose?.ink ?? ''}',
       );
-      if (const {0, 90, 165, 510}.contains(frame)) {
+      if (pose != null) {
+        final worldRoot = pose.root as Offset;
+        final paws = pose.paws as List<dynamic>;
+        for (final (index, paw) in paws.indexed) {
+          final point = paw.ground as Offset;
+          final relative = (point - worldRoot) * (_width / 1536);
+          contacts.writeln(
+            '$frame,$index,${(center.dx + relative.dx) * _pixelRatio},'
+            '${(footY + relative.dy) * _pixelRatio},${paw.lift},${paw.planted}',
+          );
+        }
+      }
+      if ({0, callFrame - 8, compare ? 265 : 165, lastFrame}.contains(frame)) {
         destinations[frame] = center.dx;
       }
       // Keep the clock running through the unsampled idle wait.
-      if (frame > 285 && frame < 425) continue;
+      if (compare ? frame > 395 && frame < 470 : frame > 285 && frame < 425) {
+        continue;
+      }
       final suffix = frame.toString().padLeft(4, '0');
       await tester.runAsync(() async {
         await _saveFrame(picture, '$output/frame-$suffix.png');
@@ -142,12 +196,21 @@ void main() {
       });
     }
     await tester.runAsync(
-      () => File('$output/positions.csv').writeAsString(positions.toString()),
+      () => Future.wait([
+        File('$output/positions.csv').writeAsString(positions.toString()),
+        if (gait)
+          File('$output/contacts.csv').writeAsString(contacts.toString()),
+      ]),
     );
     expect(walkStarts, hasLength(3));
-    expect(walkStarts.take(2), [30, 100]);
-    expect(walkStarts.last, inInclusiveRange(425, 480));
-    for (final entry in {0: .47, 90: .23, 165: .56, 510: .38}.entries) {
+    expect(walkStarts.take(2), [30, callFrame]);
+    expect(walkStarts.last, inInclusiveRange(callFrame + 345, callFrame + 380));
+    for (final entry in {
+      0: .47,
+      callFrame - 8: .23,
+      compare ? 265 : 165: .56,
+      lastFrame: .38,
+    }.entries) {
       expect(destinations[entry.key], closeTo(entry.value * _width, .01));
     }
   }, timeout: const Timeout(Duration(minutes: 6)));

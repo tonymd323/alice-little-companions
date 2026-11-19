@@ -8,6 +8,8 @@ import '../domain/companions.dart';
 import 'tailoring.dart';
 import 'companion_motion.dart';
 import 'action_poses.dart';
+import 'cat_walk.dart';
+import 'cat_walk_art.dart';
 
 /// Coordinates in the tightly cropped illustration. The pupil and appendage
 /// anchors differ even between growth stages of the same companion.
@@ -235,11 +237,15 @@ class IllustratedPet extends StatefulWidget {
     required this.still,
     this.motion,
     this.actionPoses = false,
+    this.catWalk,
+    this.catFacesLeft,
   });
   final Companion pet;
   final int stage;
   final bool reveal, still, actionPoses;
   final PetMotion Function()? motion;
+  final CatWalkPose? Function()? catWalk;
+  final bool Function()? catFacesLeft;
   final Map<String, String> outfit;
   final Listenable clock;
   final double Function() seconds, reaction, walking, gaze;
@@ -252,6 +258,9 @@ class _IllustratedPetState extends State<IllustratedPet> {
   final _images = <String, ImageInfo>{};
   _Mesh? mesh, leapMesh;
   ui.Image? _dressed, _leapDressed;
+  CatWalkArt? _walkArt;
+  List<String> get _walkAssets =>
+      widget.catWalk == null ? const [] : catWalkAssets(widget.outfit['body']);
   bool get _paintedScarf =>
       widget.pet == Companion.rabbit &&
       widget.stage == 3 &&
@@ -359,6 +368,22 @@ class _IllustratedPetState extends State<IllustratedPet> {
         actionClothes?.padding ?? Offset.zero,
       );
     }
+    _buildWalkArt(clothes);
+  }
+
+  void _buildWalkArt(Map<String, ui.Image> clothes) {
+    final paths = _walkAssets;
+    if (_walkArt != null ||
+        paths.isEmpty ||
+        !paths.every(_images.containsKey)) {
+      return;
+    }
+    _walkArt = CatWalkArt(
+      {for (final path in paths) path: _images[path]!.image},
+      widget.outfit['body'],
+      clothes,
+      widget.outfit['head'],
+    );
   }
 
   void _disposeTextures() {
@@ -376,6 +401,7 @@ class _IllustratedPetState extends State<IllustratedPet> {
     final needed = {
       path,
       if (widget.actionPoses) leapPath,
+      ..._walkAssets,
       for (final entry in _accessories) ...[
         fittedAccessory(entry.value, widget.pet),
         if (widget.actionPoses)
@@ -386,6 +412,8 @@ class _IllustratedPetState extends State<IllustratedPet> {
     if (_requested == keyset) return;
     _requested = keyset;
     _disposeTextures();
+    _walkArt?.dispose();
+    _walkArt = null;
     for (final key
         in _streams.keys.where((key) => !needed.contains(key)).toList()) {
       final (stream, listener) = _streams.remove(key)!;
@@ -418,6 +446,7 @@ class _IllustratedPetState extends State<IllustratedPet> {
       pair.$1.removeListener(pair.$2);
     }
     _disposeTextures();
+    _walkArt?.dispose();
     for (final info in _images.values) {
       info.dispose();
     }
@@ -426,22 +455,39 @@ class _IllustratedPetState extends State<IllustratedPet> {
 
   @override
   Widget build(BuildContext context) => RepaintBoundary(
-    child: CustomPaint(painter: _PetPainter(widget, mesh, leapMesh)),
+    child: CustomPaint(painter: _PetPainter(widget, mesh, leapMesh, _walkArt)),
   );
 }
 
 class _PetPainter extends CustomPainter {
-  _PetPainter(this.actor, this.mesh, this.leapMesh)
+  _PetPainter(this.actor, this.mesh, this.leapMesh, this.walkArt)
     : super(repaint: actor.clock);
   final IllustratedPet actor;
   final _Mesh? mesh, leapMesh;
+  final CatWalkArt? walkArt;
   @override
   void paint(Canvas canvas, Size size) {
     final m = mesh;
     if (m == null || size.isEmpty) return;
-    final source = m.bodySize;
-    final dest = applyBoxFit(BoxFit.contain, source, size).destination;
-    final rect = Alignment.bottomCenter.inscribe(dest, Offset.zero & size);
+    final bounds = actor.catWalk == null
+        ? Offset.zero & size
+        : (Offset.zero & size).deflate(size.width / 6);
+    final dest = applyBoxFit(
+      BoxFit.contain,
+      m.bodySize,
+      bounds.size,
+    ).destination;
+    final rect = Alignment.bottomCenter.inscribe(dest, bounds);
+    final pose = walkArt == null || actor.still ? null : actor.catWalk?.call();
+    if (pose != null) {
+      if (pose.ink > 0) walkArt!.paint(canvas, bounds, pose);
+      if (pose.ink == 1) return;
+    }
+    canvas.save();
+    if (actor.catFacesLeft?.call() ?? false) {
+      canvas.translate(size.width, 0);
+      canvas.scale(-1, 1);
+    }
     final t = actor.seconds(),
         reaction = actor.still ? 0.0 : actor.reaction(),
         walking = actor.still ? 0.0 : actor.walking();
@@ -455,11 +501,11 @@ class _PetPainter extends CustomPainter {
         rect,
         t,
         reaction,
-        walking,
+        pose == null ? walking : 0,
         actor.gaze(),
-        actor.still,
+        actor.still || pose != null,
         motion,
-        opacity: 1 - mix,
+        opacity: (1 - mix) * (1 - (pose?.ink ?? 0)),
       );
     }
     if (mix > 0) {
@@ -467,10 +513,10 @@ class _PetPainter extends CustomPainter {
       final footprint = applyBoxFit(
         BoxFit.contain,
         airborne.bodySize,
-        size * 1.16,
+        bounds.size * 1.16,
       ).destination;
       final flightRect = Rect.fromCenter(
-        center: Offset(size.width / 2, size.height - footprint.height / 2),
+        center: Offset(bounds.center.dx, bounds.bottom - footprint.height / 2),
         width: footprint.width,
         height: footprint.height,
       );
@@ -486,6 +532,7 @@ class _PetPainter extends CustomPainter {
         opacity: mix,
       );
     }
+    canvas.restore();
   }
 
   @override
