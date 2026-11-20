@@ -1,0 +1,28 @@
+{
+  "provider": "Android DocumentsUI / Downloads",
+  "file": "alice-4d8e55f0-784b-4802-a34c-eb21c9074113.alicebackup",
+  "bytes": 18589159,
+  "sha256": "dd59e4f426fed4c0caa1137410fee82f7ee782ef67bc6139593e628422e79237",
+  "host_review": {
+    "mode": "backup",
+    "summary": {
+      "balance": 32077,
+      "ledger_count": 10706,
+      "valid_completion_count": 10697,
+      "owned_item_count": 5,
+      "space_count": 1,
+      "max_growth_stage": 6,
+      "active_companion_experience": 10697,
+      "owned_companion_count": 1
+    },
+    "business_sha256": "f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210"
+  },
+  "device_readback": {
+    "external_receipt": "verified",
+    "active_generation_sha256": "cd88c43bd1b269df2bf16928879581939a78386e79d7533eeff71d89766c8dc2",
+    "all_business_rows_sha256": "a2c4da416098e0005e3039a132d9b7452f064b56bb3170f798ce7f26ada7650e",
+    "no_changes_to_all_30_tables": true,
+    "software_emulator_readback_observed_seconds": 182.101,
+    "initial_save_picker_wait_timed_out_seconds": 260
+  }
+}

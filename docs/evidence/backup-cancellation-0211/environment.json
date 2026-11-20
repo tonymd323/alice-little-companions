@@ -1,0 +1,10 @@
+{
+  "platform": "Android 9 x86_64 software emulator",
+  "airplane_mode": true,
+  "wifi": false,
+  "mobile_data": false,
+  "apk_sha256": "6a3930f07ac58d7b5b257e9bc73a92ff9df47ea671d151cafd9644d3230e0979",
+  "fixture_sha256": "643685960f3204669bfa0d1e8ceb04c59b546fd7790876dcdf8c4439fb599c44",
+  "source": "772db06b8df394332a8aee1297ec05658ed5e66a",
+  "app_version": "0.21.1+20"
+}

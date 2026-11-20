@@ -1,0 +1,47 @@
+App source: 772db06b8df394332a8aee1297ec05658ed5e66a (0.21.1+20)
+Flutter 3.50.0 / Dart 3.14.0 debug JIT on Debian 13 x86_64. Android software emulator also running.
+ALICE_QA_INPUT_FILE pointed to the independent Git copy of the published synthetic transfer fixture.
+$ flutter test --no-pub --concurrency=1 --reporter expanded test/published_large_transfer_probe_test.dart
+
+Run 1
+00:00 +0: published 50 MiB family survives cancelling large transfers
+Shell: AC40 restore_old_fixture {"input_sha256":"643685960f3204669bfa0d1e8ceb04c59b546fd7790876dcdf8c4439fb599c44","schema":8,"database_bytes":54800384,"preview_ms":8953,"activation_ms":5908}
+Shell: AC40 save_and_reselect {"export_with_internal_readback_ms":18212,"local_external_verification_ms":9709,"bytes":18589157,"sha256":"6e69ef9c929480b8dd6868915cb792b50aa687678b777082bdab81fb3a35a573"}
+Shell: AC40 cancel_migration_encrypting {"phases":["snapshot","checking","encrypting"],"one_second_after_phase_started":true,"cancel_to_return_ms":17}
+Shell: AC40 cancel_migration_readback {"phases":["snapshot","checking","encrypting","readback"],"one_second_after_phase_started":true,"cancel_to_return_ms":25}
+Shell: AC40 cancel_restore_preview {"phases":["decrypting"],"one_second_after_phase_started":true,"cancel_to_return_ms":2}
+Shell: AC40 cancel_restore_protection {"phases":["snapshot","checking","encrypting"],"one_second_after_phase_started":true,"cancel_to_return_ms":8}
+Shell: AC40 cold_restart {"schema":8,"business_sha256":"f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210","summary":{"balance":32077,"ledger_count":10706,"valid_completion_count":10697,"owned_item_count":5,"space_count":1,"max_growth_stage":6,"active_companion_experience":10697,"owned_companion_count":1},"original_archive_preserved":true,"new_archive_and_verified_receipt_preserved":true,"previous_checkpoint_preserved":true,"same_active_generation":true}
+01:25 +1: All tests passed!
+
+Run 2, after removing an unnecessary null assertion from the probe
+
+$ flutter analyze --no-pub test/published_large_transfer_probe_test.dart
+Analyzing published_large_transfer_probe_test.dart...
+No issues found! (ran in 1.7s)
+$ flutter test --no-pub --concurrency=1 --reporter expanded test/published_large_transfer_probe_test.dart
+00:00 +0: published 50 MiB family survives cancelling large transfers
+Shell: AC40 restore_old_fixture {"input_sha256":"643685960f3204669bfa0d1e8ceb04c59b546fd7790876dcdf8c4439fb599c44","schema":8,"database_bytes":54800384,"preview_ms":9877,"activation_ms":7288}
+Shell: AC40 save_and_reselect {"export_with_internal_readback_ms":20337,"local_external_verification_ms":11600,"bytes":18589160,"sha256":"8a2e305d464091658b13fe07f7a3a208927d94293baeb9d2cc6bbd32702e1e00"}
+Shell: AC40 cancel_migration_encrypting {"phases":["snapshot","checking","encrypting"],"one_second_after_phase_started":true,"cancel_to_return_ms":22}
+Shell: AC40 cancel_migration_readback {"phases":["snapshot","checking","encrypting","readback"],"one_second_after_phase_started":true,"cancel_to_return_ms":40}
+Shell: AC40 cancel_restore_preview {"phases":["decrypting"],"one_second_after_phase_started":true,"cancel_to_return_ms":1}
+Shell: AC40 cancel_restore_protection {"phases":["snapshot","checking","encrypting"],"one_second_after_phase_started":true,"cancel_to_return_ms":13}
+Shell: AC40 cold_restart {"schema":8,"business_sha256":"f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210","summary":{"balance":32077,"ledger_count":10706,"valid_completion_count":10697,"owned_item_count":5,"space_count":1,"max_growth_stage":6,"active_companion_experience":10697,"owned_companion_count":1},"original_archive_preserved":true,"new_archive_and_verified_receipt_preserved":true,"previous_checkpoint_preserved":true,"same_active_generation":true}
+01:32 +1: All tests passed!
+
+Progress and cancellation regression
+
+$ flutter test --no-pub --concurrency=1 --reporter expanded test/backup_cancellation_test.dart
+00:00 +0: the export page shows a progress bar and can cancel
+00:08 +1: cancelling migration generation restores the prior backup and control
+00:31 +2: reopening an interrupted export preserves the last backup
+00:34 +3: cancelled decryption and validation leave the activation pointer untouched
+00:56 +4: stopping checkpoint protection keeps existing recovery data
+01:02 +5: All tests passed!
+
+Linux review of the file saved by the Android release, using the existing 50 MiB benchmark with ALICE_QA_REVIEW_FILE
+
+$ flutter test --no-pub --concurrency=1 --reporter expanded test/published_native_archive_probe_test.dart
+Shell: AC40 device_export {"mode":"backup","summary":{"balance":32077,"ledger_count":10706,"valid_completion_count":10697,"owned_item_count":5,"space_count":1,"max_growth_stage":6,"active_companion_experience":10697,"owned_companion_count":1},"business_sha256":"f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210","file_sha256":"dd59e4f426fed4c0caa1137410fee82f7ee782ef67bc6139593e628422e79237"}
+00:22 +1: All tests passed!

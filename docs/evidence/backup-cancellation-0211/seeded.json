@@ -1,0 +1,84 @@
+{
+  "android_user": 0,
+  "generation_sha256": "cd88c43bd1b269df2bf16928879581939a78386e79d7533eeff71d89766c8dc2",
+  "device_id_sha256": "5914520aaf43130cd21df16a56674964aac68a4baee0f56d7e2d0b19e1bf4fb6",
+  "state": "IDLE",
+  "external_receipt": null,
+  "schema": 8,
+  "all_business_rows_sha256": "a2c4da416098e0005e3039a132d9b7452f064b56bb3170f798ce7f26ada7650e",
+  "tables": {
+    "accounts": 1,
+    "base_furnishings": 0,
+    "child_profiles": 1,
+    "companion_completions": 10698,
+    "companion_memories": 2,
+    "completions": 10698,
+    "correction_records": 1,
+    "entitlements": 5,
+    "growth_awards": 5,
+    "households": 1,
+    "ledger_entries": 10706,
+    "owned_companions": 1,
+    "penalty_day_usage": 1,
+    "penalty_events": 1,
+    "penalty_rules": 1,
+    "pet_state": 1,
+    "placements": 0,
+    "processed_commands": 10779,
+    "project_stages": 0,
+    "purchases": 5,
+    "rain_map_runs": 1,
+    "spaces": 1,
+    "submissions": 21,
+    "task_instances": 10719,
+    "task_templates": 10719,
+    "task_versions": 10719,
+    "wind_story_runs": 1,
+    "window_math_bookmarks": 1,
+    "window_story_milestones": 1,
+    "wishes": 1
+  },
+  "balance": 32077,
+  "reconciled_ledger": true,
+  "valid_completions": 10697,
+  "pending": 21,
+  "active": "rabbit",
+  "owned": [
+    [
+      "rabbit",
+      6,
+      10697,
+      null
+    ]
+  ],
+  "inventory": [
+    "accessory_scarf",
+    "decor_cushion",
+    "decor_mobile",
+    "decor_plant",
+    "decor_vase"
+  ],
+  "wardrobe": [
+    [
+      "rabbit",
+      "accessory_scarf"
+    ]
+  ],
+  "story": [
+    2,
+    1,
+    0,
+    1,
+    1
+  ],
+  "memories": [
+    [
+      "rabbit",
+      "call"
+    ],
+    [
+      "rabbit",
+      "touch"
+    ]
+  ]
+}
