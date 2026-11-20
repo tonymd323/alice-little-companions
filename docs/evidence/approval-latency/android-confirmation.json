@@ -1,0 +1,87 @@
+{
+  "environment": {
+    "platform": "Android 9 x86_64 software emulator",
+    "airplane_mode": true,
+    "version": "0.21.2+21",
+    "apk_sha256": "a91fda73a0f1c65995f2dd9ac314f61c1fd2ebc290eb274474ee376941c0e017",
+    "source": "ae09472607a72dcc1bad1ab6574cd4ef337f6873",
+    "synthetic_backup_sha256": "88552abff53896d880bb80037aa4913ceff607480000430928ebf050a0d4d118"
+  },
+  "synthetic_family_after_files_restore": {
+    "active_companion": "fox",
+    "balance": 5,
+    "pending_tasks": 1,
+    "valid_completions": 16,
+    "ledger_entries": 20,
+    "companions": {
+      "cat": {
+        "level": 1,
+        "experience": 0,
+        "unlock_points": 30
+      },
+      "fox": {
+        "level": 3,
+        "experience": 16,
+        "unlock_points": null
+      }
+    },
+    "business_sha256": "201690cb2d6e13d06091ce7a6c6feaa694e48fe31da721876341e8a0aa3aaceb"
+  },
+  "after_selecting_unlocked_companion": {
+    "active_companion": "cat",
+    "balance": 5,
+    "pending_tasks": 1,
+    "valid_completions": 16,
+    "ledger_entries": 20,
+    "companions": {
+      "cat": {
+        "level": 1,
+        "experience": 0,
+        "unlock_points": 30
+      },
+      "fox": {
+        "level": 3,
+        "experience": 16,
+        "unlock_points": null
+      }
+    },
+    "business_sha256": "b177b33307572e56b9702acb46ec3fd20b68f77c54143320c3b1f6a41e3a33d6"
+  },
+  "after_approval_and_cold_restart": {
+    "active_companion": "cat",
+    "balance": 7,
+    "pending_tasks": 0,
+    "valid_completions": 17,
+    "ledger_entries": 21,
+    "companions": {
+      "cat": {
+        "level": 1,
+        "experience": 1,
+        "unlock_points": 30
+      },
+      "fox": {
+        "level": 3,
+        "experience": 16,
+        "unlock_points": null
+      }
+    },
+    "business_sha256": "f1d2a0e5246e7f2f63864d2ce6e22783b702675e23aa420023c8255afc022c0d"
+  },
+  "parent_receipt": {
+    "title": "成果已确认",
+    "task": "测试任务C",
+    "feedback": "测试确认反馈",
+    "points": 2,
+    "experience": 1
+  },
+  "verified_after_restart": {
+    "sqlite_schema": 8,
+    "inspected_business_tables": 30,
+    "ledger_matches_balance": true,
+    "active_generation_preserved": true,
+    "inventory": true,
+    "wardrobe": true,
+    "companion_memories": true,
+    "story_progress": true
+  }
+}

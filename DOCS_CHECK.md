@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1201 项通过。下面列出逐项结果。
+- 本次准备检查 1211 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -142,6 +142,7 @@
 - 内部链接有效：docs/PLAN.md → evidence/companion-unlock/native-migration/README.md
 - 内部链接有效：docs/PLAN.md → evidence/companion-query-performance/README.md
 - 内部链接有效：docs/PLAN.md → evidence/backup-export-performance/README.md
+- 内部链接有效：docs/PLAN.md → evidence/approval-latency/README.md
 - 内部链接有效：docs/PLAN.md → evidence/task-performance/README.md
 - 内部链接有效：docs/PLAN.md → evidence/migration-return/README.md
 - 内部链接有效：docs/PLAN.md → GAME_STUDIO.md
@@ -282,6 +283,14 @@
 - 内部链接有效：docs/evidence/android-updates/README.md → ../companion-query-performance/github-download.json
 - 内部链接有效：docs/evidence/android-updates/README.md → published_update_probe_test.dart
 - 内部链接有效：docs/evidence/android-updates/README.md → published-0211.log
+- 内部链接有效：docs/evidence/approval-latency/README.md → ../device-acceptance/github-fixture.json
+- 内部链接有效：docs/evidence/approval-latency/README.md → timing.log
+- 内部链接有效：docs/evidence/approval-latency/README.md → ../device-acceptance/README.md
+- 内部链接有效：docs/evidence/approval-latency/README.md → confirmation-feedback.png
+- 内部链接有效：docs/evidence/approval-latency/README.md → home-after-confirmation.png
+- 内部链接有效：docs/evidence/approval-latency/README.md → android-confirmation.json
+- 内部链接有效：docs/evidence/approval-latency/README.md → approval_profile_test.dart
+- 内部链接有效：docs/evidence/approval-latency/README.md → ../task-performance/ui_performance_test.dart
 - 内部链接有效：docs/evidence/backup-cancellation-0211/README.md → ../device-acceptance/github-fixture.json
 - 内部链接有效：docs/evidence/backup-cancellation-0211/README.md → ../companion-query-performance/package.json
 - 内部链接有效：docs/evidence/backup-cancellation-0211/README.md → environment.json
@@ -504,6 +513,7 @@
 - 内部链接有效：docs/evidence/device-acceptance/README.md → ../../ACCEPTANCE.md
 - 内部链接有效：docs/evidence/device-acceptance/README.md → ../backup-cancellation-0211/README.md
 - 内部链接有效：docs/evidence/device-acceptance/README.md → ../backup-export-performance/README.md
+- 内部链接有效：docs/evidence/device-acceptance/README.md → ../approval-latency/README.md
 - 内部链接有效：docs/evidence/device-acceptance/README.md → ../acceptance.csv
 - 内部链接有效：docs/evidence/family-functions/README.md → package.json
 - 内部链接有效：docs/evidence/family-functions/README.md → assets-daily.json
