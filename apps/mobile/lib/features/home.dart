@@ -674,31 +674,37 @@ class GrowthPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   GardenCard(
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const Icon(
-                        Icons.favorite_border,
-                        color: terracotta,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(
+                          Icons.favorite_border,
+                          color: terracotta,
+                        ),
+                        title: const Text('伙伴回忆'),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () =>
+                            openPage(context, _MemoriesPage(family: family)),
                       ),
-                      title: const Text('伙伴回忆'),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () =>
-                          openPage(context, _MemoriesPage(family: family)),
                     ),
                   ),
                   const SizedBox(height: 12),
                   GardenCard(
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const Icon(
-                        Icons.menu_book_outlined,
-                        color: terracotta,
-                      ),
-                      title: const Text('银杏家园手记'),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () => openPage(
-                        context,
-                        GardenStorybook(stage: family.stage),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(
+                          Icons.menu_book_outlined,
+                          color: terracotta,
+                        ),
+                        title: const Text('银杏家园手记'),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => openPage(
+                          context,
+                          GardenStorybook(stage: family.stage),
+                        ),
                       ),
                     ),
                   ),
