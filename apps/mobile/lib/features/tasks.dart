@@ -408,11 +408,16 @@ class ParentHome extends StatelessWidget {
     child: ListenableBuilder(
       listenable: controller,
       builder: (context, _) {
-        final waiting = controller.currentTasks.where(
-          (task) => task.state == 'SUBMITTED',
-        );
-        return PageBody(
-          child: Column(
+        final waiting = controller.currentTasks
+            .where((task) => task.state == 'SUBMITTED')
+            .toList(growable: false);
+        return TaskTileList(
+          entries: waiting,
+          onTap: (context, entry) => openPage(
+            context,
+            ApprovePage(controller: controller, task: entry),
+          ),
+          header: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               GardenCard(
@@ -525,14 +530,6 @@ class ParentHome extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               if (waiting.isEmpty) const GardenCard(child: Text('当前没有待确认的小事。')),
-              for (final entry in waiting)
-                TaskTile(
-                  task: entry,
-                  onTap: () => openPage(
-                    context,
-                    ApprovePage(controller: controller, task: entry),
-                  ),
-                ),
             ],
           ),
         );
