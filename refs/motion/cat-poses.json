@@ -1,0 +1,81 @@
+{
+  "canvas": [512, 464],
+  "root": [256, 440],
+  "seatedArtHeight": 440,
+  "tailPivot": [149, 298],
+  "head": {
+    "side": {
+      "pivot": [365, 259],
+      "crown": [365, 88],
+      "nearEar": [274, 134],
+      "neck": [383, 247],
+      "nearEye": [338, 166],
+      "farEye": [431, 142],
+      "skullWidth": 191
+    },
+    "front": {
+      "pivot": [256, 272],
+      "crown": [256, 112],
+      "nearEar": [161, 111],
+      "neck": [256, 275],
+      "nearEye": [207, 179],
+      "farEye": [306, 179],
+      "skullWidth": 213
+    },
+    "away": {
+      "pivot": [256, 272],
+      "crown": [256, 110],
+      "nearEar": [161, 112],
+      "neck": [256, 278],
+      "skullWidth": 213
+    }
+  },
+  "segment": {"size": [128, 160], "start": [64, 32], "end": [64, 128]},
+  "paw": {"size": [128, 100], "joint": [64, 55], "pad": [64, 84]},
+  "limbs": [
+    {"id": "near-hind", "hip": [157, 301], "bend": [177, 356], "pad": [166, 440]},
+    {"id": "near-front", "hip": [344, 305], "bend": [338, 358], "pad": [358, 440]},
+    {"id": "far-hind", "hip": [195, 291], "bend": [216, 343], "pad": [206, 423]},
+    {"id": "far-front", "hip": [372, 296], "bend": [372, 345], "pad": [397, 423]}
+  ],
+  "directions": {
+    "front": [
+      {"hip": [191, 287], "pad": [176, 420]},
+      {"hip": [215, 305], "pad": [221, 440]},
+      {"hip": [321, 287], "pad": [325, 420]},
+      {"hip": [297, 305], "pad": [291, 440]}
+    ],
+    "away": [
+      {"hip": [221, 304], "pad": [208, 440]},
+      {"hip": [188, 287], "pad": [176, 418]},
+      {"hip": [291, 304], "pad": [304, 440]},
+      {"hip": [324, 287], "pad": [336, 418]}
+    ]
+  },
+  "cycle": {
+    "stride": 132,
+    "strideUnits": "artwork px at full resolution",
+    "support": 0.75,
+    "keyPoses": [
+      {"label": "LH plants", "phase": 0, "hip": [0, 4], "shoulder": [-2, 1], "body": [-1, 2], "head": [-3, 4]},
+      {"label": "LF passes", "phase": 0.125, "hip": [2, -2], "shoulder": [2, -3], "body": [2, -3], "head": [4, -2]},
+      {"label": "LF plants", "phase": 0.25, "hip": [2, 0], "shoulder": [1, 4], "body": [1, 2], "head": [3, 5]},
+      {"label": "RH passes", "phase": 0.375, "hip": [3, -4], "shoulder": [3, -1], "body": [3, -2], "head": [5, 0]},
+      {"label": "RH plants", "phase": 0.50, "hip": [0, 3], "shoulder": [-2, 0], "body": [-1, 2], "head": [-4, 3]},
+      {"label": "RF passes", "phase": 0.625, "hip": [-2, -3], "shoulder": [1, -4], "body": [0, -3], "head": [3, -2]},
+      {"label": "RF plants", "phase": 0.75, "hip": [-2, 1], "shoulder": [-1, 4], "body": [-1, 3], "head": [1, 5]},
+      {"label": "LH passes", "phase": 0.875, "hip": [-3, -3], "shoulder": [-3, -1], "body": [-3, -2], "head": [-5, 1]}
+    ]
+  },
+  "transitions": {
+    "stand": {"hip": [0, 0], "shoulder": [0, 0], "body": [0, 0], "head": [0, 0]},
+    "pushUp": {
+      "hip": [20, 46], "shoulder": [-26, 17], "body": [-2, 24], "head": [-50, 9],
+      "feet": [[18, 0], [-39, 0], [8, 0], [-43, 0]]
+    },
+    "sitBack": {
+      "hip": [15, 35], "shoulder": [-18, 13], "body": [-3, 18], "head": [-36, 6],
+      "feet": [[15, 0], [-30, 0], [6, 0], [-35, 0]]
+    }
+  }
+}

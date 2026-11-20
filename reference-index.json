@@ -1,0 +1,455 @@
+{
+  "reference_checkout": "47788aee98f4ddec456687c3cfdd6f182fc559db",
+  "references": [
+    {
+      "id": "C",
+      "source": "design/references/garden-color.png",
+      "file": "refs/scene/garden-color.png",
+      "use": "C 版方向稿。取木、石、草、金叶及水色。图中角色仅作比例和笔触参考。",
+      "bytes": 3553577,
+      "sha256": "0a3e515432dcba109f8328dea1867dffd56d1c4a1ab94a5c12853f067fc277db",
+      "source_sha256": "0a3e515432dcba109f8328dea1867dffd56d1c4a1ab94a5c12853f067fc277db"
+    },
+    {
+      "id": "BOARD",
+      "source": "design/references/pet-stages.png",
+      "file": "refs/pets/three-by-six.png",
+      "use": "原三宠六阶段设定板，横向读同一只宠物的成长。",
+      "bytes": 2211266,
+      "sha256": "3870371cf6d3f5d7a07232b1ef321423d6a11f3f1964b42bf3486a2170f983b9",
+      "source_sha256": "3870371cf6d3f5d7a07232b1ef321423d6a11f3f1964b42bf3486a2170f983b9"
+    },
+    {
+      "id": "COURT",
+      "source": "apps/mobile/assets/art/garden.webp",
+      "file": "refs/scene/courtyard.png",
+      "use": "1536×1024 无宠庭院，树屋与石桥的机位、光向和层次。",
+      "bytes": 3173626,
+      "sha256": "d42f0f746695382e8862586f13e367b5e8f0f4e6f0b4bf1bfa0b23641a5e9ea0",
+      "source_sha256": "fe09689ac123c25f45e02b39e0f26b636e0ec6b6f8ae810bcb0f6e3d966e8a76"
+    },
+    {
+      "id": "VERANDA",
+      "source": "apps/mobile/assets/art/veranda.webp",
+      "file": "refs/scene/veranda.png",
+      "use": "1536×1024 暖廊，窗座、右侧窗外溪桥和地板透视。",
+      "bytes": 3368981,
+      "sha256": "e16c9d03d50357c56b4e72e8ac47bd96957bdaee65f359aee2b9f8e354a7b74f",
+      "source_sha256": "346b8dfea82b38940a8a670613bab2c31416e665a43d36bdeb2fa20b2840578f"
+    },
+    {
+      "id": "SHOP",
+      "source": "apps/mobile/assets/art/scene_flower_shop_background.webp",
+      "file": "refs/scene/flower-shop-base.png",
+      "use": "768×512 花店底图，标定室内视角及地面。",
+      "bytes": 778716,
+      "sha256": "884dac3032000f728f40bd221f256d6fa58d2d72e0456ab54ef8ecb3404df887",
+      "source_sha256": "35e6ecfffa2f7858f2d797f8f61c4a24f6c8bfa97a4ba211030cd30ae69383de"
+    },
+    {
+      "id": "SHOPFULL",
+      "source": "apps/mobile/assets/art/painted_flower_shop.webp",
+      "file": "refs/scene/flower-shop-furnished.png",
+      "use": "花店实际固定陈设，参考台沿、木架比例及绿木材质。",
+      "bytes": 812096,
+      "sha256": "17ea0ea5c70ceee892ce0215cf71bf1ea7721080c28d8a35085055f809239a25",
+      "source_sha256": "1b4694be1741f0f7a396276081c41fa8a1980cf798cd07cbf600ff52f51576a2"
+    },
+    {
+      "id": "SHOPFG",
+      "source": "apps/mobile/assets/art/scene_flower_shop_foreground.webp",
+      "file": "refs/scene/flower-shop-foreground.png",
+      "use": "与花店底图同画布的透明前景遮挡。",
+      "bytes": 10296,
+      "sha256": "412aff5d6376f4eddbb694f93c9aa2335d79d959b7da3f1a18321b8e3ee35591",
+      "source_sha256": "05932f84ad7c07d4743ac2fb1e13f142694806b91ae6c59bf1245e8d181943b6"
+    },
+    {
+      "id": "FLOOR",
+      "source": "design/scene_slots.json",
+      "file": "refs/scene/scene-slots.json",
+      "use": "各空间原画布与可落物区域。免费庭院使用 base_room。",
+      "bytes": 5097,
+      "sha256": "73f1ebebc95ee17a87bcd015bfce5fc2c897da8791a0ae032fe971296974fa28",
+      "source_sha256": "73f1ebebc95ee17a87bcd015bfce5fc2c897da8791a0ae032fe971296974fa28"
+    },
+    {
+      "id": "WINDOW",
+      "source": "design/production/wind/room/window-states.jpg",
+      "file": "refs/scene/window-states.jpg",
+      "use": "窗棂挡住玻璃，修窗前后地板投影随对应窗格改变。",
+      "bytes": 340005,
+      "sha256": "aea7362200e305be5f203d08589ceb1d1e9278e29a405c34b2798708090da2cd",
+      "source_sha256": "aea7362200e305be5f203d08589ceb1d1e9278e29a405c34b2798708090da2cd"
+    },
+    {
+      "id": "LEAF",
+      "source": "apps/mobile/assets/wind/actors/leaf.webp",
+      "file": "refs/props/ginkgo-leaf.png",
+      "use": "主线可取的独立金叶，参考可数单位的清晰外缘。",
+      "bytes": 48723,
+      "sha256": "a14747002c573f83c41455d2542235adf8cda378cfb0c0434ef6d4d95ee47f8c",
+      "source_sha256": "4ae956ace32d251353bec91bce3318c3ac8b6452a18b1cef4bd29851c5ed2a88"
+    },
+    {
+      "id": "BASKET",
+      "source": "apps/mobile/assets/wind/actors/basket.webp",
+      "file": "refs/props/basket.png",
+      "use": "手绘藤篮主体，参考材质和接触尺度。",
+      "bytes": 244495,
+      "sha256": "c3dc650ead1eefdecd1bd2b10e615faabf219614e5852c60b31dc8557f566586",
+      "source_sha256": "fa3ca5e1ae5018e9440aa2273ac1fb5ccba680c36772bf16e4c7260bb7c00d9c"
+    },
+    {
+      "id": "RIM",
+      "source": "apps/mobile/assets/wind/actors/basket_front.webp",
+      "file": "refs/props/basket-front.png",
+      "use": "同一藤篮前沿遮挡片，需与主体同画布套合。",
+      "bytes": 163163,
+      "sha256": "d3890a37ce12b30b67b359d16a100416465b256283f706b5f4eecd3095f87ac4",
+      "source_sha256": "8be7c2b266d3a757c14c629320ff46c3b6c9d61c8230008a964a143ca6b383bc"
+    },
+    {
+      "id": "PROPFILE",
+      "source": "design/production/wind/actors/props.ora",
+      "file": "refs/props/props.ora",
+      "use": "可用 Krita 或 GIMP 打开的多层道具原稿。",
+      "bytes": 3832650,
+      "sha256": "eca80244ff81c3ae53897321056dab56c2ddbedd882ec9a1e93a586e4b753bd4",
+      "source_sha256": "eca80244ff81c3ae53897321056dab56c2ddbedd882ec9a1e93a586e4b753bd4"
+    },
+    {
+      "id": "FOX1",
+      "source": "apps/mobile/assets/art/fox-1.webp",
+      "file": "refs/pets/fox-1.png",
+      "use": "银杏狐奶油第一阶段实际透明日常原图，369×451。",
+      "bytes": 280766,
+      "sha256": "8b3e5aeeb411ede357280bc6df1a7311bb6a74d92ffa4315e23b298b0c209aed",
+      "source_sha256": "19b5e96a542f1bacf4d4f3a779b2ce3377ef77b064ec8415f24c32102e5ecc28"
+    },
+    {
+      "id": "RABBIT1",
+      "source": "apps/mobile/assets/art/rabbit-1.webp",
+      "file": "refs/pets/rabbit-1.png",
+      "use": "月牙耳兔桃桃第一阶段实际透明日常原图，450×408。",
+      "bytes": 275409,
+      "sha256": "18badf090313872ee8c69e13db9255c2e1c3da5f5abe1bc5bae810a0208272c7",
+      "source_sha256": "c58c8fb8ad4dc34a353da1b00e079aeb97e326fa934c29f56d2b99cc68140cd4"
+    },
+    {
+      "id": "RABJUMP",
+      "source": "apps/mobile/assets/art/leap-rabbit-1.webp",
+      "file": "refs/pets/rabbit-1-skill.png",
+      "use": "桃桃一阶技能腾跃姿，只用于确认兔体和耳形。",
+      "bytes": 196206,
+      "sha256": "fd0b40f95683f4fc6c9dc840edd7a2cc5f38ef26b22d4426a7701b14537561a7",
+      "source_sha256": "75ba901609fea582d01ce17c4f8829b5a11b498bf2e8eec806b004f5daa8aaf0"
+    },
+    {
+      "id": "CAT1",
+      "source": "apps/mobile/assets/art/cat-1.webp",
+      "file": "refs/pets/cat-1.png",
+      "use": "团团第 1 阶实际透明原画。",
+      "bytes": 238864,
+      "sha256": "331584384d84c5d3ea4e63a68bff1d6e928d13037fa9a6f2151dabf36c6cb702",
+      "source_sha256": "17110a5ebf09369f4561303a07dbb0c52e8cb468bc21433a33c1c7107cde6ebb"
+    },
+    {
+      "id": "CAT2",
+      "source": "apps/mobile/assets/art/cat-2.webp",
+      "file": "refs/pets/cat-2.png",
+      "use": "团团第 2 阶实际透明原画。",
+      "bytes": 247971,
+      "sha256": "65cbe13b6fdb7ecbb2beb0fc889ad6e0dc5dcb93e198b9d1eacb05861e9d3853",
+      "source_sha256": "77eeb7602b1e484aa6d9047d740869cbdfcaedae35a546c2ce996f6f2851e3f6"
+    },
+    {
+      "id": "CAT3",
+      "source": "apps/mobile/assets/art/cat-3.webp",
+      "file": "refs/pets/cat-3.png",
+      "use": "团团第 3 阶实际透明原画。",
+      "bytes": 232529,
+      "sha256": "0f02ebb72ff593aa1178b7dd7802841d9c5348b67ba5c4d28230252b7424f382",
+      "source_sha256": "e9c153a40d83bbeda77d834e29449ad3325cab3f829799ecd125cd32c7762d6c"
+    },
+    {
+      "id": "CAT4REST",
+      "source": "apps/mobile/assets/art/cat-4-rest.webp",
+      "file": "refs/pets/cat-4-rest.png",
+      "use": "团团四阶家园收翼坐姿。",
+      "bytes": 1696987,
+      "sha256": "8fd6566cf4b87afc0ec309cab1f6b30b98f0b57ed77a05375098533b7526291c",
+      "source_sha256": "0dc4561981dcdb0b8a7da8cea3a79d6daa7000fa71307f627071de8d2f2baa4e"
+    },
+    {
+      "id": "CAT4OPEN",
+      "source": "apps/mobile/assets/art/cat-4.webp",
+      "file": "refs/pets/cat-4.png",
+      "use": "团团四阶进化展翼。",
+      "bytes": 311885,
+      "sha256": "0e72ec8006117b959981d871fb3479115fefd555b63e26a3a0037ca62727bfe8",
+      "source_sha256": "90381f85755541b2f81691bf7e29f8f46b22757da5265315622d05c3c759c16f"
+    },
+    {
+      "id": "CAT5",
+      "source": "apps/mobile/assets/art/cat-5.webp",
+      "file": "refs/pets/cat-5.png",
+      "use": "团团第 5 阶实际透明原画。",
+      "bytes": 239421,
+      "sha256": "f157e7e72fb538b18d6bddc1bc6d277199a37c8e4d517ae9dbefbb670a2a9f5c",
+      "source_sha256": "657acdd5c12bcb0fb2991b3b8c0b20e9b4f526899a1b523dbee56b71faffdbe8"
+    },
+    {
+      "id": "CAT6",
+      "source": "apps/mobile/assets/art/cat-6.webp",
+      "file": "refs/pets/cat-6.png",
+      "use": "团团第 6 阶实际透明原画。",
+      "bytes": 251322,
+      "sha256": "ed156eea03f90a6617546ee3e4288430fdd4992ad1a91d511c643e5ca862b6de",
+      "source_sha256": "a042e9d0285a23689959c388213c05d4acba5757f75a1e79f4a2a4ec3520f600"
+    },
+    {
+      "id": "FOXCOAT",
+      "source": "apps/mobile/assets/art/fox-1-coat.webp",
+      "file": "refs/fit/fox-1-coat.png",
+      "use": "奶油一阶穿外套原图，对照领口、前爪和尾根。",
+      "bytes": 271376,
+      "sha256": "e5f5aab3161973f34d303bb1586777fdc5645bd76422341f1a88ea2a8f496aa4",
+      "source_sha256": "619ba76a8d288400fe8e65c56dc37899eeba88d7a32eb9c34517d3b505078404"
+    },
+    {
+      "id": "RABAPRON",
+      "source": "apps/mobile/assets/art/rabbit-1-apron.webp",
+      "file": "refs/fit/rabbit-1-apron.png",
+      "use": "桃桃一阶围裙坐姿，校准圆身与服装边缘。",
+      "bytes": 268538,
+      "sha256": "fa6ec9ecfeb1daac5f147cff1bce889fc64a8c633596dab4586ff583483039cb",
+      "source_sha256": "62f6ffddb1602d5bd029050db5d0f203926b25e8f96e72a03e2a54896b5233d9"
+    },
+    {
+      "id": "SCARF",
+      "source": "apps/mobile/assets/art/fitted-scarf-rabbit-rest.webp",
+      "file": "refs/fit/rabbit-scarf.png",
+      "use": "桃桃坐姿围巾的实际透明层，观察布褶和颈部受力。",
+      "bytes": 89446,
+      "sha256": "1ded7c2a12b4a9d1db8a162511630e1210a438c11900e2f222af046205378561",
+      "source_sha256": "0d8474929408e58872eda190bfaac87813cfe70f723357fba20e6ed129cc8a91"
+    },
+    {
+      "id": "GLASSES",
+      "source": "apps/mobile/assets/art/worn_accessory_glasses.webp",
+      "file": "refs/fit/glasses.png",
+      "use": "眼镜的穿戴原图，近远镜片仍需按角色眼位制版。",
+      "bytes": 88827,
+      "sha256": "fba7665194cba20ff672a2b88ce6c3c6b06025d08ba20de73a9edda1eda1224f",
+      "source_sha256": "3e41d222c8af682199c783c6b1fd6533c1d353cebaf742951d465fbd8ac6a291"
+    },
+    {
+      "id": "BOW",
+      "source": "apps/mobile/assets/art/fitted-bow-fox-rest.webp",
+      "file": "refs/fit/fox-bow.png",
+      "use": "狐狸耳结原层，参考布结尺寸与笔触。",
+      "bytes": 75299,
+      "sha256": "25deec185068b4c0ea6849e133cb49da86578168838fe8b2e7163c00822fcd8c",
+      "source_sha256": "c64364e8dc323741b59c24802507bbe78cdcecf4ba508f5a0601b72cb47b995b"
+    },
+    {
+      "id": "BOWTURN",
+      "source": "docs/evidence/fox-walk/bow-turn.png",
+      "file": "refs/fit/fox-bow-turn.png",
+      "use": "左右换面时奶油自身右耳的近远变化，仅用作佩戴参照。",
+      "bytes": 826332,
+      "sha256": "4a7b9739adf7bb7ebb532f454ecb7d71390cdc51e074a6256dba0b46e7e3b7f8",
+      "source_sha256": "4a7b9739adf7bb7ebb532f454ecb7d71390cdc51e074a6256dba0b46e7e3b7f8"
+    },
+    {
+      "id": "FOXPOSE",
+      "source": "design/production/fox-walk/poses.json",
+      "file": "refs/motion/fox-poses.json",
+      "use": "奶油一阶行走画布、地线和头颈接点，数值仅适用于这套姿态。",
+      "bytes": 3446,
+      "sha256": "8af8414ba01a6f670be6500510d69d004c54c47d9ce4b2315bd7434edd5af9bf",
+      "source_sha256": "8af8414ba01a6f670be6500510d69d004c54c47d9ce4b2315bd7434edd5af9bf"
+    },
+    {
+      "id": "CATPOSE",
+      "source": "design/production/cat-walk/poses.json",
+      "file": "refs/motion/cat-poses.json",
+      "use": "团团一阶旧动作的画布、脚掌与接点坐标，供复测对齐。",
+      "bytes": 3091,
+      "sha256": "9b387e0a621f1fea4b25231e0b7d2a7c215e6e8239da7ce3fc1db6f8fed144a4",
+      "source_sha256": "9b387e0a621f1fea4b25231e0b7d2a7c215e6e8239da7ce3fc1db6f8fed144a4"
+    },
+    {
+      "id": "OLDMOVE",
+      "source": "docs/evidence/cat-walk/three-walks.mp4",
+      "file": "refs/motion/cat-before-rework.mp4",
+      "use": "旧版原速对照，1024×758、25 fps 的并排剪辑。家长反馈旧步态生硬，用来定位突变与僵直。爪垫量测使用新录的无损全景。",
+      "bytes": 5292791,
+      "sha256": "bb290a5b2ff32ebee4c0d74f402651c8ea02f1daa04885766e9dd4370fdb53ad",
+      "source_sha256": "bb290a5b2ff32ebee4c0d74f402651c8ea02f1daa04885766e9dd4370fdb53ad"
+    },
+    {
+      "id": "RABBASE",
+      "source": "docs/evidence/rabbit-hop/before.mp4",
+      "file": "refs/motion/rabbit-baseline.mp4",
+      "use": "桃桃三种日常移动的同机位原速基线，供将来短跳前后对比。",
+      "bytes": 2738029,
+      "sha256": "ee0283e24382715cdc28d0b52a776e8b23ca5f7e95dfabe02879712bb3c1a82c",
+      "source_sha256": "ee0283e24382715cdc28d0b52a776e8b23ca5f7e95dfabe02879712bb3c1a82c"
+    },
+    {
+      "id": "FOXSIDE",
+      "source": "apps/mobile/assets/fox_walk/head.webp",
+      "file": "refs/fit/fox-head-side.png",
+      "use": "奶油一阶动作侧头原层，512×464。",
+      "bytes": 126239,
+      "sha256": "3877a85cb287e5b177f0ac3b4534973dfc02489b870d2fa64f224579214b0c0c",
+      "source_sha256": "ddb17bc5e2bcf433253a8839f65aba9d2221fbc2e279f9dca59b20a3422abeaa"
+    },
+    {
+      "id": "FOXFRONT",
+      "source": "apps/mobile/assets/fox_walk/head-front.webp",
+      "file": "refs/fit/fox-head-front.png",
+      "use": "同一画布的正头原层。",
+      "bytes": 115380,
+      "sha256": "37a70e7da9b5521706a740c6e935de93d6565e24ee7a831e6244fccc4c18ee31",
+      "source_sha256": "9f7674842679fda0c9ced5e3527069453f70ac42ef50e0e2eec3b1d59d327d28"
+    },
+    {
+      "id": "FOXBACK",
+      "source": "apps/mobile/assets/fox_walk/head-away.webp",
+      "file": "refs/fit/fox-head-away.png",
+      "use": "同一画布的背头原层。",
+      "bytes": 102041,
+      "sha256": "690536e17a80b62bb4307e9540d71ff0eeab6f16a63b2639b6881ed303f10edc",
+      "source_sha256": "da66c73113782fb26c0de52701887b4883b79733aef343fa0ef27332d80f9a62"
+    },
+    {
+      "id": "FOXSHEET",
+      "source": "design/production/fox-walk/contact-sheet.jpg",
+      "file": "refs/fit/fox-outfits-and-poses.jpg",
+      "use": "奶油一阶身体、服装与接触姿势的制作对照，供校准形状与遮挡。",
+      "bytes": 301919,
+      "sha256": "d96f12e7bbefa1b2bfd2495ad01621fffcf46fcfff9009d5743d218cd08a73ff",
+      "source_sha256": "d96f12e7bbefa1b2bfd2495ad01621fffcf46fcfff9009d5743d218cd08a73ff"
+    },
+    {
+      "id": "CATSHEET",
+      "source": "design/production/cat-walk/contact-sheet.jpg",
+      "file": "refs/fit/cat-outfits-and-poses.jpg",
+      "use": "团团一阶体态、穿戴和原画地线对照，供制作定位。",
+      "bytes": 262379,
+      "sha256": "5f5f1cbd9bf930215663504958e4f2cc6ca5e853ab5bd0f1a6ddaa356e31a8a8",
+      "source_sha256": "5f5f1cbd9bf930215663504958e4f2cc6ca5e853ab5bd0f1a6ddaa356e31a8a8"
+    },
+    {
+      "id": "FOX2",
+      "source": "apps/mobile/assets/art/fox-2.webp",
+      "file": "refs/pets/fox-2.png",
+      "use": "奶油第 2 阶实际透明原画，校准尾尖冒芽。",
+      "bytes": 260284,
+      "sha256": "873353b6023351f4e5e58fde3180cbf4946765585b7b59d3da2ac753f3036fac",
+      "source_sha256": "94cbd4e25f3c31a163cbfc4a66fee56c32c57ff732e7485ef900dea5b40f8661"
+    },
+    {
+      "id": "FOX3",
+      "source": "apps/mobile/assets/art/fox-3.webp",
+      "file": "refs/pets/fox-3.png",
+      "use": "奶油第 3 阶实际透明原画，校准尾部长出银杏叶。",
+      "bytes": 302148,
+      "sha256": "e26a00dddf60a3838924d2bb6b9ec78a39ec5dc542f903f04fc9f04c3d5e9ca6",
+      "source_sha256": "5c4b67826c769cbcd22069595e0349110479ad05ee90b6b0a4842e6d3730a2bf"
+    },
+    {
+      "id": "FOX4",
+      "source": "apps/mobile/assets/art/fox-4.webp",
+      "file": "refs/pets/fox-4.png",
+      "use": "奶油第 4 阶实际透明原画，校准金色扇尾。",
+      "bytes": 297892,
+      "sha256": "18de4105e151038a3fdc4c9483b795ddb9460a38c24151e611eefe7123f853c9",
+      "source_sha256": "56c4c8e728b5fd2b97266cc875cd97b5c2c9e0e143b80e7393f25f6127a43def"
+    },
+    {
+      "id": "FOX5",
+      "source": "apps/mobile/assets/art/fox-5.webp",
+      "file": "refs/pets/fox-5.png",
+      "use": "奶油第 5 阶实际透明原画，校准颈边金叶圈。",
+      "bytes": 318542,
+      "sha256": "be8cc675d196c7279ea8894985933d744ff8484f66e9813358d58f4966a8b016",
+      "source_sha256": "273cfea22a1f6365f7f4900b55aafb5325089e2c97711c79501a469d2928fad0"
+    },
+    {
+      "id": "FOX6",
+      "source": "apps/mobile/assets/art/fox-6.webp",
+      "file": "refs/pets/fox-6.png",
+      "use": "奶油第 6 阶实际透明原画，校准跃身与层叠叶尾。",
+      "bytes": 288273,
+      "sha256": "0d69c5d5fc6587b9c67624c20494c44b0c6dcc2e4a28e28f4abf74e247ff4cd1",
+      "source_sha256": "43fe2cd9b72fa75a3065013bee113799e40cc677e3a899da0f3c403b4ff15fd0"
+    },
+    {
+      "id": "RABBIT2",
+      "source": "apps/mobile/assets/art/rabbit-2.webp",
+      "file": "refs/pets/rabbit-2.png",
+      "use": "桃桃第 2 阶实际透明原画，校准长耳淡紫尖。",
+      "bytes": 300256,
+      "sha256": "eebb8d9d987d1214ca85eab3c72376a534dffb6a39ae5cb5638c07befcc8ce96",
+      "source_sha256": "9cc8c00b0f16a32faca0cb109a2bf13d4943d0540eb95e7822e2369d27062efc"
+    },
+    {
+      "id": "RABBIT3",
+      "source": "apps/mobile/assets/art/rabbit-3.webp",
+      "file": "refs/pets/rabbit-3.png",
+      "use": "桃桃第 3 阶实际透明原画，校准额头月牙。",
+      "bytes": 186279,
+      "sha256": "d210d25b4377dfca17f37dae70ad6e2ea2754d308cc3051bd329eb51aaf7d5f5",
+      "source_sha256": "ad6ca22ca7e87c222103fb87d1feac2b2ec96851cabbdea249650e5903a14992"
+    },
+    {
+      "id": "RABBIT4",
+      "source": "apps/mobile/assets/art/rabbit-4.webp",
+      "file": "refs/pets/rabbit-4.png",
+      "use": "桃桃第 4 阶实际透明原画，校准双耳银月。",
+      "bytes": 216809,
+      "sha256": "8c67b359c77379a7c277b18f518575ca22ed69c9a15d6eee6fe477969b5c2f12",
+      "source_sha256": "0025028476399ab74aebd1bc7b385c56a31b7c51657ed5dfe015509cf48d98bd"
+    },
+    {
+      "id": "RABBIT5",
+      "source": "apps/mobile/assets/art/rabbit-5.webp",
+      "file": "refs/pets/rabbit-5.png",
+      "use": "桃桃第 5 阶实际透明原画，校准长耳云纹。",
+      "bytes": 265860,
+      "sha256": "eede10573981008777b2f6afe2db54c94273f03ac8c725937b47367aa30224fe",
+      "source_sha256": "e802b600ed4158eab39004e076e9ce9940bf5806aaeb4a98349ad8c9b91cee45"
+    },
+    {
+      "id": "RABBIT6",
+      "source": "apps/mobile/assets/art/rabbit-6.webp",
+      "file": "refs/pets/rabbit-6.png",
+      "use": "桃桃第 6 阶实际透明原画，校准月光飘带耳。",
+      "bytes": 272877,
+      "sha256": "d3a46333b1a4cdf9d8f13e5be6cab1705d8917a214ed521f44d2010217ebfdf0",
+      "source_sha256": "285aa0b4b6f23c1f6c3c2f9354420eb69d13e89f780990ec0b326b7e725285d3"
+    },
+    {
+      "id": "FOXSCARF",
+      "source": "apps/mobile/assets/art/fitted-scarf-fox-rest.webp",
+      "file": "refs/fit/fox-scarf.png",
+      "use": "奶油日常坐姿的既有围巾透明层，校准领围与毛缘。",
+      "bytes": 99041,
+      "sha256": "2062fd0bac5b1e09ccb7a451f01c74c8d4bcc82ddeee4769bcb766726210d166",
+      "source_sha256": "044e3dcf879e1de23b9b94dd63ef799e0bac8f73c3b595a0113f9ba30c2c227d"
+    },
+    {
+      "id": "CATSCARF",
+      "source": "apps/mobile/assets/art/fitted-scarf-cat-rest.webp",
+      "file": "refs/fit/cat-scarf.png",
+      "use": "团团日常坐姿的既有围巾透明层，校准领围与毛缘。",
+      "bytes": 79457,
+      "sha256": "f2bcfff7fa7bdc88b3b1e25d2d31f33b788d59d58d09cb66d9a9066c8e0f2c4d",
+      "source_sha256": "7da4b44b55ee10d54c97ee9a1e31db2303909cdb163cfc9f94a9a389abfe34ee"
+    }
+  ]
+}
