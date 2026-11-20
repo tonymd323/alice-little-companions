@@ -11434,6 +11434,618 @@ class CompanionMemoriesCompanion extends UpdateCompanion<CompanionMemory> {
   }
 }
 
+class OwnedCompanions extends Table
+    with TableInfo<OwnedCompanions, OwnedCompanion> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  OwnedCompanions(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _childIdMeta = const VerificationMeta(
+    'childId',
+  );
+  late final GeneratedColumn<String> childId = GeneratedColumn<String>(
+    'child_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL REFERENCES child_profiles(id)',
+  );
+  static const VerificationMeta _petIdMeta = const VerificationMeta('petId');
+  late final GeneratedColumn<String> petId = GeneratedColumn<String>(
+    'pet_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL CHECK (pet_id IN (\'fox\', \'rabbit\', \'cat\'))',
+  );
+  static const VerificationMeta _purchaseIdMeta = const VerificationMeta(
+    'purchaseId',
+  );
+  late final GeneratedColumn<String> purchaseId = GeneratedColumn<String>(
+    'purchase_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'UNIQUE REFERENCES purchases(id)',
+  );
+  static const VerificationMeta _retainedStageMeta = const VerificationMeta(
+    'retainedStage',
+  );
+  late final GeneratedColumn<int> retainedStage = GeneratedColumn<int>(
+    'retained_stage',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT 1 CHECK (retained_stage BETWEEN 1 AND 6)',
+    defaultValue: const CustomExpression('1'),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    childId,
+    petId,
+    purchaseId,
+    retainedStage,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'owned_companions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<OwnedCompanion> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('child_id')) {
+      context.handle(
+        _childIdMeta,
+        childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('pet_id')) {
+      context.handle(
+        _petIdMeta,
+        petId.isAcceptableOrUnknown(data['pet_id']!, _petIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_petIdMeta);
+    }
+    if (data.containsKey('purchase_id')) {
+      context.handle(
+        _purchaseIdMeta,
+        purchaseId.isAcceptableOrUnknown(data['purchase_id']!, _purchaseIdMeta),
+      );
+    }
+    if (data.containsKey('retained_stage')) {
+      context.handle(
+        _retainedStageMeta,
+        retainedStage.isAcceptableOrUnknown(
+          data['retained_stage']!,
+          _retainedStageMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {childId, petId};
+  @override
+  OwnedCompanion map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return OwnedCompanion(
+      childId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}child_id'],
+      )!,
+      petId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}pet_id'],
+      )!,
+      purchaseId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}purchase_id'],
+      ),
+      retainedStage: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}retained_stage'],
+      )!,
+    );
+  }
+
+  @override
+  OwnedCompanions createAlias(String alias) {
+    return OwnedCompanions(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const ['PRIMARY KEY(child_id, pet_id)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class OwnedCompanion extends DataClass implements Insertable<OwnedCompanion> {
+  final String childId;
+  final String petId;
+  final String? purchaseId;
+  final int retainedStage;
+  const OwnedCompanion({
+    required this.childId,
+    required this.petId,
+    this.purchaseId,
+    required this.retainedStage,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['child_id'] = Variable<String>(childId);
+    map['pet_id'] = Variable<String>(petId);
+    if (!nullToAbsent || purchaseId != null) {
+      map['purchase_id'] = Variable<String>(purchaseId);
+    }
+    map['retained_stage'] = Variable<int>(retainedStage);
+    return map;
+  }
+
+  OwnedCompanionsCompanion toCompanion(bool nullToAbsent) {
+    return OwnedCompanionsCompanion(
+      childId: Value(childId),
+      petId: Value(petId),
+      purchaseId: purchaseId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(purchaseId),
+      retainedStage: Value(retainedStage),
+    );
+  }
+
+  factory OwnedCompanion.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return OwnedCompanion(
+      childId: serializer.fromJson<String>(json['child_id']),
+      petId: serializer.fromJson<String>(json['pet_id']),
+      purchaseId: serializer.fromJson<String?>(json['purchase_id']),
+      retainedStage: serializer.fromJson<int>(json['retained_stage']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'child_id': serializer.toJson<String>(childId),
+      'pet_id': serializer.toJson<String>(petId),
+      'purchase_id': serializer.toJson<String?>(purchaseId),
+      'retained_stage': serializer.toJson<int>(retainedStage),
+    };
+  }
+
+  OwnedCompanion copyWith({
+    String? childId,
+    String? petId,
+    Value<String?> purchaseId = const Value.absent(),
+    int? retainedStage,
+  }) => OwnedCompanion(
+    childId: childId ?? this.childId,
+    petId: petId ?? this.petId,
+    purchaseId: purchaseId.present ? purchaseId.value : this.purchaseId,
+    retainedStage: retainedStage ?? this.retainedStage,
+  );
+  OwnedCompanion copyWithCompanion(OwnedCompanionsCompanion data) {
+    return OwnedCompanion(
+      childId: data.childId.present ? data.childId.value : this.childId,
+      petId: data.petId.present ? data.petId.value : this.petId,
+      purchaseId: data.purchaseId.present
+          ? data.purchaseId.value
+          : this.purchaseId,
+      retainedStage: data.retainedStage.present
+          ? data.retainedStage.value
+          : this.retainedStage,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('OwnedCompanion(')
+          ..write('childId: $childId, ')
+          ..write('petId: $petId, ')
+          ..write('purchaseId: $purchaseId, ')
+          ..write('retainedStage: $retainedStage')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(childId, petId, purchaseId, retainedStage);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is OwnedCompanion &&
+          other.childId == this.childId &&
+          other.petId == this.petId &&
+          other.purchaseId == this.purchaseId &&
+          other.retainedStage == this.retainedStage);
+}
+
+class OwnedCompanionsCompanion extends UpdateCompanion<OwnedCompanion> {
+  final Value<String> childId;
+  final Value<String> petId;
+  final Value<String?> purchaseId;
+  final Value<int> retainedStage;
+  final Value<int> rowid;
+  const OwnedCompanionsCompanion({
+    this.childId = const Value.absent(),
+    this.petId = const Value.absent(),
+    this.purchaseId = const Value.absent(),
+    this.retainedStage = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  OwnedCompanionsCompanion.insert({
+    required String childId,
+    required String petId,
+    this.purchaseId = const Value.absent(),
+    this.retainedStage = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : childId = Value(childId),
+       petId = Value(petId);
+  static Insertable<OwnedCompanion> custom({
+    Expression<String>? childId,
+    Expression<String>? petId,
+    Expression<String>? purchaseId,
+    Expression<int>? retainedStage,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (childId != null) 'child_id': childId,
+      if (petId != null) 'pet_id': petId,
+      if (purchaseId != null) 'purchase_id': purchaseId,
+      if (retainedStage != null) 'retained_stage': retainedStage,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  OwnedCompanionsCompanion copyWith({
+    Value<String>? childId,
+    Value<String>? petId,
+    Value<String?>? purchaseId,
+    Value<int>? retainedStage,
+    Value<int>? rowid,
+  }) {
+    return OwnedCompanionsCompanion(
+      childId: childId ?? this.childId,
+      petId: petId ?? this.petId,
+      purchaseId: purchaseId ?? this.purchaseId,
+      retainedStage: retainedStage ?? this.retainedStage,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (childId.present) {
+      map['child_id'] = Variable<String>(childId.value);
+    }
+    if (petId.present) {
+      map['pet_id'] = Variable<String>(petId.value);
+    }
+    if (purchaseId.present) {
+      map['purchase_id'] = Variable<String>(purchaseId.value);
+    }
+    if (retainedStage.present) {
+      map['retained_stage'] = Variable<int>(retainedStage.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('OwnedCompanionsCompanion(')
+          ..write('childId: $childId, ')
+          ..write('petId: $petId, ')
+          ..write('purchaseId: $purchaseId, ')
+          ..write('retainedStage: $retainedStage, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class CompanionCompletions extends Table
+    with TableInfo<CompanionCompletions, CompanionCompletion> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  CompanionCompletions(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _completionIdMeta = const VerificationMeta(
+    'completionId',
+  );
+  late final GeneratedColumn<String> completionId = GeneratedColumn<String>(
+    'completion_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY REFERENCES completions(id)',
+  );
+  static const VerificationMeta _childIdMeta = const VerificationMeta(
+    'childId',
+  );
+  late final GeneratedColumn<String> childId = GeneratedColumn<String>(
+    'child_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _petIdMeta = const VerificationMeta('petId');
+  late final GeneratedColumn<String> petId = GeneratedColumn<String>(
+    'pet_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [completionId, childId, petId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'companion_completions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CompanionCompletion> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('completion_id')) {
+      context.handle(
+        _completionIdMeta,
+        completionId.isAcceptableOrUnknown(
+          data['completion_id']!,
+          _completionIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_completionIdMeta);
+    }
+    if (data.containsKey('child_id')) {
+      context.handle(
+        _childIdMeta,
+        childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('pet_id')) {
+      context.handle(
+        _petIdMeta,
+        petId.isAcceptableOrUnknown(data['pet_id']!, _petIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_petIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {completionId};
+  @override
+  CompanionCompletion map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CompanionCompletion(
+      completionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}completion_id'],
+      )!,
+      childId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}child_id'],
+      )!,
+      petId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}pet_id'],
+      )!,
+    );
+  }
+
+  @override
+  CompanionCompletions createAlias(String alias) {
+    return CompanionCompletions(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const [
+    'FOREIGN KEY(child_id, pet_id)REFERENCES owned_companions(child_id, pet_id)',
+  ];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class CompanionCompletion extends DataClass
+    implements Insertable<CompanionCompletion> {
+  final String completionId;
+  final String childId;
+  final String petId;
+  const CompanionCompletion({
+    required this.completionId,
+    required this.childId,
+    required this.petId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['completion_id'] = Variable<String>(completionId);
+    map['child_id'] = Variable<String>(childId);
+    map['pet_id'] = Variable<String>(petId);
+    return map;
+  }
+
+  CompanionCompletionsCompanion toCompanion(bool nullToAbsent) {
+    return CompanionCompletionsCompanion(
+      completionId: Value(completionId),
+      childId: Value(childId),
+      petId: Value(petId),
+    );
+  }
+
+  factory CompanionCompletion.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CompanionCompletion(
+      completionId: serializer.fromJson<String>(json['completion_id']),
+      childId: serializer.fromJson<String>(json['child_id']),
+      petId: serializer.fromJson<String>(json['pet_id']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'completion_id': serializer.toJson<String>(completionId),
+      'child_id': serializer.toJson<String>(childId),
+      'pet_id': serializer.toJson<String>(petId),
+    };
+  }
+
+  CompanionCompletion copyWith({
+    String? completionId,
+    String? childId,
+    String? petId,
+  }) => CompanionCompletion(
+    completionId: completionId ?? this.completionId,
+    childId: childId ?? this.childId,
+    petId: petId ?? this.petId,
+  );
+  CompanionCompletion copyWithCompanion(CompanionCompletionsCompanion data) {
+    return CompanionCompletion(
+      completionId: data.completionId.present
+          ? data.completionId.value
+          : this.completionId,
+      childId: data.childId.present ? data.childId.value : this.childId,
+      petId: data.petId.present ? data.petId.value : this.petId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CompanionCompletion(')
+          ..write('completionId: $completionId, ')
+          ..write('childId: $childId, ')
+          ..write('petId: $petId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(completionId, childId, petId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CompanionCompletion &&
+          other.completionId == this.completionId &&
+          other.childId == this.childId &&
+          other.petId == this.petId);
+}
+
+class CompanionCompletionsCompanion
+    extends UpdateCompanion<CompanionCompletion> {
+  final Value<String> completionId;
+  final Value<String> childId;
+  final Value<String> petId;
+  final Value<int> rowid;
+  const CompanionCompletionsCompanion({
+    this.completionId = const Value.absent(),
+    this.childId = const Value.absent(),
+    this.petId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CompanionCompletionsCompanion.insert({
+    required String completionId,
+    required String childId,
+    required String petId,
+    this.rowid = const Value.absent(),
+  }) : completionId = Value(completionId),
+       childId = Value(childId),
+       petId = Value(petId);
+  static Insertable<CompanionCompletion> custom({
+    Expression<String>? completionId,
+    Expression<String>? childId,
+    Expression<String>? petId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (completionId != null) 'completion_id': completionId,
+      if (childId != null) 'child_id': childId,
+      if (petId != null) 'pet_id': petId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CompanionCompletionsCompanion copyWith({
+    Value<String>? completionId,
+    Value<String>? childId,
+    Value<String>? petId,
+    Value<int>? rowid,
+  }) {
+    return CompanionCompletionsCompanion(
+      completionId: completionId ?? this.completionId,
+      childId: childId ?? this.childId,
+      petId: petId ?? this.petId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (completionId.present) {
+      map['completion_id'] = Variable<String>(completionId.value);
+    }
+    if (childId.present) {
+      map['child_id'] = Variable<String>(childId.value);
+    }
+    if (petId.present) {
+      map['pet_id'] = Variable<String>(petId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CompanionCompletionsCompanion(')
+          ..write('completionId: $completionId, ')
+          ..write('childId: $childId, ')
+          ..write('petId: $petId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$FamilyDatabase extends GeneratedDatabase {
   _$FamilyDatabase(QueryExecutor e) : super(e);
   $FamilyDatabaseManager get managers => $FamilyDatabaseManager(this);
@@ -11500,6 +12112,18 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
   late final WindStoryRuns windStoryRuns = WindStoryRuns(this);
   late final RainMapRuns rainMapRuns = RainMapRuns(this);
   late final CompanionMemories companionMemories = CompanionMemories(this);
+  late final OwnedCompanions ownedCompanions = OwnedCompanions(this);
+  late final Index oneStarterCompanion = Index(
+    'one_starter_companion',
+    'CREATE UNIQUE INDEX one_starter_companion ON owned_companions (child_id) WHERE purchase_id IS NULL',
+  );
+  late final CompanionCompletions companionCompletions = CompanionCompletions(
+    this,
+  );
+  late final Index companionCompletionPetIdx = Index(
+    'companion_completion_pet_idx',
+    'CREATE INDEX companion_completion_pet_idx ON companion_completions (child_id, pet_id, completion_id)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -11541,6 +12165,10 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
     windStoryRuns,
     rainMapRuns,
     companionMemories,
+    ownedCompanions,
+    oneStarterCompanion,
+    companionCompletions,
+    companionCompletionPetIdx,
   ];
 }
 
@@ -12191,6 +12819,27 @@ final class $ChildProfilesReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<OwnedCompanions, List<OwnedCompanion>>
+  _ownedCompanionsRefsTable(_$FamilyDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.ownedCompanions,
+        aliasName: 'child_profiles__id__owned_companions__child_id',
+      );
+
+  $OwnedCompanionsProcessedTableManager get ownedCompanionsRefs {
+    final manager = $OwnedCompanionsTableManager(
+      $_db,
+      $_db.ownedCompanions,
+    ).filter((f) => f.childId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _ownedCompanionsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $ChildProfilesFilterComposer
@@ -12431,6 +13080,31 @@ class $ChildProfilesFilterComposer
           }) => $CompanionMemoriesFilterComposer(
             $db: $db,
             $table: $db.companionMemories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> ownedCompanionsRefs(
+    Expression<bool> Function($OwnedCompanionsFilterComposer f) f,
+  ) {
+    final $OwnedCompanionsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.ownedCompanions,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $OwnedCompanionsFilterComposer(
+            $db: $db,
+            $table: $db.ownedCompanions,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -12731,6 +13405,31 @@ class $ChildProfilesAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> ownedCompanionsRefs<T extends Object>(
+    Expression<T> Function($OwnedCompanionsAnnotationComposer a) f,
+  ) {
+    final $OwnedCompanionsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.ownedCompanions,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $OwnedCompanionsAnnotationComposer(
+            $db: $db,
+            $table: $db.ownedCompanions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $ChildProfilesTableManager
@@ -12756,6 +13455,7 @@ class $ChildProfilesTableManager
             bool windStoryRunsRefs,
             bool rainMapRunsRefs,
             bool companionMemoriesRefs,
+            bool ownedCompanionsRefs,
           })
         > {
   $ChildProfilesTableManager(_$FamilyDatabase db, ChildProfiles table)
@@ -12816,6 +13516,7 @@ class $ChildProfilesTableManager
                 windStoryRunsRefs = false,
                 rainMapRunsRefs = false,
                 companionMemoriesRefs = false,
+                ownedCompanionsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -12828,6 +13529,7 @@ class $ChildProfilesTableManager
                     if (windStoryRunsRefs) db.windStoryRuns,
                     if (rainMapRunsRefs) db.rainMapRuns,
                     if (companionMemoriesRefs) db.companionMemories,
+                    if (ownedCompanionsRefs) db.ownedCompanions,
                   ],
                   addJoins:
                       <
@@ -13021,6 +13723,26 @@ class $ChildProfilesTableManager
                           referencedColumn: 'child_id',
                           typedResults: items,
                         ),
+                      if (ownedCompanionsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          ChildProfile,
+                          ChildProfiles,
+                          OwnedCompanion,
+                          OwnedCompanions
+                        >(
+                          currentTable: table,
+                          referencedTable: $ChildProfilesReferences
+                              ._ownedCompanionsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $ChildProfilesReferences(
+                                db,
+                                table,
+                                p0,
+                              ).ownedCompanionsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'child_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -13051,6 +13773,7 @@ typedef $ChildProfilesProcessedTableManager =
         bool windStoryRunsRefs,
         bool rainMapRunsRefs,
         bool companionMemoriesRefs,
+        bool ownedCompanionsRefs,
       })
     >;
 typedef $WindowMathBookmarksCreateCompanionBuilder =
@@ -16764,6 +17487,27 @@ final class $CompletionsReferences
       manager.$state.copyWith(prefetchedData: [item]),
     );
   }
+
+  static MultiTypedResultKey<CompanionCompletions, List<CompanionCompletion>>
+  _companionCompletionsRefsTable(_$FamilyDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.companionCompletions,
+        aliasName: 'completions__id__companion_completions__completion_id',
+      );
+
+  $CompanionCompletionsProcessedTableManager get companionCompletionsRefs {
+    final manager = $CompanionCompletionsTableManager(
+      $_db,
+      $_db.companionCompletions,
+    ).filter((f) => f.completionId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _companionCompletionsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $CompletionsFilterComposer
@@ -16821,6 +17565,31 @@ class $CompletionsFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> companionCompletionsRefs(
+    Expression<bool> Function($CompanionCompletionsFilterComposer f) f,
+  ) {
+    final $CompanionCompletionsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.companionCompletions,
+      getReferencedColumn: (t) => t.completionId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CompanionCompletionsFilterComposer(
+            $db: $db,
+            $table: $db.companionCompletions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 }
 
@@ -16932,6 +17701,31 @@ class $CompletionsAnnotationComposer
     );
     return composer;
   }
+
+  Expression<T> companionCompletionsRefs<T extends Object>(
+    Expression<T> Function($CompanionCompletionsAnnotationComposer a) f,
+  ) {
+    final $CompanionCompletionsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.companionCompletions,
+      getReferencedColumn: (t) => t.completionId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CompanionCompletionsAnnotationComposer(
+            $db: $db,
+            $table: $db.companionCompletions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $CompletionsTableManager
@@ -16947,7 +17741,10 @@ class $CompletionsTableManager
           $CompletionsUpdateCompanionBuilder,
           (Completion, $CompletionsReferences),
           Completion,
-          PrefetchHooks Function({bool instanceId})
+          PrefetchHooks Function({
+            bool instanceId,
+            bool companionCompletionsRefs,
+          })
         > {
   $CompletionsTableManager(_$FamilyDatabase db, Completions table)
     : super(
@@ -17004,45 +17801,69 @@ class $CompletionsTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({instanceId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (instanceId) {
-                      state = state.withJoin(
-                        currentTable: table,
-                        currentColumn: table.instanceId,
-                        referencedTable: $CompletionsReferences
-                            ._instanceIdTable(db),
-                        referencedColumn: $CompletionsReferences
-                            ._instanceIdTable(db)
-                            .id,
-                      ) as T;
-                    }
+          prefetchHooksCallback:
+              ({instanceId = false, companionCompletionsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (companionCompletionsRefs) db.companionCompletions,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (instanceId) {
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.instanceId,
+                            referencedTable: $CompletionsReferences
+                                ._instanceIdTable(db),
+                            referencedColumn: $CompletionsReferences
+                                ._instanceIdTable(db)
+                                .id,
+                          ) as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (companionCompletionsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          Completion,
+                          Completions,
+                          CompanionCompletion,
+                          CompanionCompletions
+                        >(
+                          currentTable: table,
+                          referencedTable: $CompletionsReferences
+                              ._companionCompletionsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $CompletionsReferences(
+                                db,
+                                table,
+                                p0,
+                              ).companionCompletionsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'completion_id',
+                          typedResults: items,
+                        ),
+                    ];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [];
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -17059,7 +17880,7 @@ typedef $CompletionsProcessedTableManager =
       $CompletionsUpdateCompanionBuilder,
       (Completion, $CompletionsReferences),
       Completion,
-      PrefetchHooks Function({bool instanceId})
+      PrefetchHooks Function({bool instanceId, bool companionCompletionsRefs})
     >;
 typedef $LedgerEntriesCreateCompanionBuilder = LedgerEntriesCompanion Function({
   required String id,
@@ -19169,6 +19990,27 @@ final class $PurchasesReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<OwnedCompanions, List<OwnedCompanion>>
+  _ownedCompanionsRefsTable(_$FamilyDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.ownedCompanions,
+        aliasName: 'purchases__id__owned_companions__purchase_id',
+      );
+
+  $OwnedCompanionsProcessedTableManager get ownedCompanionsRefs {
+    final manager = $OwnedCompanionsTableManager(
+      $_db,
+      $_db.ownedCompanions,
+    ).filter((f) => f.purchaseId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _ownedCompanionsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $PurchasesFilterComposer extends Composer<_$FamilyDatabase, Purchases> {
@@ -19283,6 +20125,31 @@ class $PurchasesFilterComposer extends Composer<_$FamilyDatabase, Purchases> {
           }) => $EntitlementsFilterComposer(
             $db: $db,
             $table: $db.entitlements,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> ownedCompanionsRefs(
+    Expression<bool> Function($OwnedCompanionsFilterComposer f) f,
+  ) {
+    final $OwnedCompanionsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.ownedCompanions,
+      getReferencedColumn: (t) => t.purchaseId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $OwnedCompanionsFilterComposer(
+            $db: $db,
+            $table: $db.ownedCompanions,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -19472,6 +20339,31 @@ class $PurchasesAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> ownedCompanionsRefs<T extends Object>(
+    Expression<T> Function($OwnedCompanionsAnnotationComposer a) f,
+  ) {
+    final $OwnedCompanionsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.ownedCompanions,
+      getReferencedColumn: (t) => t.purchaseId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $OwnedCompanionsAnnotationComposer(
+            $db: $db,
+            $table: $db.ownedCompanions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $PurchasesTableManager
@@ -19491,6 +20383,7 @@ class $PurchasesTableManager
             bool ledgerId,
             bool spacesRefs,
             bool entitlementsRefs,
+            bool ownedCompanionsRefs,
           })
         > {
   $PurchasesTableManager(_$FamilyDatabase db, Purchases table)
@@ -19565,12 +20458,14 @@ class $PurchasesTableManager
                 ledgerId = false,
                 spacesRefs = false,
                 entitlementsRefs = false,
+                ownedCompanionsRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (spacesRefs) db.spaces,
                     if (entitlementsRefs) db.entitlements,
+                    if (ownedCompanionsRefs) db.ownedCompanions,
                   ],
                   addJoins:
                       <
@@ -19639,6 +20534,25 @@ class $PurchasesTableManager
                           referencedColumn: 'purchase_id',
                           typedResults: items,
                         ),
+                      if (ownedCompanionsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          Purchase,
+                          Purchases,
+                          OwnedCompanion,
+                          OwnedCompanions
+                        >(
+                          currentTable: table,
+                          referencedTable: $PurchasesReferences
+                              ._ownedCompanionsRefsTable(db),
+                          managerFromTypedResult: (p0) => $PurchasesReferences(
+                            db,
+                            table,
+                            p0,
+                          ).ownedCompanionsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'purchase_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -19663,6 +20577,7 @@ typedef $PurchasesProcessedTableManager =
         bool ledgerId,
         bool spacesRefs,
         bool entitlementsRefs,
+        bool ownedCompanionsRefs,
       })
     >;
 typedef $SpacesCreateCompanionBuilder = SpacesCompanion Function({
@@ -24141,6 +25056,676 @@ typedef $CompanionMemoriesProcessedTableManager =
       CompanionMemory,
       PrefetchHooks Function({bool childId})
     >;
+typedef $OwnedCompanionsCreateCompanionBuilder =
+    OwnedCompanionsCompanion Function({
+      required String childId,
+      required String petId,
+      Value<String?> purchaseId,
+      Value<int> retainedStage,
+      Value<int> rowid,
+    });
+typedef $OwnedCompanionsUpdateCompanionBuilder =
+    OwnedCompanionsCompanion Function({
+      Value<String> childId,
+      Value<String> petId,
+      Value<String?> purchaseId,
+      Value<int> retainedStage,
+      Value<int> rowid,
+    });
+
+final class $OwnedCompanionsReferences
+    extends BaseReferences<_$FamilyDatabase, OwnedCompanions, OwnedCompanion> {
+  $OwnedCompanionsReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static ChildProfiles _childIdTable(_$FamilyDatabase db) => db.childProfiles
+      .createAlias('owned_companions__child_id__child_profiles__id');
+
+  $ChildProfilesProcessedTableManager get childId {
+    final $_column = $_itemColumn<String>('child_id')!;
+
+    final manager = $ChildProfilesTableManager(
+      $_db,
+      $_db.childProfiles,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static Purchases _purchaseIdTable(_$FamilyDatabase db) =>
+      db.purchases.createAlias('owned_companions__purchase_id__purchases__id');
+
+  $PurchasesProcessedTableManager? get purchaseId {
+    final $_column = $_itemColumn<String>('purchase_id');
+    if ($_column == null) return null;
+    final manager = $PurchasesTableManager(
+      $_db,
+      $_db.purchases,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_purchaseIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $OwnedCompanionsFilterComposer
+    extends Composer<_$FamilyDatabase, OwnedCompanions> {
+  $OwnedCompanionsFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get petId => $composableBuilder(
+    column: $table.petId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get retainedStage => $composableBuilder(
+    column: $table.retainedStage,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $ChildProfilesFilterComposer get childId {
+    final $ChildProfilesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesFilterComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $PurchasesFilterComposer get purchaseId {
+    final $PurchasesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.purchaseId,
+      referencedTable: $db.purchases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $PurchasesFilterComposer(
+            $db: $db,
+            $table: $db.purchases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $OwnedCompanionsOrderingComposer
+    extends Composer<_$FamilyDatabase, OwnedCompanions> {
+  $OwnedCompanionsOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get petId => $composableBuilder(
+    column: $table.petId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get retainedStage => $composableBuilder(
+    column: $table.retainedStage,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $ChildProfilesOrderingComposer get childId {
+    final $ChildProfilesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesOrderingComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $PurchasesOrderingComposer get purchaseId {
+    final $PurchasesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.purchaseId,
+      referencedTable: $db.purchases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $PurchasesOrderingComposer(
+            $db: $db,
+            $table: $db.purchases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $OwnedCompanionsAnnotationComposer
+    extends Composer<_$FamilyDatabase, OwnedCompanions> {
+  $OwnedCompanionsAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get petId =>
+      $composableBuilder(column: $table.petId, builder: (column) => column);
+
+  GeneratedColumn<int> get retainedStage => $composableBuilder(
+    column: $table.retainedStage,
+    builder: (column) => column,
+  );
+
+  $ChildProfilesAnnotationComposer get childId {
+    final $ChildProfilesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesAnnotationComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $PurchasesAnnotationComposer get purchaseId {
+    final $PurchasesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.purchaseId,
+      referencedTable: $db.purchases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $PurchasesAnnotationComposer(
+            $db: $db,
+            $table: $db.purchases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $OwnedCompanionsTableManager
+    extends
+        RootTableManager<
+          _$FamilyDatabase,
+          OwnedCompanions,
+          OwnedCompanion,
+          $OwnedCompanionsFilterComposer,
+          $OwnedCompanionsOrderingComposer,
+          $OwnedCompanionsAnnotationComposer,
+          $OwnedCompanionsCreateCompanionBuilder,
+          $OwnedCompanionsUpdateCompanionBuilder,
+          (OwnedCompanion, $OwnedCompanionsReferences),
+          OwnedCompanion,
+          PrefetchHooks Function({bool childId, bool purchaseId})
+        > {
+  $OwnedCompanionsTableManager(_$FamilyDatabase db, OwnedCompanions table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $OwnedCompanionsFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $OwnedCompanionsOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $OwnedCompanionsAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> childId = const Value.absent(),
+                Value<String> petId = const Value.absent(),
+                Value<String?> purchaseId = const Value.absent(),
+                Value<int> retainedStage = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => OwnedCompanionsCompanion(
+                childId: childId,
+                petId: petId,
+                purchaseId: purchaseId,
+                retainedStage: retainedStage,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String childId,
+                required String petId,
+                Value<String?> purchaseId = const Value.absent(),
+                Value<int> retainedStage = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => OwnedCompanionsCompanion.insert(
+                childId: childId,
+                petId: petId,
+                purchaseId: purchaseId,
+                retainedStage: retainedStage,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<OwnedCompanions, OwnedCompanion>(table),
+                  $OwnedCompanionsReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({childId = false, purchaseId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (childId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.childId,
+                        referencedTable: $OwnedCompanionsReferences
+                            ._childIdTable(db),
+                        referencedColumn: $OwnedCompanionsReferences
+                            ._childIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+                    if (purchaseId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.purchaseId,
+                        referencedTable: $OwnedCompanionsReferences
+                            ._purchaseIdTable(db),
+                        referencedColumn: $OwnedCompanionsReferences
+                            ._purchaseIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $OwnedCompanionsProcessedTableManager =
+    ProcessedTableManager<
+      _$FamilyDatabase,
+      OwnedCompanions,
+      OwnedCompanion,
+      $OwnedCompanionsFilterComposer,
+      $OwnedCompanionsOrderingComposer,
+      $OwnedCompanionsAnnotationComposer,
+      $OwnedCompanionsCreateCompanionBuilder,
+      $OwnedCompanionsUpdateCompanionBuilder,
+      (OwnedCompanion, $OwnedCompanionsReferences),
+      OwnedCompanion,
+      PrefetchHooks Function({bool childId, bool purchaseId})
+    >;
+typedef $CompanionCompletionsCreateCompanionBuilder =
+    CompanionCompletionsCompanion Function({
+      required String completionId,
+      required String childId,
+      required String petId,
+      Value<int> rowid,
+    });
+typedef $CompanionCompletionsUpdateCompanionBuilder =
+    CompanionCompletionsCompanion Function({
+      Value<String> completionId,
+      Value<String> childId,
+      Value<String> petId,
+      Value<int> rowid,
+    });
+
+final class $CompanionCompletionsReferences
+    extends
+        BaseReferences<
+          _$FamilyDatabase,
+          CompanionCompletions,
+          CompanionCompletion
+        > {
+  $CompanionCompletionsReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static Completions _completionIdTable(_$FamilyDatabase db) => db.completions
+      .createAlias('companion_completions__completion_id__completions__id');
+
+  $CompletionsProcessedTableManager get completionId {
+    final $_column = $_itemColumn<String>('completion_id')!;
+
+    final manager = $CompletionsTableManager(
+      $_db,
+      $_db.completions,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_completionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $CompanionCompletionsFilterComposer
+    extends Composer<_$FamilyDatabase, CompanionCompletions> {
+  $CompanionCompletionsFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get childId => $composableBuilder(
+    column: $table.childId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get petId => $composableBuilder(
+    column: $table.petId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $CompletionsFilterComposer get completionId {
+    final $CompletionsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.completionId,
+      referencedTable: $db.completions,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CompletionsFilterComposer(
+            $db: $db,
+            $table: $db.completions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $CompanionCompletionsOrderingComposer
+    extends Composer<_$FamilyDatabase, CompanionCompletions> {
+  $CompanionCompletionsOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get childId => $composableBuilder(
+    column: $table.childId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get petId => $composableBuilder(
+    column: $table.petId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $CompletionsOrderingComposer get completionId {
+    final $CompletionsOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.completionId,
+      referencedTable: $db.completions,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CompletionsOrderingComposer(
+            $db: $db,
+            $table: $db.completions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $CompanionCompletionsAnnotationComposer
+    extends Composer<_$FamilyDatabase, CompanionCompletions> {
+  $CompanionCompletionsAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get childId =>
+      $composableBuilder(column: $table.childId, builder: (column) => column);
+
+  GeneratedColumn<String> get petId =>
+      $composableBuilder(column: $table.petId, builder: (column) => column);
+
+  $CompletionsAnnotationComposer get completionId {
+    final $CompletionsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.completionId,
+      referencedTable: $db.completions,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CompletionsAnnotationComposer(
+            $db: $db,
+            $table: $db.completions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $CompanionCompletionsTableManager
+    extends
+        RootTableManager<
+          _$FamilyDatabase,
+          CompanionCompletions,
+          CompanionCompletion,
+          $CompanionCompletionsFilterComposer,
+          $CompanionCompletionsOrderingComposer,
+          $CompanionCompletionsAnnotationComposer,
+          $CompanionCompletionsCreateCompanionBuilder,
+          $CompanionCompletionsUpdateCompanionBuilder,
+          (CompanionCompletion, $CompanionCompletionsReferences),
+          CompanionCompletion,
+          PrefetchHooks Function({bool completionId})
+        > {
+  $CompanionCompletionsTableManager(
+    _$FamilyDatabase db,
+    CompanionCompletions table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $CompanionCompletionsFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $CompanionCompletionsOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $CompanionCompletionsAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> completionId = const Value.absent(),
+                Value<String> childId = const Value.absent(),
+                Value<String> petId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CompanionCompletionsCompanion(
+                completionId: completionId,
+                childId: childId,
+                petId: petId,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String completionId,
+                required String childId,
+                required String petId,
+                Value<int> rowid = const Value.absent(),
+              }) => CompanionCompletionsCompanion.insert(
+                completionId: completionId,
+                childId: childId,
+                petId: petId,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<CompanionCompletions, CompanionCompletion>(table),
+                  $CompanionCompletionsReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({completionId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (completionId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.completionId,
+                        referencedTable: $CompanionCompletionsReferences
+                            ._completionIdTable(db),
+                        referencedColumn: $CompanionCompletionsReferences
+                            ._completionIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $CompanionCompletionsProcessedTableManager =
+    ProcessedTableManager<
+      _$FamilyDatabase,
+      CompanionCompletions,
+      CompanionCompletion,
+      $CompanionCompletionsFilterComposer,
+      $CompanionCompletionsOrderingComposer,
+      $CompanionCompletionsAnnotationComposer,
+      $CompanionCompletionsCreateCompanionBuilder,
+      $CompanionCompletionsUpdateCompanionBuilder,
+      (CompanionCompletion, $CompanionCompletionsReferences),
+      CompanionCompletion,
+      PrefetchHooks Function({bool completionId})
+    >;
 
 class $FamilyDatabaseManager {
   final _$FamilyDatabase _db;
@@ -24199,4 +25784,8 @@ class $FamilyDatabaseManager {
       $RainMapRunsTableManager(_db, _db.rainMapRuns);
   $CompanionMemoriesTableManager get companionMemories =>
       $CompanionMemoriesTableManager(_db, _db.companionMemories);
+  $OwnedCompanionsTableManager get ownedCompanions =>
+      $OwnedCompanionsTableManager(_db, _db.ownedCompanions);
+  $CompanionCompletionsTableManager get companionCompletions =>
+      $CompanionCompletionsTableManager(_db, _db.companionCompletions);
 }

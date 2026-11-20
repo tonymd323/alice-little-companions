@@ -165,8 +165,10 @@ extension FamilyEconomy on FamilyService {
     session: session,
   );
 
-  Future<List<Json>> purchases() =>
-      db.rows('SELECT * FROM purchases ORDER BY rowid DESC');
+  Future<List<Json>> purchases() => db.rows('''
+    SELECT p.*, NOT EXISTS(SELECT 1 FROM owned_companions c WHERE c.purchase_id = p.id) AS refundable
+    FROM purchases p ORDER BY p.rowid DESC
+    ''');
   Future<List<Json>> items() =>
       db.rows('SELECT * FROM entitlements WHERE revoked = 0 ORDER BY rowid');
   Future<List<Json>> spaces() => db.rows('SELECT * FROM spaces ORDER BY rowid');
@@ -223,24 +225,14 @@ extension FamilyEconomy on FamilyService {
         if (family.balance < price) {
           throw UserError('还差 ${price - family.balance} 分。');
         }
-        final key = uuid.v4();
-        final ledger = await _addLedger(
+        final receipt = await _recordPurchase(
           id,
-          -price,
-          'purchase',
-          'purchase:$key',
-          today,
+          item,
+          product['name'] as String,
+          product['asset_id'] as String,
+          price,
         );
-        await db.insertRow('purchases', {
-          'id': key,
-          'item_id': item,
-          'name': product['name'],
-          'price_paid': price,
-          'ledger_id': ledger['id'],
-          'created_at': now,
-          'command_id': id,
-          'asset_id': product['asset_id'],
-        });
+        final key = receipt['id'] as String;
         final spaceType = product['space_id'] as String?;
         final space = spaceType == null ? null : uuid.v4();
         if (space != null) {
@@ -286,13 +278,41 @@ extension FamilyEconomy on FamilyService {
           [family.childId, item],
         );
         fresh = key;
-        return {'id': key, 'charged': price, 'balance': ledger['balance']};
+        return receipt;
       },
     );
     if (fresh != null) {
       _childUndoStarts[fresh!] = _undoClock.elapsedMilliseconds;
     }
     return result;
+  }
+
+  Future<Json> _recordPurchase(
+    String command,
+    String item,
+    String name,
+    String asset,
+    int price,
+  ) async {
+    final key = uuid.v4();
+    final ledger = await _addLedger(
+      command,
+      -price,
+      'purchase',
+      'purchase:$key',
+      today,
+    );
+    await db.insertRow('purchases', {
+      'id': key,
+      'item_id': item,
+      'name': name,
+      'price_paid': price,
+      'ledger_id': ledger['id'],
+      'created_at': now,
+      'command_id': command,
+      'asset_id': asset,
+    });
+    return {'id': key, 'charged': price, 'balance': ledger['balance']};
   }
 
   bool canChildUndo(String purchase) {
@@ -322,6 +342,12 @@ extension FamilyEconomy on FamilyService {
       [purchase],
     );
     if (row == null) throw const UserError('此兑换已退回或不存在。');
+    if (await db.value('SELECT 1 FROM owned_companions WHERE purchase_id = ?', [
+          purchase,
+        ]) !=
+        null) {
+      throw const UserError('解锁的伙伴会一直留在小家。');
+    }
     final entitlementIds = 'SELECT id FROM entitlements WHERE purchase_id = ?';
     await db.customStatement(
       """
@@ -387,6 +413,7 @@ extension FamilyEconomy on FamilyService {
       SELECT p.* FROM purchases p JOIN ledger_entries l ON l.id = p.ledger_id
       WHERE p.refunded_at IS NULL AND l.rowid >
         (SELECT rowid FROM ledger_entries WHERE source_key = ?)
+        AND NOT EXISTS (SELECT 1 FROM owned_companions c WHERE c.purchase_id = p.id)
       ORDER BY l.rowid
       ''',
       ['reward:$instance'],
@@ -455,7 +482,7 @@ extension FamilyEconomy on FamilyService {
         'refunded_purchase_ids': jsonEncode(verified.refunds),
         'command_id': id,
       });
-      await _preserveGrowth(family.childId, family.stage);
+      await _retainCreditedCompanionStage(quote.instance);
       await db.customStatement(
         'UPDATE completions SET is_valid = 0 WHERE instance_id = ?',
         [quote.instance],

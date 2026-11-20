@@ -256,7 +256,7 @@ class WardrobePage extends StatefulWidget {
 class _WardrobePageState extends State<WardrobePage> {
   FamilyService get service => widget.controller.service!;
   late Companion pet = widget.controller.family!.companion;
-  late Future<List<Json>> items = service.items();
+  late var inventory = (service.items(), service.companionProgress()).wait;
   late Future<List<Json>> current = service.wardrobe(pet);
   late int revision = widget.controller.family!.revision;
   Map<String, String>? draft;
@@ -267,15 +267,16 @@ class _WardrobePageState extends State<WardrobePage> {
     body: PageBody(
       maxWidth: 780,
       child: FutureBuilder(
-        future: items,
-        builder: (context, inventory) => FutureBuilder(
+        future: inventory,
+        builder: (context, stock) => FutureBuilder(
           future: current,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting ||
-                inventory.data == null) {
+                stock.data == null) {
               return const Center(child: CircularProgressIndicator());
             }
-            final clothes = inventory.data!
+            final (items, progress) = stock.data!;
+            final clothes = items
                 .where((item) => item['slot'] != null)
                 .toList();
             final available = {
@@ -292,7 +293,7 @@ class _WardrobePageState extends State<WardrobePage> {
               children: [
                 GardenScene(
                   companion: pet,
-                  stage: widget.controller.family!.stage,
+                  stage: progress[pet]?.stage ?? 1,
                   rules: service.rules,
                   label: '试衣间',
                   focus: true,
@@ -318,7 +319,7 @@ class _WardrobePageState extends State<WardrobePage> {
                     );
                     if (!mounted) return;
                     setState(() {
-                      items = service.items();
+                      inventory = (service.items(), service.companionProgress()).wait;
                       current = service.wardrobe(pet);
                       revision = widget.controller.family!.revision;
                       draft = null;
@@ -328,7 +329,7 @@ class _WardrobePageState extends State<WardrobePage> {
                 const SizedBox(height: 12),
                 CompanionPicker(
                   selected: pet,
-                  stage: widget.controller.family!.stage,
+                  stages: progress.map((pet, state) => MapEntry(pet, state.stage)),
                   onSelected: (value) => setState(() {
                     pet = value;
                     draft = null;

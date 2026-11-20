@@ -6,7 +6,8 @@ import 'package:sqlite3/sqlite3.dart' as sqlite;
 
 part 'database.g.dart';
 
-const currentSchemaVersion = 7;
+const companionSchemaVersion = 8;
+const currentSchemaVersion = companionSchemaVersion;
 const v2Indexes = [
   'ledger_day_kind_idx',
   'purchase_ledger_idx',
@@ -44,6 +45,26 @@ class FamilyDatabase extends _$FamilyDatabase {
         if (from < 7) {
           await migrator.createTable(rainMapRuns);
           await migrator.createTable(companionMemories);
+        }
+        if (from < companionSchemaVersion) {
+          await migrator.createTable(ownedCompanions);
+          await migrator.createIndex(oneStarterCompanion);
+          await migrator.createTable(companionCompletions);
+          await migrator.createIndex(companionCompletionPetIdx);
+          // Old saves share one progress record. Keep it with the active pet.
+          await customStatement('''
+            INSERT INTO owned_companions(child_id, pet_id, retained_stage)
+            SELECT c.id, c.active_pet_id, COALESCE(MAX(g.stage), 1)
+            FROM child_profiles c LEFT JOIN growth_awards g ON g.child_id = c.id
+            GROUP BY c.id
+            ''');
+          await customStatement('''
+            INSERT INTO companion_completions(completion_id, child_id, pet_id)
+            SELECT x.id, c.id, c.active_pet_id FROM completions x
+            JOIN task_instances i ON i.id = x.instance_id
+            JOIN task_templates t ON t.id = i.template_id
+            JOIN child_profiles c ON c.family_id = t.family_id
+            ''');
         }
       });
     },

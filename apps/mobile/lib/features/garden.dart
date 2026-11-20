@@ -90,12 +90,14 @@ class CompanionPicker extends StatelessWidget {
     required this.selected,
     required this.onSelected,
     this.stage = 1,
+    this.stages = const {},
     this.reveal = false,
   });
 
   final Companion selected;
   final ValueChanged<Companion> onSelected;
   final int stage;
+  final Map<Companion, int> stages;
   final bool reveal;
 
   @override
@@ -125,7 +127,7 @@ class CompanionPicker extends StatelessWidget {
                       child: Column(
                         children: [
                           Image.asset(
-                            pet.artwork(stage, reveal: reveal),
+                            pet.artwork(stages[pet] ?? stage, reveal: reveal),
                             filterQuality: FilterQuality.medium,
                             height: 53,
                             width: 65,

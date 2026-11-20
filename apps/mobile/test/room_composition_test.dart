@@ -150,7 +150,7 @@ void main() {
                 .copyWith(textScaler: const TextScaler.linear(1.3)),
             child: v!,
           ),
-          home: const GardenStorybook(stage: 4),
+          home: const GardenStorybook(stages: {Companion.cat: 4, Companion.fox: 4, Companion.rabbit: 4}),
         ),
       );
       expect(find.text('桥头的一片叶'), findsOneWidget);

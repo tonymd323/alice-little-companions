@@ -14,8 +14,8 @@ import 'support/families.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  test('same-day approvals, retry, correction and reopening retain one shared experience history', () async {
-    final f = await TestFamily.create();
+  test('same-day approvals, retry, correction and reopening retain the companion stage', () async {
+    final f = await TestFamily.create(pet: Companion.cat);
     addTearDown(f.dispose);
     final s = f.service, owner = await s.pin.unlock(TestFamily.pin);
     const draft = TaskDraft('测试任务A', '', '测试标准', 'focus');
@@ -56,8 +56,8 @@ void main() {
       (atThreshold.experience, atThreshold.days, atThreshold.balance),
       (3, 1, 9),
     );
-    // The same effective family can be opened from 0.12 with no stored XP award.
-    await s.db.customStatement('DELETE FROM growth_awards');
+    // Old families may qualify for a stage they never stored.
+    await s.db.customStatement('UPDATE owned_companions SET retained_stage = 1');
     expect((await s.overview())!.stage, 2);
     await s.correctAward(
       await s.correctionQuote(id, [], owner),
@@ -65,14 +65,13 @@ void main() {
       false,
       session: owner,
     );
-    await s.selectCompanion(Companion.cat);
     await f.reopen();
     final after = (await f.service.overview())!;
     expect(
       (after.experience, after.stage, after.balance, after.companion),
       (2, 2, 6, Companion.cat),
     );
-    expect(await f.service.db.value('SELECT COUNT(*) FROM growth_awards'), 1);
+    expect(await f.service.db.value('SELECT retained_stage FROM owned_companions'), 2);
   });
   test('every pet, stage and tailored outfit has an individual airborne silhouette', () {
     final paths = <String>{};

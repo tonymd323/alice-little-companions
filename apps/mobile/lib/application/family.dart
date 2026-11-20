@@ -17,6 +17,7 @@ import '../domain/rules.dart';
 import '../domain/wind_progress.dart';
 import '../domain/window_page.dart';
 
+part 'companion_progress.dart';
 part 'decorations.dart';
 part 'economy.dart';
 part 'task_rules.dart';
@@ -33,6 +34,7 @@ class FamilyOverview {
         rules.earnedStage(row['experience'] as int),
       ),
       experience = row['experience'] as int,
+      validCompletionCount = row['valid_completion_count'] as int,
       taskCount = row['task_count'] as int,
       windowsLit = (row['windows_lit'] as int) != 0,
       rainMapCleared = row['rain_map_cleared'] == 1,
@@ -50,6 +52,7 @@ class FamilyOverview {
   final int balance;
   final int stage;
   final int experience;
+  final int validCompletionCount;
   final int taskCount;
   final bool windowsLit;
   final bool rainMapCleared;
@@ -251,6 +254,10 @@ class FamilyService implements RainMapCommands {
           'nickname': name,
           'active_pet_id': companion.name,
         });
+        await service.db.insertRow('owned_companions', {
+          'child_id': childId,
+          'pet_id': companion.name,
+        });
         await service.db.insertRow('accounts', {
           'id': uuid.v4(),
           'child_id': childId,
@@ -278,12 +285,14 @@ class FamilyService implements RainMapCommands {
           AND m.pet_id = c.active_pet_id AND m.moment = 'touch') AS companion_touched,
         EXISTS(SELECT 1 FROM companion_memories m WHERE m.child_id = c.id
           AND m.pet_id = c.active_pet_id AND m.moment = 'call') AS companion_called,
-        (SELECT COUNT(*) FROM completions WHERE is_valid = 1) AS experience,
+        ($_companionExperience) AS experience,
+        (SELECT COUNT(*) FROM completions WHERE is_valid = 1) AS valid_completion_count,
         (SELECT COUNT(*) FROM task_instances) AS task_count,
         (SELECT COUNT(DISTINCT actual_date) FROM completions WHERE is_valid = 1) AS growth_days,
-        COALESCE((SELECT MAX(stage) FROM growth_awards WHERE child_id = c.id), 1) AS stage
+        p.retained_stage AS stage
       FROM households h JOIN child_profiles c ON h.id = c.family_id
       JOIN accounts a ON a.child_id = c.id
+      JOIN owned_companions p ON p.child_id = c.id AND p.pet_id = c.active_pet_id
       ''');
     return row == null ? null : FamilyOverview(row, rules);
   }
@@ -639,15 +648,6 @@ class FamilyService implements RainMapCommands {
     });
   }
 
-  Future<Json> selectCompanion(Companion companion, {String? commandId}) =>
-      _command('select', companion.name, commandId, (_, family) async {
-        await db.customStatement(
-          'UPDATE child_profiles SET active_pet_id = ? WHERE id = ?',
-          [companion.name, family.childId],
-        );
-        return {'pet': companion.name};
-      });
-
   Future<Json> publish(
     TaskDraft draft, {
     ParentSession? session,
@@ -800,12 +800,18 @@ class FamilyService implements RainMapCommands {
       "UPDATE task_instances SET state = 'APPROVED', actual_date = ?, approved_at = ? WHERE id = ?",
       [actual, now, instance],
     );
+    final completion = uuid.v4();
     await db.insertRow('completions', {
-      'id': uuid.v4(),
+      'id': completion,
       'instance_id': instance,
       'actual_date': actual,
       'feedback': textValue(feedback, 500),
       'approval_command_id': commandId,
+    });
+    await db.insertRow('companion_completions', {
+      'completion_id': completion,
+      'child_id': family.childId,
+      'pet_id': family.companion.name,
     });
     await db.customStatement(
       """
@@ -826,7 +832,9 @@ class FamilyService implements RainMapCommands {
     );
     final experience = family.experience + 1;
     final stage = max(family.stage, rules.earnedStage(experience));
-    await _preserveGrowth(family.childId, stage);
+    if (stage > family.stage) {
+      await _retainCompanionStage(family.childId, family.companion.name, stage);
+    }
     return {
       ...ledger,
       'experience_delta': 1,
@@ -834,18 +842,6 @@ class FamilyService implements RainMapCommands {
       'new_stage': stage > family.stage,
       'stage': stage,
     };
-  }
-
-  // An older database can earn a higher stage on first open through its
-  // historical completions. Preserve that high-water mark before a correction.
-  Future<void> _preserveGrowth(String child, int stage) async {
-    for (var i = 0; i < stage - 1; i++) {
-      await db.customStatement(
-        'INSERT INTO growth_awards (child_id, threshold, stage, awarded_at) '
-        'VALUES (?, ?, ?, ?) ON CONFLICT(child_id, threshold) DO NOTHING',
-        [child, rules.thresholds[i], i + 2, now],
-      );
-    }
   }
 
   void _validateActualDate(String actual) {

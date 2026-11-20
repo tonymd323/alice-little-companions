@@ -36,7 +36,7 @@ final assets =
         .toSet();
 final pin = 739184.toString();
 const fixtureDraft = TaskDraft('测试任务A', '测试内容', '测试标准A', 'focus');
-const dropV7 = 'DROP TABLE companion_memories; DROP TABLE rain_map_runs; ';
+const dropV7AndLater = '${dropCompanionTables}DROP TABLE companion_memories; DROP TABLE rain_map_runs; ';
 
 TransferService transfers(TestFamily fixture, {Set<String>? withAssets}) =>
     TransferService(
@@ -221,6 +221,8 @@ void main() {
       'owned_item_count': 5,
       'space_count': 1,
       'max_growth_stage': 3,
+      'owned_companion_count': 1,
+      'active_companion_experience': 17,
     });
     // Encode the original 0.12 shape as a separate authenticated archive. It
     // reported stage 2 on four actual dates, despite having 17 valid outcomes.
@@ -229,7 +231,8 @@ void main() {
     );
     final legacySql = sqlite3.open(oldDb.path);
     legacySql.execute(
-      '${dropV7}DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DELETE FROM growth_awards WHERE stage > 2; PRAGMA user_version=3',
+      '${dropV7AndLater}DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; '
+      'INSERT INTO growth_awards SELECT id, 3, 2, 0 FROM child_profiles; PRAGMA user_version=3',
     );
     legacySql.close();
     final legacyInfo = await checkSnapshot(
@@ -285,6 +288,7 @@ void main() {
       await expectedSchema(),
       source.rules,
       assets,
+      compareLegacyCompanions: true,
     );
     expect(oldAfter.businessDigest, legacyInfo.businessDigest);
     final restored = await incoming.activate(
@@ -406,7 +410,7 @@ void main() {
     await stock.service.close();
     final legacy = sqlite3.open(file.path);
     legacy.execute(
-      '${dropV7}DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; PRAGMA user_version = 2',
+      '${dropV7AndLater}DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; PRAGMA user_version = 2',
     );
     legacy.close();
     final schema = await expectedSchema();
@@ -414,10 +418,10 @@ void main() {
     expect(before.schemaVersion, 2);
     stock.service = await FamilyService.load(stock.device, id, stock.rules);
     final service = stock.service;
-    final after = await checkSnapshot(file.path, schema, stock.rules, assets);
+    final after = await checkSnapshot(file.path, schema, stock.rules, assets, compareLegacyCompanions: true);
     expect(after.schemaVersion, currentSchemaVersion);
     expect(after.businessDigest, before.businessDigest);
-    expect(after.summary, before.summary);
+    expect(after.summary, {...before.summary, 'owned_companion_count': 1, 'active_companion_experience': 1});
     expect(await CheckpointStore(stock.device).files(), hasLength(1));
     final first = await service.windowMathBookmark();
     expect(first.page, WindowPage.count);
@@ -431,9 +435,9 @@ void main() {
     expect(saved.pattern, {1, 3});
     expect((await stock.service.overview())!.balance, 3);
     expect(await stock.service.ledger(), hasLength(1));
-    final current = await checkSnapshot(file.path, schema, stock.rules, assets);
-    expect(current.businessDigest, isNot(before.businessDigest));
-    expect(current.summary, before.summary);
+    final current = await checkSnapshot(file.path, schema, stock.rules, assets, compareLegacyCompanions: true);
+    expect(current.businessDigest, isNot(after.businessDigest));
+    expect(current.summary, after.summary);
   });
 
   test('Wind scene survives a v5 upgrade and partial encrypted handoff independently of the old chapter', () async {
@@ -445,7 +449,7 @@ void main() {
     await stock.service.close();
     final legacy = sqlite3.open(file.path);
     legacy.execute(
-      '${dropV7}DROP TABLE wind_story_runs; PRAGMA user_version=5',
+      '${dropV7AndLater}DROP TABLE wind_story_runs; PRAGMA user_version=5',
     );
     legacy.close();
     final schema = await expectedSchema();
@@ -462,9 +466,10 @@ void main() {
       schema,
       stock.rules,
       assets,
+      compareLegacyCompanions: true,
     );
     expect(upgraded.businessDigest, old.businessDigest);
-    expect(upgraded.summary, old.summary);
+    expect(upgraded.summary, {...old.summary, 'owned_companion_count': 1, 'active_companion_experience': 0});
     expect((await stock.service.overview())!.windowsLit, isTrue);
     expect((await stock.service.windProgress()).started, isFalse);
     expect((await stock.service.windowMathBookmark()).pattern, {0, 4});
@@ -693,7 +698,7 @@ void main() {
     await stock.service.close();
     final old = sqlite3.open(stock.device.databaseFile(id).path);
     old.execute(
-      '${dropV7}DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; DROP TABLE base_furnishings; DROP INDEX ledger_day_kind_idx; DROP INDEX purchase_ledger_idx; PRAGMA user_version = 1',
+      '${dropV7AndLater}DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; DROP TABLE base_furnishings; DROP INDEX ledger_day_kind_idx; DROP INDEX purchase_ledger_idx; PRAGMA user_version = 1',
     );
     old.close();
     stock.service = await FamilyService.load(stock.device, id, stock.rules);

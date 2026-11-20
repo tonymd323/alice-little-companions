@@ -7,8 +7,8 @@ import 'common.dart';
 import 'garden.dart';
 
 class GardenStorybook extends StatefulWidget {
-  const GardenStorybook({super.key, required this.stage, this.initial});
-  final int stage;
+  const GardenStorybook({super.key, this.stages = const {}, this.initial});
+  final Map<Companion, int> stages;
   final Companion? initial;
   @override
   State<GardenStorybook> createState() => _GardenStorybookState();
@@ -19,6 +19,7 @@ class _GardenStorybookState extends State<GardenStorybook> {
   @override
   Widget build(BuildContext context) {
     final friend = pet, entry = companionStories[friend];
+    final stage = widget.stages[friend] ?? 1;
     return Scaffold(
       appBar: AppBar(title: const Text('银杏家园手记')),
       body: PageBody(
@@ -57,7 +58,7 @@ class _GardenStorybookState extends State<GardenStorybook> {
               Row(
                 children: [
                   Image.asset(
-                    friend.artwork(widget.stage),
+                    friend.artwork(stage),
                     width: 98,
                     height: 106,
                     fit: BoxFit.contain,
@@ -86,16 +87,16 @@ class _GardenStorybookState extends State<GardenStorybook> {
               _Paragraph(entry.wish),
               const Divider(height: 24),
               Text(
-                '第 ${widget.stage} 阶段 · ${stageNames[widget.stage - 1]}',
+                '第 $stage 阶段 · ${stageNames[stage - 1]}',
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              _Paragraph(entry.stages[widget.stage - 1]),
+              _Paragraph(entry.stages[stage - 1]),
               TextButton.icon(
                 onPressed: () => openPage(
                   context,
                   AppearancePreview(
                     initial: friend,
-                    initialStage: widget.stage,
+                    initialStage: stage,
                   ),
                 ),
                 icon: const Icon(Icons.pets_outlined),

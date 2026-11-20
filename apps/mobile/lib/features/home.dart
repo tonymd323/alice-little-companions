@@ -11,6 +11,7 @@ import '../domain/pin.dart';
 import '../domain/rain_map.dart';
 import '../illustration/wind_sound.dart';
 import 'common.dart';
+import 'companion_collection.dart';
 import 'garden.dart';
 import 'rain_map_chapter.dart';
 import 'rewards.dart';
@@ -341,7 +342,7 @@ class _FamilyHomeState extends State<FamilyHome> {
                       ],
                     ),
                     Text(
-                      '${stageNames[family.stage - 1]} · 第 ${family.stage} 阶段',
+                      '${stageNames[family.stage - 1]} · ${family.stage} 级',
                       style: const TextStyle(fontSize: 14, color: mutedInk),
                     ),
                   ],
@@ -353,9 +354,9 @@ class _FamilyHomeState extends State<FamilyHome> {
                     ? null
                     : () => openPage(
                         context,
-                        SwitchCompanion(controller: controller),
+                        CompanionCollection(controller: controller),
                       ),
-                child: const Text('换伙伴'),
+                child: const Text('伙伴'),
               ),
             ],
           ),
@@ -545,49 +546,6 @@ class _WorkshopAction extends StatelessWidget {
   );
 }
 
-class SwitchCompanion extends StatefulWidget {
-  const SwitchCompanion({super.key, required this.controller});
-  final FamilyController controller;
-
-  @override
-  State<SwitchCompanion> createState() => _SwitchCompanionState();
-}
-
-class _SwitchCompanionState extends State<SwitchCompanion> {
-  late Companion selected = widget.controller.family!.companion;
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('选择伙伴')),
-    body: PageBody(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          GardenScene(
-            companion: selected,
-            stage: widget.controller.family!.stage,
-          ),
-          const SizedBox(height: 14),
-          CompanionPicker(
-            selected: selected,
-            stage: widget.controller.family!.stage,
-            onSelected: (value) => setState(() => selected = value),
-          ),
-          const SizedBox(height: 14),
-          ActionButton(
-            label: '和它一起长大',
-            action: () async {
-              await widget.controller.service!.selectCompanion(selected);
-              await widget.controller.refresh();
-              if (context.mounted) Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
 class GrowthPage extends StatelessWidget {
   const GrowthPage({super.key, required this.controller});
   final FamilyController controller;
@@ -714,10 +672,16 @@ class GrowthPage extends StatelessWidget {
                         ),
                         title: const Text('银杏家园手记'),
                         trailing: const Icon(Icons.chevron_right),
-                        onTap: () => openPage(
-                          context,
-                          GardenStorybook(stage: family.stage),
-                        ),
+                        onTap: () async {
+                          final progress = await controller.service!.companionProgress();
+                          if (!context.mounted) return;
+                          await openPage(
+                            context,
+                            GardenStorybook(
+                              stages: progress.map((pet, state) => MapEntry(pet, state.stage)),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),

@@ -645,7 +645,8 @@ class _RestorePageState extends State<RestorePage>
     final data = preview!;
     final summary = data.info.summary;
     final current = controller.family;
-    final experience = summary['valid_completion_count'] as int;
+    final partner = controller.rules.companion(data.info.family['active_pet_id'] as String);
+    final experience = (summary['active_companion_experience'] ?? summary['valid_completion_count']) as int;
     final originalStage = summary['max_growth_stage'] as int;
     final earned = controller.rules.earnedStage(experience);
     final restoredStage = earned > originalStage ? earned : originalStage;
@@ -672,8 +673,9 @@ class _RestorePageState extends State<RestorePage>
                     '${summary['ledger_count']} 条流水 · ${summary['owned_item_count']} 件物品',
                   ),
                   Text(
-                    '${summary['space_count']} 个空间 · $experience 经验 · 恢复后第 $restoredStage 阶段',
+                    '${summary['space_count']} 个空间 · ${summary['owned_companion_count'] ?? 1} 位伙伴',
                   ),
+                  Text('${partner.nickname} · $restoredStage 级 · $experience 经验'),
                 ],
               ),
             );
@@ -685,9 +687,9 @@ class _RestorePageState extends State<RestorePage>
                   Text('当前小家', style: Theme.of(context).textTheme.titleMedium),
                   Text(current.nickname),
                   Text(
-                    '${current.balance} 分 · ${current.experience} 份有效成果',
+                    '${current.balance} 分 · ${current.validCompletionCount} 份有效成果',
                   ),
-                  Text('${current.experience} 经验 · 伙伴阶段 ${current.stage}'),
+                  Text('${current.companion.nickname} · ${current.stage} 级 · ${current.experience} 经验'),
                 ],
               ),
             );

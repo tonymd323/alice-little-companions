@@ -56,6 +56,9 @@
     "parent_error_refund": true,
     "repeat_unique_item_purchase": false
   },
+  "companions": {
+    "unlock_price": 30
+  },
   "growth": {
     "thresholds": [
       3,
@@ -70,7 +73,7 @@
     "requires_points": false,
     "requires_streak": false,
     "demote_on_spend_or_penalty": false,
-    "shared_across_companions": true
+    "shared_across_companions": false
   },
   "parent_access": {
     "pin_digits": 6,

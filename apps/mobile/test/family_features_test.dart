@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:alice_companions/application/controller.dart';
 import 'package:alice_companions/application/family.dart';
 import 'package:alice_companions/application/transfer.dart';
+import 'package:alice_companions/data/database.dart';
 import 'package:alice_companions/data/device.dart';
 import 'package:alice_companions/data/snapshot.dart';
 import 'package:alice_companions/domain/companion_bond.dart';
@@ -48,7 +49,7 @@ void main() {
       final legacy = sqlite3.open(file.path);
       try {
         legacy.execute(
-          'DROP TABLE rain_map_runs; DROP TABLE companion_memories; PRAGMA user_version = 6',
+          '${dropCompanionTables}DROP TABLE rain_map_runs; DROP TABLE companion_memories; PRAGMA user_version = 6',
         );
       } finally {
         legacy.close();
@@ -61,10 +62,11 @@ void main() {
         schema,
         stock.rules,
         assets,
+        compareLegacyCompanions: true,
       );
-      expect((old.schemaVersion, upgraded.schemaVersion), (6, 7));
+      expect((old.schemaVersion, upgraded.schemaVersion), (6, currentSchemaVersion));
       expect(upgraded.businessDigest, old.businessDigest);
-      expect(upgraded.summary, old.summary);
+      expect(upgraded.summary, {...old.summary, 'owned_companion_count': 1, 'active_companion_experience': 0});
       expect((await stock.service.overview())!.bond.label, '初见');
       expect((await stock.service.rainMapProgress()).started, isFalse);
       expect((await stock.service.windProgress()).mask, 1 << 2);
@@ -129,7 +131,6 @@ void main() {
       );
       expect(wish?['item_id'], 'single_coat');
       await source.saveWindowMathBookmark(WindowPage.finished, {1, 3});
-      final ledger = await source.ledger();
       final first = (await source.overview())!;
       expect((first.balance, first.experience, first.stage), (5, 10, 3));
       await Future.wait([
@@ -140,6 +141,18 @@ void main() {
       expect((await source.overview())!.bond.label, '熟悉');
       await source.recordCompanionMoment(Companion.fox, CompanionMoment.call);
       expect((await source.overview())!.bond.label, '默契');
+      for (var i = 0; i < stock.rules.companionUnlockPrice ~/ 5; i++) {
+        await source.backfill(
+          const TaskDraft('测试伙伴积分', '', '测试标准', 'challenge'),
+          source.today,
+          '',
+          session: parent,
+        );
+      }
+      await source.unlockCompanion(Companion.cat);
+      final funded = (await source.overview())!;
+      expect((funded.balance, funded.experience, funded.stage), (5, 16, 3));
+      final ledger = await source.ledger();
       await source.selectCompanion(Companion.cat);
       expect((await source.overview())!.bond.label, '初见');
       await source.recordCompanionMoment(Companion.cat, CompanionMoment.call);
@@ -261,7 +274,7 @@ void main() {
       final progress = await restored.rainMapProgress();
       expect(
         (family.balance, family.experience, family.stage, family.companion),
-        (first.balance, first.experience, first.stage, Companion.fox),
+        (funded.balance, funded.experience, funded.stage, Companion.fox),
       );
       expect((family.bond.label, family.rainMapCleared), ('默契', true));
       expect(
@@ -418,8 +431,8 @@ void main() {
       );
       expect((await replacement.rainMapProgress()).totalStones, 2);
       expect(
-        (roundTrip.balance, roundTrip.experience, roundTrip.stage),
-        (7, 11, 3),
+        (roundTrip.balance, roundTrip.experience, roundTrip.stage, roundTrip.validCompletionCount),
+        (7, 1, 1, 17),
       );
       expect(await replacement.ledger(), updatedLedger);
       expect(await replacement.items(), items);
@@ -434,7 +447,10 @@ void main() {
         session: newSession,
       );
       final continued = (await replacement.overview())!;
-      expect((continued.balance, continued.experience), (9, 12));
+      expect((continued.balance, continued.experience, continued.validCompletionCount), (9, 2, 18));
+      final returnedCompanions = await replacement.companionProgress();
+      expect(returnedCompanions.keys, unorderedEquals([Companion.cat, Companion.fox]));
+      expect((returnedCompanions[Companion.fox]!.stage, returnedCompanions[Companion.fox]!.experience), (3, 16));
       expect(await restored.ledger(), updatedLedger);
     },
     timeout: const Timeout(Duration(minutes: 4)),

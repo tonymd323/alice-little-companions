@@ -67,6 +67,8 @@ class _FirstRunPageState extends State<FirstRunPage> {
             selected: pet,
             onSelected: (p) => setState(() => pet = p),
           ),
+          const SizedBox(height: 8),
+          const Text('选一位免费入住。其他伙伴以后用积分解锁。'),
           const SizedBox(height: 12),
           FilledButton(
             onPressed: () => setState(() => step = 1),
@@ -77,7 +79,7 @@ class _FirstRunPageState extends State<FirstRunPage> {
             children: [
               TextButton(
                 onPressed: () =>
-                    openPage(context, GardenStorybook(stage: 1, initial: pet)),
+                    openPage(context, GardenStorybook(initial: pet)),
                 child: const Text('认识伙伴'),
               ),
               TextButton(

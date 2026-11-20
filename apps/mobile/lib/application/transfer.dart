@@ -101,8 +101,14 @@ class TransferService {
     return generation == null ? {} : device.control(generation);
   }
 
-  Future<Snapshot> _read(File file) async =>
-      checkSnapshot(file.path, await schema, rules, availableAssets);
+  Future<Snapshot> _read(File file, {bool compareLegacyCompanions = false}) async =>
+      checkSnapshot(
+        file.path,
+        await schema,
+        rules,
+        availableAssets,
+        compareLegacyCompanions: compareLegacyCompanions,
+      );
 
   Future<ExportTicket> prepareExport(
     String mode,
@@ -558,7 +564,10 @@ class TransferService {
           throw const UserError('新家长凭据未能保存。');
         }
         fault?.call('credentials');
-        final verified = await _read(destination);
+        final verified = await _read(
+          destination,
+          compareLegacyCompanions: preview.info.schemaVersion < companionSchemaVersion,
+        );
         if (verified.businessDigest != preview.info.businessDigest) {
           throw const UserError('恢复后的存档校验失败。');
         }

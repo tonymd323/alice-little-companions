@@ -31,6 +31,8 @@ class Rules {
       pinIterations =
           (rules['parent_access'] as Json)['pin_pbkdf2_iterations'] as int,
       weeklyReference = rules['weekly_pricing_reference'] as int,
+      companionUnlockPrice =
+          (rules['companions'] as Json)['unlock_price'] as int,
       maxPerDay = rules['max_instances_per_day_per_template'] as int,
       penaltyCap = (rules['penalty'] as Json)['daily_actual_cap'] as int,
       catalogVersion = catalog['catalog_version'] as String,
@@ -57,6 +59,7 @@ class Rules {
   final List<int> thresholds;
   final int pinIterations;
   final int weeklyReference;
+  final int companionUnlockPrice;
   final int maxPerDay;
   final int penaltyCap;
   final String catalogVersion;

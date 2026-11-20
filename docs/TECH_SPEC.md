@@ -60,7 +60,8 @@ M0核对维护中的依赖版本与平台要求，锁定Flutter/Dart及pubspec.l
 | purchases | id、catalog_item_id、price_paid、created_at、refunded_at、command_id唯一 |
 | entitlements | id、purchase_id可空、catalog_item_id、asset_id、status、metadata_snapshot；活跃拥有关系唯一 |
 | spaces / placements | 空间实例UUID、scene_id（含免费 base_room）、name、layout_version；物品实例ID、归一化x/y、rotation、flipped、z、使用挂点时的mount_id；同一活跃物品最多一个摆放位置 |
-| pet_state / growth_awards | pet_state以(child_id,pet_id)保存各自已穿戴槽位和可选宠物昵称；growth_awards唯一(child_id,threshold)，三只伙伴共享家庭孩子阶段 |
+| pet_state / growth_awards | `pet_state` 按伙伴和槽位保存穿戴。`growth_awards` 保留旧版阶段授予历史 |
+| owned_companions / companion_completions | 每个孩子只有一位无兑换记录的首宠。其余伙伴与支付流水和兑换记录关联，按伙伴保存历史最高等级。每件成果关联唯一获得经验的伙伴，有效成果数为该伙伴的经验 |
 | wishes | child_id唯一、catalog_item_id、selected_price、selected_at |
 | processed_commands | command_id唯一、payload_hash、result_json、created_at；幂等回放 |
 | correction_records | 原记录、应收回、实收回、家长接受差额、说明 |
@@ -83,7 +84,8 @@ SQLite设置：foreign_keys=ON、WAL、synchronous=FULL。使用一个数据库�
 | BackfillTask | 内容、标准、类型、actual_date | 建立可追溯补录与确认，不支持无来源赠分 |
 | ApplyPenalty / ReversePenalty | 规则/事件ID、事实；原扣分ID | 实扣或原实扣冲回，日额度一致 |
 | PurchaseItem / RefundPurchase | item_id；purchase_id | 余额、流水、购买、所有权/容器摆放一致 |
-| SelectCompanion | 免费伙伴ID、expected_version | 写入child_profiles.active_pet_id；保留所有搭配、账本和已授予阶段；预览只持有界面状态 |
+| UnlockCompanion | 伙伴 ID、命令 ID | 同事务扣除积分、写兑换记录和伙伴归属。初始为 1 级，尚无成果关联 |
+| SelectCompanion | 伙伴 ID、命令 ID | 校验已解锁才更新 `child_profiles.active_pet_id`，新页面读目标伙伴的经验与等级 |
 | SaveOutfit / SaveLayout | 槽位/完整布局、expected_version | 校验所有权和坐标后保存新版本 |
 | CorrectAward | 原奖励、处理方式、明确差额接受 | 记录更正、实际回收、任务CORRECTED |
 | ExportBackup / ImportBackup | 方式、系统文件目标、口令、覆盖确认 | 文件编排按BACKUP_FORMAT，不把导入当作发奖 |

@@ -25,7 +25,8 @@ void main() {
       0,
       (sum, row) => sum + (row['price'] as int),
     );
-    final confirmed = (cost / 5).ceil();
+    final companionPrice = fixture.rules.companionUnlockPrice;
+    final confirmed = ((cost + companionPrice) / 5).ceil();
     for (var count = 0; count < confirmed; count++) {
       await service.backfill(task, service.today, '测试反馈', session: parent);
     }
@@ -107,9 +108,10 @@ void main() {
         'neck': scarf,
       }, (await service.overview())!.revision);
     }
+    await service.unlockCompanion(Companion.cat);
     await service.selectCompanion(Companion.cat);
     final before = (await service.overview())!;
-    expect(before.balance, confirmed * 5 - cost);
+    expect(before.balance, confirmed * 5 - cost - companionPrice);
     await service.processCalendar();
     await fixture.reopen();
     final restored = fixture.service;

@@ -52,4 +52,4 @@ PRD定义范围，RULES定义行为，UX定义操作，DESIGN定义视觉，TECH
 
 ## 美术基线与交付证据
 
-使用 docs/DEMO_TO_APP.md、docs/DESIGN_SPEC.md 和 design/asset_manifest.json 对照银杏家园。三位伙伴共用同一个家庭成长进度。先建立一条纵向可用的原生流程，再扩展全部规则。docs/evidence/acceptance.csv 记录原生应用结果。docs/OWNER_WALKTHROUGH.md 供家长最终体验，Codex 负责完整 43 项核查。
+使用 docs/DEMO_TO_APP.md、docs/DESIGN_SPEC.md 和 design/asset_manifest.json 对照银杏家园。建家免费选定一位伙伴，其他伙伴用积分解锁。每位伙伴独立从 1 级成长。docs/evidence/acceptance.csv 记录原生应用结果。docs/OWNER_WALKTHROUGH.md 供家长最终体验，Codex 负责完整 43 项核查。

@@ -6,6 +6,8 @@ import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/domain/pin.dart';
 import 'package:alice_companions/domain/rules.dart';
 
+const dropCompanionTables = 'DROP TABLE companion_completions; DROP TABLE owned_companions; ';
+
 class MemorySecureValues implements SecureValues {
   final data = <String, String>{};
 

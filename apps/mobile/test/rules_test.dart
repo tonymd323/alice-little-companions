@@ -260,9 +260,9 @@ void main() {
   );
 
   test(
-    'AC-17/18 all growth threshold boundaries and all companions remain shared',
+    'AC-17/18 all growth thresholds apply to the starter and locked companions stay out',
     () async {
-      final fixture = await TestFamily.create();
+      final fixture = await TestFamily.create(pet: Companion.cat);
       addTearDown(fixture.dispose);
       final service = fixture.service;
       final parent = await service.pin.unlock(TestFamily.pin);
@@ -287,17 +287,18 @@ void main() {
           (offset + 1, offset + 2, expected),
         );
         if ([1, 2, 3, 9, 10, 19, 20, 34, 35, 54, 55].contains(offset + 1)) {
-          for (final pet in Companion.values) {
-            await service.selectCompanion(pet);
-            final after = (await service.overview())!;
-            expect(
-              (after.companion, after.stage, after.balance),
-              (pet, expected, summary.balance),
-            );
+          for (final pet in [Companion.fox, Companion.rabbit]) {
+            await expectLater(service.selectCompanion(pet), throwsA(isA<UserError>()));
           }
+          await service.selectCompanion(Companion.cat);
+          final after = (await service.overview())!;
+          expect(
+            (after.companion, after.experience, after.stage, after.balance),
+            (Companion.cat, summary.experience, expected, summary.balance),
+          );
         }
       }
-      expect(await service.db.value('SELECT COUNT(*) FROM growth_awards'), 5);
+      expect(await service.db.value('SELECT retained_stage FROM owned_companions'), 6);
       final old = (await service.tasks()).last;
       await service.correctAward(
         await service.correctionQuote(old.id, [], parent),
@@ -314,8 +315,8 @@ void main() {
         (6, Companion.cat),
       );
       expect(
-        await fixture.service.db.value('SELECT COUNT(*) FROM growth_awards'),
-        5,
+        await fixture.service.db.value('SELECT retained_stage FROM owned_companions'),
+        6,
       );
     },
   );

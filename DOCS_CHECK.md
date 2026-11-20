@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1079 项通过。下面列出逐项结果。
+- 本次准备检查 1082 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -25,7 +25,7 @@
 - 内部链接有效：README.md → docs/evidence/fox-walk/README.md
 - 内部链接有效：README.md → docs/evidence/rabbit-hop/README.md
 - 内部链接有效：README.md → docs/PLAN.md
-- 内部链接有效：README.md → docs/evidence/daily/README.md
+- 内部链接有效：README.md → docs/RULES.md
 - 内部链接有效：README.md → docs/PRD.md
 - 内部链接有效：README.md → docs/UX_SPEC.md
 - 内部链接有效：README.md → docs/RULES.md
@@ -137,6 +137,8 @@
 - 内部链接有效：docs/PLAN.md → evidence/android-updates/README.md
 - 内部链接有效：docs/PLAN.md → evidence/backup-performance/README.md
 - 内部链接有效：docs/PLAN.md → evidence/device-acceptance/README.md
+- 内部链接有效：docs/PLAN.md → ACCEPTANCE.md
+- 内部链接有效：docs/PLAN.md → BACKUP_MIGRATION.md
 - 内部链接有效：docs/PLAN.md → evidence/task-performance/README.md
 - 内部链接有效：docs/PLAN.md → evidence/migration-return/README.md
 - 内部链接有效：docs/PLAN.md → GAME_STUDIO.md
@@ -589,7 +591,8 @@
 - 初始0分且不事后截断奖励
 - 扣分上限与无欠分一致
 - 成长阈值与阶段数一致
-- 每件有效现实成果增加1共享经验
+- 每件有效成果给当前伙伴增加1经验
+- 伙伴解锁价格和运行配置一致
 - 首次与核心写入无需服务器
 - 整套迁移与不合并账本一致
 - 备份格式参数一致

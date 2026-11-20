@@ -272,3 +272,22 @@ CREATE TABLE companion_memories (
   moment TEXT NOT NULL CHECK (moment IN ('touch', 'call')),
   PRIMARY KEY (child_id, pet_id, moment)
 );
+
+CREATE TABLE owned_companions (
+  child_id TEXT NOT NULL REFERENCES child_profiles(id),
+  pet_id TEXT NOT NULL CHECK (pet_id IN ('fox', 'rabbit', 'cat')),
+  purchase_id TEXT UNIQUE REFERENCES purchases(id),
+  retained_stage INTEGER NOT NULL DEFAULT 1 CHECK (retained_stage BETWEEN 1 AND 6),
+  PRIMARY KEY (child_id, pet_id)
+);
+
+CREATE UNIQUE INDEX one_starter_companion ON owned_companions(child_id) WHERE purchase_id IS NULL;
+
+CREATE TABLE companion_completions (
+  completion_id TEXT NOT NULL PRIMARY KEY REFERENCES completions(id),
+  child_id TEXT NOT NULL,
+  pet_id TEXT NOT NULL,
+  FOREIGN KEY (child_id, pet_id) REFERENCES owned_companions(child_id, pet_id)
+);
+
+CREATE INDEX companion_completion_pet_idx ON companion_completions(child_id, pet_id, completion_id);

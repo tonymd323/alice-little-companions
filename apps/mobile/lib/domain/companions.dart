@@ -8,6 +8,9 @@ enum Companion {
   final String label;
   final String nickname;
 
+  String get unlockItemId => 'companion_$name';
+  String get firstStageAssetId => 'pet_${name}_1';
+
   double aspect(int stage, {bool reveal = false}) {
     if (this == cat && stage == 4 && !reveal) return 480 / 451;
     final (width, height) = switch (this) {

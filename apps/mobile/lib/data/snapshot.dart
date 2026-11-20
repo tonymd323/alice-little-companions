@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:drift/native.dart';
@@ -16,6 +17,7 @@ const schemaQuery = '''
   SELECT type, name, tbl_name, sql FROM sqlite_schema ORDER BY type, name
 ''';
 const _v7Tables = {'rain_map_runs', 'companion_memories'};
+const _v8Tables = {'owned_companions', 'companion_completions'};
 
 class Snapshot {
   const Snapshot({
@@ -69,14 +71,18 @@ Future<Snapshot> checkSnapshot(
   String path,
   List<Json> schema,
   Rules rules,
-  Set<String> available,
-) => Isolate.run(() => _check(path, schema, rules, available));
+  Set<String> available, {
+  bool compareLegacyCompanions = false,
+}) => Isolate.run(
+  () => _check(path, schema, rules, available, compareLegacyCompanions),
+);
 
 Snapshot _check(
   String path,
   List<Json> schema,
   Rules rules,
   Set<String> available,
+  bool compareLegacyCompanions,
 ) {
   final db = sqlite3.open(path, mode: OpenMode.readOnly);
   try {
@@ -88,6 +94,11 @@ Snapshot _check(
       throw const UserError('此存档结构需要兼容版本的 App。');
     }
     final expected = schema
+        .where(
+          (row) =>
+              version >= companionSchemaVersion ||
+              !_v8Tables.contains(row['tbl_name']),
+        )
         .where((row) => version >= 7 || !_v7Tables.contains(row['tbl_name']))
         .where((row) => version >= 6 || row['tbl_name'] != 'wind_story_runs')
         .where(
@@ -149,6 +160,23 @@ Snapshot _check(
         family['timezone'] != rules.timezone) {
       throw const UserError('备份使用的规则或目录需要兼容版本。');
     }
+    final Iterable<Json> companions = version < companionSchemaVersion
+        ? <Json>[]
+        : db.select('''
+          SELECT p.*, COUNT(x.completion_id) AS assigned,
+            COUNT(CASE WHEN a.is_valid = 1 THEN 1 END) AS experience
+          FROM owned_companions p
+          LEFT JOIN companion_completions x ON x.child_id = p.child_id AND x.pet_id = p.pet_id
+          LEFT JOIN completions a ON a.id = x.completion_id
+          GROUP BY p.child_id, p.pet_id
+          ''');
+    final companionPurchases = {
+      for (final companion in companions)
+        if (companion['purchase_id'] != null)
+          companion['purchase_id']: rules.companion(
+            companion['pet_id'] as String,
+          ),
+    };
 
     var balance = 0;
     var ledgerCount = 0;
@@ -262,13 +290,6 @@ Snapshot _check(
       throw const UserError('备份缺少基础家园。');
     }
     for (final purchase in db.select('SELECT * FROM purchases')) {
-      final item = rules.catalog[purchase['item_id']];
-      if (item == null || purchase['asset_id'] != item['asset_id']) {
-        throw const UserError('备份中的兑换需要兼容的目录。');
-      }
-      final productAsset = item['asset_id'] as String;
-      assets.add(productAsset);
-      final parts = (item['included_items'] as List?)?.cast<Json>() ?? [item];
       final owned = db.select(
         'SELECT * FROM entitlements WHERE purchase_id = ?',
         [purchase['id']],
@@ -277,6 +298,23 @@ Snapshot _check(
         'SELECT scene_id FROM spaces WHERE purchase_id = ?',
         [purchase['id']],
       );
+      final companion = companionPurchases[purchase['id']];
+      if (companion != null) {
+        if (purchase['item_id'] != companion.unlockItemId ||
+            purchase['asset_id'] != companion.firstStageAssetId ||
+            purchase['refunded_at'] != null ||
+            owned.isNotEmpty ||
+            spaces.isNotEmpty) {
+          throw const UserError('备份的伙伴兑换有误。');
+        }
+        continue;
+      }
+      final item = rules.catalog[purchase['item_id']];
+      if (item == null || purchase['asset_id'] != item['asset_id']) {
+        throw const UserError('备份中的兑换需要兼容的目录。');
+      }
+      assets.add(item['asset_id'] as String);
+      final parts = (item['included_items'] as List?)?.cast<Json>() ?? [item];
       if (owned.length != parts.length ||
           (purchase['refunded_at'] == null && item['space_id'] != null
               ? spaces.length != 1 ||
@@ -340,28 +378,62 @@ Snapshot _check(
         throw const UserError('备份的伙伴成长有误。');
       }
     }
-    final experience =
+    final validCompletions =
         scalar('SELECT COUNT(*) FROM completions WHERE is_valid = 1') as int;
     final recordedStage = 1 + growth.length;
-    final earned = rules.earnedStage(experience);
-    final summary = {
+    final summary = <String, Object?>{
       'balance': balance,
       'ledger_count': ledgerCount,
-      'valid_completion_count': experience,
+      'valid_completion_count': validCompletions,
       'owned_item_count': scalar(
         'SELECT COUNT(*) FROM entitlements WHERE revoked = 0',
       ),
       'space_count': scalar('SELECT COUNT(*) FROM spaces'),
-      'max_growth_stage': version >= 4 && earned > recordedStage
-          ? earned
+      'max_growth_stage': version >= 4
+          ? max(recordedStage, rules.earnedStage(validCompletions))
           : recordedStage,
     };
+    if (version >= companionSchemaVersion) {
+      final starters = companions.where((pet) => pet['purchase_id'] == null);
+      final active = companions
+          .where((pet) => pet['pet_id'] == family['active_pet_id'])
+          .singleOrNull;
+      final assigned = companions.fold(
+        0,
+        (count, pet) => count + (pet['assigned'] as int),
+      );
+      if (starters.length != 1 ||
+          active == null ||
+          assigned != scalar('SELECT COUNT(*) FROM completions') ||
+          starters.single['retained_stage'] as int < recordedStage ||
+          (compareLegacyCompanions &&
+              (companions.length != 1 ||
+                  active['retained_stage'] != recordedStage))) {
+        throw const UserError('备份的伙伴归属或成长记录有误。');
+      }
+      for (final pet in companions) {
+        final legacyStage = pet['purchase_id'] == null ? recordedStage : 1;
+        if (pet['child_id'] != family['child_id'] ||
+            pet['retained_stage'] as int >
+                max(legacyStage, rules.earnedStage(pet['assigned'] as int))) {
+          throw const UserError('备份的伙伴成长有误。');
+        }
+      }
+      final experience = active['experience'] as int;
+      summary['active_companion_experience'] = experience;
+      summary['owned_companion_count'] = companions.length;
+      summary['max_growth_stage'] = max(
+        active['retained_stage'] as int,
+        rules.earnedStage(experience),
+      );
+    }
 
     // Feed each table row separately so comparing a large family needs no second full database in memory.
     final sink = _DigestResult();
     final content = sha256.startChunkedConversion(sink);
     for (final row in actual.where((row) => row['type'] == 'table')) {
       final table = row['name'] as String;
+      if (compareLegacyCompanions && _v8Tables.contains(table)) continue;
       final records = db.select('SELECT * FROM "$table" ORDER BY rowid');
       if (records.isEmpty &&
           (table == 'base_furnishings' ||

@@ -241,6 +241,7 @@ class _RewardPageState extends State<RewardPage> {
       Json? purchase,
       Json? wish,
       Json? room,
+      int stage,
       List<ScenePiece> pieces,
       Map<String, String> outfit,
     })
@@ -261,10 +262,15 @@ class _RewardPageState extends State<RewardPage> {
     } else {
       room = widget.controller.baseSpace;
     }
+    final family = widget.controller.family!;
+    final stage = pet == family.companion
+        ? family.stage
+        : (await service.companionProgress())[pet]?.stage ?? 1;
     return (
       purchase: purchase,
       wish: await service.wish(),
       room: room,
+      stage: stage,
       pieces: room == null
           ? <ScenePiece>[]
           : (await service.furnishings(room['id'] as String))
@@ -305,7 +311,6 @@ class _RewardPageState extends State<RewardPage> {
                   ? loaded.wish!['selected_price'] as int
                   : fixed;
               final price = fixed < wishPrice ? fixed : wishPrice;
-              final family = widget.controller.family!;
               final asset = product['asset_id'] as String;
               final sceneId =
                   (loaded.room?['scene_id'] ??
@@ -336,7 +341,7 @@ class _RewardPageState extends State<RewardPage> {
                 children: [
                   GardenScene(
                     companion: pet,
-                    stage: family.stage,
+                    stage: loaded.stage,
                     rules: service.rules,
                     scene: SceneDefinition(service.rules, sceneId),
                     view: HomeView.veranda,
@@ -528,7 +533,7 @@ class _PurchaseHistoryPageState extends State<PurchaseHistoryPage> {
                         Text(
                           '${row['price_paid']} 分 · ${row['refunded_at'] == null ? '已兑换' : '已退回'}',
                         ),
-                        if (row['refunded_at'] == null && !service.frozen)
+                        if (row['refundable'] == 1 && row['refunded_at'] == null && !service.frozen)
                           if (widget.parent ||
                               service.canChildUndo(row['id'] as String))
                             ActionButton(
