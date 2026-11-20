@@ -2,7 +2,9 @@
 
 2026-11-18　｜　交付基线 2.0　｜　iOS、iPadOS、Android
 
-安卓家庭版 **0.17.0+15** 新增《奶油的雨天地图》、伙伴亲密度和回忆。已有家庭版可同签更新。修好暖廊彩窗后，从小家的「主线」打开雨天地图。在「成长」可查看伙伴回忆。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.17.0-android.apk?raw=true) · [功能实测](docs/evidence/family-functions/README.md) · [安装说明](docs/DELIVERY.md)
+安卓家庭版 **0.18.0+16** 在家长入口新增「应用更新」。首次从 GitHub 下载安装包，已有家庭版选择「更新」。以后可以在 App 内检查、下载，并用安卓系统确认安装。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.18.0-android.apk?raw=true) · [应用更新说明](docs/DELIVERY.md#app-内更新)
+
+修好暖廊彩窗后，从小家的「主线」打开《奶油的雨天地图》。在「成长」可以看三只伙伴各自的亲密度和回忆。[家庭功能实测](docs/evidence/family-functions/README.md)
 
 伙伴步态和场景融稿继续按原画制作批次推进。奶油的固定镜头录像和桃桃的同机位基线已归档。[奶油步态](docs/evidence/fox-walk/README.md) · [桃桃基线](docs/evidence/rabbit-hop/README.md) · [开发计划](docs/PLAN.md)
 

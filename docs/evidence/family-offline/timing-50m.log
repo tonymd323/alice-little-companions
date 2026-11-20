@@ -1,0 +1,14 @@
+source=28da3a76621f8d13c00ff57f8cf7f426f26239ca
+recorded_utc=2026-11-20T13:20:25Z
+app=0.17.0+15
+flutter=3.50.0
+mode=flutter_tester debug JIT
+fixture_generator_sha256=41532e9b78eacfb2c9e8e97192948b4743c435f9566ff9cf49600672c30ba11b
+AC40 calibration {"generated_rows":5000,"snapshot_bytes":38486016}
+AC40 calibration {"generated_rows":6811,"snapshot_bytes":52256768}
+AC40 fixture {"sqlite":"3.54.1","dart":"3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on \"linux_x64\"","snapshot_bytes":52256768,"schema":7,"revision":6872,"seeded_backfill_extensions":6811,"summary":{"balance":20584,"ledger_count":6871,"valid_completion_count":6866,"owned_item_count":5,"space_count":1,"max_growth_stage":6},"digest":"1d254b64eff3d895aa4f18732ea6ac286e6d1d03ebd49d9134dae5d14918318a"}
+AC40 export {"total_ms":27033,"preparing_ms":10,"phases_ms":{"snapshot":182,"checking":4979,"encrypting":11440,"readback":10422}}
+AC40 handoff {"local_copy_and_receipt_ms":78,"container_bytes":17355501}
+AC40 restore {"total_ms":21880,"preview":{"total_ms":10526,"preparing_ms":1,"phases_ms":{"decrypting":7539,"checking":2986}},"protect_target":{"total_ms":174,"preparing_ms":7,"phases_ms":{"snapshot":7,"checking":14,"encrypting":146}},"activate_ms":11178}
+AC40 verification {"restored_snapshot_bytes":52256768,"activated_target_digest":"1d254b64eff3d895aa4f18732ea6ac286e6d1d03ebd49d9134dae5d14918318a","same_summary":true,"same_business_digest":true,"target_generation_switched":true,"source_balance_preserved":true}
+01:23 +1: All tests passed!
