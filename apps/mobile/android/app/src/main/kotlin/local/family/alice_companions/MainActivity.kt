@@ -15,9 +15,11 @@ import java.io.IOException
 class MainActivity : FlutterActivity() {
     private var foley: VerandaFoley? = null
     private var soundChannel: MethodChannel? = null
+    private var updateChannel: MethodChannel? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        updateChannel = AppUpdateInstaller(this).register(flutterEngine.dartExecutor.binaryMessenger)
         val sounds = VerandaFoley(applicationContext)
         foley = sounds
         soundChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "alice/wind-sound")
@@ -60,6 +62,8 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
+        updateChannel?.setMethodCallHandler(null)
+        updateChannel = null
         soundChannel?.setMethodCallHandler(null)
         soundChannel = null
         foley?.close()
