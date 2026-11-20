@@ -1,0 +1,60 @@
+{
+  "environment": "Android 9 (API 28) x86_64 emulator, airplane mode; 390 × 844",
+  "apk_sha256": "b3745bbee0a272fec3eb4397d3a9db948714f6321a2dc176fc0c108be75d8692",
+  "verified": [
+    "same-app growth and first touch memory",
+    "mainline and first stepping stone",
+    "force-stop / cold start preserves first step and all saved data",
+    "balance, experience and ledger count stayed zero"
+  ],
+  "after_reopen": {
+    "table_count": 28,
+    "unchanged_v6_tables_sha256": "1b8f6e1b90179d2d1754362bc510dd355f0181a5be2a915d712658765f1eb0c2",
+    "table_row_counts": {
+      "accounts": 1,
+      "base_furnishings": 0,
+      "child_profiles": 1,
+      "companion_memories": 1,
+      "completions": 0,
+      "correction_records": 0,
+      "entitlements": 0,
+      "growth_awards": 0,
+      "households": 1,
+      "ledger_entries": 0,
+      "penalty_day_usage": 0,
+      "penalty_events": 0,
+      "penalty_rules": 0,
+      "pet_state": 0,
+      "placements": 0,
+      "processed_commands": 17,
+      "project_stages": 0,
+      "purchases": 0,
+      "rain_map_runs": 1,
+      "spaces": 1,
+      "submissions": 0,
+      "task_instances": 0,
+      "task_templates": 0,
+      "task_versions": 0,
+      "wind_story_runs": 1,
+      "window_math_bookmarks": 0,
+      "window_story_milestones": 1,
+      "wishes": 0
+    },
+    "schema_version": 7,
+    "balance": 0,
+    "experience": 0,
+    "stage": 1,
+    "pet": "rabbit",
+    "wind_window_mask": 31,
+    "integrity_check": "ok",
+    "foreign_key_errors": 0,
+    "rain_map": [
+      1,
+      1,
+      0,
+      0,
+      0
+    ],
+    "memory_count": 1
+  }
+}

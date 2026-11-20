@@ -1,0 +1,27 @@
+{
+  "version": "0.17.0+15",
+  "source_commit": "28da3a76621f8d13c00ff57f8cf7f426f26239ca",
+  "application_id": "local.family.alice_companions",
+  "file": "alice-0.17.0-android.apk",
+  "sha256": "b3745bbee0a272fec3eb4397d3a9db948714f6321a2dc176fc0c108be75d8692",
+  "size_bytes": 82299932,
+  "android_family_signer_certificate_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+  "apk_signature_v2_verified": true,
+  "zipalign_16k_verified": true,
+  "android_min_sdk": 26,
+  "android_target_sdk": 36,
+  "abi": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86_64"
+  ],
+  "flutter_version": "3.50.0",
+  "mode": "release",
+  "github": {
+    "branch": "android-downloads",
+    "commit": "2d3644c39ea1ba98eaebb62e156892df02250e41",
+    "path": "downloads/alice-0.17.0-android.apk",
+    "downloaded_bytes": 82299932,
+    "downloaded_sha256": "b3745bbee0a272fec3eb4397d3a9db948714f6321a2dc176fc0c108be75d8692"
+  }
+}

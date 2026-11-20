@@ -2,9 +2,9 @@
 
 2026-11-18　｜　交付基线 2.0　｜　iOS、iPadOS、Android
 
-安卓家庭版 **0.16.0+14** 新增第一阶段银杏狐奶油的日常步态。原家庭用户下载 APK 后选择「更新」，即可从小家庭院点草地或「过来」看奶油走动。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.16.0-android.apk?raw=true) · [奶油录像与签发记录](docs/evidence/fox-walk/README.md) · [安装与签名交接](docs/DELIVERY.md)
+安卓家庭版 **0.17.0+15** 新增《奶油的雨天地图》、伙伴亲密度和回忆。已有家庭版可同签更新。修好暖廊彩窗后，从小家的「主线」打开雨天地图。在「成长」可查看伙伴回忆。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.17.0-android.apk?raw=true) · [功能实测](docs/evidence/family-functions/README.md) · [安装说明](docs/DELIVERY.md)
 
-奶油候选版的固定镜头录像、独立试玩和飞行模式覆盖记录均已归档。桃桃的同机位基线也已留存。[桃桃基线](docs/evidence/rabbit-hop/README.md) · [开发计划](docs/PLAN.md)
+伙伴步态和场景融稿继续按原画制作批次推进。奶油的固定镜头录像和桃桃的同机位基线已归档。[奶油步态](docs/evidence/fox-walk/README.md) · [桃桃基线](docs/evidence/rabbit-hop/README.md) · [开发计划](docs/PLAN.md)
 
 ## 家庭离线闭环
 

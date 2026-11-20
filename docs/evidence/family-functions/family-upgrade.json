@@ -1,0 +1,92 @@
+{
+  "environment": "Android 9 (API 28) x86_64 cloud emulator, synthetic project family, airplane mode",
+  "operation": "adb install -r, without uninstall or clearing application storage",
+  "package_manager_result": "Success",
+  "before": {
+    "version": "0.16.0",
+    "version_code": 14,
+    "uid": "10067",
+    "first_install_time": "2026-11-19 00:29:54",
+    "airplane_mode": true
+  },
+  "after": {
+    "version": "0.17.0",
+    "version_code": 15,
+    "uid": "10067",
+    "first_install_time": "2026-11-19 00:29:54",
+    "airplane_mode": true
+  },
+  "before_home": [
+    "小家",
+    "庭院",
+    "暖廊",
+    "过来",
+    "桃桃",
+    "主线"
+  ],
+  "updated_home": [
+    "小家",
+    "庭院",
+    "暖廊",
+    "过来",
+    "桃桃",
+    "主线"
+  ],
+  "cold_reopened_home": [
+    "小家",
+    "庭院",
+    "暖廊",
+    "过来",
+    "桃桃",
+    "主线"
+  ],
+  "same_uid_and_first_install_time": true,
+  "v6_rows_identical_after_update": true,
+  "v7_rows_identical_after_cold_restart": true,
+  "before_schema": 6,
+  "family": {
+    "table_count": 28,
+    "unchanged_v6_tables_sha256": "be0cd347ab0a1785283cd1bff6fd2ffe37bd26060823b0350f11917923b0020c",
+    "table_row_counts": {
+      "accounts": 1,
+      "base_furnishings": 0,
+      "child_profiles": 1,
+      "companion_memories": 0,
+      "completions": 0,
+      "correction_records": 0,
+      "entitlements": 0,
+      "growth_awards": 0,
+      "households": 1,
+      "ledger_entries": 0,
+      "penalty_day_usage": 0,
+      "penalty_events": 0,
+      "penalty_rules": 0,
+      "pet_state": 0,
+      "placements": 0,
+      "processed_commands": 14,
+      "project_stages": 0,
+      "purchases": 0,
+      "rain_map_runs": 0,
+      "spaces": 1,
+      "submissions": 0,
+      "task_instances": 0,
+      "task_templates": 0,
+      "task_versions": 0,
+      "wind_story_runs": 1,
+      "window_math_bookmarks": 0,
+      "window_story_milestones": 1,
+      "wishes": 0
+    },
+    "schema_version": 7,
+    "balance": 0,
+    "experience": 0,
+    "stage": 1,
+    "pet": "rabbit",
+    "wind_window_mask": 31,
+    "integrity_check": "ok",
+    "foreign_key_errors": 0,
+    "rain_map": null,
+    "memory_count": 0
+  },
+  "real_device_tested": false
+}
