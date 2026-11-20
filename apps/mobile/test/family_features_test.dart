@@ -73,7 +73,7 @@ void main() {
   );
 
   test(
-    'rain map, companionship and replay survive an encrypted round trip',
+    'an encrypted round trip keeps the ledger, furnishings and story',
     () async {
       final stock = await TestFamily.create(pet: Companion.fox);
       addTearDown(stock.dispose);
@@ -86,9 +86,52 @@ void main() {
         '',
         session: parent,
       );
+      for (var i = 0; i < 9; i++) {
+        await source.backfill(
+          const TaskDraft('测试任务B', '', '测试标准B', 'challenge'),
+          source.today,
+          '',
+          session: parent,
+        );
+      }
+      final pending =
+          (await source.publish(
+                const TaskDraft('测试任务C', '', '测试标准C', 'light'),
+                session: parent,
+              ))['instance_id']
+              as String;
+      await source.submit(pending, '测试申报');
+      await source.purchase('decor_vase');
+      await source.purchase('single_armchair');
+      await source.purchase('accessory_scarf');
+      await source.setWish('single_coat');
+      final room = (await source.spaces()).single['id'] as String;
+      final items = await source.items();
+      final furnishings = await source.furnishings(room);
+      final wardrobe = await source.wardrobe(Companion.fox);
+      final wish = await source.wish();
+      expect(
+        items.map((item) => item['item_id']),
+        unorderedEquals(['decor_vase', 'single_armchair', 'accessory_scarf']),
+      );
+      expect(
+        furnishings.map((item) => item['item_id']),
+        unorderedEquals([
+          'base_bed',
+          'base_rug',
+          'decor_vase',
+          'single_armchair',
+        ]),
+      );
+      expect(
+        wardrobe.single['entitlement_id'],
+        items.singleWhere((item) => item['item_id'] == 'accessory_scarf')['id'],
+      );
+      expect(wish?['item_id'], 'single_coat');
       await source.saveWindowMathBookmark(WindowPage.finished, {1, 3});
       final ledger = await source.ledger();
       final first = (await source.overview())!;
+      expect((first.balance, first.experience, first.stage), (5, 10, 3));
       await Future.wait([
         for (var i = 0; i < 4; i++)
           source.recordCompanionMoment(Companion.fox, CompanionMoment.touch),
@@ -174,6 +217,10 @@ void main() {
         source.recordCompanionMoment(Companion.fox, CompanionMoment.touch),
         throwsA(isA<UserError>()),
       );
+      await expectLater(
+        source.approve(pending, source.today, '', session: session),
+        throwsA(isA<UserError>()),
+      );
       FamilyService? targetFamily;
       final target = TransferService(
         device: DeviceStore(
@@ -198,8 +245,8 @@ void main() {
       final family = (await restored.overview())!;
       final progress = await restored.rainMapProgress();
       expect(
-        (family.balance, family.experience, family.companion),
-        (first.balance, first.experience, Companion.fox),
+        (family.balance, family.experience, family.stage, family.companion),
+        (first.balance, first.experience, first.stage, Companion.fox),
       );
       expect((family.bond.label, family.rainMapCleared), ('默契', true));
       expect(
@@ -212,11 +259,25 @@ void main() {
         (2, 1, 0, true),
       );
       expect(await restored.ledger(), ledger);
+      expect(await restored.items(), items);
+      expect(await restored.furnishings(room), furnishings);
+      expect(await restored.wardrobe(Companion.fox), wardrobe);
+      expect(await restored.wish(), wish);
+      expect((await restored.task(pending)).state, 'SUBMITTED');
       expect((await restored.windowMathBookmark()).pattern, {1, 3});
       await restored.selectCompanion(Companion.cat);
       expect((await restored.overview())!.bond.label, '熟悉');
       await restored.stepRainMapStone(run: 2, group: 0, stone: 1);
       final targetSession = await restored.pin.unlock(TestFamily.pin);
+      await restored.approve(
+        pending,
+        restored.today,
+        '测试反馈',
+        session: targetSession,
+      );
+      final updatedLedger = await restored.ledger();
+      expect(updatedLedger, hasLength(ledger.length + 1));
+      expect(await source.ledger(), ledger);
       final returnTicket = await target.prepareExport(
         'migration',
         password,
@@ -245,8 +306,16 @@ void main() {
         (Companion.cat, '熟悉', true),
       );
       expect((await replacement.rainMapProgress()).totalStones, 2);
-      expect((roundTrip.balance, roundTrip.experience), (3, 1));
-      expect(await replacement.ledger(), ledger);
+      expect(
+        (roundTrip.balance, roundTrip.experience, roundTrip.stage),
+        (7, 11, 3),
+      );
+      expect(await replacement.ledger(), updatedLedger);
+      expect(await replacement.items(), items);
+      expect(await replacement.furnishings(room), furnishings);
+      expect(await replacement.wardrobe(Companion.fox), wardrobe);
+      expect(await replacement.wish(), wish);
+      expect((await replacement.task(pending)).state, 'APPROVED');
     },
     timeout: const Timeout(Duration(minutes: 4)),
   );
