@@ -1,7 +1,7 @@
 name: alice_companions
 description: "小小伙伴 · 银杏家园"
 publish_to: none
-version: 0.17.0+15
+version: 0.18.0+16
 
 environment:
   sdk: ^3.14.0

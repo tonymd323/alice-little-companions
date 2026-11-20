@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:material_ui/material_ui.dart';
 
 import '../application/controller.dart';
@@ -11,6 +13,7 @@ import 'parent_access.dart';
 import 'rewards.dart';
 import 'task_editor.dart';
 import 'penalties.dart';
+import 'update_page.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({super.key, required this.task, required this.onTap});
@@ -348,6 +351,12 @@ class ParentHome extends StatelessWidget {
                         openPage(context, DataPage(controller: controller)),
                     child: const Text('备份与迁移'),
                   ),
+                  if (Platform.isAndroid)
+                    OutlinedButton(
+                      onPressed: () =>
+                          openPage(context, UpdatePage(controller: controller)),
+                      child: const Text('应用更新'),
+                    ),
                   OutlinedButton(
                     onPressed: () => openPage(
                       context,
