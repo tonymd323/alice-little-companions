@@ -36,3 +36,5 @@ flutter pub get --enforce-lockfile
 ALICE_UI_PROBE_LABEL=0.20.0 ALICE_UI_PROBE_FILE=/absolute/path/to/alice-qa-019.alicebackup \
   flutter test --no-pub --reporter expanded test/ui_performance_test.dart
 ```
+
+复测 0.21 时，检出 `f3a7184`，给上面的测试增加 `ALICE_UI_PROBE_UPGRADE_SCHEMA=8`。测试先打开并保护旧档，核对迁移后的 SQLite 结构，再记录十次重开与二十次确认。旧档准备耗时随原始结果一并保留。[0.21 计时记录](../companion-unlock/README.md#万条流水确认计时)

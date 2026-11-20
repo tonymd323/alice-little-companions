@@ -62,6 +62,30 @@ void main() {
         await input.copy(path);
       }
     });
+    int? upgradeMicros;
+    final schema = int.tryParse(
+      Platform.environment['ALICE_UI_PROBE_UPGRADE_SCHEMA'] ?? '',
+    );
+    if (schema != null) {
+      upgradeMicros = await tester.runAsync(() async {
+        final controller = TimedController(stock.device, stock.rules);
+        try {
+          final clock = Stopwatch()..start();
+          await controller.open();
+          clock.stop();
+          expect(controller.family?.balance, 32077);
+          expect(controller.family?.experience, 10697);
+          expect(
+            await controller.service!.db.value('PRAGMA user_version'),
+            schema,
+          );
+          return clock.elapsedMicroseconds;
+        } finally {
+          controller.dispose();
+          await controller.service?.close();
+        }
+      });
+    }
     final boots = <int>[];
     final confirms = <int>[];
     final reloads = <int>[];
@@ -120,7 +144,7 @@ void main() {
       PaintingBinding.instance.imageCache.clearLiveImages();
     }
     stdout.writeln(
-      'AC39 ${jsonEncode({'run': Platform.environment['ALICE_UI_PROBE_LABEL'], 'ledger_at_start': 10706, 'boot_us': boots, 'confirm_us': confirms, 'refresh_us': reloads, 'slowest_boot_us': (boots.toList()..sort()).last, 'confirm_p95_us': (confirms.toList()..sort())[18], 'refresh_p95_us': (reloads.toList()..sort())[18]})}',
+      'AC39 ${jsonEncode({'run': Platform.environment['ALICE_UI_PROBE_LABEL'], 'ledger_at_start': 10706, 'upgrade_and_open_us': ?upgradeMicros, 'boot_us': boots, 'confirm_us': confirms, 'refresh_us': reloads, 'slowest_boot_us': (boots.toList()..sort()).last, 'confirm_p95_us': (confirms.toList()..sort())[18], 'refresh_p95_us': (reloads.toList()..sort())[18]})}',
     );
   }, timeout: const Timeout(Duration(minutes: 6)));
 }
