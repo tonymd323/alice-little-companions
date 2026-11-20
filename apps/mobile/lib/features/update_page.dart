@@ -12,9 +12,16 @@ import 'garden.dart';
 import 'parent_access.dart';
 
 class UpdatePage extends StatefulWidget {
-  const UpdatePage({super.key, required this.controller});
+  const UpdatePage({
+    super.key,
+    required this.controller,
+    this.installer = const AndroidInstaller(),
+    this.updates,
+  });
 
   final FamilyController controller;
+  final AndroidInstaller installer;
+  final GitHubUpdates? updates;
 
   @override
   State<UpdatePage> createState() => _UpdatePageState();
@@ -22,17 +29,20 @@ class UpdatePage extends StatefulWidget {
 
 class _UpdatePageState extends State<UpdatePage> {
   static const _tokenKey = 'alice.github-updates-token';
-  static const _installer = AndroidInstaller();
-  final _github = GitHubUpdates();
+  static const _downloadLabel = '正在下载更新…';
+  static const _installLabel = '正在打开安装界面…';
+  late final _github = widget.updates ?? GitHubUpdates();
   final _token = TextEditingController();
 
   String? _version, _status, _working;
   bool _hasToken = false, _editingToken = false;
+  bool _downloadCancelled = false;
   double? _progress;
   AndroidRelease? _release;
   File? _downloaded;
 
   FamilyController get controller => widget.controller;
+  AndroidInstaller get _installer => widget.installer;
   bool get _busy => _working != null;
 
   @override
@@ -55,6 +65,7 @@ class _UpdatePageState extends State<UpdatePage> {
 
   @override
   void dispose() {
+    _downloadCancelled = true;
     _github.cancel();
     _token.dispose();
     super.dispose();
@@ -68,6 +79,13 @@ class _UpdatePageState extends State<UpdatePage> {
     });
     try {
       await action();
+    } on UpdateAuthorizationRequired catch (error) {
+      if (mounted) {
+        setState(() {
+          _status = error.message;
+          _editingToken = true;
+        });
+      }
     } on UserError catch (error) {
       if (mounted) setState(() => _status = error.message);
     } on PlatformException catch (error) {
@@ -79,13 +97,7 @@ class _UpdatePageState extends State<UpdatePage> {
     }
   }
 
-  Future<String> _credential() async {
-    final token = await controller.device.secure.read(_tokenKey);
-    if (token == null || token.isEmpty) {
-      throw const UserError('请先设置 GitHub 仓库的只读令牌。');
-    }
-    return token;
-  }
+  Future<String?> _credential() => controller.device.secure.read(_tokenKey);
 
   Future<void> _storeToken({bool remove = false}) => _run('正在保存…', () async {
     final secure = controller.device.secure;
@@ -105,17 +117,15 @@ class _UpdatePageState extends State<UpdatePage> {
   });
 
   Future<void> _check() async {
-    if (!_hasToken) {
-      setState(() => _editingToken = true);
-      return;
-    }
     await _run('正在检查更新…', () async {
       setState(() {
         _release = null;
         _downloaded = null;
       });
       final current = await _installer.installed();
-      final latest = await _github.check(current.code, await _credential());
+      final credential = await _credential();
+      if (!mounted || !controller.parentUnlocked) return;
+      final latest = await _github.check(current.code, credential);
       if (mounted) {
         setState(() {
           _version = current.name;
@@ -126,28 +136,53 @@ class _UpdatePageState extends State<UpdatePage> {
     });
   }
 
-  Future<void> _download(AndroidRelease release) => _run('正在下载更新…', () async {
-    _progress = 0;
-    final file = await _github.download(
-      release,
-      await _installer.cache(),
-      await _credential(),
-      onProgress: (received, total) {
-        final next = (100 * received ~/ total) / 100;
-        if (mounted && next != _progress) setState(() => _progress = next);
-      },
-    );
-    if (!mounted) return;
-    setState(() => _downloaded = file);
-    if (controller.parentUnlocked) await _openInstaller(release, file);
-  });
+  void _cancelDownload() {
+    setState(() => _downloadCancelled = true);
+    _github.cancel();
+  }
+
+  void _checkDownload() {
+    if (_downloadCancelled) throw const UserError('已取消下载。');
+  }
+
+  Future<void> _download(AndroidRelease release) =>
+      _run(_downloadLabel, () async {
+        _downloadCancelled = false;
+        _progress = 0;
+        final cache = await _installer.cache();
+        final credential = await _credential();
+        if (!mounted || !controller.parentUnlocked) return;
+        _checkDownload();
+        final file = await _github.download(
+          release,
+          cache,
+          credential,
+          onProgress: (received, total) {
+            final next = (100 * received ~/ total) / 100;
+            if (mounted && next != _progress) setState(() => _progress = next);
+          },
+        );
+        if (!mounted) return;
+        _checkDownload();
+        setState(() {
+          _downloaded = file;
+          _working = _installLabel;
+        });
+        if (controller.parentUnlocked) await _openInstaller(release, file);
+      });
 
   Future<void> _openInstaller(AndroidRelease release, File file) async {
-    final result = await _installer.install(file, release.versionCode);
+    final InstallHandoff result;
+    try {
+      result = await _installer.install(file, release.versionCode);
+    } catch (_) {
+      if (mounted) setState(() => _downloaded = null);
+      rethrow;
+    }
     if (!mounted) return;
     setState(
       () => _status = result == InstallHandoff.permission
-          ? '允许此应用安装更新后，回到这里点「安装更新」。'
+          ? '允许此应用安装更新后，返回并解锁家长入口，再点「安装更新」。'
           : '请在系统安装界面确认更新。',
     );
   }
@@ -177,18 +212,18 @@ class _UpdatePageState extends State<UpdatePage> {
                 Text(working),
                 const SizedBox(height: 8),
                 LinearProgressIndicator(
-                  value: working == '正在下载更新…' ? _progress : null,
+                  value: working == _downloadLabel ? _progress : null,
                 ),
-                if (working == '正在下载更新…')
+                if (working == _downloadLabel)
                   TextButton(
-                    onPressed: _github.cancel,
+                    onPressed: _downloadCancelled ? null : _cancelDownload,
                     child: const Text('取消下载'),
                   ),
               ] else if (release != null && downloaded != null)
                 ActionButton(
                   label: '安装更新',
                   action: () => _run(
-                    '正在打开安装界面…',
+                    _installLabel,
                     () => _openInstaller(release, downloaded),
                   ),
                 )
@@ -213,12 +248,12 @@ class _UpdatePageState extends State<UpdatePage> {
               Wrap(
                 alignment: WrapAlignment.center,
                 children: [
-                  if (!_editingToken)
+                  if (_hasToken && !_editingToken)
                     TextButton(
                       onPressed: _busy
                           ? null
                           : () => setState(() => _editingToken = true),
-                      child: Text(_hasToken ? '更换令牌' : '设置只读令牌'),
+                      child: const Text('更换令牌'),
                     ),
                   if (_hasToken)
                     TextButton(

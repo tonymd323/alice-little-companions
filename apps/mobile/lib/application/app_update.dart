@@ -53,6 +53,11 @@ class AndroidRelease {
 
 enum InstallHandoff { permission, launched }
 
+class UpdateAuthorizationRequired extends UserError {
+  const UpdateAuthorizationRequired()
+    : super('GitHub 未开放此文件。私有仓库请设置能读取安装包的只读令牌。');
+}
+
 class AndroidInstaller {
   const AndroidInstaller();
 
@@ -119,7 +124,7 @@ class GitHubUpdates {
     active.close(force: true);
   }
 
-  Future<AndroidRelease?> check(int installed, String token) =>
+  Future<AndroidRelease?> check(int installed, [String? token]) =>
       _withConnection(token, (client, token) async {
         final response = await _read(client, 'latest.json', token);
         final bytes = BytesBuilder(copy: false);
@@ -143,7 +148,7 @@ class GitHubUpdates {
   Future<File> download(
     AndroidRelease release,
     Directory cache,
-    String token, {
+    String? token, {
     required void Function(int received, int total) onProgress,
   }) => _withConnection(token, (client, token) async {
     await cache.create(recursive: true);
@@ -201,11 +206,11 @@ class GitHubUpdates {
   });
 
   Future<T> _withConnection<T>(
-    String token,
-    Future<T> Function(HttpClient, String token) operation,
+    String? token,
+    Future<T> Function(HttpClient, String? token) operation,
   ) async {
     if (_active != null) throw const UserError('已有更新操作正在进行。');
-    final credential = tokenValue(token);
+    final credential = token == null ? null : tokenValue(token);
     final client = HttpClient()..connectionTimeout = _timeout;
     _active = client;
     _cancelled = false;
@@ -230,7 +235,7 @@ class GitHubUpdates {
   Future<HttpClientResponse> _read(
     HttpClient client,
     String file,
-    String token,
+    String? token,
   ) async {
     var url = _api.replace(
       path: '/repos/tonymd323/alice-little-companions/contents/downloads/$file',
@@ -242,7 +247,9 @@ class GitHubUpdates {
       request.followRedirects = false;
       request.headers.set(HttpHeaders.acceptEncodingHeader, 'identity');
       if (url.origin == _api.origin) {
-        request.headers.set(HttpHeaders.authorizationHeader, 'Bearer $token');
+        if (token != null) {
+          request.headers.set(HttpHeaders.authorizationHeader, 'Bearer $token');
+        }
         request.headers.set(
           HttpHeaders.acceptHeader,
           'application/vnd.github.raw+json',
@@ -268,8 +275,12 @@ class GitHubUpdates {
         url = next;
         continue;
       }
+      if (response.statusCode == 429 ||
+          response.headers.value('x-ratelimit-remaining') == '0') {
+        throw const UserError('GitHub 查询暂时达到限额，请稍后重试。');
+      }
       if ([401, 403, 404].contains(response.statusCode)) {
-        throw const UserError('GitHub 未开放此文件，请核对令牌的仓库读取权限。');
+        throw const UpdateAuthorizationRequired();
       }
       throw const UserError('GitHub 暂时无法提供更新，请稍后重试。');
     }

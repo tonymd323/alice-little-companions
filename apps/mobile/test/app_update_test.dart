@@ -41,14 +41,19 @@ void main() {
       expect((await updater.check(15, token))?.versionCode, 16);
       expect(await updater.check(16, token), isNull);
       expect(await updater.check(17, token), isNull);
-      expect(
-        requests,
-        List.filled(3, (
+      expect((await updater.check(15))?.versionCode, 16);
+      expect(requests, [
+        ...List.filled(3, (
           '/repos/tonymd323/alice-little-companions/contents/downloads/latest.json',
           'android-downloads',
           'Bearer $token',
         )),
-      );
+        (
+          '/repos/tonymd323/alice-little-companions/contents/downloads/latest.json',
+          'android-downloads',
+          null,
+        ),
+      ]);
       expect(
         () => AndroidRelease.read({...releaseData, 'file': '../test.apk'}),
         throwsA(isA<UserError>()),
