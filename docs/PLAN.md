@@ -2,7 +2,9 @@
 
 ## 当前开发顺序
 
-**安卓家庭版 0.16.0+14** 已接入第一阶段奶油从站起、换向到收步坐回的三种日常走动。尾尖在身体停稳后跟上，转身时蝴蝶结随同一只耳朵换面。第一阶段桃桃的庭院短跳已留同机位基线，接下来制作起跳前蓄力、前爪接地、后爪收跟及耳尖回落。[奶油检查点](evidence/fox-walk/README.md) · [桃桃基线](evidence/rabbit-hop/README.md) · [动作技术方案](TECH_SPEC.md#小家动画与主线接入) · [画面验收](ACCEPTANCE.md#小家画面与剧情验收)
+家长试玩 0.16 后指出日常移动像机械狗。团队将先返工起身、迈步、换向和坐回的整段表演。当前以第一阶段团团的同向短程靠近验证，保留 C 版的短身、圆臀和大头，能看见视线先回应、重心越过承重爪，再自然停下。完成原速复看后再接入家庭入口、转向和衣饰。桃桃的原画与接入草稿已单独留存，等动作方向校准后继续。当前安卓下载仍为 0.16.0+14。[团团同机位复看](https://github.com/tonymd323/alice-little-companions/blob/codex/tuantuan-motion-preview/docs/evidence/tuantuan-approach/README.md)
+
+**安卓家庭版 0.16.0+14** 已接入第一阶段奶油的三种日常走动。尾尖在身体停稳后跟上，转身时蝴蝶结随同一只耳朵换面。第一阶段桃桃的庭院短跳已有同机位基线，蓄力、腾空和前后爪落地节拍已留待后续复看。[奶油检查点](evidence/fox-walk/README.md) · [桃桃基线](evidence/rabbit-hop/README.md) · [动作技术方案](TECH_SPEC.md#小家动画与主线接入) · [画面验收](ACCEPTANCE.md#小家画面与剧情验收)
 
 奶油家庭版签发自检查点 `6e198ea`，运行代码与云端候选 `e014029` 一致。原家庭安装入口已提供 **0.16.0+14**。庭院木梯已有固定镜头回归，上中下踏板连续 125 帧静止，叶簇和树冠仍动。[团团覆盖实测](evidence/cat-walk/family-upgrade.json) · [奶油分层原画](../design/production/fox-walk/README.md)
 
