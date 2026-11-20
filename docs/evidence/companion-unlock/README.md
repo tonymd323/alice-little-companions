@@ -22,6 +22,8 @@
 
 同一个 GitHub 提交发布 APK、`latest.json` 和 SHA-256 清单。独立 Git 副本取回 APK 和更新记录，与签名机构建结果逐字节一致。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.0-android.apk?raw=true) · [发布回执](github-download.json)
 
+在两个隔离的安卓测试用户间，通过系统文件界面保存、回读并恢复同一份结构 8 迁移包。恢复前后的 30 张业务表一致。[系统文件迁移实测](native-migration/README.md)
+
 ## 万条流水旧档
 
 原 0.19 合成档升级到结构 8 后有 54,800,384 字节，保留 32,077 分、10,706 条流水和 10,697 份有效成果。桃桃继承 10,697 经验和 6 级。重新加密导出并整体恢复后，摘要与结构 8 的源存档一致。云端调试运行时同机安卓模拟器也在运行，导出为 21.518 秒，恢复为 16.688 秒。[复核日志](large-fixture.log) · [真机计时方法](../device-acceptance/README.md#计时)
