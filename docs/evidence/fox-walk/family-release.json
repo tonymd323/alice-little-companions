@@ -1,0 +1,27 @@
+{
+  "build_commit": "6e198ea4bbae7ccb66d88140c0f571b420d7e3ab",
+  "tested_candidate_commit": "e014029e0d19b34c3e68d666a1d7ed022ed1d67e",
+  "filename": "alice-0.16.0-android.apk",
+  "application_id": "local.family.alice_companions",
+  "version_name": "0.16.0",
+  "version_code": 14,
+  "abis": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86_64"
+  ],
+  "bytes": 81890160,
+  "apk_sha256": "ae5d73719e088a160712ccc5bb60db88297e3abddd5266b35060c4408613d548",
+  "verified_signer_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+  "same_signer_as": "0.15.0+13",
+  "candidate_evidence": "docs/evidence/fox-walk/README.md",
+  "tests_rerun_at_family_signing": false,
+  "family_upgrade_exercised_at_signing": false,
+  "github": {
+    "branch": "android-downloads",
+    "commit": "7a49563a03ceb3dc2a4418c82a7324cfc0e1a755",
+    "path": "downloads/alice-0.16.0-android.apk",
+    "bytes_retrieved": 81890160,
+    "retrieved_sha256": "ae5d73719e088a160712ccc5bb60db88297e3abddd5266b35060c4408613d548"
+  }
+}

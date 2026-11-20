@@ -2,9 +2,9 @@
 
 2026-11-18　｜　交付基线 2.0　｜　iOS、iPadOS、Android
 
-安卓家庭版 **0.15.0+13** 已接入第一阶段团团的三种走动。0.14.1 的家庭用户下载后选择「更新」。原签名构建机已在飞行模式下验证测试家庭覆盖及重启。家长负责最终体验验收。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.15.0-android.apk?raw=true) · [团团录像与覆盖实测](docs/evidence/cat-walk/README.md) · [安装与签名交接](docs/DELIVERY.md)
+安卓家庭版 **0.16.0+14** 新增第一阶段银杏狐奶油的日常步态。原家庭用户下载 APK 后选择「更新」，即可从小家庭院点草地或「过来」看奶油走动。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.16.0-android.apk?raw=true) · [奶油录像与签发记录](docs/evidence/fox-walk/README.md) · [安装与签名交接](docs/DELIVERY.md)
 
-**0.16.0+14 云端候选**新增第一阶段奶油的日常步态，有固定镜头、独立试玩和飞行模式下的云端同签覆盖证据。桃桃的同机位基线也已留存。[奶油步态](docs/evidence/fox-walk/README.md) · [桃桃基线](docs/evidence/rabbit-hop/README.md) · [开发计划](docs/PLAN.md)
+奶油候选版的固定镜头录像、独立试玩和飞行模式覆盖记录均已归档。桃桃的同机位基线也已留存。[桃桃基线](docs/evidence/rabbit-hop/README.md) · [开发计划](docs/PLAN.md)
 
 ## 家庭离线闭环
 
