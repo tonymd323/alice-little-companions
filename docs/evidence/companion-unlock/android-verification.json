@@ -1,0 +1,112 @@
+{
+  "target": "Android 9 (API 28) x86_64 software emulator",
+  "airplaneMode": true,
+  "installedVersion": {
+    "before": "0.20.0",
+    "after": "0.21.0"
+  },
+  "installedApkSha256": {
+    "before": "7c990f73c5b53f1529e11afca073dc6bcde189e56abdd5b624c553f877a25d91",
+    "after": "579a85ac9e2a0a1c421755e803cf416b3f9bb614577d254cacc86710060fda58"
+  },
+  "samePackageUid": true,
+  "sameFirstInstallTime": true,
+  "sameStorageGeneration": true,
+  "existingBusinessTableCount": 28,
+  "sameExistingBusinessTableRows": true,
+  "ownershipColumns": [
+    "companion",
+    "highestLevel",
+    "experience",
+    "pointsPaid"
+  ],
+  "beforeUpgrade": {
+    "schema": 7,
+    "generation_sha256": "77fd4c9c8e4904feb8b4b05796ab9cc01a2c822ca4a613cb046e0f0f3eb2c843",
+    "legacy_tables_sha256": "9b6dbcef83846c61feccaa95cb00f8368dd1cf1007b37efb2a9582bd75f5bd8c",
+    "balance": 35,
+    "ledger_balance": 35,
+    "active": "fox",
+    "valid_completions": 16,
+    "pending": 1,
+    "owned": [],
+    "companion_purchase_debits": []
+  },
+  "afterUpgrade": {
+    "schema": 8,
+    "generation_sha256": "77fd4c9c8e4904feb8b4b05796ab9cc01a2c822ca4a613cb046e0f0f3eb2c843",
+    "legacy_tables_sha256": "9b6dbcef83846c61feccaa95cb00f8368dd1cf1007b37efb2a9582bd75f5bd8c",
+    "balance": 35,
+    "ledger_balance": 35,
+    "active": "fox",
+    "valid_completions": 16,
+    "pending": 1,
+    "owned": [
+      [
+        "fox",
+        3,
+        16,
+        null
+      ]
+    ],
+    "companion_purchase_debits": []
+  },
+  "afterUnlock": {
+    "schema": 8,
+    "generation_sha256": "77fd4c9c8e4904feb8b4b05796ab9cc01a2c822ca4a613cb046e0f0f3eb2c843",
+    "legacy_tables_sha256": "a83847d27cb3d8085af992ae5f4e86b4858ce798908db7d960f750eb9c1b9706",
+    "balance": 5,
+    "ledger_balance": 5,
+    "active": "fox",
+    "valid_completions": 16,
+    "pending": 1,
+    "owned": [
+      [
+        "cat",
+        1,
+        0,
+        30
+      ],
+      [
+        "fox",
+        3,
+        16,
+        null
+      ]
+    ],
+    "companion_purchase_debits": [
+      [
+        -30
+      ]
+    ]
+  },
+  "afterColdRestart": {
+    "schema": 8,
+    "generation_sha256": "77fd4c9c8e4904feb8b4b05796ab9cc01a2c822ca4a613cb046e0f0f3eb2c843",
+    "legacy_tables_sha256": "f668aecc12f1ad83544701d92a89fa3052d7a6916c664c3ddb0f61d0162fe4c8",
+    "balance": 7,
+    "ledger_balance": 7,
+    "active": "cat",
+    "valid_completions": 17,
+    "pending": 0,
+    "owned": [
+      [
+        "cat",
+        1,
+        1,
+        30
+      ],
+      [
+        "fox",
+        3,
+        16,
+        null
+      ]
+    ],
+    "companion_purchase_debits": [
+      [
+        -30
+      ]
+    ]
+  }
+}
