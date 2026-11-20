@@ -210,5 +210,97 @@
         "touch"
       ]
     ]
+  },
+  "after_approval_and_cold_restart": {
+    "android_user": 0,
+    "generation_sha256": "96ab65cff062d9676b2b19c444e45bda1ef6bfe47053f9465665ed67339bfea6",
+    "device_id_sha256": "65ec31adcae3b56ef0953ddf3b0bb1a5be2bff5cd49a732b873be516110b79f1",
+    "state": "IDLE",
+    "external_receipt": null,
+    "schema": 8,
+    "all_business_rows_sha256": "3d911d45620392a52172d33e5c5d4db1bcb7620787cadd02d070ed634821a525",
+    "tables": {
+      "accounts": 1,
+      "base_furnishings": 0,
+      "child_profiles": 1,
+      "companion_completions": 17,
+      "companion_memories": 3,
+      "completions": 17,
+      "correction_records": 0,
+      "entitlements": 3,
+      "growth_awards": 0,
+      "households": 1,
+      "ledger_entries": 21,
+      "owned_companions": 2,
+      "penalty_day_usage": 0,
+      "penalty_events": 0,
+      "penalty_rules": 0,
+      "pet_state": 1,
+      "placements": 0,
+      "processed_commands": 51,
+      "project_stages": 0,
+      "purchases": 4,
+      "rain_map_runs": 1,
+      "spaces": 1,
+      "submissions": 1,
+      "task_instances": 17,
+      "task_templates": 17,
+      "task_versions": 17,
+      "wind_story_runs": 0,
+      "window_math_bookmarks": 1,
+      "window_story_milestones": 1,
+      "wishes": 1
+    },
+    "balance": 7,
+    "reconciled_ledger": true,
+    "valid_completions": 17,
+    "pending": 0,
+    "active": "cat",
+    "owned": [
+      [
+        "cat",
+        1,
+        1,
+        30
+      ],
+      [
+        "fox",
+        3,
+        16,
+        null
+      ]
+    ],
+    "inventory": [
+      "accessory_scarf",
+      "decor_vase",
+      "single_armchair"
+    ],
+    "wardrobe": [
+      [
+        "fox",
+        "accessory_scarf"
+      ]
+    ],
+    "story": [
+      2,
+      1,
+      0,
+      1,
+      1
+    ],
+    "memories": [
+      [
+        "cat",
+        "call"
+      ],
+      [
+        "fox",
+        "call"
+      ],
+      [
+        "fox",
+        "touch"
+      ]
+    ]
   }
 }

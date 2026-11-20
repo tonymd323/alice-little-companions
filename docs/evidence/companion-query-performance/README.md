@@ -2,6 +2,8 @@
 
 家庭版 **0.21.1+20** 使用原安卓签名，构建源码为 `772db06b8df394332a8aee1297ec05658ed5e66a`。[APK 与签名摘要](package.json) · [构建检查](build.log)
 
+原私有下载分支在同一提交中提供 APK、更新清单和 SHA-256 清单。用独立 Git 副本重新取回 APK 和更新清单，逐字节核对通过。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.1-android.apk?raw=true) · [发布回执](github-download.json)
+
 查询源码提交为 `4d084d5e959f33d9b05a20d85ee05d78150a3023`。每笔经验关联一条成果。查询利用 SQLite 结构 8 中已有的成果有效性索引和归属索引，读取有效与已更正成果中较少的一组，按伙伴计算经验。[实现](../../../apps/mobile/lib/application/companion_progress.dart) · [纠错回归](../../../apps/mobile/test/companion_unlock_test.dart)
 
 10,706 条流水的原合成档共有 10,698 条成果，其中 1 条已更正。相同数据上的 SQLite 查询 p95 从 9.624 毫秒降至 1.577 毫秒。将约一半或全部成果设为已更正后，逐次比对新旧查询的经验值，结果一致。这两组对照在独立测试事务中执行并回滚。[查询计划与原始计时](timing.log)
@@ -23,3 +25,5 @@
 在 Android 9 x86_64 软件模拟器的飞行模式下，用系统文件选择器在原签名 0.21.0 恢复结构 8 的合成家庭，用测试输入法设置新的本机凭据。家园有两个已拥有伙伴、5 分、一件待确认小事、衣饰、家具与雨天地图进度。[升级前的小家](before-update.png)
 
 使用 `adb install --no-streaming -r` 同签覆盖到 0.21.1+20。冷启动后原应用 UID、首次安装时间、活动存储代及 30 张业务表的摘要一致。奶油仍为 3 级、16 经验，团团仍为 1 级、0 经验，家园余额为 5 分。[升级后的小家](after-update.png) · [数据库与安装摘要](android-upgrade.json)
+
+在伙伴页切换到已解锁的团团，并在家长入口确认待办。重开后余额 7 分，团团有 1 经验，奶油有 16 经验，原家具、穿戴、回忆和雨天地图进度均保留。[升级后伙伴](partners-after-update.png) · [确认反馈](approval-after-update.png) · [重开后的团团](restart-with-independent-experience.png)

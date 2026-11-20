@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1157 项通过。下面列出逐项结果。
+- 本次准备检查 1161 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -324,6 +324,7 @@
 - 内部链接有效：docs/evidence/cat-walk/independent.md → depth-walk.png
 - 内部链接有效：docs/evidence/companion-query-performance/README.md → package.json
 - 内部链接有效：docs/evidence/companion-query-performance/README.md → build.log
+- 内部链接有效：docs/evidence/companion-query-performance/README.md → github-download.json
 - 内部链接有效：docs/evidence/companion-query-performance/README.md → ../../../apps/mobile/lib/application/companion_progress.dart
 - 内部链接有效：docs/evidence/companion-query-performance/README.md → ../../../apps/mobile/test/companion_unlock_test.dart
 - 内部链接有效：docs/evidence/companion-query-performance/README.md → timing.log
@@ -334,6 +335,9 @@
 - 内部链接有效：docs/evidence/companion-query-performance/README.md → before-update.png
 - 内部链接有效：docs/evidence/companion-query-performance/README.md → after-update.png
 - 内部链接有效：docs/evidence/companion-query-performance/README.md → android-upgrade.json
+- 内部链接有效：docs/evidence/companion-query-performance/README.md → partners-after-update.png
+- 内部链接有效：docs/evidence/companion-query-performance/README.md → approval-after-update.png
+- 内部链接有效：docs/evidence/companion-query-performance/README.md → restart-with-independent-experience.png
 - 内部链接有效：docs/evidence/companion-unlock/README.md → package.json
 - 内部链接有效：docs/evidence/companion-unlock/README.md → ../../BACKUP_MIGRATION.md
 - 内部链接有效：docs/evidence/companion-unlock/README.md → tests.log
