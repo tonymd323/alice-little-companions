@@ -1,6 +1,6 @@
 # 安卓与 iPad 真机验收
 
-双端使用 **0.21.1+20**，构建源码 `772db06b8df394332a8aee1297ec05658ed5e66a`。记录设备型号、系统版本、签名方式和测试证据。[安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.1-android.apk?raw=true) · [iPad 签名安装](../../DELIVERY.md#ipad-首次试装)
+双端使用 **0.21.2+21**，构建源码 `ae09472607a72dcc1bad1ab6574cd4ef337f6873`。记录设备型号、系统版本、签名方式和测试证据。[安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.2-android.apk?raw=true) · [iPad 签名安装](../../DELIVERY.md#ipad-首次试装)
 
 云端已核对 iPadOS 16 部署配置、四种 iPad 方向、Swift Package 依赖及 `.alicebackup` 类型声明。独立校验通过加密备份标准向量。Flutter 的 iOS 目标构建在原生依赖构建阶段缺少 `xcrun`。接入 Mac 后继续原生编译和签名，并实测首次建家、钥匙串和系统文件的保存、取消及重选。[iPad 工程核查](ios-project-review.log)
 
@@ -36,6 +36,8 @@
 
 0.21.1 原签名 APK 已在 Android 9 软件模拟器离线恢复这份大档，并通过系统文件界面导出和回读。取回生成的文件解密后核对了全量业务摘要。对应源码的 Flutter 回归覆盖迁移加密、内部回读、恢复解密和恢复保护期间取消，核对已保存的备份和恢复点，以及冷启动后的业务摘要。[大档复测](../backup-cancellation-0211/README.md)
 
+0.21.2 用同一大档重跑计时，导出和内部回读为 15.606 与 15.004 秒。恢复后业务摘要一致，四个取消阶段的保护回归通过。双端真机按本节方法采集正式包数据。[计时对照](../backup-export-performance/README.md)
+
 ## 生成和复核
 
 在仓库根目录运行。复核只处理本测试档和从它派生的设备文件。每次生成使用新的家庭标识和随机加密参数，以随包的 `fixture.json` 核对摘要。
@@ -50,10 +52,10 @@ flutter pub get --enforce-lockfile
 ALICE_QA_OUTPUT_DIR="$alice_probe" flutter test --no-pub --reporter expanded test/backup_50m_benchmark_test.dart
 ```
 
-输出在 `$alice_probe/alice-qa-019-*`。用 0.21.1 的源码复核候选版导出的文件。升级旧档时会增加伙伴记录，因此每个方向都比较同为结构 8 的两份导出。
+输出在 `$alice_probe/alice-qa-019-*`。用 0.21.2 的源码复核候选版导出的文件。升级旧档时会增加伙伴记录，因此每个方向都比较同为结构 8 的两份导出。
 
 ```sh
-git -C "$alice_repo" worktree add --detach "$alice_probe/check" 772db06b8df394332a8aee1297ec05658ed5e66a
+git -C "$alice_repo" worktree add --detach "$alice_probe/check" ae09472607a72dcc1bad1ab6574cd4ef337f6873
 cp "$alice_repo/docs/evidence/family-offline/backup_50m_benchmark_test.dart" "$alice_probe/check/apps/mobile/test/"
 cd "$alice_probe/check/apps/mobile"
 flutter pub get --enforce-lockfile

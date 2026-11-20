@@ -1,0 +1,29 @@
+Exact source: ae09472607a72dcc1bad1ab6574cd4ef337f6873 (0.21.2+21)
+Flutter 3.50.0 / Dart 3.14.0 / Debian x86_64
+$ flutter pub get --offline --enforce-lockfile
+Got dependencies!
+
+$ flutter analyze --no-pub
+No issues found! (ran in 6.5s)
+
+$ flutter test --no-pub --concurrency=2 --reporter expanded
+01:25 +31: test/backup_test.dart: AC-23/24/28 ALICEBK1 exact published vector and authentication failures
+01:34 +32: test/backup_test.dart: AC-23/24/28 ALICEBK1 exact published vector and authentication failures
+02:37 +40: test/backup_test.dart: snapshot rejects a balanced reward without a matching completion
+03:28 +48: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+03:35 +49: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+03:38 +50: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+03:40 +51: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+03:46 +52: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+04:02 +52: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+04:31 +52: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+06:17 +80: All tests passed!
+
+$ node tools/check_backup_vector.mjs
+ALICEBK1 reference vector verified.
+
+0.21.1 source 772db06b8df394332a8aee1297ec05658ed5e66a reading the system file written by 0.21.2 on Android.
+
+Used docs/evidence/family-offline/backup_50m_benchmark_test.dart with ALICE_QA_REVIEW_FILE.
+Shell: AC40 device_export {"mode":"backup","summary":{"balance":5,"ledger_count":20,"valid_completion_count":16,"owned_item_count":3,"space_count":1,"max_growth_stage":3,"active_companion_experience":16,"owned_companion_count":2},"business_sha256":"7f816629f4e9c90ac39f51f90fb82fd120f8854666cdf41c4d41aaf8457a1a79","file_sha256":"f5188aa605c250597920a3bbe44142128c8f31e1320d6bf91e180c35326bb0d0"}
+00:07 +1: All tests passed!

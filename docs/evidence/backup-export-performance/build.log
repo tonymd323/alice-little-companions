@@ -1,0 +1,15 @@
+Source: ae09472607a72dcc1bad1ab6574cd4ef337f6873
+Flutter 3.50.0 / Dart 3.14.0 / JDK 21 / Android Build Tools 36.0.0
+First build attempt with --no-pub retained the generated integration_test registration and failed at compileReleaseJavaWithJavac.
+$ flutter build apk --release
+✓ Built build/app/outputs/flutter-apk/app-release.apk (83.3MB)
+Release-mode generation removed the test-only Android registration. The committed app files, including pubspec.lock, match the source exactly.
+$ apksigner verify --verbose --print-certs alice-0.21.2-android.apk
+Verified using v2 scheme (APK Signature Scheme v2): true
+Signer #1 certificate SHA-256 digest: c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05
+$ zipalign -c -P 16 -v 4 alice-0.21.2-android.apk
+Verification successful.
+$ python3 tools/check_daily_release.py alice-0.21.2-android.apk
+247 app assets verified.
+$ python3 tools/check_wind_release.py alice-0.21.2-android.apk
+58 warm veranda files verified.

@@ -1,0 +1,51 @@
+Debian Linux x86_64, cgroup quota equivalent to four CPU cores, Flutter 3.50.0 / Dart 3.14.0, SQLite 3.54.1.
+Android emulator stopped for all four timed runs.
+Input: independent Git copy of the published ALICE QA 0.19 archive. Benchmark: docs/evidence/family-offline/backup_50m_benchmark_test.dart with ALICE_QA_INPUT_FILE.
+
+0.21.1 baseline, build source 772db06b8df394332a8aee1297ec05658ed5e66a, run 1
+Shell: AC40 fixture_input {"sha256":"643685960f3204669bfa0d1e8ceb04c59b546fd7790876dcdf8c4439fb599c44","business_sha256":"de93819ac02daec6326bcad55cecf59fe6a8ea5bb50a45b9e68f9ba152d35729"}
+Shell: AC40 fixture {"sqlite":"3.54.1","dart":"3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on \"linux_x64\"","snapshot_bytes":54800384,"schema":8,"revision":10779,"summary":{"balance":32077,"ledger_count":10706,"valid_completion_count":10697,"owned_item_count":5,"space_count":1,"max_growth_stage":6,"active_companion_experience":10697,"owned_companion_count":1},"digest":"f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210"}
+Shell: AC40 export {"total_ms":18087,"preparing_ms":4,"phases_ms":{"snapshot":118,"checking":1642,"encrypting":7844,"readback":8479}}
+Shell: AC40 handoff {"local_copy_and_receipt_ms":60,"container_bytes":18589158}
+Shell: AC40 restore {"total_ms":15316,"preview":{"total_ms":9098,"preparing_ms":0,"phases_ms":{"decrypting":7145,"checking":1953}},"protect_target":{"total_ms":87,"preparing_ms":2,"phases_ms":{"snapshot":7,"checking":6,"encrypting":72}},"activate_ms":6130}
+Shell: AC40 verification {"restored_snapshot_bytes":54800384,"activated_target_digest":"f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210","same_summary":true,"same_business_digest":true,"target_generation_switched":true,"source_balance_preserved":true}
+01:11 +1: All tests passed!
+
+0.21.1 baseline, run 2
+Shell: AC40 fixture_input {"sha256":"643685960f3204669bfa0d1e8ceb04c59b546fd7790876dcdf8c4439fb599c44","business_sha256":"de93819ac02daec6326bcad55cecf59fe6a8ea5bb50a45b9e68f9ba152d35729"}
+Shell: AC40 fixture {"sqlite":"3.54.1","dart":"3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on \"linux_x64\"","snapshot_bytes":54800384,"schema":8,"revision":10779,"summary":{"balance":32077,"ledger_count":10706,"valid_completion_count":10697,"owned_item_count":5,"space_count":1,"max_growth_stage":6,"active_companion_experience":10697,"owned_companion_count":1},"digest":"f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210"}
+Shell: AC40 export {"total_ms":18209,"preparing_ms":5,"phases_ms":{"snapshot":107,"checking":1701,"encrypting":7964,"readback":8432}}
+Shell: AC40 handoff {"local_copy_and_receipt_ms":64,"container_bytes":18589159}
+Shell: AC40 restore {"total_ms":14813,"preview":{"total_ms":8375,"preparing_ms":1,"phases_ms":{"decrypting":6694,"checking":1680}},"protect_target":{"total_ms":92,"preparing_ms":3,"phases_ms":{"snapshot":13,"checking":7,"encrypting":69}},"activate_ms":6345}
+Shell: AC40 verification {"restored_snapshot_bytes":54800384,"activated_target_digest":"f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210","same_summary":true,"same_business_digest":true,"target_generation_switched":true,"source_balance_preserved":true}
+01:09 +1: All tests passed!
+
+0.21.2 implementation, run 1 before the version bump and test formatting
+Shell: AC40 fixture_input {"sha256":"643685960f3204669bfa0d1e8ceb04c59b546fd7790876dcdf8c4439fb599c44","business_sha256":"de93819ac02daec6326bcad55cecf59fe6a8ea5bb50a45b9e68f9ba152d35729"}
+Shell: AC40 fixture {"sqlite":"3.54.1","dart":"3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on \"linux_x64\"","snapshot_bytes":54800384,"schema":8,"revision":10779,"summary":{"balance":32077,"ledger_count":10706,"valid_completion_count":10697,"owned_item_count":5,"space_count":1,"max_growth_stage":6,"active_companion_experience":10697,"owned_companion_count":1},"digest":"f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210"}
+Shell: AC40 export {"total_ms":15606,"preparing_ms":4,"phases_ms":{"snapshot":111,"checking":200,"encrypting":8145,"readback":7146}}
+Shell: AC40 handoff {"local_copy_and_receipt_ms":72,"container_bytes":18589158}
+Shell: AC40 restore {"total_ms":14678,"preview":{"total_ms":8757,"preparing_ms":1,"phases_ms":{"decrypting":7142,"checking":1614}},"protect_target":{"total_ms":86,"preparing_ms":4,"phases_ms":{"snapshot":7,"checking":4,"encrypting":71}},"activate_ms":5834}
+Shell: AC40 verification {"restored_snapshot_bytes":54800384,"activated_target_digest":"f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210","same_summary":true,"same_business_digest":true,"target_generation_switched":true,"source_balance_preserved":true}
+01:05 +1: All tests passed!
+
+0.21.2 final source ae09472607a72dcc1bad1ab6574cd4ef337f6873, run 2
+Shell: AC40 fixture_input {"sha256":"643685960f3204669bfa0d1e8ceb04c59b546fd7790876dcdf8c4439fb599c44","business_sha256":"de93819ac02daec6326bcad55cecf59fe6a8ea5bb50a45b9e68f9ba152d35729"}
+Shell: AC40 fixture {"sqlite":"3.54.1","dart":"3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on \"linux_x64\"","snapshot_bytes":54800384,"schema":8,"revision":10779,"summary":{"balance":32077,"ledger_count":10706,"valid_completion_count":10697,"owned_item_count":5,"space_count":1,"max_growth_stage":6,"active_companion_experience":10697,"owned_companion_count":1},"digest":"f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210"}
+Shell: AC40 export {"total_ms":15004,"preparing_ms":8,"phases_ms":{"snapshot":101,"checking":291,"encrypting":8022,"readback":6582}}
+Shell: AC40 handoff {"local_copy_and_receipt_ms":84,"container_bytes":18589157}
+Shell: AC40 restore {"total_ms":13979,"preview":{"total_ms":8081,"preparing_ms":1,"phases_ms":{"decrypting":6475,"checking":1605}},"protect_target":{"total_ms":84,"preparing_ms":2,"phases_ms":{"snapshot":7,"checking":5,"encrypting":70}},"activate_ms":5814}
+Shell: AC40 verification {"restored_snapshot_bytes":54800384,"activated_target_digest":"f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210","same_summary":true,"same_business_digest":true,"target_generation_switched":true,"source_balance_preserved":true}
+01:03 +1: All tests passed!
+
+0.21.2 cancellation probe, Android emulator starting in parallel. The sandbox uses synthetic device credentials.
+
+Probe: docs/evidence/backup-cancellation-0211/published_large_transfer_probe_test.dart with ALICE_QA_INPUT_FILE.
+Shell: AC40 restore_old_fixture {"input_sha256":"643685960f3204669bfa0d1e8ceb04c59b546fd7790876dcdf8c4439fb599c44","schema":8,"database_bytes":54800384,"preview_ms":9402,"activation_ms":5848}
+Shell: AC40 save_and_reselect {"export_with_internal_readback_ms":16973,"local_external_verification_ms":9538,"bytes":18589158,"sha256":"0a6f33c17ce91db75c10cbe3e575b6d5f23cb83fca24f4c732e99679789b0095"}
+Shell: AC40 cancel_migration_encrypting {"phases":["snapshot","checking","encrypting"],"one_second_after_phase_started":true,"cancel_to_return_ms":30}
+Shell: AC40 cancel_migration_readback {"phases":["snapshot","checking","encrypting","readback"],"one_second_after_phase_started":true,"cancel_to_return_ms":15}
+Shell: AC40 cancel_restore_preview {"phases":["decrypting"],"one_second_after_phase_started":true,"cancel_to_return_ms":1}
+Shell: AC40 cancel_restore_protection {"phases":["snapshot","checking","encrypting"],"one_second_after_phase_started":true,"cancel_to_return_ms":13}
+Shell: AC40 cold_restart {"schema":8,"business_sha256":"f0de750306457d56435a4e79d90b1ef5b4ae08510d91678db42516f69ffe0210","summary":{"balance":32077,"ledger_count":10706,"valid_completion_count":10697,"owned_item_count":5,"space_count":1,"max_growth_stage":6,"active_companion_experience":10697,"owned_companion_count":1},"original_archive_preserved":true,"new_archive_and_verified_receipt_preserved":true,"previous_checkpoint_preserved":true,"same_active_generation":true}
+01:20 +1: All tests passed!

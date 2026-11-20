@@ -1,0 +1,44 @@
+{
+  "platform": "Android 9 x86_64 software emulator",
+  "airplane_mode": true,
+  "source": "ae09472607a72dcc1bad1ab6574cd4ef337f6873",
+  "apk_before": {
+    "version_code": 20,
+    "version": "0.21.1",
+    "uid": 10067,
+    "first_install_time": "2026-11-19 00:29:54",
+    "apk_sha256": "6a3930f07ac58d7b5b257e9bc73a92ff9df47ea671d151cafd9644d3230e0979"
+  },
+  "apk_after": {
+    "version_code": 21,
+    "version": "0.21.2",
+    "uid": 10067,
+    "first_install_time": "2026-11-19 00:29:54",
+    "apk_sha256": "a91fda73a0f1c65995f2dd9ac314f61c1fd2ebc290eb274474ee376941c0e017"
+  },
+  "active_generation_sha256": "161494938096b8c4988288a40b6f8081fbc4dfeffd38072cf30cc7132983fe57",
+  "all_business_rows_sha256": "201690cb2d6e13d06091ce7a6c6feaa694e48fe31da721876341e8a0aa3aaceb",
+  "tables": 30,
+  "balance": 5,
+  "owned_companions": [
+    [
+      "cat",
+      1,
+      0,
+      30
+    ],
+    [
+      "fox",
+      3,
+      16,
+      null
+    ]
+  ],
+  "story": [
+    2,
+    1,
+    0,
+    1,
+    1
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "file_sha256": "f5188aa605c250597920a3bbe44142128c8f31e1320d6bf91e180c35326bb0d0",
+  "archive_bytes": 24955,
+  "provider": "Android DocumentsUI / Downloads",
+  "external_receipt": "verified",
+  "active_generation_sha256": "161494938096b8c4988288a40b6f8081fbc4dfeffd38072cf30cc7132983fe57",
+  "all_business_rows_sha256": "201690cb2d6e13d06091ce7a6c6feaa694e48fe31da721876341e8a0aa3aaceb",
+  "tables": 30,
+  "old_reader": {
+    "buildCommit": "772db06b8df394332a8aee1297ec05658ed5e66a",
+    "mode": "backup",
+    "summary": {
+      "balance": 5,
+      "ledger_count": 20,
+      "valid_completion_count": 16,
+      "owned_item_count": 3,
+      "space_count": 1,
+      "max_growth_stage": 3,
+      "active_companion_experience": 16,
+      "owned_companion_count": 2
+    },
+    "business_sha256": "7f816629f4e9c90ac39f51f90fb82fd120f8854666cdf41c4d41aaf8457a1a79",
+    "file_sha256": "f5188aa605c250597920a3bbe44142128c8f31e1320d6bf91e180c35326bb0d0"
+  }
+}
