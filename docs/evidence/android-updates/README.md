@@ -11,3 +11,5 @@ Flutter 静态分析与 75 项正常回归通过，其中 7 项覆盖新更新�
 Android 9 API 28 模拟器使用同签的测试入口，保留原 0.17 合成家庭。入口通过正式原生通道读取候选包，拒绝版本号相同的 APK 和同包名的另一个证书签名 APK。原证书的 `0.18.0+16` 打开安卓授权设置，在系统中允许安装并点击确认。安装完成后冷启动，从家园读出原有桃桃。新旧数据代和 28 张表的摘要完全一致，全程保留飞行模式。此环节从测试缓存提供正式 APK；HTTP 下载及取消由前述接口测试覆盖。[原生测试入口](installer_probe.dart) · [拒绝同版本](native-old-version-rejected.png) · [拒绝异签](native-wrong-signature-rejected.png) · [安装来源授权](native-install-permission.png) · [系统确认](native-system-installer.png) · [覆盖后家园](native-updated-home.png) · [数据摘要](native-handoff-result.json)
 
 安装包与 `latest.json` 同批提交到 `android-downloads` 的 `7002b80`。独立 Git 副本重新取回两份文件，版本记录逐字一致，APK 长度和 SHA-256 与构建结果一致。[GitHub 下载核对](github-018-receipt.json) · [构建包回执](package.json)
+
+覆盖后的正式包在飞行模式下通过家长 PIN 打开「应用更新」，正确显示当前版本和检查按钮。[正式包更新入口](native-update-page.png)
