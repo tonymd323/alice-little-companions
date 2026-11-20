@@ -12,6 +12,8 @@
 
 在 `apps/mobile` 运行 `flutter test --no-pub test/companion_unlock_test.dart test/family_features_test.dart test/backup_test.dart` 复测专项。Android 家庭包可离线显示的素材和暖廊音效已逐项核对。[专项源码](../../../apps/mobile/test/companion_unlock_test.dart) · [回迁源码](../../../apps/mobile/test/family_features_test.dart) · [素材](art-daily.json) · [暖廊](art-wind.json)
 
+Flutter 布局检查覆盖 360×780、390×844 和两种 iPad 方向的参考尺寸。四种尺寸在 130% 字体下均能从小家打开伙伴页、查看解锁确认并返回，余额和伙伴数量不变。在 `f3a7184` 的工作树中，将探针复制到 `apps/mobile/test/` 后运行 `flutter test --no-pub test/mobile_candidate_layout_probe_test.dart` 可复测。[布局探针](mobile_candidate_layout_probe_test.dart) · [运行日志](layout-probe.log)
+
 ## 安卓覆盖与重开
 
 在 Android 9 云端模拟器的 0.20.0 家庭版中使用合成档，启用飞行模式，再原地升级到 0.21.0。应用 UID、首次安装时间和存储代一致。原有 28 张业务表导出行的 SHA-256 相同。奶油成为首宠，保留 3 级、16 经验和家庭的 35 分。伙伴页另两位等待积分解锁。[覆盖后截图](01-legacy-companion.png)

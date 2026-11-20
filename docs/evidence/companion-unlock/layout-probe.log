@@ -1,0 +1,7 @@
+00:00 +0: loading test/mobile_candidate_layout_probe_test.dart
+00:00 +0: current companion entry and unlock dialog at 130% on four viewports
+Viewport 360x780 android 130%: entry, unlock dialog, and cancel passed.
+Viewport 390x844 android 130%: entry, unlock dialog, and cancel passed.
+Viewport 820x1180 iOS 130%: entry, unlock dialog, and cancel passed.
+Viewport 1180x820 iOS 130%: entry, unlock dialog, and cancel passed.
+00:11 +1: All tests passed!
