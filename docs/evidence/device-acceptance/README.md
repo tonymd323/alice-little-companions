@@ -4,6 +4,8 @@
 
 云端已核对 iPadOS 16 部署配置、四种 iPad 方向、Swift Package 依赖及 `.alicebackup` 类型声明。独立校验通过加密备份标准向量。Flutter 的 iOS 目标构建在原生依赖构建阶段缺少 `xcrun`。接入 Mac 后继续原生编译和签名，并实测首次建家、钥匙串和系统文件的保存、取消及重选。[iPad 工程核查](ios-project-review.log)
 
+系统文件面板返回后，若出现家长解锁，用本机 PIN 回到原页面，回读时仍输入备份口令。云端界面回归已覆盖失焦后继续迁移的路径。[备份迁移界面复测](../transfer-layout/README.md)
+
 ## 导入测试家庭
 
 把合成档保存到设备本地，在飞行模式从「从备份恢复」选文件。测试口令为 `Alice-QA-Fixture-019`。激活时为测试设备设置新 PIN。请使用专门的测试安装，恢复会替换设备上的当前小家。[下载合成档](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/acceptance/alice-qa-019.alicebackup?raw=true) · [文件摘要与预期数字](fixture.json)

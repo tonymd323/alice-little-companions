@@ -1,0 +1,30 @@
+Debian Linux x86_64, Flutter 3.50.0, Dart 3.14.0 debug widget runner.
+Keyboard insets and file picker results are simulated. Encrypted files and both SQLite generations are created by the application.
+
+0.21.2 runtime ae09472, original code, 360x800 at 130%:
+setState() callback argument returned a Future.
+#2      _DataPageState.visit (package:alice_companions/features/backup_pages.dart:34:18)
+
+Interim build with only the state refresh fixed, same viewport:
+Actual: FlutterError:<ListTile background color or ink splashes may be invisible.
+paints its background and ink splashes on the nearest Material ancestor, this DecoratedBox will hide
+
+Runtime source 7ce053762a12ba2b602e5adf67b4355ef926d60a
+flutter analyze --no-pub
+No issues found! (ran in 5.1s)
+
+flutter test --no-pub --concurrency=2 --reporter expanded
+The full suite included the 80 existing tests and a four-viewport transfer flow with one companion.
+Shell: AC36 360x800 text=130% keyboard=300 logical px. Save and pick cancelled, parent reauthenticated, readback verified, one task and one XP restored, source archived.
+Shell: AC36 390x844 text=130% keyboard=312 logical px. Save and pick cancelled, parent reauthenticated, readback verified, one task and one XP restored, source archived.
+Shell: AC36 834x1194 text=130% keyboard=350 logical px. Save and pick cancelled, parent reauthenticated, readback verified, one task and one XP restored, source archived.
+Shell: AC36 1194x834 text=130% keyboard=360 logical px. Save and pick cancelled, parent reauthenticated, readback verified, one task and one XP restored, source archived.
+08:32 +84: All tests passed!
+
+flutter test --no-pub --concurrency=1 --reporter expanded test/transfer_layout_probe_test.dart
+Final probe with the same runtime in a detached checkout. Includes two companions and Android or iOS widget platform settings.
+Shell: AC36 360x800 android text=130% keyboard=300 logical px. Unlocked Cream at level 1 and 0 XP for 30 points. Save and pick cancelled, parent reauthenticated, readback verified, seven completions and two independent companion levels restored, source archived.
+Shell: AC36 390x844 android text=130% keyboard=312 logical px. Unlocked Cream at level 1 and 0 XP for 30 points. Save and pick cancelled, parent reauthenticated, readback verified, seven completions and two independent companion levels restored, source archived.
+Shell: AC36 834x1194 iOS text=130% keyboard=350 logical px. Unlocked Cream at level 1 and 0 XP for 30 points. Save and pick cancelled, parent reauthenticated, readback verified, seven completions and two independent companion levels restored, source archived.
+Shell: AC36 1194x834 iOS text=130% keyboard=360 logical px. Unlocked Cream at level 1 and 0 XP for 30 points. Save and pick cancelled, parent reauthenticated, readback verified, seven completions and two independent companion levels restored, source archived.
+03:38 +4: All tests passed!
