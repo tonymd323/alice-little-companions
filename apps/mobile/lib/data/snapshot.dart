@@ -19,23 +19,33 @@ const schemaQuery = '''
 const _v7Tables = {'rain_map_runs', 'companion_memories'};
 const _v8Tables = {'owned_companions', 'companion_completions'};
 
-class Snapshot {
-  const Snapshot({
+class SnapshotInfo {
+  const SnapshotInfo({
     required this.schemaVersion,
     required this.family,
     required this.summary,
     required this.assets,
-    required this.businessDigest,
   });
 
   final int schemaVersion;
   final Json family;
   final Json summary;
   final Set<String> assets;
-  final String businessDigest;
 
   String get nickname => family['nickname'] as String;
   int get revision => family['domain_revision'] as int;
+}
+
+class Snapshot extends SnapshotInfo {
+  Snapshot(SnapshotInfo info, this.businessDigest)
+    : super(
+        schemaVersion: info.schemaVersion,
+        family: info.family,
+        summary: info.summary,
+        assets: info.assets,
+      );
+
+  final String businessDigest;
 }
 
 Future<List<Json>> expectedSchema() async {
@@ -67,6 +77,16 @@ Future<void> vacuumFile(String original, String output) => Isolate.run(() {
   }
 });
 
+/// Checks the SQLite schema and business rules before packaging a snapshot.
+Future<SnapshotInfo> validateSnapshot(
+  String path,
+  List<Json> schema,
+  Rules rules,
+  Set<String> available,
+) => Isolate.run(
+  () => _check(path, schema, rules, available, (_, _, info) => info),
+);
+
 Future<Snapshot> checkSnapshot(
   String path,
   List<Json> schema,
@@ -74,16 +94,27 @@ Future<Snapshot> checkSnapshot(
   Set<String> available, {
   bool compareLegacyCompanions = false,
 }) => Isolate.run(
-  () => _check(path, schema, rules, available, compareLegacyCompanions),
+  () => _check(
+    path,
+    schema,
+    rules,
+    available,
+    (db, tables, info) => Snapshot(
+      info,
+      _businessDigest(db, tables, compareLegacyCompanions),
+    ),
+    compareLegacyCompanions: compareLegacyCompanions,
+  ),
 );
 
-Snapshot _check(
+T _check<T>(
   String path,
   List<Json> schema,
   Rules rules,
   Set<String> available,
-  bool compareLegacyCompanions,
-) {
+  T Function(Database db, List<Json> schema, SnapshotInfo info) finish, {
+  bool compareLegacyCompanions = false,
+}) {
   final db = sqlite3.open(path, mode: OpenMode.readOnly);
   try {
     db.execute('PRAGMA trusted_schema = OFF');
@@ -428,33 +459,15 @@ Snapshot _check(
       );
     }
 
-    // Feed each table row separately so comparing a large family needs no second full database in memory.
-    final sink = _DigestResult();
-    final content = sha256.startChunkedConversion(sink);
-    for (final row in actual.where((row) => row['type'] == 'table')) {
-      final table = row['name'] as String;
-      if (compareLegacyCompanions && _v8Tables.contains(table)) continue;
-      final records = db.select('SELECT * FROM "$table" ORDER BY rowid');
-      if (records.isEmpty &&
-          (table == 'base_furnishings' ||
-              table == 'window_math_bookmarks' ||
-              table == 'window_story_milestones' ||
-              table == 'wind_story_runs' ||
-              _v7Tables.contains(table))) {
-        continue;
-      }
-      content.add(utf8.encode('$table\n'));
-      for (final record in records) {
-        content.add(utf8.encode('${jsonEncode(record)}\n'));
-      }
-    }
-    content.close();
-    return Snapshot(
-      schemaVersion: version,
-      family: family,
-      summary: summary,
-      assets: assets,
-      businessDigest: sink.digest.toString(),
+    return finish(
+      db,
+      actual,
+      SnapshotInfo(
+        schemaVersion: version,
+        family: family,
+        summary: summary,
+        assets: assets,
+      ),
     );
   } on UserError {
     rethrow;
@@ -463,6 +476,35 @@ Snapshot _check(
   } finally {
     db.close();
   }
+}
+
+String _businessDigest(
+  Database db,
+  List<Json> schema,
+  bool compareLegacyCompanions,
+) {
+  // Feed each row separately to avoid keeping a second copy of the database.
+  final sink = _DigestResult();
+  final content = sha256.startChunkedConversion(sink);
+  for (final row in schema.where((row) => row['type'] == 'table')) {
+    final table = row['name'] as String;
+    if (compareLegacyCompanions && _v8Tables.contains(table)) continue;
+    final records = db.select('SELECT * FROM "$table" ORDER BY rowid');
+    if (records.isEmpty &&
+        (table == 'base_furnishings' ||
+            table == 'window_math_bookmarks' ||
+            table == 'window_story_milestones' ||
+            table == 'wind_story_runs' ||
+            _v7Tables.contains(table))) {
+      continue;
+    }
+    content.add(utf8.encode('$table\n'));
+    for (final record in records) {
+      content.add(utf8.encode('${jsonEncode(record)}\n'));
+    }
+  }
+  content.close();
+  return sink.digest.toString();
 }
 
 class _DigestResult implements Sink<Digest> {

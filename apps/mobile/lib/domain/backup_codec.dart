@@ -139,7 +139,8 @@ class BackupCodec {
         bits: 256,
       ).deriveKey(secretKey: SecretKey(utf8.encode(passphrase)), nonce: salt);
 
-  Future<void> write(
+  /// Seals the archive and returns the digest of its SQLite snapshot.
+  Future<String> write(
     File snapshot,
     Json metadata,
     String passphrase,
@@ -149,10 +150,11 @@ class BackupCodec {
       throw const UserError('存档超过支持的备份大小。');
     }
     final database = await snapshot.readAsBytes();
+    final databaseHash = digest.sha256.convert(database).toString();
     final manifest = utf8.encode(
       jsonEncode({
         ...metadata,
-        'database_sha256': digest.sha256.convert(database).toString(),
+        'database_sha256': databaseHash,
       }),
     );
     if (manifest.length > maxManifest) throw const UserError('备份摘要超过支持的大小。');
@@ -166,9 +168,16 @@ class BackupCodec {
       passphrase,
     );
     await output.writeAsBytes(file, flush: true);
+    return databaseHash;
   }
 
-  Future<Json> extract(File input, String passphrase, File snapshot) async {
+  /// Authenticates and validates an archive without writing a SQLite file.
+  Future<Json> verify(File input, String passphrase) => _read(input, passphrase);
+
+  Future<Json> extract(File input, String passphrase, File snapshot) =>
+      _read(input, passphrase, snapshot: snapshot);
+
+  Future<Json> _read(File input, String passphrase, {File? snapshot}) async {
     final length = await input.length();
     if (length > maxContainer) throw const UserError('备份超过支持的文件大小。');
     final plain = await decryptPayload(await input.readAsBytes(), passphrase);
@@ -189,6 +198,7 @@ class BackupCodec {
         throw const FormatException();
       }
       final metadata = OutputMemoryStream();
+      late final String databaseHash;
       for (final header in headers) {
         final fileMode = header.externalFileAttributes >> 16 & 0xf000;
         final limit = switch (header.filename) {
@@ -214,6 +224,8 @@ class BackupCodec {
         entry.throwOnError = true;
         if (header.filename == 'manifest.json') {
           entry.decompress(metadata);
+        } else if (snapshot == null) {
+          databaseHash = _entryHash(entry);
         } else {
           final output = OutputFileStream(snapshot.path);
           try {
@@ -221,16 +233,34 @@ class BackupCodec {
           } finally {
             output.closeSync();
           }
+          databaseHash = await fileHash(snapshot);
         }
       }
       final manifest = jsonDecode(utf8.decode(metadata.getBytes())) as Json;
-      if (manifest['database_sha256'] != await fileHash(snapshot)) {
+      if (manifest['database_sha256'] != databaseHash) {
         throw const FormatException();
       }
       return manifest;
     } catch (_) {
       throw const UserError('备份文件结构或摘要校验失败。');
     }
+  }
+
+  String _entryHash(ZipFile entry) {
+    late final digest.Digest hash;
+    final output = SinkOutputStream(
+      digest.sha256.startChunkedConversion(
+        ChunkedConversionSink<digest.Digest>.withCallback(
+          (values) => hash = values.single,
+        ),
+      ),
+    );
+    try {
+      entry.decompress(output);
+    } finally {
+      output.closeSync();
+    }
+    return hash.toString();
   }
 }
 

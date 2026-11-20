@@ -365,6 +365,13 @@ void main() {
     final schema = await expectedSchema();
     final valid = await checkSnapshot(snapshot, schema, stock.rules, assets);
     expect(valid.summary['ledger_count'], 1);
+    final exportInfo = await validateSnapshot(
+      snapshot,
+      schema,
+      stock.rules,
+      assets,
+    );
+    expect(exportInfo.summary, valid.summary);
 
     final db = sqlite3.open(snapshot);
     try {
@@ -383,15 +390,20 @@ void main() {
       db.close();
     }
 
+    final invalidLinks = throwsA(
+      isA<UserError>().having(
+        (error) => error.message,
+        'message',
+        '存档的成果、兑换或布置关联校验失败。',
+      ),
+    );
     await expectLater(
       checkSnapshot(snapshot, schema, stock.rules, assets),
-      throwsA(
-        isA<UserError>().having(
-          (error) => error.message,
-          'message',
-          '存档的成果、兑换或布置关联校验失败。',
-        ),
-      ),
+      invalidLinks,
+    );
+    await expectLater(
+      validateSnapshot(snapshot, schema, stock.rules, assets),
+      invalidLinks,
     );
   });
 
@@ -618,6 +630,30 @@ void main() {
       await codec.encryptPayload(Uint8List.fromList(largeZip), password),
     );
     await fails(safe.inspect(invalid, password, parent));
+
+    final differentHash = utf8.encode(
+      jsonEncode({'database_sha256': sha256.convert([1]).toString()}),
+    );
+    final differentSnapshotZip = ZipEncoder().encodeBytes(
+      Archive()
+        ..addFile(ArchiveFile('snapshot.sqlite', 1, [2]))
+        ..addFile(
+          ArchiveFile('manifest.json', differentHash.length, differentHash),
+        ),
+    );
+    await invalid.writeAsBytes(
+      await codec.encryptPayload(differentSnapshotZip, password),
+    );
+    await expectLater(
+      codec.verify(invalid, password),
+      throwsA(
+        isA<UserError>().having(
+          (error) => error.message,
+          'message',
+          '备份文件结构或摘要校验失败。',
+        ),
+      ),
+    );
     final badVersion = File(p.join(fixture.root.path, 'future.sqlite'));
     await preview.database.copy(badVersion.path);
     final sql = sqlite3.open(badVersion.path);

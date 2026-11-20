@@ -110,6 +110,9 @@ class TransferService {
         compareLegacyCompanions: compareLegacyCompanions,
       );
 
+  Future<SnapshotInfo> _validate(File file) async =>
+      validateSnapshot(file.path, await schema, rules, availableAssets);
+
   Future<ExportTicket> prepareExport(
     String mode,
     String password,
@@ -134,18 +137,8 @@ class TransferService {
         }
         final existing = device.outgoingBackup(id, previous);
         if (!await existing.exists()) throw const UserError('请回读之前保存的迁移文件。');
-        final check = await device.temporaryDirectory();
-        try {
-          operation?._report(TransferPhase.readback);
-          await _unpack(
-            existing.path,
-            password,
-            p.join(check.path, 'snapshot.sqlite'),
-            operation,
-          );
-        } finally {
-          await cleanDirectory(check);
-        }
+        operation?._report(TransferPhase.readback);
+        await _verifyArchive(existing.path, password, operation);
         operation?.check();
         return ExportTicket._(previous, existing, mode, control, retry: true);
       }
@@ -167,7 +160,7 @@ class TransferService {
         final snapshot = File(p.join(folder.path, 'snapshot.sqlite'));
         await family.db.customStatement('VACUUM INTO ?', [snapshot.path]);
         operation?._report(TransferPhase.checking);
-        final info = await _read(snapshot);
+        final info = await _validate(snapshot);
         final manifest = {
           'backup_id': bid,
           'mode': mode,
@@ -187,22 +180,19 @@ class TransferService {
         };
         final encrypted = File(p.join(folder.path, 'outgoing.alicebackup'));
         operation?._report(TransferPhase.encrypting);
-        await _pack(
+        final snapshotDigest = await _pack(
           snapshot.path,
           manifest,
           password,
           encrypted.path,
           operation,
         );
-        final readback = File(p.join(folder.path, 'verified.sqlite'));
         operation?._report(TransferPhase.readback);
-        final verified = await _unpack(
+        final verified = await _verifyArchive(
           encrypted.path,
           password,
-          readback.path,
           operation,
         );
-        final snapshotDigest = await fileHash(snapshot);
         operation?.check();
         if (verified['backup_id'] != bid ||
             snapshotDigest != verified['database_sha256']) {
@@ -488,7 +478,7 @@ class TransferService {
         operation?._report(TransferPhase.snapshot);
         await family.db.customStatement('VACUUM INTO ?', [snapshot.path]);
         operation?._report(TransferPhase.checking);
-        await _read(snapshot);
+        await _validate(snapshot);
         operation?._report(TransferPhase.encrypting);
         final protection = await checkpoints.protect(snapshot, work: operation);
         return RestoreProtection._(
@@ -606,7 +596,16 @@ Future<Json> _unpack(
   operation,
 );
 
-Future<void> _pack(
+Future<Json> _verifyArchive(
+  String input,
+  String password,
+  TransferOperation? operation,
+) => runTransferWorker(
+  () => const BackupCodec().verify(File(input), password),
+  operation,
+);
+
+Future<String> _pack(
   String input,
   Json manifest,
   String password,
