@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1124 项通过。下面列出逐项结果。
+- 本次准备检查 1132 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -330,6 +330,7 @@
 - 内部链接有效：docs/evidence/companion-unlock/README.md → art-wind.json
 - 内部链接有效：docs/evidence/companion-unlock/README.md → mobile_candidate_layout_probe_test.dart
 - 内部链接有效：docs/evidence/companion-unlock/README.md → layout-probe.log
+- 内部链接有效：docs/evidence/companion-unlock/README.md → first-run/README.md
 - 内部链接有效：docs/evidence/companion-unlock/README.md → 01-legacy-companion.png
 - 内部链接有效：docs/evidence/companion-unlock/README.md → 02-new-companion.png
 - 内部链接有效：docs/evidence/companion-unlock/README.md → 03-independent-experience.png
@@ -341,6 +342,13 @@
 - 内部链接有效：docs/evidence/companion-unlock/README.md → ../migration-return/README.md
 - 内部链接有效：docs/evidence/companion-unlock/README.md → ../device-acceptance/README.md
 - 内部链接有效：docs/evidence/companion-unlock/README.md → ../../DELIVERY.md
+- 内部链接有效：docs/evidence/companion-unlock/first-run/README.md → ../package.json
+- 内部链接有效：docs/evidence/companion-unlock/first-run/README.md → fox.png
+- 内部链接有效：docs/evidence/companion-unlock/first-run/README.md → rabbit.png
+- 内部链接有效：docs/evidence/companion-unlock/first-run/README.md → cat.png
+- 内部链接有效：docs/evidence/companion-unlock/first-run/README.md → locked.png
+- 内部链接有效：docs/evidence/companion-unlock/first-run/README.md → verification.json
+- 内部链接有效：docs/evidence/companion-unlock/first-run/README.md → ../../acceptance.csv
 - 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → ../package.json
 - 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → ../../../BACKUP_MIGRATION.md
 - 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → a-to-b-system-save.png

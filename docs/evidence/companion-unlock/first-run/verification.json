@@ -1,0 +1,170 @@
+{
+  "environment": {
+    "platform": "Android 9 x86_64 emulator",
+    "sdk": 28,
+    "airplane_mode": true,
+    "wifi": false,
+    "mobile_data": false,
+    "installed_apk_sha256": "579a85ac9e2a0a1c421755e803cf416b3f9bb614577d254cacc86710060fda58",
+    "build_commit": "f3a7184aaeff2589f3ffe6ef6618ac21c0618288",
+    "version": "0.21.0+19"
+  },
+  "families": {
+    "fox": {
+      "after_onboarding": {
+        "generation_sha256": "b8c2798e314959a3d9b675785652cc23276046d639d0a2bc58ffcc6fb7759c63",
+        "all_business_rows_sha256": "f2104a0545be243feb864cc00034e5ae2c063f5d46df71500a0ece77b7e127dd",
+        "business_tables": 30,
+        "schema": 8,
+        "active": "fox",
+        "balance": 0,
+        "tasks": 0,
+        "pending": 0,
+        "valid_outcomes": 0,
+        "ledger_entries": 0,
+        "reconciled_ledger": true,
+        "companions": [
+          [
+            "fox",
+            1,
+            0,
+            null
+          ]
+        ],
+        "inventory": [],
+        "room_items": 0,
+        "state": "IDLE",
+        "external_receipt": null
+      },
+      "after_cold_launch": {
+        "generation_sha256": "b8c2798e314959a3d9b675785652cc23276046d639d0a2bc58ffcc6fb7759c63",
+        "all_business_rows_sha256": "f2104a0545be243feb864cc00034e5ae2c063f5d46df71500a0ece77b7e127dd",
+        "business_tables": 30,
+        "schema": 8,
+        "active": "fox",
+        "balance": 0,
+        "tasks": 0,
+        "pending": 0,
+        "valid_outcomes": 0,
+        "ledger_entries": 0,
+        "reconciled_ledger": true,
+        "companions": [
+          [
+            "fox",
+            1,
+            0,
+            null
+          ]
+        ],
+        "inventory": [],
+        "room_items": 0,
+        "state": "IDLE",
+        "external_receipt": null
+      }
+    },
+    "rabbit": {
+      "after_onboarding": {
+        "generation_sha256": "dc8350a490a2de0a8b3d7ebe88a6f685b28a2ab6238b7f8ec7b866b82b664eec",
+        "all_business_rows_sha256": "0dca8bb49d3f9d446d6897870a068e00d8e42c3040703c8944d71e4149b2410c",
+        "business_tables": 30,
+        "schema": 8,
+        "active": "rabbit",
+        "balance": 0,
+        "tasks": 0,
+        "pending": 0,
+        "valid_outcomes": 0,
+        "ledger_entries": 0,
+        "reconciled_ledger": true,
+        "companions": [
+          [
+            "rabbit",
+            1,
+            0,
+            null
+          ]
+        ],
+        "inventory": [],
+        "room_items": 0,
+        "state": "IDLE",
+        "external_receipt": null
+      },
+      "after_cold_launch": {
+        "generation_sha256": "dc8350a490a2de0a8b3d7ebe88a6f685b28a2ab6238b7f8ec7b866b82b664eec",
+        "all_business_rows_sha256": "0dca8bb49d3f9d446d6897870a068e00d8e42c3040703c8944d71e4149b2410c",
+        "business_tables": 30,
+        "schema": 8,
+        "active": "rabbit",
+        "balance": 0,
+        "tasks": 0,
+        "pending": 0,
+        "valid_outcomes": 0,
+        "ledger_entries": 0,
+        "reconciled_ledger": true,
+        "companions": [
+          [
+            "rabbit",
+            1,
+            0,
+            null
+          ]
+        ],
+        "inventory": [],
+        "room_items": 0,
+        "state": "IDLE",
+        "external_receipt": null
+      }
+    },
+    "cat": {
+      "after_onboarding": {
+        "generation_sha256": "b99528275ea7cb8da5d401f3287d7b81b7f5f08cca335cd8dd94fc4e95f34d17",
+        "all_business_rows_sha256": "a777638c769c675de6f4922d046f225336c92304886b2d53b96c08f02373f9ce",
+        "business_tables": 30,
+        "schema": 8,
+        "active": "cat",
+        "balance": 0,
+        "tasks": 0,
+        "pending": 0,
+        "valid_outcomes": 0,
+        "ledger_entries": 0,
+        "reconciled_ledger": true,
+        "companions": [
+          [
+            "cat",
+            1,
+            0,
+            null
+          ]
+        ],
+        "inventory": [],
+        "room_items": 0,
+        "state": "IDLE",
+        "external_receipt": null
+      },
+      "after_cold_launch": {
+        "generation_sha256": "b99528275ea7cb8da5d401f3287d7b81b7f5f08cca335cd8dd94fc4e95f34d17",
+        "all_business_rows_sha256": "a777638c769c675de6f4922d046f225336c92304886b2d53b96c08f02373f9ce",
+        "business_tables": 30,
+        "schema": 8,
+        "active": "cat",
+        "balance": 0,
+        "tasks": 0,
+        "pending": 0,
+        "valid_outcomes": 0,
+        "ledger_entries": 0,
+        "reconciled_ledger": true,
+        "companions": [
+          [
+            "cat",
+            1,
+            0,
+            null
+          ]
+        ],
+        "inventory": [],
+        "room_items": 0,
+        "state": "IDLE",
+        "external_receipt": null
+      }
+    }
+  }
+}
