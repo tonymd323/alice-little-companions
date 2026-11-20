@@ -1,0 +1,51 @@
+id,source,file,use
+C,design/references/garden-color.png,scene/garden-color.png,C 版方向稿。取木、石、草、金叶及水色。图中角色仅作比例和笔触参考。
+BOARD,design/references/pet-stages.png,pets/three-by-six.png,原三宠六阶段设定板，横向读同一只宠物的成长。
+COURT,apps/mobile/assets/art/garden.webp,scene/courtyard.png,1536×1024 无宠庭院，树屋与石桥的机位、光向和层次。
+VERANDA,apps/mobile/assets/art/veranda.webp,scene/veranda.png,1536×1024 暖廊，窗座、右侧窗外溪桥和地板透视。
+SHOP,apps/mobile/assets/art/scene_flower_shop_background.webp,scene/flower-shop-base.png,768×512 花店底图，标定室内视角及地面。
+SHOPFULL,apps/mobile/assets/art/painted_flower_shop.webp,scene/flower-shop-furnished.png,花店实际固定陈设，参考台沿、木架比例及绿木材质。
+SHOPFG,apps/mobile/assets/art/scene_flower_shop_foreground.webp,scene/flower-shop-foreground.png,与花店底图同画布的透明前景遮挡。
+FLOOR,design/scene_slots.json,scene/scene-slots.json,各空间原画布与可落物区域。免费庭院使用 base_room。
+WINDOW,design/production/wind/room/window-states.jpg,scene/window-states.jpg,窗棂挡住玻璃，修窗前后地板投影随对应窗格改变。
+LEAF,apps/mobile/assets/wind/actors/leaf.webp,props/ginkgo-leaf.png,主线可取的独立金叶，参考可数单位的清晰外缘。
+BASKET,apps/mobile/assets/wind/actors/basket.webp,props/basket.png,手绘藤篮主体，参考材质和接触尺度。
+RIM,apps/mobile/assets/wind/actors/basket_front.webp,props/basket-front.png,同一藤篮前沿遮挡片，需与主体同画布套合。
+PROPFILE,design/production/wind/actors/props.ora,props/props.ora,可用 Krita 或 GIMP 打开的多层道具原稿。
+FOX1,apps/mobile/assets/art/fox-1.webp,pets/fox-1.png,银杏狐奶油第一阶段实际透明日常原图，369×451。
+RABBIT1,apps/mobile/assets/art/rabbit-1.webp,pets/rabbit-1.png,月牙耳兔桃桃第一阶段实际透明日常原图，450×408。
+RABJUMP,apps/mobile/assets/art/leap-rabbit-1.webp,pets/rabbit-1-skill.png,桃桃一阶技能腾跃姿，只用于确认兔体和耳形。
+CAT1,apps/mobile/assets/art/cat-1.webp,pets/cat-1.png,团团第 1 阶实际透明原画。
+CAT2,apps/mobile/assets/art/cat-2.webp,pets/cat-2.png,团团第 2 阶实际透明原画。
+CAT3,apps/mobile/assets/art/cat-3.webp,pets/cat-3.png,团团第 3 阶实际透明原画。
+CAT4REST,apps/mobile/assets/art/cat-4-rest.webp,pets/cat-4-rest.png,团团四阶家园收翼坐姿。
+CAT4OPEN,apps/mobile/assets/art/cat-4.webp,pets/cat-4.png,团团四阶进化展翼。
+CAT5,apps/mobile/assets/art/cat-5.webp,pets/cat-5.png,团团第 5 阶实际透明原画。
+CAT6,apps/mobile/assets/art/cat-6.webp,pets/cat-6.png,团团第 6 阶实际透明原画。
+FOXCOAT,apps/mobile/assets/art/fox-1-coat.webp,fit/fox-1-coat.png,奶油一阶穿外套原图，对照领口、前爪和尾根。
+RABAPRON,apps/mobile/assets/art/rabbit-1-apron.webp,fit/rabbit-1-apron.png,桃桃一阶围裙坐姿，校准圆身与服装边缘。
+SCARF,apps/mobile/assets/art/fitted-scarf-rabbit-rest.webp,fit/rabbit-scarf.png,桃桃坐姿围巾的实际透明层，观察布褶和颈部受力。
+GLASSES,apps/mobile/assets/art/worn_accessory_glasses.webp,fit/glasses.png,眼镜的穿戴原图，近远镜片仍需按角色眼位制版。
+BOW,apps/mobile/assets/art/fitted-bow-fox-rest.webp,fit/fox-bow.png,狐狸耳结原层，参考布结尺寸与笔触。
+BOWTURN,docs/evidence/fox-walk/bow-turn.png,fit/fox-bow-turn.png,左右换面时奶油自身右耳的近远变化，仅用作佩戴参照。
+FOXPOSE,design/production/fox-walk/poses.json,motion/fox-poses.json,奶油一阶行走画布、地线和头颈接点，数值仅适用于这套姿态。
+CATPOSE,design/production/cat-walk/poses.json,motion/cat-poses.json,团团一阶旧动作的画布、脚掌与接点坐标，供复测对齐。
+OLDMOVE,docs/evidence/cat-walk/three-walks.mp4,motion/cat-before-rework.mp4,旧版原速对照，1024×758、25 fps 的并排剪辑。家长反馈旧步态生硬，用来定位突变与僵直。爪垫量测使用新录的无损全景。
+RABBASE,docs/evidence/rabbit-hop/before.mp4,motion/rabbit-baseline.mp4,桃桃三种日常移动的同机位原速基线，供将来短跳前后对比。
+FOXSIDE,apps/mobile/assets/fox_walk/head.webp,fit/fox-head-side.png,奶油一阶动作侧头原层，512×464。
+FOXFRONT,apps/mobile/assets/fox_walk/head-front.webp,fit/fox-head-front.png,同一画布的正头原层。
+FOXBACK,apps/mobile/assets/fox_walk/head-away.webp,fit/fox-head-away.png,同一画布的背头原层。
+FOXSHEET,design/production/fox-walk/contact-sheet.jpg,fit/fox-outfits-and-poses.jpg,奶油一阶身体、服装与接触姿势的制作对照，供校准形状与遮挡。
+CATSHEET,design/production/cat-walk/contact-sheet.jpg,fit/cat-outfits-and-poses.jpg,团团一阶体态、穿戴和原画地线对照，供制作定位。
+FOX2,apps/mobile/assets/art/fox-2.webp,pets/fox-2.png,奶油第 2 阶实际透明原画，校准尾尖冒芽。
+FOX3,apps/mobile/assets/art/fox-3.webp,pets/fox-3.png,奶油第 3 阶实际透明原画，校准尾部长出银杏叶。
+FOX4,apps/mobile/assets/art/fox-4.webp,pets/fox-4.png,奶油第 4 阶实际透明原画，校准金色扇尾。
+FOX5,apps/mobile/assets/art/fox-5.webp,pets/fox-5.png,奶油第 5 阶实际透明原画，校准颈边金叶圈。
+FOX6,apps/mobile/assets/art/fox-6.webp,pets/fox-6.png,奶油第 6 阶实际透明原画，校准跃身与层叠叶尾。
+RABBIT2,apps/mobile/assets/art/rabbit-2.webp,pets/rabbit-2.png,桃桃第 2 阶实际透明原画，校准长耳淡紫尖。
+RABBIT3,apps/mobile/assets/art/rabbit-3.webp,pets/rabbit-3.png,桃桃第 3 阶实际透明原画，校准额头月牙。
+RABBIT4,apps/mobile/assets/art/rabbit-4.webp,pets/rabbit-4.png,桃桃第 4 阶实际透明原画，校准双耳银月。
+RABBIT5,apps/mobile/assets/art/rabbit-5.webp,pets/rabbit-5.png,桃桃第 5 阶实际透明原画，校准长耳云纹。
+RABBIT6,apps/mobile/assets/art/rabbit-6.webp,pets/rabbit-6.png,桃桃第 6 阶实际透明原画，校准月光飘带耳。
+FOXSCARF,apps/mobile/assets/art/fitted-scarf-fox-rest.webp,fit/fox-scarf.png,奶油日常坐姿的既有围巾透明层，校准领围与毛缘。
+CATSCARF,apps/mobile/assets/art/fitted-scarf-cat-rest.webp,fit/cat-scarf.png,团团日常坐姿的既有围巾透明层，校准领围与毛缘。
