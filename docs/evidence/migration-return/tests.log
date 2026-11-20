@@ -1,0 +1,105 @@
+0.20.0+18, Flutter 3.50.0 / Dart 3.14.0 on Linux x86_64
+flutter test --no-pub --reporter expanded test/family_features_test.dart --plain-name "an encrypted round trip keeps the ledger, furnishings and story"
+00:00 +0: loading test/family_features_test.dart
+00:00 +0: an encrypted round trip keeps the ledger, furnishings and story
+00:59 +1: All tests passed!
+
+flutter analyze --no-pub lib test
+Analyzing 2 items...
+No issues found! (ran in 2.8s)
+
+flutter analyze --no-pub test/backup_50m_benchmark_test.dart
+Analyzing backup_50m_benchmark_test.dart...
+No issues found! (ran in 2.1s)
+
+flutter test --no-pub --concurrency=2 --reporter expanded
+00:00 +0: loading test/companion_walk_test.dart
+00:00 +0: test/companion_walk_test.dart: cat: every support interval is stationary as phase follows travel
+00:00 +1: test/companion_walk_test.dart: cat: redirect and stroke stop start from the visible world pose
+00:00 +2: test/companion_walk_test.dart: cat: courtyard depth tap and reduced motion use the same destinations
+00:00 +3: test/companion_walk_test.dart: cat: courtyard depth tap and reduced motion use the same destinations
+00:02 +4: test/companion_walk_test.dart: cat: courtyard depth tap and reduced motion use the same destinations
+00:02 +5: test/companion_walk_test.dart: cat: all 36 existing costume combinations resolve to bundled walk layers
+00:02 +6: test/companion_walk_test.dart: fox: every support interval is stationary as phase follows travel
+00:02 +7: test/companion_walk_test.dart: fox: redirect and stroke stop start from the visible world pose
+00:02 +8: test/companion_walk_test.dart: fox: courtyard depth tap and reduced motion use the same destinations
+00:03 +9: test/companion_walk_test.dart: fox: all 36 existing costume combinations resolve to bundled walk layers
+00:03 +10: test/family_test.dart: M1 AC-02/09/10 one atomic reward and completion survive reopen
+00:08 +11: test/family_test.dart: M1 AC-02/09/10 one atomic reward and completion survive reopen
+00:09 +12: test/family_test.dart: M1 AC-02/09/10 one atomic reward and completion survive reopen
+00:09 +13: test/family_test.dart: M1 AC-02/09/10 one atomic reward and completion survive reopen
+00:11 +14: test/family_test.dart: M1 AC-02/09/10 one atomic reward and completion survive reopen
+00:12 +15: test/family_test.dart: M1 AC-02/09/10 one atomic reward and completion survive reopen
+00:12 +16: test/wind_stage_test.dart: reduced motion exposes the settled chapter and keeps input live
+00:12 +17: test/family_test.dart: AC-03 PIN session locks and five failures remain throttled after restart
+00:13 +18: test/family_test.dart: AC-03 PIN session locks and five failures remain throttled after restart
+00:13 +19: test/family_test.dart: AC-03 PIN session locks and five failures remain throttled after restart
+00:17 +20: test/family_test.dart: AC-03 PIN session locks and five failures remain throttled after restart
+00:18 +21: test/family_test.dart: AC-03 PIN session locks and five failures remain throttled after restart
+00:30 +22: test/family_test.dart: AC-03 PIN session locks and five failures remain throttled after restart
+00:37 +22: test/backup_cancellation_test.dart: cancelling migration generation restores the prior backup and control
+00:43 +23: test/backup_cancellation_test.dart: cancelling migration generation restores the prior backup and control
+00:52 +24: test/backup_cancellation_test.dart: cancelling migration generation restores the prior backup and control
+00:52 +25: test/backup_cancellation_test.dart: reopening an interrupted export preserves the last backup
+00:56 +26: test/daily_companions_test.dart: same-day approvals, retry, correction and reopening retain one shared experience history
+01:01 +27: test/backup_cancellation_test.dart: cancelled decryption and validation leave the activation pointer untouched
+01:01 +28: test/backup_cancellation_test.dart: cancelled decryption and validation leave the activation pointer untouched
+01:03 +29: test/backup_cancellation_test.dart: cancelled decryption and validation leave the activation pointer untouched
+01:03 +30: test/backup_cancellation_test.dart: cancelled decryption and validation leave the activation pointer untouched
+01:20 +31: test/backup_cancellation_test.dart: cancelled decryption and validation leave the activation pointer untouched
+01:22 +32: test/backup_test.dart: AC-22/27/28/31 fixed 37-point replica, freeze, fresh credentials and reward to 42
+01:29 +32: test/backup_cancellation_test.dart: stopping checkpoint protection keeps existing recovery data
+01:30 +33: test/backup_test.dart: AC-22/27/28/31 fixed 37-point replica, freeze, fresh credentials and reward to 42
+01:34 +34: test/backup_test.dart: AC-22/27/28/31 fixed 37-point replica, freeze, fresh credentials and reward to 42
+01:43 +35: test/backup_test.dart: AC-22/27/28/31 fixed 37-point replica, freeze, fresh credentials and reward to 42
+01:54 +36: test/backup_test.dart: AC-22/27/28/31 fixed 37-point replica, freeze, fresh credentials and reward to 42
+02:02 +37: test/backup_test.dart: AC-22/27/28/31 fixed 37-point replica, freeze, fresh credentials and reward to 42
+02:07 +38: test/rules_test.dart: AC-13/14 penalty is bounded and reversal does not release the cap
+02:09 +39: test/backup_test.dart: snapshot rejects a balanced reward without a matching completion
+02:14 +40: test/rules_test.dart: AC-15/43 correction records explicit shortfall with ownership retained
+02:16 +41: test/backup_test.dart: 0.10 family upgrades with an empty chapter, keeps its ledger and restores the bookmark on restart
+02:21 +42: test/rules_test.dart: AC-17/18 all growth threshold boundaries and all companions remain shared
+02:23 +43: test/backup_test.dart: Wind scene survives a v5 upgrade and partial encrypted handoff independently of the old chapter
+02:30 +44: test/backup_test.dart: Wind scene survives a v5 upgrade and partial encrypted handoff independently of the old chapter
+02:47 +45: test/backup_test.dart: Wind scene survives a v5 upgrade and partial encrypted handoff independently of the old chapter
+02:51 +46: test/update_page_test.dart: public check is explicit and cancelling before cache selection prevents a request
+02:59 +46: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+02:59 +47: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+03:08 +48: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+03:16 +49: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+03:17 +50: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+03:19 +51: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+03:24 +52: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+03:36 +52: test/family_features_test.dart: an encrypted round trip keeps the ledger, furnishings and story
+03:49 +52: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+03:53 +52: test/family_features_test.dart: an encrypted round trip keeps the ledger, furnishings and story
+03:57 +52: test/backup_test.dart: AC-24/25/26/32/33 invalid input and interrupted activation preserve generation
+04:01 +53: test/family_features_test.dart: an encrypted round trip keeps the ledger, furnishings and story
+04:09 +54: test/family_features_test.dart: an encrypted round trip keeps the ledger, furnishings and story
+04:15 +55: test/family_features_test.dart: an encrypted round trip keeps the ledger, furnishings and story
+04:29 +56: test/family_features_test.dart: an encrypted round trip keeps the ledger, furnishings and story
+04:32 +57: test/family_features_test.dart: an encrypted round trip keeps the ledger, furnishings and story
+04:35 +58: test/family_features_test.dart: an encrypted round trip keeps the ledger, furnishings and story
+04:36 +59: test/family_features_test.dart: an encrypted round trip keeps the ledger, furnishings and story
+04:38 +60: test/family_features_test.dart: an encrypted round trip keeps the ledger, furnishings and story
+04:40 +61: test/delivery_test.dart: the home story repairs actual panes in either order and keeps a permanent light with zero income
+04:49 +62: test/family_features_test.dart: closed task details load in Growth and in the completed list
+04:51 +63: test/delivery_test.dart: the family home opens its own saved window chapter with the chosen companion
+04:54 +64: test/family_features_test.dart: an open task detail reflects expiry after a calendar refresh
+04:59 +65: test/family_features_test.dart: an open task detail reflects expiry after a calendar refresh
+05:00 +66: test/delivery_test.dart: AC-26/34 active file failure can open the encrypted checkpoint through current PIN
+05:04 +67: test/delivery_test.dart: AC-26/34 active file failure can open the encrypted checkpoint through current PIN
+05:08 +68: test/delivery_test.dart: AC-26/34 active file failure can open the encrypted checkpoint through current PIN
+05:09 +69: test/delivery_test.dart: AC-26/34 active file failure can open the encrypted checkpoint through current PIN
+05:10 +70: test/delivery_test.dart: AC-26/34 active file failure can open the encrypted checkpoint through current PIN
+05:10 +71: test/delivery_test.dart: AC-26/34 active file failure can open the encrypted checkpoint through current PIN
+05:10 +72: test/delivery_test.dart: AC-26/34 active file failure can open the encrypted checkpoint through current PIN
+05:13 +73: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+05:14 +74: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+05:23 +75: test/decoration_test.dart: AC-16/19/20 18 products, 5 independent spaces, layout and refund without income
+05:23 +76: test/decoration_test.dart: AC-16 child can undo the original charge once in the current session
+05:30 +77: test/decoration_test.dart: AC-35 all catalog assets, 19 companion poses and five layered scenes are bundled
+05:30 +78: All tests passed!
+
+node tools/check_backup_vector.mjs
+ALICEBK1 reference vector verified.

@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1070 项通过。下面列出逐项结果。
+- 本次准备检查 1079 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -138,6 +138,7 @@
 - 内部链接有效：docs/PLAN.md → evidence/backup-performance/README.md
 - 内部链接有效：docs/PLAN.md → evidence/device-acceptance/README.md
 - 内部链接有效：docs/PLAN.md → evidence/task-performance/README.md
+- 内部链接有效：docs/PLAN.md → evidence/migration-return/README.md
 - 内部链接有效：docs/PLAN.md → GAME_STUDIO.md
 - 内部链接有效：docs/PLAN.md → evidence/wind/README.md
 - 内部链接有效：docs/PLAN.md → evidence/M0/README.md
@@ -381,6 +382,7 @@
 - 内部链接有效：docs/evidence/device-acceptance/README.md → android-restored-home.png
 - 内部链接有效：docs/evidence/device-acceptance/README.md → android-restoration.json
 - 内部链接有效：docs/evidence/device-acceptance/README.md → ../../ACCEPTANCE.md
+- 内部链接有效：docs/evidence/device-acceptance/README.md → ../migration-return/README.md
 - 内部链接有效：docs/evidence/device-acceptance/README.md → ../../ACCEPTANCE.md
 - 内部链接有效：docs/evidence/device-acceptance/README.md → ../acceptance.csv
 - 内部链接有效：docs/evidence/family-functions/README.md → package.json
@@ -496,6 +498,13 @@
 - 内部链接有效：docs/evidence/math-preview/README.md → installation.json
 - 内部链接有效：docs/evidence/math-preview/README.md → ../../../apps/mobile/lib/main_window_math.dart
 - 内部链接有效：docs/evidence/math-preview/README.md → ../../../apps/mobile/lib/features/window_math.dart
+- 内部链接有效：docs/evidence/migration-return/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/migration-return/README.md → ../device-acceptance/README.md
+- 内部链接有效：docs/evidence/migration-return/README.md → ../../../apps/mobile/test/family_features_test.dart
+- 内部链接有效：docs/evidence/migration-return/README.md → tests.log
+- 内部链接有效：docs/evidence/migration-return/README.md → ../device-acceptance/fixture.json
+- 内部链接有效：docs/evidence/migration-return/README.md → dense-backup.log
+- 内部链接有效：docs/evidence/migration-return/README.md → ../family-offline/backup_50m_benchmark_test.dart
 - 内部链接有效：docs/evidence/rabbit-hop/README.md → before.mp4
 - 内部链接有效：docs/evidence/rabbit-hop/README.md → positions.csv
 - 内部链接有效：docs/evidence/rabbit-hop/README.md → ../../../apps/mobile/assets/art/rabbit-1.webp

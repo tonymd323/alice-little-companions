@@ -195,6 +195,12 @@ void main() {
       expect(await source.ledger(), ledger);
 
       const password = '家园备份测试密码-1234';
+      const targetPin = '264915';
+      const returnedPin = '784103';
+      final handoff = await Directory(
+        p.join(stock.root.path, 'handoff'),
+      ).create();
+      final originalGeneration = source.pin.generation;
       final exporting = TransferService(
         device: stock.device,
         rules: stock.rules,
@@ -207,8 +213,16 @@ void main() {
         password,
         session,
       );
+      final outbound = await ticket.file.copy(p.join(handoff.path, ticket.name));
       await exporting.finishExport(ticket, SaveOutcome.handedToSystem);
       expect(source.frozen, isTrue);
+      expect((await exporting.status())['state'], 'AWAITING_FILE_VERIFICATION');
+      await expectLater(
+        exporting.endMigration(archive: true, session: session),
+        throwsA(isA<UserError>()),
+      );
+      await exporting.verifyExternal(outbound, password, session);
+      expect((await exporting.status())['state'], 'MIGRATION_PENDING');
       await expectLater(
         source.stampRainMap(run: 2, group: 0),
         throwsA(isA<UserError>()),
@@ -222,20 +236,21 @@ void main() {
         throwsA(isA<UserError>()),
       );
       FamilyService? targetFamily;
+      final targetDevice = DeviceStore(
+        Directory(p.join(stock.root.path, 'new-device')),
+        MemorySecureValues(),
+      );
       final target = TransferService(
-        device: DeviceStore(
-          Directory(p.join(stock.root.path, 'new-device')),
-          MemorySecureValues(),
-        ),
+        device: targetDevice,
         rules: stock.rules,
         availableAssets: assets,
         current: () => targetFamily,
       );
-      final preview = await target.inspect(ticket.file, password, null);
+      final preview = await target.inspect(outbound, password, null);
       addTearDown(preview.close);
       final restored = (await target.activate(
         preview,
-        TestFamily.pin,
+        targetPin,
         PinGate.newRecoveryCode(),
         session: null,
         replace: false,
@@ -265,10 +280,34 @@ void main() {
       expect(await restored.wish(), wish);
       expect((await restored.task(pending)).state, 'SUBMITTED');
       expect((await restored.windowMathBookmark()).pattern, {1, 3});
+      final targetSnapshot = await checkSnapshot(
+        targetDevice.databaseFile(restored.pin.generation).path,
+        await target.schema,
+        stock.rules,
+        assets,
+      );
+      expect(targetSnapshot.businessDigest, preview.info.businessDigest);
+      await expectLater(
+        restored.pin.unlock(TestFamily.pin),
+        throwsA(isA<UserError>()),
+      );
+
+      await exporting.endMigration(archive: true, session: session);
+      await stock.reopen();
+      source = stock.service;
+      expect(source.pin.generation, originalGeneration);
+      expect(source.frozen, isTrue);
+      expect((await exporting.status())['state'], 'ARCHIVED');
+      final archiveSession = await source.pin.unlock(TestFamily.pin);
+      await expectLater(
+        source.approve(pending, source.today, '', session: archiveSession),
+        throwsA(isA<UserError>()),
+      );
+
       await restored.selectCompanion(Companion.cat);
       expect((await restored.overview())!.bond.label, '熟悉');
       await restored.stepRainMapStone(run: 2, group: 0, stone: 1);
-      final targetSession = await restored.pin.unlock(TestFamily.pin);
+      final targetSession = await restored.pin.unlock(targetPin);
       await restored.approve(
         pending,
         restored.today,
@@ -283,23 +322,95 @@ void main() {
         password,
         targetSession,
       );
+      final inbound = await returnTicket.file.copy(
+        p.join(handoff.path, returnTicket.name),
+      );
       await target.finishExport(returnTicket, SaveOutcome.handedToSystem);
+      await target.verifyExternal(inbound, password, targetSession);
       expect(restored.frozen, isTrue);
+      await expectLater(
+        restored.selectCompanion(Companion.fox),
+        throwsA(isA<UserError>()),
+      );
+
       final returned = await exporting.inspect(
-        returnTicket.file,
+        inbound,
         password,
-        session,
+        archiveSession,
       );
       addTearDown(returned.close);
-      final replacement = (await exporting.activate(
+      final sendingSnapshot = await checkSnapshot(
+        targetDevice.databaseFile(restored.pin.generation).path,
+        await target.schema,
+        stock.rules,
+        assets,
+      );
+      expect(returned.info.businessDigest, sendingSnapshot.businessDigest);
+      await expectLater(
+        exporting.activate(
+          returned,
+          returnedPin,
+          PinGate.newRecoveryCode(),
+          session: archiveSession,
+          replace: true,
+        ),
+        throwsA(isA<UserError>()),
+      );
+      expect(await stock.device.activeGeneration(), originalGeneration);
+      final protection = (await exporting.protectCurrent(archiveSession))!;
+      final checkpoint = await exporting.inspectCheckpoint(
+        protection.checkpoint,
+        archiveSession,
+      );
+      addTearDown(checkpoint.close);
+      expect(checkpoint.info.businessDigest, preview.info.businessDigest);
+      final activation = await exporting.activate(
         returned,
-        TestFamily.pin,
+        returnedPin,
         PinGate.newRecoveryCode(),
-        session: session,
+        session: archiveSession,
         replace: true,
-        protection: await exporting.protectCurrent(session),
-      )).service;
-      addTearDown(replacement.close);
+        protection: protection,
+      );
+      await source.close();
+      stock.service = activation.service;
+      await stock.reopen();
+      source = stock.service;
+      final replacement = source;
+      expect(replacement.pin.generation, isNot(originalGeneration));
+      expect((await exporting.status())['state'], 'IDLE');
+      expect(replacement.frozen, isFalse);
+      await expectLater(
+        replacement.pin.unlock(TestFamily.pin),
+        throwsA(isA<UserError>()),
+      );
+      final newSession = await replacement.pin.unlock(returnedPin);
+      final finalSnapshot = await checkSnapshot(
+        stock.device.databaseFile(replacement.pin.generation).path,
+        await exporting.schema,
+        stock.rules,
+        assets,
+      );
+      expect(finalSnapshot.businessDigest, sendingSnapshot.businessDigest);
+      final reimport = await exporting.activate(
+        returned,
+        returnedPin,
+        PinGate.newRecoveryCode(),
+        session: newSession,
+        replace: true,
+      );
+      expect(reimport.alreadyRestored, isTrue);
+      expect(reimport.service, same(replacement));
+      expect(await stock.device.activeGeneration(), replacement.pin.generation);
+      final archived = await checkSnapshot(
+        stock.device.databaseFile(originalGeneration).path,
+        await exporting.schema,
+        stock.rules,
+        assets,
+      );
+      expect(archived.businessDigest, preview.info.businessDigest);
+      await target.endMigration(archive: true, session: targetSession);
+      expect((await target.status())['state'], 'ARCHIVED');
       final roundTrip = (await replacement.overview())!;
       expect(
         (roundTrip.companion, roundTrip.bond.label, roundTrip.rainMapCleared),
@@ -316,6 +427,15 @@ void main() {
       expect(await replacement.wardrobe(Companion.fox), wardrobe);
       expect(await replacement.wish(), wish);
       expect((await replacement.task(pending)).state, 'APPROVED');
+      await replacement.backfill(
+        const TaskDraft('测试回迁后补录', '', '测试标准', 'light'),
+        replacement.today,
+        '测试反馈',
+        session: newSession,
+      );
+      final continued = (await replacement.overview())!;
+      expect((continued.balance, continued.experience), (9, 12));
+      expect(await restored.ledger(), updatedLedger);
     },
     timeout: const Timeout(Duration(minutes: 4)),
   );

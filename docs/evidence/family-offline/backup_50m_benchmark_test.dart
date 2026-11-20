@@ -392,6 +392,39 @@ void _reviewDeviceExport(File input) {
   }, timeout: const Timeout(Duration(minutes: 4)));
 }
 
+Future<void> _restorePublishedFixture(
+  TestFamily source,
+  File input,
+  Set<String> assets,
+) async {
+  final original = source.service;
+  final owner = await original.pin.unlock(TestFamily.pin);
+  final transfer = _transfer(source, assets);
+  final preview = await transfer.inspect(
+    input,
+    _deviceFixturePassphrase,
+    owner,
+  );
+  try {
+    final restored = await transfer.activate(
+      preview,
+      TestFamily.pin,
+      PinGate.newRecoveryCode(),
+      session: owner,
+      replace: true,
+      protection: await transfer.protectCurrent(owner),
+    );
+    source.service = restored.service;
+    await original.close();
+    _log('fixture_input', {
+      'sha256': await fileHash(input),
+      'business_sha256': preview.info.businessDigest,
+    });
+  } finally {
+    await preview.close();
+  }
+}
+
 void main() {
   final reviewPath = Platform.environment['ALICE_QA_REVIEW_FILE'];
   if (reviewPath != null) {
@@ -399,6 +432,10 @@ void main() {
     return;
   }
   final outputPath = Platform.environment['ALICE_QA_OUTPUT_DIR'];
+  final inputPath = Platform.environment['ALICE_QA_INPUT_FILE'];
+  if (inputPath != null && outputPath != null) {
+    throw ArgumentError('Select fixture replay or fixture generation.');
+  }
   final deviceFixture = outputPath != null;
   test(
     deviceFixture
@@ -411,9 +448,13 @@ void main() {
       addTearDown(target.dispose);
       expect(source.root.path, isNot(target.root.path));
       final targetBefore = await target.device.activeGeneration();
+      final assets = _runtimeAssets();
+      if (inputPath != null) {
+        await _restorePublishedFixture(source, File(inputPath), assets);
+      }
       final sourceOwner = await source.service.pin.unlock(TestFamily.pin);
       final targetOwner = await target.service.pin.unlock(TestFamily.pin);
-      await _seedHistory(source, sourceOwner);
+      if (inputPath == null) await _seedHistory(source, sourceOwner);
       final pending = deviceFixture
           ? await _seedDeviceChecks(source.service, sourceOwner)
           : const <String>[];
@@ -424,7 +465,6 @@ void main() {
         session: targetOwner,
       );
 
-      final assets = _runtimeAssets();
       final exporter = _transfer(source, assets);
       final importer = _transfer(target, assets);
       final transit = await Directory.systemTemp.createTemp(
@@ -432,11 +472,19 @@ void main() {
       );
       addTearDown(() async => transit.delete(recursive: true));
       final preflight = File(p.join(transit.path, 'preflight.sqlite'));
-      final syntheticCount = await _fillFixture(
-        source,
-        preflight,
-        deviceFixture: deviceFixture,
-      );
+      int? syntheticCount;
+      if (inputPath == null) {
+        syntheticCount = await _fillFixture(
+          source,
+          preflight,
+          deviceFixture: deviceFixture,
+        );
+      } else {
+        final database = source.device.databaseFile(
+          source.service.pin.generation,
+        );
+        await vacuumFile(database.path, preflight.path);
+      }
       final sourceBytes = await preflight.length();
       final original = await checkSnapshot(
         preflight.path,
@@ -456,7 +504,7 @@ void main() {
         'snapshot_bytes': sourceBytes,
         'schema': original.schemaVersion,
         'revision': original.revision,
-        'seeded_backfill_extensions': syntheticCount,
+        'seeded_backfill_extensions': ?syntheticCount,
         'summary': original.summary,
         'digest': original.businessDigest,
       });
