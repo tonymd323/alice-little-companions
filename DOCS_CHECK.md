@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1098 项通过。下面列出逐项结果。
+- 本次准备检查 1103 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -336,6 +336,11 @@
 - 内部链接有效：docs/evidence/companion-unlock/README.md → large-fixture.log
 - 内部链接有效：docs/evidence/companion-unlock/README.md → ../device-acceptance/README.md
 - 内部链接有效：docs/evidence/companion-unlock/README.md → ../../DELIVERY.md
+- 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → ../package.json
+- 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → ../../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → a-to-b-system-save.png
+- 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → a-to-b-readback.png
+- 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → verification.json
 - 内部链接有效：docs/evidence/courtyard-motion/README.md → courtyard-stairs.mp4
 - 内部链接有效：docs/evidence/courtyard-motion/README.md → cat-three-walks.mp4
 - 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../apps/mobile/assets/art/garden.webp
