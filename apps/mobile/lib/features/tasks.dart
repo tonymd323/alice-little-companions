@@ -624,6 +624,7 @@ class ApprovePage extends StatefulWidget {
 class _ApprovePageState extends State<ApprovePage> {
   final feedback = TextEditingController();
   late String date = widget.task.actual ?? widget.controller.service!.today;
+  ({String date, String note, int points, int experience})? receipt;
 
   @override
   void dispose() {
@@ -631,8 +632,79 @@ class _ApprovePageState extends State<ApprovePage> {
     super.dispose();
   }
 
+  Future<void> approve() async {
+    final actualDate = date;
+    final note = feedback.text;
+    FocusScope.of(context).unfocus();
+    final controller = widget.controller;
+    final result = await controller.service!.approve(
+      widget.task.id,
+      actualDate,
+      note,
+      session: controller.session,
+    );
+    await controller.refresh();
+    if (!mounted) return;
+    if (result['new_stage'] == true) {
+      await showEvolution(
+        context,
+        controller.family!.companion,
+        result['previous_stage'] as int,
+        result['stage'] as int,
+        receipt: [
+          widget.task.title,
+          '+${result['delta']} 分 · +1 经验',
+          if (note.trim().isNotEmpty) note.trim(),
+        ].join('\n'),
+        outfit: outfitFiles(controller.outfit),
+      );
+      if (mounted) Navigator.pop(context);
+      return;
+    }
+    setState(() {
+      receipt = (
+        date: actualDate,
+        note: note.trim(),
+        points: result['delta'] as int,
+        experience: result['experience_delta'] as int? ?? 0,
+      );
+    });
+  }
+
   @override
-  Widget build(BuildContext context) => ParentFrame(
+  Widget build(BuildContext context) {
+    final saved = receipt;
+    if (saved == null) return form(context);
+
+    return ParentFrame(
+      controller: widget.controller,
+      title: '成果已确认',
+      child: PageBody(
+        maxWidth: 520,
+        child: GardenCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(widget.task.title, style: Theme.of(context).textTheme.titleLarge),
+              if (saved.note.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(saved.note),
+              ],
+              const SizedBox(height: 10),
+              Text('发生日期 ${saved.date} · +${saved.points} 分 · +${saved.experience} 经验'),
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('完成'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget form(BuildContext context) => ParentFrame(
     controller: widget.controller,
     title: '确认成果',
     child: PageBody(
@@ -657,62 +729,7 @@ class _ApprovePageState extends State<ApprovePage> {
           ActionButton(
             label: '确认并入账 ${widget.task.reward} 分',
             enabled: !widget.controller.service!.frozen,
-            action: () async {
-              FocusScope.of(context).unfocus();
-              final result = await widget.controller.service!.approve(
-                widget.task.id,
-                date,
-                feedback.text,
-                session: widget.controller.session,
-              );
-              await widget.controller.refresh();
-              if (!context.mounted) return;
-              if (result['new_stage'] == true) {
-                await showEvolution(
-                  context,
-                  widget.controller.family!.companion,
-                  result['previous_stage'] as int,
-                  result['stage'] as int,
-                  receipt: [
-                    widget.task.title,
-                    '+${result['delta']} 分 · +1 经验',
-                    if (feedback.text.trim().isNotEmpty) feedback.text.trim(),
-                  ].join('\n'),
-                  outfit: outfitFiles(widget.controller.outfit),
-                );
-              } else {
-                await showDialog<void>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('成果已确认'),
-                    scrollable: true,
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.task.title,
-                          style: const TextStyle(fontWeight: FontWeight.w700),
-                        ),
-                        if (feedback.text.trim().isNotEmpty)
-                          Text(feedback.text.trim()),
-                        const SizedBox(height: 8),
-                        Text(
-                          '发生日期 $date · +${result['delta']} 分 · +${result['experience_delta'] ?? 0} 经验',
-                        ),
-                      ],
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('完成'),
-                      ),
-                    ],
-                  ),
-                );
-              }
-              if (context.mounted) Navigator.pop(context);
-            },
+            action: approve,
           ),
           const SizedBox(height: 8),
           ActionButton(
