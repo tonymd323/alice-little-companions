@@ -1,0 +1,10 @@
+Build source: 772db06b8df394332a8aee1297ec05658ed5e66a
+Download commit: cda3a9994820b0aa485e39c17c9691fa9d7dee88
+GitHub connector latest.json blob: b42645bde5648bda3e408a82496f21f811f35264
+Manifest and APK bytes taken from the previously verified independent Git copy.
+The direct GitHub Contents API request from this Linux cloud environment returned Forbidden.
+Test: Flutter 3.50.0 / Dart 3.14.0, local HTTP server with real release bytes and synthetic authorization.
+The Android installer method channel returns simulated permission and launch results.
+$ flutter test --no-pub --reporter expanded test/published_update_probe_test.dart
+APK-UPDATE {"version_code":20,"apk_bytes":83168804,"sha256":"6a3930f07ac58d7b5b257e9bc73a92ff9df47ea671d151cafd9644d3230e0979","raw_api_headers_verified":true,"unauthenticated_prompt_verified":true,"apk_get_requests":1,"installer_channel_requests":2,"cache_reused_after_parent_unlock":true,"already_installed_version_ignored":true}
+00:24 +1: All tests passed!

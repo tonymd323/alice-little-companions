@@ -13,3 +13,25 @@ Android 9 API 28 模拟器使用同签的测试入口，保留原 0.17 合成家
 安装包与 `latest.json` 同批提交到 `android-downloads` 的 `7002b80`。独立 Git 副本重新取回两份文件，版本记录逐字一致，APK 长度和 SHA-256 与构建结果一致。[GitHub 下载核对](github-018-receipt.json) · [构建包回执](package.json)
 
 覆盖后的正式包在飞行模式下通过家长 PIN 打开「应用更新」，正确显示当前版本和检查按钮。[正式包更新入口](native-update-page.png)
+
+## 0.21.1 发布包复测
+
+用 `772db06` 的更新页复测从 `0.21.0+19` 到 `0.21.1+20`。测试服务器使用从私有下载分支取回的更新清单和 83,168,804 字节的完整签名 APK，并用测试令牌校验 GitHub 请求格式。测试走通授权提示、发现新版、下载、SHA-256 校验，以及在模拟系统授权和家长重新解锁后交接安装。两次交接的文件均通过摘要校验，APK 只下载一次。当前版本号为 20 时未提示更新。[发布回执](../companion-query-performance/github-download.json) · [测试源码](published_update_probe_test.dart) · [日志](published-0211.log)
+
+GitHub 连接器读到的发布清单与测试用文件一致。此云端直连 GitHub API 返回 `Forbidden`。测试模拟了 GitHub 权限响应和安卓安装通道，私有仓库的设备侧认证与真机安装仍待实测。[GitHub 更新清单](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/latest.json)
+
+从源码仓库运行以下命令可复测。Git 需要读取私有下载分支的权限。
+
+```bash
+alice_repo=$(git rev-parse --show-toplevel)
+alice_probe=$(mktemp -d)
+git fetch origin android-downloads
+git show cda3a9994820b0aa485e39c17c9691fa9d7dee88:downloads/latest.json > "$alice_probe/github-latest.json"
+git show cda3a9994820b0aa485e39c17c9691fa9d7dee88:downloads/alice-0.21.1-android.apk > "$alice_probe/github-0211.apk"
+git worktree add --detach "$alice_probe/source" 772db06b8df394332a8aee1297ec05658ed5e66a
+cp "$alice_repo/docs/evidence/android-updates/published_update_probe_test.dart" "$alice_probe/source/apps/mobile/test/"
+cd "$alice_probe/source/apps/mobile"
+flutter pub get --enforce-lockfile
+ALICE_UPDATE_FIXTURE_DIR="$alice_probe" \
+  flutter test --no-pub --reporter expanded test/published_update_probe_test.dart
+```

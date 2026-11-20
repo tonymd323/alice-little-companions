@@ -2,7 +2,7 @@
 
 家庭版 **0.21.1+20** 使用原安卓签名，构建源码为 `772db06b8df394332a8aee1297ec05658ed5e66a`。[APK 与签名摘要](package.json) · [构建检查](build.log)
 
-原私有下载分支在同一提交中提供 APK、更新清单和 SHA-256 清单。用独立 Git 副本重新取回 APK 和更新清单，逐字节核对通过。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.1-android.apk?raw=true) · [发布回执](github-download.json)
+原私有下载分支在同一提交中提供 APK、更新清单和 SHA-256 清单。用独立 Git 副本重新取回 APK 和更新清单，逐字节核对通过。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.1-android.apk?raw=true) · [发布回执](github-download.json) · [App 内更新复测](../android-updates/README.md#0211-发布包复测)
 
 查询源码提交为 `4d084d5e959f33d9b05a20d85ee05d78150a3023`。每笔经验关联一条成果。查询利用 SQLite 结构 8 中已有的成果有效性索引和归属索引，读取有效与已更正成果中较少的一组，按伙伴计算经验。[实现](../../../apps/mobile/lib/application/companion_progress.dart) · [纠错回归](../../../apps/mobile/test/companion_unlock_test.dart)
 
