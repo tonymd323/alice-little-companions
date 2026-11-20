@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "version": "0.19.0",
-  "versionCode": 17,
-  "file": "alice-0.19.0-android.apk",
-  "sha256": "0f3ad5ca31a969938db22d24d3925cfe324cd4718aa1c4ca3bea1c95b543edc2",
-  "sizeBytes": 83119636
+  "version": "0.20.0",
+  "versionCode": 18,
+  "file": "alice-0.20.0-android.apk",
+  "sha256": "7c990f73c5b53f1529e11afca073dc6bcde189e56abdd5b624c553f877a25d91",
+  "sizeBytes": 83119632
 }
