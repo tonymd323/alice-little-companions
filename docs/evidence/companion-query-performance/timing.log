@@ -1,0 +1,24 @@
+Candidate source: 4d084d5e959f33d9b05a20d85ee05d78150a3023
+Released source: f3a7184aaeff2589f3ffe6ef6618ac21c0618288
+Linux x86_64, Flutter 3.50.0 / Dart 3.14.0 debug JIT, SQLite 3.54.1, no emulator during timing.
+Synthetic input SHA-256: 643685960f3204669bfa0d1e8ceb04c59b546fd7790876dcdf8c4439fb599c44
+SQLite probe: 5 preparatory iterations and 40 measured queries for each variant, alternating variants.
+The half-invalid and all-invalid queries ran in temporary SQLite transactions that were rolled back.
+
+XP-SQL SQLite 3.54.1
+XP-SQL plan current ["SCAN p USING COVERING INDEX sqlite_autoindex_owned_companions_2","CORRELATED SCALAR SUBQUERY 1","SEARCH x USING COVERING INDEX companion_completion_pet_idx (child_id=? AND pet_id=?)","SEARCH a USING INDEX sqlite_autoindex_completions_1 (id=?)","USE TEMP B-TREE FOR ORDER BY"]
+XP-SQL plan invalid_set ["SCAN p USING COVERING INDEX sqlite_autoindex_owned_companions_2","CORRELATED SCALAR SUBQUERY 2","SEARCH x USING COVERING INDEX companion_completion_pet_idx (child_id=? AND pet_id=?)","LIST SUBQUERY 1","SEARCH completions USING INDEX completion_date_idx (is_valid=?)","CREATE BLOOM FILTER","USE TEMP B-TREE FOR ORDER BY"]
+XP-SQL plan subtract_invalid ["SCAN p USING COVERING INDEX sqlite_autoindex_owned_companions_2","CORRELATED SCALAR SUBQUERY 4","SCAN CONSTANT ROW","CORRELATED SCALAR SUBQUERY 1","SEARCH x USING COVERING INDEX companion_completion_pet_idx (child_id=? AND pet_id=?)","CORRELATED SCALAR SUBQUERY 3","SEARCH a USING INDEX completion_date_idx (is_valid=?)","SEARCH x EXISTS USING COVERING INDEX companion_completion_pet_idx (child_id=? AND pet_id=? AND completion_id=?)","USE TEMP B-TREE FOR ORDER BY"]
+XP-SQL plan smaller_range ["SCAN p USING COVERING INDEX sqlite_autoindex_owned_companions_2","CORRELATED SCALAR SUBQUERY 8","SCAN CONSTANT ROW","SCALAR SUBQUERY 1","SEARCH completions USING COVERING INDEX completion_date_idx (is_valid=?)","SCALAR SUBQUERY 2","SEARCH completions USING COVERING INDEX completion_date_idx (is_valid=?)","CORRELATED SCALAR SUBQUERY 3","SEARCH x USING COVERING INDEX companion_completion_pet_idx (child_id=? AND pet_id=?)","CORRELATED SCALAR SUBQUERY 5","SEARCH a USING INDEX completion_date_idx (is_valid=?)","SEARCH x EXISTS USING COVERING INDEX companion_completion_pet_idx (child_id=? AND pet_id=? AND completion_id=?)","CORRELATED SCALAR SUBQUERY 7","SEARCH a USING INDEX completion_date_idx (is_valid=?)","SEARCH x EXISTS USING COVERING INDEX companion_completion_pet_idx (child_id=? AND pet_id=? AND completion_id=?)","USE TEMP B-TREE FOR ORDER BY"]
+XP-SQL {"fixture":"upgraded-published-fixture","owners":[["rabbit",10697]],"invalid":1,"p95_us":{"current":9624,"invalid_set":2597,"subtract_invalid":1005,"smaller_range":1577}}
+XP-SQL {"fixture":"half-invalid-single-owner","owners":[["rabbit",5349]],"invalid":5349,"p95_us":{"current":25416,"invalid_set":25095,"subtract_invalid":11603,"smaller_range":11287}}
+XP-SQL {"fixture":"all-invalid-single-owner","owners":[["rabbit",0]],"invalid":10698,"p95_us":{"current":8685,"invalid_set":16556,"subtract_invalid":13462,"smaller_range":609}}
+00:25 +1: All tests passed!
+
+Flutter UI probe: ten controller restarts and twenty parent approvals per independent copy.
+
+AC39 {"run":"query-candidate-1","ledger_at_start":10706,"upgrade_and_open_us":9604785,"boot_us":[1239194,242411,204618,197569,243865,175704,170511,152752,166927,136895],"confirm_us":[417811,264317,278227,269759,190972,190597,229080,221126,145265,231980,174368,152818,147536,164181,148477,161850,166433,176339,164614,130969],"refresh_us":[26536,34393,42451,28096,39768,28789,14794,51848,13090,42821,14698,21594,20582,39280,12918,16637,34851,25602,33631,24797],"slowest_boot_us":1239194,"confirm_p95_us":278227,"refresh_p95_us":42821}
+00:35 +1: All tests passed!
+
+AC39 {"run":"query-candidate-2","ledger_at_start":10706,"upgrade_and_open_us":9351252,"boot_us":[1106581,214927,188200,278081,243296,237164,167784,144125,213187,168240],"confirm_us":[429995,242747,244219,218872,223016,215863,212822,154004,156126,164363,177593,134783,136811,131499,123314,158630,201332,130276,221310,179996],"refresh_us":[41005,45446,21912,31596,35194,48581,34581,14858,16552,18608,39387,15053,14258,15467,19604,32928,29193,26943,39704,34001],"slowest_boot_us":1106581,"confirm_p95_us":244219,"refresh_p95_us":45446}
+00:35 +1: All tests passed!

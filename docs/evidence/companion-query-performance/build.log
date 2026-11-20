@@ -1,0 +1,13 @@
+Source: 772db06b8df394332a8aee1297ec05658ed5e66a
+Flutter 3.50.0 / Dart 3.14.0 / JDK 21 / Android Build Tools 36.0.0
+$ flutter build apk --release
+✓ Built build/app/outputs/flutter-apk/app-release.apk (83.2MB)
+pubspec.lock checked against the source commit after the build.
+$ apksigner verify --verbose --print-certs alice-0.21.1-android.apk
+Verified using APK Signature Scheme v2 and original family certificate c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05
+$ zipalign -c -P 16 -v 4 alice-0.21.1-android.apk
+Verification successful.
+$ python3 tools/check_daily_release.py alice-0.21.1-android.apk
+247 app assets verified.
+$ python3 tools/check_wind_release.py alice-0.21.1-android.apk
+58 warm veranda files verified.

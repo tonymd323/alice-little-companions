@@ -2,7 +2,7 @@
 
 2026-11-18　｜　交付基线 2.0　｜　iOS、iPadOS、Android
 
-安卓家庭候选版 **0.21.0+19** 增加伙伴解锁和独立成长。0.18 及后续家庭版可在「家长入口 → 应用更新」检查并覆盖安装。也可以在手机浏览器登录 GitHub 后下载家庭包。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.0-android.apk?raw=true) · [应用更新说明](docs/DELIVERY.md#app-内更新) · [本轮测试](docs/evidence/companion-unlock/README.md)
+安卓家庭候选版 **0.21.1+20** 优化大存档中的伙伴经验查询。0.18 及后续家庭版可在「家长入口 → 应用更新」检查并覆盖安装。也可以在手机浏览器登录 GitHub 后下载家庭包。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.1-android.apk?raw=true) · [应用更新说明](docs/DELIVERY.md#app-内更新) · [本轮测试](docs/evidence/companion-query-performance/README.md)
 
 修好暖廊彩窗后，从小家的「主线」打开《奶油的雨天地图》。在「成长」可以看三只伙伴各自的亲密度和回忆。[家庭功能实测](docs/evidence/family-functions/README.md)
 
