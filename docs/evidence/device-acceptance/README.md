@@ -1,12 +1,12 @@
 # 安卓与 iPad 真机验收
 
-双端使用同一候选版本。最新候选为 0.20.0+18，构建源码 `0b3aa4d8b6a2de22be99bd35666a9b7e66ffbf6a`。记录设备型号、系统版本、签名方式和测试证据。[安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.20.0-android.apk?raw=true) · [iPad 签名安装](../../DELIVERY.md#ipad-首次试装)
+双端使用 **0.21.0+19**，构建源码 `f3a7184aaeff2589f3ffe6ef6618ac21c0618288`。记录设备型号、系统版本、签名方式和测试证据。[安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.0-android.apk?raw=true) · [iPad 签名安装](../../DELIVERY.md#ipad-首次试装)
 
 ## 导入测试家庭
 
 把合成档保存到设备本地，在飞行模式从「从备份恢复」选文件。测试口令为 `Alice-QA-Fixture-019`。激活时为测试设备设置新 PIN。请使用专门的测试安装，恢复会替换设备上的当前小家。[下载合成档](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/acceptance/alice-qa-019.alicebackup?raw=true) · [文件摘要与预期数字](fixture.json)
 
-恢复后核对第六阶段桃桃、已佩戴的围巾、已兑换家具、扶手椅心愿、扣分撤销与成果更正。彩窗已修复，雨天地图完成过 12 块石板和近路挑战，重玩进度留在第一块石板。家长入口可见 21 项编号待确认小事。[玩法与换机路径](../../BACKUP_MIGRATION.md)
+恢复后核对余额 32,077 分、桃桃 6 级和 10,697 经验，以及已佩戴的围巾、已兑换家具、扶手椅心愿、扣分撤销与成果更正。此次旧档升级后，桃桃是唯一已解锁伙伴。彩窗已修复，雨天地图完成过 12 块石板和近路挑战，重玩进度留在第一块石板。家长入口可见 21 项编号待确认小事。[玩法与换机路径](../../BACKUP_MIGRATION.md)
 
 该文件解密后的 SQLite 有 49.95 MiB，包含 10,706 条流水和 10,697 项有效成果。用 Flutter 3.50.0 / Dart 3.14.0 调试模式从独立云端存档恢复，前后业务摘要一致。连续确认 20 件后增加 40 分、20 经验，应用服务调用 p95 为 13.69 毫秒。生成时并行启动了安卓软件模拟器，记录的导出为 21.455 秒、恢复为 14.792 秒。[云端日志](fixture-tests.log)
 
@@ -14,8 +14,8 @@
 
 ## 双向迁移
 
-1. 在 iPad 从「备份与迁移 → 迁移到新设备」生成文件，用同一测试口令保存并回读。确认源机保持只读。把文件交给安卓，从系统文件选择器导入，核对预览数字和恢复后家园。安卓在新增记录前导出一份普通备份，核对它与 iPad 迁移档的业务 SHA-256 相同，随后归档 iPad 上的原档。
-2. 在安卓确认「测试待确认 01」，核对增加 2 分和 1 经验。生成迁移档并保存、回读，确认安卓源机冻结。在已归档的 iPad 用原本机 PIN 解锁，通过「备份与迁移 → 从外部备份恢复」选择返程文件，设置新 PIN，建立恢复点并确认替换。冷启动核对新增记录、剧情和物品，再导出普通备份与安卓迁移档比对业务 SHA-256。
+1. 在 iPad 的测试家庭用 30 分解锁团团。核对桃桃为 6 级、10,697 经验，团团为 1 级、0 经验，余额为 32,047 分。从「备份与迁移 → 迁移到新设备」用同一测试口令保存并回读。确认 iPad 保持只读，将文件通过系统文件选择器导入安卓。保留两只伙伴的核对截图，从安卓导出普通备份与 iPad 迁移档比对业务 SHA-256，再归档 iPad 原档。
+2. 在安卓切换到团团并确认「测试待确认 01」。核对余额 32,049 分，团团获得 1 经验。保存并回读返程档，安卓进入只读。在已归档的 iPad 用原 PIN 解锁，通过「从外部备份恢复」选择返程文件，设置新 PIN，建立恢复点并确认替换。冷启动后核对两只伙伴的经验、剧情、物品和账本，再导出普通备份与安卓迁移档比对业务 SHA-256。
 
 文件 SHA-256 用于校验传输。业务 SHA-256 来自解密后的规范化 SQLite 内容。用下面的复核命令分别读取源端和目标端的文件，每个方向的两个 `business_sha256` 应相同。[AC-29、AC-30](../../ACCEPTANCE.md#3-备份恢复和迁移)
 
@@ -46,9 +46,13 @@ flutter pub get --enforce-lockfile
 ALICE_QA_OUTPUT_DIR="$alice_probe" flutter test --no-pub --reporter expanded test/backup_50m_benchmark_test.dart
 ```
 
-输出在 `$alice_probe/alice-qa-019-*`。检查从任一设备导出的文件时使用绝对路径。
+输出在 `$alice_probe/alice-qa-019-*`。用 0.21 的源码复核候选版导出的文件。升级旧档时会增加伙伴记录，因此每个方向都比较同为结构 8 的两份导出。
 
 ```sh
+git -C "$alice_repo" worktree add --detach "$alice_probe/check" f3a7184aaeff2589f3ffe6ef6618ac21c0618288
+cp "$alice_repo/docs/evidence/family-offline/backup_50m_benchmark_test.dart" "$alice_probe/check/apps/mobile/test/"
+cd "$alice_probe/check/apps/mobile"
+flutter pub get --enforce-lockfile
 ALICE_QA_REVIEW_FILE=/absolute/path/to/test.alicebackup \
   flutter test --no-pub --reporter expanded test/backup_50m_benchmark_test.dart
 ```
