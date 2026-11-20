@@ -228,7 +228,9 @@ Snapshot _check(
       """) ||
         invalid("""
       SELECT id FROM ledger_entries l WHERE
-      (l.kind = 'reward' AND NOT EXISTS (SELECT 1 FROM completions c WHERE l.source_key = 'reward:' || c.instance_id))
+      (l.kind = 'reward' AND l.source_key NOT IN (
+        SELECT 'reward:' || c.instance_id FROM completions c
+      ))
       OR (l.kind = 'purchase' AND NOT EXISTS (SELECT 1 FROM purchases p WHERE p.ledger_id = l.id))
       OR (l.kind = 'penalty' AND NOT EXISTS (SELECT 1 FROM penalty_events p WHERE p.ledger_id = l.id))
       OR (l.kind = 'correction' AND NOT EXISTS (SELECT 1 FROM correction_records c

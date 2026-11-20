@@ -343,6 +343,54 @@ void main() {
     expect((await source.service.overview())!.balance, 37);
   }, timeout: const Timeout(Duration(minutes: 4)));
 
+  test('snapshot rejects a balanced reward without a matching completion', () async {
+    final stock = await TestFamily.create();
+    addTearDown(stock.dispose);
+    final owner = await stock.service.pin.unlock(TestFamily.pin);
+    await stock.service.backfill(
+      fixtureDraft,
+      stock.service.today,
+      '',
+      session: owner,
+    );
+    final snapshot = p.join(stock.root.path, 'stray-credit.sqlite');
+    await vacuumFile(
+      stock.device.databaseFile(stock.service.pin.generation).path,
+      snapshot,
+    );
+    final schema = await expectedSchema();
+    final valid = await checkSnapshot(snapshot, schema, stock.rules, assets);
+    expect(valid.summary['ledger_count'], 1);
+
+    final db = sqlite3.open(snapshot);
+    try {
+      db.execute('''
+        INSERT INTO ledger_entries (
+          id, account_id, delta, balance_after, kind, source_key, actual_date,
+          posted_day, created_at, command_id
+        )
+        SELECT 'stray-credit', account_id, delta, balance_after + delta,
+               kind, source_key || ':unexpected', actual_date, posted_day,
+               created_at, 'stray-credit-command'
+        FROM ledger_entries WHERE kind = 'reward';
+        UPDATE accounts SET balance = balance * 2;
+      ''');
+    } finally {
+      db.close();
+    }
+
+    await expectLater(
+      checkSnapshot(snapshot, schema, stock.rules, assets),
+      throwsA(
+        isA<UserError>().having(
+          (error) => error.message,
+          'message',
+          '存档的成果、兑换或布置关联校验失败。',
+        ),
+      ),
+    );
+  });
+
   test('0.10 family upgrades with an empty chapter, keeps its ledger and restores the bookmark on restart', () async {
     final stock = await TestFamily.create();
     addTearDown(stock.dispose);
