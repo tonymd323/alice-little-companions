@@ -351,7 +351,7 @@ void main() {
         controller.dispose();
         await fixture.dispose();
       });
-      final before = (await tester.runAsync(() async {
+      final initial = (await tester.runAsync(() async {
         final adult = await fixture.service.pin.unlock(TestFamily.pin);
         await fixture.service.backfill(
           const TaskDraft('测试任务A', '', '测试标准A', 'focus'),
@@ -370,9 +370,19 @@ void main() {
       await advanceScene(tester);
       await tester.tap(find.text('暖廊'));
       await advanceScene(tester);
-      await tester.tapAt(tester.getCenter(find.byType(IllustratedPet)));
+      final petPosition = tester.getCenter(find.byType(IllustratedPet));
+      await tester.runAsync(() => tester.tapAt(petPosition));
       await advanceScene(tester);
       expect(find.text('桃桃轻轻跳了一下'), findsOneWidget);
+      final before = (await tester.runAsync(() async {
+        // The live interaction records its first memory before the preview.
+        await fixture.service.serial.run(() async {});
+        final touched = (await fixture.service.overview())!;
+        expect(touched.bond.touched, isTrue);
+        expect(touched.revision, initial.revision + 1);
+        expect((touched.balance, touched.experience), (3, 1));
+        return touched;
+      }))!;
       final preview = find.text('外观预览');
       await tester.ensureVisible(preview);
       await tester.tap(preview);
@@ -397,6 +407,7 @@ void main() {
         expect(
           (
             latest.balance,
+            latest.experience,
             latest.revision,
             latest.stage,
             latest.companion,
@@ -404,6 +415,7 @@ void main() {
           ),
           (
             before.balance,
+            before.experience,
             before.revision,
             before.stage,
             before.companion,
