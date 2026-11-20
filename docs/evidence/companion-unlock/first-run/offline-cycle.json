@@ -1,0 +1,241 @@
+{
+  "states": {
+    "published": {
+      "generation_sha256": "b99528275ea7cb8da5d401f3287d7b81b7f5f08cca335cd8dd94fc4e95f34d17",
+      "all_business_rows_sha256": "022e07da8da71827cfc5f1fc6e8dbc88199da772ce0ccc0f1a98e95b93e5e234",
+      "business_tables": 30,
+      "schema": 8,
+      "active": "cat",
+      "balance": 0,
+      "tasks": 2,
+      "pending": 0,
+      "valid_outcomes": 0,
+      "ledger_entries": 0,
+      "reconciled_ledger": true,
+      "companions": [
+        [
+          "cat",
+          1,
+          0,
+          null
+        ]
+      ],
+      "inventory": [],
+      "room_items": 0,
+      "state": "IDLE",
+      "external_receipt": null
+    },
+    "submitted": {
+      "generation_sha256": "b99528275ea7cb8da5d401f3287d7b81b7f5f08cca335cd8dd94fc4e95f34d17",
+      "all_business_rows_sha256": "acab839ed5212fe70653560a7bb9b3b24f5eb15b1640ab7648c54c2d5e85cb09",
+      "business_tables": 30,
+      "schema": 8,
+      "active": "cat",
+      "balance": 0,
+      "tasks": 2,
+      "pending": 2,
+      "valid_outcomes": 0,
+      "ledger_entries": 0,
+      "reconciled_ledger": true,
+      "companions": [
+        [
+          "cat",
+          1,
+          0,
+          null
+        ]
+      ],
+      "inventory": [],
+      "room_items": 0,
+      "state": "IDLE",
+      "external_receipt": null
+    },
+    "approved": {
+      "generation_sha256": "b99528275ea7cb8da5d401f3287d7b81b7f5f08cca335cd8dd94fc4e95f34d17",
+      "all_business_rows_sha256": "95490ece27b70eb090d083b51824e2844ef21bae6802eb9bf84b3fe4e586d2c7",
+      "business_tables": 30,
+      "schema": 8,
+      "active": "cat",
+      "balance": 6,
+      "tasks": 2,
+      "pending": 0,
+      "valid_outcomes": 2,
+      "ledger_entries": 2,
+      "reconciled_ledger": true,
+      "companions": [
+        [
+          "cat",
+          1,
+          2,
+          null
+        ]
+      ],
+      "inventory": [],
+      "room_items": 0,
+      "state": "IDLE",
+      "external_receipt": null
+    },
+    "redeemed": {
+      "generation_sha256": "b99528275ea7cb8da5d401f3287d7b81b7f5f08cca335cd8dd94fc4e95f34d17",
+      "all_business_rows_sha256": "ee17cb753d0640488bb84f2cf97fad9fab2c982f76a2ff3e0dc726d433085f34",
+      "business_tables": 30,
+      "schema": 8,
+      "active": "cat",
+      "balance": 0,
+      "tasks": 2,
+      "pending": 0,
+      "valid_outcomes": 2,
+      "ledger_entries": 3,
+      "reconciled_ledger": true,
+      "companions": [
+        [
+          "cat",
+          1,
+          2,
+          null
+        ]
+      ],
+      "inventory": [
+        "decor_vase"
+      ],
+      "room_items": 1,
+      "state": "IDLE",
+      "external_receipt": null
+    },
+    "redemption-cold": {
+      "generation_sha256": "b99528275ea7cb8da5d401f3287d7b81b7f5f08cca335cd8dd94fc4e95f34d17",
+      "all_business_rows_sha256": "ee17cb753d0640488bb84f2cf97fad9fab2c982f76a2ff3e0dc726d433085f34",
+      "business_tables": 30,
+      "schema": 8,
+      "active": "cat",
+      "balance": 0,
+      "tasks": 2,
+      "pending": 0,
+      "valid_outcomes": 2,
+      "ledger_entries": 3,
+      "reconciled_ledger": true,
+      "companions": [
+        [
+          "cat",
+          1,
+          2,
+          null
+        ]
+      ],
+      "inventory": [
+        "decor_vase"
+      ],
+      "room_items": 1,
+      "state": "IDLE",
+      "external_receipt": null
+    },
+    "backup-verified": {
+      "generation_sha256": "b99528275ea7cb8da5d401f3287d7b81b7f5f08cca335cd8dd94fc4e95f34d17",
+      "all_business_rows_sha256": "ee17cb753d0640488bb84f2cf97fad9fab2c982f76a2ff3e0dc726d433085f34",
+      "business_tables": 30,
+      "schema": 8,
+      "active": "cat",
+      "balance": 0,
+      "tasks": 2,
+      "pending": 0,
+      "valid_outcomes": 2,
+      "ledger_entries": 3,
+      "reconciled_ledger": true,
+      "companions": [
+        [
+          "cat",
+          1,
+          2,
+          null
+        ]
+      ],
+      "inventory": [
+        "decor_vase"
+      ],
+      "room_items": 1,
+      "state": "IDLE",
+      "external_receipt": "verified"
+    },
+    "restored-cold": {
+      "generation_sha256": "5b7ff2ce57b39498bc1e1245e83a89a62c7f5a8cf2c15e86dc4211a9bcbdfb22",
+      "all_business_rows_sha256": "ee17cb753d0640488bb84f2cf97fad9fab2c982f76a2ff3e0dc726d433085f34",
+      "business_tables": 30,
+      "schema": 8,
+      "active": "cat",
+      "balance": 0,
+      "tasks": 2,
+      "pending": 0,
+      "valid_outcomes": 2,
+      "ledger_entries": 3,
+      "reconciled_ledger": true,
+      "companions": [
+        [
+          "cat",
+          1,
+          2,
+          null
+        ]
+      ],
+      "inventory": [
+        "decor_vase"
+      ],
+      "room_items": 1,
+      "state": "IDLE",
+      "external_receipt": null
+    }
+  },
+  "external_file": {
+    "local_filename": "alice-cdb4227c-3980-4608-84d9-7ff1bef89bd7.alicebackup",
+    "sha256": "e9e69a2c8a2754e0370b161305096b8a07b3dca9f13f616f971a7f584ce2ec80",
+    "bytes": 12918,
+    "magic": "ALICEBK1"
+  },
+  "independent_file_review": {
+    "runtime": "Node crypto / Python sqlite3",
+    "authenticated": true,
+    "schema": 8,
+    "cipher": "AES-256-GCM",
+    "bytes": 12918,
+    "sha256": "e9e69a2c8a2754e0370b161305096b8a07b3dca9f13f616f971a7f584ce2ec80",
+    "databaseSha256": "335c7d02c565bcd3e8cee587e358a58f2442b149bb28351d18b7ee2460e40705",
+    "businessTables": 30,
+    "businessSha256": "ee17cb753d0640488bb84f2cf97fad9fab2c982f76a2ff3e0dc726d433085f34",
+    "ledgerDeltas": [
+      3,
+      3,
+      -6
+    ],
+    "summary": {
+      "balance": 0,
+      "ledger_count": 3,
+      "valid_completion_count": 2,
+      "owned_item_count": 1,
+      "space_count": 1,
+      "max_growth_stage": 1,
+      "active_companion_experience": 2,
+      "owned_companion_count": 1
+    }
+  },
+  "veranda_comparison": {
+    "view": "veranda",
+    "screen": [
+      390,
+      844
+    ],
+    "compared_bounds": [
+      0,
+      149,
+      390,
+      348
+    ],
+    "changed_bounds": [
+      133,
+      202,
+      152,
+      232
+    ],
+    "changed_pixels": 426,
+    "vase_region_matches_after_restore": true
+  },
+  "new_parent_pin_verified": true
+}
