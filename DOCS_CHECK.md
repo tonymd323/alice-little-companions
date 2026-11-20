@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1043 项通过。下面列出逐项结果。
+- 本次准备检查 1056 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -73,6 +73,7 @@
 - 内部链接有效：docs/DELIVERY.md → OWNER_WALKTHROUGH.md
 - 内部链接有效：docs/DELIVERY.md → BACKUP_MIGRATION.md
 - 内部链接有效：docs/DELIVERY.md → evidence/backup-performance/README.md
+- 内部链接有效：docs/DELIVERY.md → evidence/device-acceptance/README.md
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/references/pet-stages.png
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/references/garden-color.png
 - 内部链接有效：docs/DESIGN_SPEC.md → TECH_SPEC.md
@@ -135,6 +136,7 @@
 - 内部链接有效：docs/PLAN.md → DELIVERY.md
 - 内部链接有效：docs/PLAN.md → evidence/android-updates/README.md
 - 内部链接有效：docs/PLAN.md → evidence/backup-performance/README.md
+- 内部链接有效：docs/PLAN.md → evidence/device-acceptance/README.md
 - 内部链接有效：docs/PLAN.md → GAME_STUDIO.md
 - 内部链接有效：docs/PLAN.md → evidence/wind/README.md
 - 内部链接有效：docs/PLAN.md → evidence/M0/README.md
@@ -369,6 +371,17 @@
 - 内部链接有效：docs/evidence/daily/README.md → android-checks.log
 - 内部链接有效：docs/evidence/daily/README.md → github-download.json
 - 内部链接有效：docs/evidence/daily/README.md → ../../PLAN.md
+- 内部链接有效：docs/evidence/device-acceptance/README.md → ../../DELIVERY.md
+- 内部链接有效：docs/evidence/device-acceptance/README.md → fixture.json
+- 内部链接有效：docs/evidence/device-acceptance/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/device-acceptance/README.md → fixture-tests.log
+- 内部链接有效：docs/evidence/device-acceptance/README.md → github-fixture.json
+- 内部链接有效：docs/evidence/device-acceptance/README.md → android-preview.png
+- 内部链接有效：docs/evidence/device-acceptance/README.md → android-restored-home.png
+- 内部链接有效：docs/evidence/device-acceptance/README.md → android-restoration.json
+- 内部链接有效：docs/evidence/device-acceptance/README.md → ../../ACCEPTANCE.md
+- 内部链接有效：docs/evidence/device-acceptance/README.md → ../../ACCEPTANCE.md
+- 内部链接有效：docs/evidence/device-acceptance/README.md → ../acceptance.csv
 - 内部链接有效：docs/evidence/family-functions/README.md → package.json
 - 内部链接有效：docs/evidence/family-functions/README.md → assets-daily.json
 - 内部链接有效：docs/evidence/family-functions/README.md → assets-wind.json

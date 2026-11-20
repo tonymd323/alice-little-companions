@@ -1,0 +1,21 @@
+0.19.0+17 c55dbd1605215c78cb13101a273bfa53ace01819; Linux JIT while Android software emulator started
+AC40 calibration {"generated_rows":5000,"snapshot_bytes":24834048}
+AC40 calibration {"generated_rows":7000,"snapshot_bytes":34578432}
+AC40 calibration {"generated_rows":9000,"snapshot_bytes":44380160}
+AC40 calibration {"generated_rows":10642,"snapshot_bytes":52379648}
+AC40 fixture {"sqlite":"3.54.1","dart":"3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on \"linux_x64\"","snapshot_bytes":52379648,"schema":7,"revision":10779,"seeded_backfill_extensions":10642,"summary":{"balance":32077,"ledger_count":10706,"valid_completion_count":10697,"owned_item_count":5,"space_count":1,"max_growth_stage":6},"digest":"de93819ac02daec6326bcad55cecf59fe6a8ea5bb50a45b9e68f9ba152d35729"}
+AC40 export {"total_ms":21455,"preparing_ms":7,"phases_ms":{"snapshot":129,"checking":1789,"encrypting":10490,"readback":9040}}
+AC40 handoff {"local_copy_and_receipt_ms":22,"container_bytes":18392508}
+AC40 restore {"total_ms":14792,"preview":{"total_ms":8993,"preparing_ms":1,"phases_ms":{"decrypting":7241,"checking":1751}},"protect_target":{"total_ms":122,"preparing_ms":5,"phases_ms":{"snapshot":8,"checking":10,"encrypting":99}},"activate_ms":5676}
+AC40 verification {"restored_snapshot_bytes":52379648,"activated_target_digest":"de93819ac02daec6326bcad55cecf59fe6a8ea5bb50a45b9e68f9ba152d35729","same_summary":true,"same_business_digest":true,"target_generation_switched":true,"source_balance_preserved":true}
+AC40 local_commands {"approved":20,"elapsed_us":[13304,27598,13693,9383,9745,13171,9509,8558,13624,8350,8745,8374,9184,9605,10667,7849,9089,9451,7875,7783]}
+AC40 device_fixture {"file":"alice-qa-019.alicebackup","sha256":"643685960f3204669bfa0d1e8ceb04c59b546fd7790876dcdf8c4439fb599c44","file_bytes":18392508,"snapshot_bytes":52379648,"schema":7,"business_sha256":"de93819ac02daec6326bcad55cecf59fe6a8ea5bb50a45b9e68f9ba152d35729","pending_approvals":21,"summary":{"balance":32077,"ledger_count":10706,"valid_completion_count":10697,"owned_item_count":5,"space_count":1,"max_growth_stage":6}}
+00:59 +1: All tests passed!
+
+Synthetic export review
+AC40 device_export {"mode":"backup","summary":{"balance":32077,"ledger_count":10706,"valid_completion_count":10697,"owned_item_count":5,"space_count":1,"max_growth_stage":6},"business_sha256":"de93819ac02daec6326bcad55cecf59fe6a8ea5bb50a45b9e68f9ba152d35729","file_sha256":"643685960f3204669bfa0d1e8ceb04c59b546fd7790876dcdf8c4439fb599c44"}
+00:14 +1: All tests passed!
+
+Default benchmark replay
+AC40 verification {"restored_snapshot_bytes":52256768,"activated_target_digest":"748699ea854afd66c47a116a124ca84b76737e5b52f705576babb0c5000eae56","same_summary":true,"same_business_digest":true,"target_generation_switched":true,"source_balance_preserved":true}
+00:53 +1: All tests passed!

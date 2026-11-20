@@ -5,9 +5,16 @@ import 'dart:math';
 
 import 'package:alice_companions/application/family.dart';
 import 'package:alice_companions/application/transfer.dart';
+import 'package:alice_companions/data/device.dart';
 import 'package:alice_companions/data/snapshot.dart';
+import 'package:alice_companions/domain/backup_codec.dart';
+import 'package:alice_companions/domain/companion_bond.dart';
+import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/domain/pin.dart';
+import 'package:alice_companions/domain/rain_map.dart';
 import 'package:alice_companions/domain/rules.dart';
+import 'package:alice_companions/domain/wind_progress.dart';
+import 'package:alice_companions/domain/window_page.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
@@ -17,11 +24,12 @@ import 'support/families.dart';
 
 const _mib = 1024 * 1024;
 const _draft = TaskDraft('测试任务A', '测试内容', '测试标准', 'focus');
+const _deviceFixturePassphrase = 'Alice-QA-Fixture-019';
 final _date = DateTime.utc(2026, 11, 18);
 
 void _log(String key, Object data) {
   // Synthetic counts and hashes only. Do not print credentials or row content.
-  print('AC40 $key ${jsonEncode(data)}');
+  stdout.writeln('AC40 $key ${jsonEncode(data)}');
 }
 
 Set<String> _runtimeAssets() =>
@@ -73,6 +81,66 @@ Future<void> _seedHistory(TestFamily source, ParentSession owner) async {
   }
 }
 
+Future<List<String>> _seedDeviceChecks(
+  FamilyService family,
+  ParentSession owner,
+) async {
+  final pending = <String>[];
+  for (var n = 1; n <= 21; n++) {
+    final result = await family.publish(
+      TaskDraft('测试待确认 ${n.toString().padLeft(2, '0')}', '', '测试标准', 'light'),
+      session: owner,
+    );
+    final instance = result['instance_id'] as String;
+    await family.submit(instance, '测试申报');
+    pending.add(instance);
+  }
+
+  final sample = await family.backfill(
+    _draft,
+    family.today,
+    '',
+    session: owner,
+  );
+  final correction = await family.correctionQuote(
+    sample['instance_id'] as String,
+    const [],
+    owner,
+  );
+  await family.correctAward(correction, '测试更正', false, session: owner);
+
+  final event = 'device-fixture-penalty';
+  final penalty = await family.definePenalty('测试约定', '测试条件', 1, session: owner);
+  await family.applyPenalty(
+    penalty['rule_id'] as String,
+    event,
+    '测试事实',
+    family.today,
+    session: owner,
+  );
+  await family.reversePenalty(event, session: owner);
+
+  await family.recordCompanionMoment(Companion.rabbit, CompanionMoment.touch);
+  await family.recordCompanionMoment(Companion.rabbit, CompanionMoment.call);
+  await family.saveWindowMathBookmark(WindowPage.finished, {1, 3});
+  final wind = await family.beginWindStory();
+  for (var slot = 0; slot < WindProgress.slots; slot++) {
+    await family.placeWindLeaf(slot, run: wind.run);
+  }
+
+  final rain = await family.beginRainMap();
+  for (var group = 0; group < RainMapProgress.groupCount; group++) {
+    for (var stone = 0; stone < RainMapProgress.groupSize; stone++) {
+      await family.stepRainMapStone(run: rain.run, group: group, stone: stone);
+    }
+    await family.stampRainMap(run: rain.run, group: group);
+  }
+  await family.solveRainMapChallenge(9);
+  final replay = await family.restartRainMap(run: rain.run);
+  await family.stepRainMapStone(run: replay.run, group: 0, stone: 0);
+  return pending;
+}
+
 String _syntheticText(Random random, String prefix, int count) =>
     '$prefix${String.fromCharCodes(List.generate(count, (_) => 0x4e00 + random.nextInt(2048)))}';
 
@@ -81,7 +149,14 @@ String _fixtureId(int record, int kind) =>
 
 // Generate complete backfill records in an isolated test database. Keep the
 // same task/version/instance/completion/ledger/command relationships as backfill.
-void _expandHistory(String path, int start, int count, int stage, int reward) {
+void _expandHistory(
+  String path,
+  int start,
+  int count,
+  int stage,
+  int reward,
+  bool deviceFixture,
+) {
   final db = sqlite3.open(path);
   try {
     db.execute('PRAGMA foreign_keys = ON');
@@ -122,17 +197,20 @@ void _expandHistory(String path, int start, int count, int stage, int reward) {
     ''');
     var balance = account['balance'] as int;
     final posted = dateKey(_date);
+    final (contentSize, criteriaSize, feedbackSize) = deviceFixture
+        ? (292, 188, 309)
+        : (470, 280, 460);
     db.execute('BEGIN IMMEDIATE');
     try {
       for (var i = start; i < start + count; i++) {
         final random = Random(20261120 + i);
         final draft = TaskDraft(
           '测试任务A',
-          _syntheticText(random, '测试内容', 470),
-          _syntheticText(random, '测试标准', 280),
+          _syntheticText(random, '测试内容', contentSize),
+          _syntheticText(random, '测试标准', criteriaSize),
           'focus',
         );
-        final feedback = _syntheticText(random, '测试反馈', 460);
+        final feedback = _syntheticText(random, '测试反馈', feedbackSize);
         final actual = dateKey(_date.subtract(Duration(days: 1 + i ~/ 6)));
         final time = _date.millisecondsSinceEpoch + i;
         final templateId = _fixtureId(i, 0);
@@ -225,9 +303,16 @@ Future<void> _expandInWorker(
   int count,
   int stage,
   int reward,
-) => Isolate.run(() => _expandHistory(dbPath, start, count, stage, reward));
+  bool deviceFixture,
+) => Isolate.run(
+  () => _expandHistory(dbPath, start, count, stage, reward, deviceFixture),
+);
 
-Future<int> _fillFixture(TestFamily source, File snapshot) async {
+Future<int> _fillFixture(
+  TestFamily source,
+  File snapshot, {
+  required bool deviceFixture,
+}) async {
   var rows = 0;
   var nextBatch = 5000;
   var previousBytes = 0;
@@ -238,7 +323,7 @@ Future<int> _fillFixture(TestFamily source, File snapshot) async {
     await source.service.serial.run(() async {
       final start = rows;
       final count = nextBatch;
-      await _expandInWorker(dbPath, start, count, stage, reward);
+      await _expandInWorker(dbPath, start, count, stage, reward, deviceFixture);
       if (await snapshot.exists()) await snapshot.delete();
       await source.service.db.customStatement('VACUUM INTO ?', [snapshot.path]);
     });
@@ -279,9 +364,46 @@ class _Timing {
   }
 }
 
+void _reviewDeviceExport(File input) {
+  test('calculate the business digest of a synthetic device export', () async {
+    final local = await TestFamily.create();
+    addTearDown(local.dispose);
+    final importer = TransferService(
+      device: DeviceStore(
+        Directory(p.join(local.root.path, 'review')),
+        MemorySecureValues(),
+      ),
+      rules: local.rules,
+      availableAssets: _runtimeAssets(),
+      current: () => null,
+    );
+    final preview = await importer.inspect(
+      input,
+      _deviceFixturePassphrase,
+      null,
+    );
+    addTearDown(preview.close);
+    _log('device_export', {
+      'mode': preview.manifest['mode'],
+      'summary': preview.info.summary,
+      'business_sha256': preview.info.businessDigest,
+      'file_sha256': await fileHash(input),
+    });
+  }, timeout: const Timeout(Duration(minutes: 4)));
+}
+
 void main() {
+  final reviewPath = Platform.environment['ALICE_QA_REVIEW_FILE'];
+  if (reviewPath != null) {
+    _reviewDeviceExport(File(reviewPath));
+    return;
+  }
+  final outputPath = Platform.environment['ALICE_QA_OUTPUT_DIR'];
+  final deviceFixture = outputPath != null;
   test(
-    'AC-40 Linux baseline for a 50 MiB encrypted backup and restoration',
+    deviceFixture
+        ? 'generate and restore the dual-device acceptance fixture'
+        : 'AC-40 Linux baseline for a 50 MiB encrypted backup and restoration',
     () async {
       final source = await TestFamily.create(now: () => _date);
       addTearDown(source.dispose);
@@ -289,9 +411,12 @@ void main() {
       addTearDown(target.dispose);
       expect(source.root.path, isNot(target.root.path));
       final targetBefore = await target.device.activeGeneration();
-      final sourceOwner = (await source.service.pin.unlock(TestFamily.pin))!;
+      final sourceOwner = await source.service.pin.unlock(TestFamily.pin);
       final targetOwner = await target.service.pin.unlock(TestFamily.pin);
       await _seedHistory(source, sourceOwner);
+      final pending = deviceFixture
+          ? await _seedDeviceChecks(source.service, sourceOwner)
+          : const <String>[];
       await target.service.backfill(
         _draft,
         target.service.today,
@@ -307,7 +432,11 @@ void main() {
       );
       addTearDown(() async => transit.delete(recursive: true));
       final preflight = File(p.join(transit.path, 'preflight.sqlite'));
-      final syntheticCount = await _fillFixture(source, preflight);
+      final syntheticCount = await _fillFixture(
+        source,
+        preflight,
+        deviceFixture: deviceFixture,
+      );
       final sourceBytes = await preflight.length();
       final original = await checkSnapshot(
         preflight.path,
@@ -332,7 +461,9 @@ void main() {
         'digest': original.businessDigest,
       });
 
-      final passphrase = PinGate.newRecoveryCode();
+      final passphrase = deviceFixture
+          ? _deviceFixturePassphrase
+          : PinGate.newRecoveryCode();
       final exportTime = _Timing();
       final ticket = await exporter.prepareExport(
         'backup',
@@ -414,6 +545,60 @@ void main() {
         'target_generation_switched': true,
         'source_balance_preserved': true,
       });
+
+      if (outputPath != null) {
+        final family = activation.service;
+        final ledgerCount = original.summary['ledger_count'] as int;
+        expect(ledgerCount, greaterThanOrEqualTo(10000));
+        final parent = await family.pin.unlock(TestFamily.pin);
+        final commandTimes = <int>[];
+        for (final instance in pending.take(20)) {
+          final entry = await family.task(instance);
+          expect(entry.state, 'SUBMITTED');
+          final clock = Stopwatch()..start();
+          final result = await family.approve(
+            instance,
+            entry.actual!,
+            '',
+            session: parent,
+          );
+          clock.stop();
+          commandTimes.add(clock.elapsedMicroseconds);
+          expect(result['delta'], 2);
+        }
+        await family.verifyAccounting();
+        final overview = (await family.overview())!;
+        expect(overview.balance, (original.summary['balance'] as int) + 40);
+        expect(
+          overview.experience,
+          (original.summary['valid_completion_count'] as int) + 20,
+        );
+        expect(await family.ledger(), hasLength(ledgerCount + 20));
+        _log('local_commands', {
+          'approved': commandTimes.length,
+          'elapsed_us': commandTimes,
+        });
+
+        final output = await Directory(outputPath).createTemp('alice-qa-019-');
+        final backup = await external.copy(
+          p.join(output.path, 'alice-qa-019.alicebackup'),
+        );
+        final receipt = {
+          'file': p.basename(backup.path),
+          'sha256': await fileHash(backup),
+          'file_bytes': await backup.length(),
+          'snapshot_bytes': sourceBytes,
+          'schema': original.schemaVersion,
+          'business_sha256': original.businessDigest,
+          'pending_approvals': pending.length,
+          'summary': original.summary,
+        };
+        await File(p.join(output.path, 'fixture.json')).writeAsString(
+          '${const JsonEncoder.withIndent('  ').convert(receipt)}\n',
+          flush: true,
+        );
+        _log('device_fixture', receipt);
+      }
     },
     timeout: const Timeout(Duration(minutes: 10)),
   );

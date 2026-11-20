@@ -1,0 +1,17 @@
+{
+  "file": "alice-qa-019.alicebackup",
+  "sha256": "643685960f3204669bfa0d1e8ceb04c59b546fd7790876dcdf8c4439fb599c44",
+  "file_bytes": 18392508,
+  "snapshot_bytes": 52379648,
+  "schema": 7,
+  "business_sha256": "de93819ac02daec6326bcad55cecf59fe6a8ea5bb50a45b9e68f9ba152d35729",
+  "pending_approvals": 21,
+  "summary": {
+    "balance": 32077,
+    "ledger_count": 10706,
+    "valid_completion_count": 10697,
+    "owned_item_count": 5,
+    "space_count": 1,
+    "max_growth_stage": 6
+  }
+}
