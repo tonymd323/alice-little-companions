@@ -54,6 +54,8 @@ class DeviceStore {
       File(p.join(root.path, 'generations', id, 'database.sqlite'));
   File controlFile(String id) =>
       File(p.join(root.path, 'generations', id, 'device.json'));
+  File outgoingBackup(String generation, String backupId) =>
+      File(p.join(root.path, 'outgoing', generation, '$backupId.alicebackup'));
   String newGeneration() => uuid.v4();
 
   Future<String?> recordedGeneration() async {

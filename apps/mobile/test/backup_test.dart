@@ -36,6 +36,7 @@ final assets =
         .toSet();
 final pin = 739184.toString();
 const fixtureDraft = TaskDraft('测试任务A', '测试内容', '测试标准A', 'focus');
+const dropV7 = 'DROP TABLE companion_memories; DROP TABLE rain_map_runs; ';
 
 TransferService transfers(TestFamily fixture, {Set<String>? withAssets}) =>
     TransferService(
@@ -228,7 +229,7 @@ void main() {
     );
     final legacySql = sqlite3.open(oldDb.path);
     legacySql.execute(
-      'DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DELETE FROM growth_awards WHERE stage > 2; PRAGMA user_version=3',
+      '${dropV7}DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DELETE FROM growth_awards WHERE stage > 2; PRAGMA user_version=3',
     );
     legacySql.close();
     final legacyInfo = await checkSnapshot(
@@ -357,7 +358,7 @@ void main() {
     await stock.service.close();
     final legacy = sqlite3.open(file.path);
     legacy.execute(
-      'DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; PRAGMA user_version = 2',
+      '${dropV7}DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; PRAGMA user_version = 2',
     );
     legacy.close();
     final schema = await expectedSchema();
@@ -395,7 +396,9 @@ void main() {
     final file = stock.device.databaseFile(generation);
     await stock.service.close();
     final legacy = sqlite3.open(file.path);
-    legacy.execute('DROP TABLE wind_story_runs; PRAGMA user_version=5');
+    legacy.execute(
+      '${dropV7}DROP TABLE wind_story_runs; PRAGMA user_version=5',
+    );
     legacy.close();
     final schema = await expectedSchema();
     final old = await checkSnapshot(file.path, schema, stock.rules, assets);
@@ -642,7 +645,7 @@ void main() {
     await stock.service.close();
     final old = sqlite3.open(stock.device.databaseFile(id).path);
     old.execute(
-      'DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; DROP TABLE base_furnishings; DROP INDEX ledger_day_kind_idx; DROP INDEX purchase_ledger_idx; PRAGMA user_version = 1',
+      '${dropV7}DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; DROP TABLE base_furnishings; DROP INDEX ledger_day_kind_idx; DROP INDEX purchase_ledger_idx; PRAGMA user_version = 1',
     );
     old.close();
     stock.service = await FamilyService.load(stock.device, id, stock.rules);

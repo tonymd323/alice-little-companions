@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:isolate';
 
 import 'package:path/path.dart' as p;
 
@@ -7,18 +6,42 @@ import '../data/checkpoints.dart';
 import '../data/database.dart';
 import '../data/device.dart';
 import '../data/snapshot.dart';
+import '../data/transfer_work.dart';
 import '../domain/backup_codec.dart';
 import '../domain/pin.dart';
 import '../domain/rules.dart';
 import 'family.dart';
 
+export '../data/transfer_work.dart' show TransferCancelled;
+
 enum SaveOutcome { cancelled, handedToSystem, externallyVerified }
 
+enum TransferPhase { snapshot, checking, encrypting, readback, decrypting }
+
+class TransferOperation extends TransferWork {
+  TransferOperation(this.onPhase);
+
+  final void Function(TransferPhase) onPhase;
+
+  void _report(TransferPhase phase) {
+    check();
+    onPhase(phase);
+    check();
+  }
+}
+
 class ExportTicket {
-  const ExportTicket(this.id, this.file, this.mode, {this.retry = false});
+  const ExportTicket._(
+    this.id,
+    this.file,
+    this.mode,
+    this._previousControl, {
+    this.retry = false,
+  });
   final String id;
   final File file;
   final String mode;
+  final Json _previousControl;
   final bool retry;
   String get name => 'alice-$id.alicebackup';
   bool get migration => mode == 'migration';
@@ -81,18 +104,17 @@ class TransferService {
   Future<Snapshot> _read(File file) async =>
       checkSnapshot(file.path, await schema, rules, availableAssets);
 
-  File _outgoing(String generation, String id) =>
-      File(p.join(device.root.path, 'outgoing', generation, '$id.alicebackup'));
-
   Future<ExportTicket> prepareExport(
     String mode,
     String password,
-    ParentSession? session,
-  ) {
+    ParentSession? session, {
+    TransferOperation? operation,
+  }) {
     final family = current();
     if (family == null) return Future.error(const UserError('请先创建小家。'));
     return family.serial.run(() async {
       family.checkParent(session);
+      operation?.check();
       BackupCodec.checkPassphrase(password);
       if (mode != 'backup' && mode != 'migration') {
         throw const UserError('请选择备份或迁移。');
@@ -104,35 +126,41 @@ class TransferService {
         if (mode != 'migration' || previous == null) {
           throw const UserError('这台设备当前只读。请处理现有迁移。');
         }
-        final existing = _outgoing(id, previous);
+        final existing = device.outgoingBackup(id, previous);
         if (!await existing.exists()) throw const UserError('请回读之前保存的迁移文件。');
         final check = await device.temporaryDirectory();
         try {
+          operation?._report(TransferPhase.readback);
           await _unpack(
             existing.path,
             password,
             p.join(check.path, 'snapshot.sqlite'),
+            operation,
           );
         } finally {
           await cleanDirectory(check);
         }
-        return ExportTicket(previous, existing, mode, retry: true);
+        operation?.check();
+        return ExportTicket._(previous, existing, mode, control, retry: true);
       }
       final bid = uuid.v4();
-      final destination = _outgoing(id, bid);
+      final destination = device.outgoingBackup(id, bid);
       final folder = await device.temporaryDirectory();
       final migration = mode == 'migration';
       try {
+        operation?._report(TransferPhase.snapshot);
         if (migration) {
           await device.updateControl(id, {
             ...control,
             'state': 'EXPORTING',
-            'outgoing_id': bid,
+            'draft_outgoing_id': bid,
           });
           family.frozen = true;
         }
+        operation?.check();
         final snapshot = File(p.join(folder.path, 'snapshot.sqlite'));
         await family.db.customStatement('VACUUM INTO ?', [snapshot.path]);
+        operation?._report(TransferPhase.checking);
         final info = await _read(snapshot);
         final manifest = {
           'backup_id': bid,
@@ -152,30 +180,43 @@ class TransferService {
           'summary': info.summary,
         };
         final encrypted = File(p.join(folder.path, 'outgoing.alicebackup'));
-        await _pack(snapshot.path, manifest, password, encrypted.path);
+        operation?._report(TransferPhase.encrypting);
+        await _pack(
+          snapshot.path,
+          manifest,
+          password,
+          encrypted.path,
+          operation,
+        );
         final readback = File(p.join(folder.path, 'verified.sqlite'));
-        final verified = await _unpack(encrypted.path, password, readback.path);
+        operation?._report(TransferPhase.readback);
+        final verified = await _unpack(
+          encrypted.path,
+          password,
+          readback.path,
+          operation,
+        );
+        final snapshotDigest = await fileHash(snapshot);
+        operation?.check();
         if (verified['backup_id'] != bid ||
-            await fileHash(snapshot) != verified['database_sha256']) {
+            snapshotDigest != verified['database_sha256']) {
           throw const UserError('生成的备份未通过回读校验。');
         }
+        final digest = await fileHash(encrypted);
         family.checkParent(session);
         await destination.parent.create(recursive: true);
+        operation?.seal();
         await encrypted.rename(destination.path);
         final next = {
           ...control,
           'outgoing_id': bid,
           'outgoing_mode': mode,
-          'outgoing_sha256': await fileHash(destination),
+          'outgoing_sha256': digest,
           'state': migration ? 'AWAITING_FILE_VERIFICATION' : 'IDLE',
           'last_external_status': 'pending',
         };
         await device.updateControl(id, next);
-        if (control['outgoing_id'] case final String old when old != bid) {
-          final file = _outgoing(id, old);
-          if (await file.exists()) await file.delete();
-        }
-        return ExportTicket(bid, destination, mode);
+        return ExportTicket._(bid, destination, mode, control);
       } catch (_) {
         if (migration) {
           await device.updateControl(id, control);
@@ -197,18 +238,15 @@ class TransferService {
       final control = await device.control(id);
       if (control['outgoing_id'] != ticket.id) return;
       if (outcome == SaveOutcome.cancelled) {
-        if (ticket.retry) return;
-        await device.updateControl(id, {
-          ...control,
-          'state': 'IDLE',
-          'outgoing_id': null,
-          'outgoing_mode': null,
-          'outgoing_sha256': null,
-          'last_external_status': 'cancelled',
-        });
+        if (ticket.retry || control['last_external_status'] != 'pending') {
+          return;
+        }
+        await device.updateControl(id, ticket._previousControl);
         family.frozen = false;
         if (await ticket.file.exists()) await ticket.file.delete();
-      } else if (outcome == SaveOutcome.externallyVerified) {
+        return;
+      }
+      if (outcome == SaveOutcome.externallyVerified) {
         await _markExternalVerified(family, control, ticket.migration);
       } else if (control['state'] != 'MIGRATION_PENDING' &&
           control['state'] != 'ARCHIVED') {
@@ -216,6 +254,11 @@ class TransferService {
           ...control,
           'last_external_status': 'unverified',
         });
+      }
+      if (ticket._previousControl['outgoing_id'] case final String old
+          when old != ticket.id) {
+        final file = device.outgoingBackup(id, old);
+        if (await file.exists()) await file.delete();
       }
     });
   }
@@ -238,19 +281,30 @@ class TransferService {
   Future<void> verifyExternal(
     File file,
     String password,
-    ParentSession? session,
-  ) async {
+    ParentSession? session, {
+    TransferOperation? operation,
+  }) async {
     final family = current();
     if (family == null) throw const UserError('请先创建小家。');
-    final preview = await inspect(file, password, session);
+    final preview = await inspect(
+      file,
+      password,
+      session,
+      operation: operation,
+    );
     try {
       await family.serial.run(() async {
+        operation?.check();
         family.checkParent(session);
         final control = await device.control(family.pin.generation);
-        if (preview.backupId != control['outgoing_id'] ||
-            await fileHash(file) != control['outgoing_sha256']) {
+        final matches =
+            preview.backupId == control['outgoing_id'] &&
+            await fileHash(file) == control['outgoing_sha256'];
+        operation?.check();
+        if (!matches) {
           throw const UserError('请重新选择这台设备刚导出的文件。');
         }
+        operation?.seal();
         await _markExternalVerified(
           family,
           control,
@@ -287,14 +341,24 @@ class TransferService {
   Future<RestorePreview> inspect(
     File selected,
     String password,
-    ParentSession? session,
-  ) async {
+    ParentSession? session, {
+    TransferOperation? operation,
+  }) async {
     _allowPreview(session);
+    operation?.check();
     final folder = await device.temporaryDirectory();
     try {
       final database = File(p.join(folder.path, 'snapshot.sqlite'));
-      final manifest = await _unpack(selected.path, password, database.path);
+      operation?._report(TransferPhase.decrypting);
+      final manifest = await _unpack(
+        selected.path,
+        password,
+        database.path,
+        operation,
+      );
+      operation?._report(TransferPhase.checking);
       final info = await _read(database);
+      operation?.check();
       _verifyManifest(manifest, info);
       return RestorePreview._(folder, database, manifest, info);
     } catch (_) {
@@ -305,16 +369,22 @@ class TransferService {
 
   Future<RestorePreview> inspectCheckpoint(
     File selected,
-    ParentSession? session,
-  ) async {
+    ParentSession? session, {
+    TransferOperation? operation,
+  }) async {
     _allowPreview(session, requireExisting: true);
+    operation?.check();
     final folder = await device.temporaryDirectory();
     try {
       final database = File(p.join(folder.path, 'snapshot.sqlite'));
-      await checkpoints.extract(selected, database);
+      operation?._report(TransferPhase.decrypting);
+      await checkpoints.extract(selected, database, work: operation);
+      operation?._report(TransferPhase.checking);
       final info = await _read(database);
+      final digest = await fileHash(database);
+      operation?.check();
       return RestorePreview._(folder, database, {
-        'database_sha256': await fileHash(database),
+        'database_sha256': digest,
       }, info);
     } catch (_) {
       await cleanDirectory(folder);
@@ -396,18 +466,25 @@ class TransferService {
     }
   }
 
-  Future<RestoreProtection?> protectCurrent(ParentSession? session) {
+  Future<RestoreProtection?> protectCurrent(
+    ParentSession? session, {
+    TransferOperation? operation,
+  }) {
     final family = current();
     if (family == null) return Future.value(null);
     return family.serial.run(() async {
       family.checkParent(session);
+      operation?.check();
       final current = (await family.overview())!;
       final folder = await device.temporaryDirectory();
       try {
         final snapshot = File(p.join(folder.path, 'snapshot.sqlite'));
+        operation?._report(TransferPhase.snapshot);
         await family.db.customStatement('VACUUM INTO ?', [snapshot.path]);
+        operation?._report(TransferPhase.checking);
         await _read(snapshot);
-        final protection = await checkpoints.protect(snapshot);
+        operation?._report(TransferPhase.encrypting);
+        final protection = await checkpoints.protect(snapshot, work: operation);
         return RestoreProtection._(
           family.pin.generation,
           current.revision,
@@ -510,17 +587,24 @@ class TransferService {
   }
 }
 
-Future<Json> _unpack(String input, String password, String output) =>
-    Isolate.run(
-      () => const BackupCodec().extract(File(input), password, File(output)),
-    );
+Future<Json> _unpack(
+  String input,
+  String password,
+  String output,
+  TransferOperation? operation,
+) => runTransferWorker(
+  () => const BackupCodec().extract(File(input), password, File(output)),
+  operation,
+);
 
 Future<void> _pack(
   String input,
   Json manifest,
   String password,
   String output,
-) => Isolate.run(
+  TransferOperation? operation,
+) => runTransferWorker(
   () =>
       const BackupCodec().write(File(input), manifest, password, File(output)),
+  operation,
 );

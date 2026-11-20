@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:path/path.dart' as p;
@@ -9,6 +8,7 @@ import '../domain/backup_codec.dart';
 import '../domain/pin.dart';
 import 'device.dart';
 import 'snapshot.dart';
+import 'transfer_work.dart';
 
 class CheckpointStore {
   const CheckpointStore(this.device);
@@ -41,17 +41,25 @@ class CheckpointStore {
     return key;
   }
 
-  Future<File> protect(File snapshot) async {
+  Future<File> protect(File snapshot, {TransferWork? work}) async {
+    work?.check();
     if (await snapshot.length() > BackupCodec.maxPlaintext) {
       throw const UserError('数据太大，无法建立内部恢复点。');
     }
     await _path.create(recursive: true);
     final time = DateTime.now().microsecondsSinceEpoch;
     final name = '$time-${uuid.v4()}';
-    final temp = File(p.join(_path.path, '$name.tmp'));
     final result = File(p.join(_path.path, '$name.checkpoint'));
+    final folder = await device.temporaryDirectory();
+    final temp = File(p.join(folder.path, 'checkpoint.tmp'));
     try {
-      await _write(snapshot.path, temp.path, await _deviceKey(create: true));
+      await _write(
+        snapshot.path,
+        temp.path,
+        await _deviceKey(create: true),
+        work,
+      );
+      work?.seal();
       await temp.rename(result.path);
       final saved = await files();
       for (final old in saved.skip(5)) {
@@ -59,7 +67,7 @@ class CheckpointStore {
       }
       return result;
     } finally {
-      if (await temp.exists()) await temp.delete();
+      await cleanDirectory(folder);
     }
   }
 
@@ -74,20 +82,34 @@ class CheckpointStore {
     }
   }
 
-  Future<void> extract(File file, File destination) async {
+  Future<void> extract(
+    File file,
+    File destination, {
+    TransferWork? work,
+  }) async {
     if (!(await files()).any((saved) => saved.path == file.path)) {
       throw const UserError('找不到所选内部恢复点。');
     }
-    await _extract(file.path, destination.path, await _deviceKey());
+    await _extract(file.path, destination.path, await _deviceKey(), work);
   }
 }
 
-Future<void> _write(String snapshot, String output, Uint8List key) =>
-    Isolate.run(
-      () => const CheckpointCodec().write(File(snapshot), File(output), key),
-    );
+Future<void> _write(
+  String snapshot,
+  String output,
+  Uint8List key,
+  TransferWork? work,
+) => runTransferWorker(
+  () => const CheckpointCodec().write(File(snapshot), File(output), key),
+  work,
+);
 
-Future<void> _extract(String source, String output, Uint8List key) =>
-    Isolate.run(
-      () => const CheckpointCodec().extract(File(source), File(output), key),
-    );
+Future<void> _extract(
+  String source,
+  String output,
+  Uint8List key,
+  TransferWork? work,
+) => runTransferWorker(
+  () => const CheckpointCodec().extract(File(source), File(output), key),
+  work,
+);

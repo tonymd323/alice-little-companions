@@ -6,7 +6,7 @@ import 'package:sqlite3/sqlite3.dart' as sqlite;
 
 part 'database.g.dart';
 
-const currentSchemaVersion = 6;
+const currentSchemaVersion = 7;
 const v2Indexes = [
   'ledger_day_kind_idx',
   'purchase_ledger_idx',
@@ -41,6 +41,10 @@ class FamilyDatabase extends _$FamilyDatabase {
         // Version 4 derives experience from existing, verified completions.
         if (from < 5) await migrator.createTable(windowStoryMilestones);
         if (from < 6) await migrator.createTable(windStoryRuns);
+        if (from < 7) {
+          await migrator.createTable(rainMapRuns);
+          await migrator.createTable(companionMemories);
+        }
       });
     },
     beforeOpen: (_) async {

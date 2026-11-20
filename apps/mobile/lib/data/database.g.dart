@@ -10739,6 +10739,701 @@ class WindStoryRunsCompanion extends UpdateCompanion<WindStoryRun> {
   }
 }
 
+class RainMapRuns extends Table with TableInfo<RainMapRuns, RainMapRun> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  RainMapRuns(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _childIdMeta = const VerificationMeta(
+    'childId',
+  );
+  late final GeneratedColumn<String> childId = GeneratedColumn<String>(
+    'child_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY REFERENCES child_profiles(id)',
+  );
+  static const VerificationMeta _runNumberMeta = const VerificationMeta(
+    'runNumber',
+  );
+  late final GeneratedColumn<int> runNumber = GeneratedColumn<int>(
+    'run_number',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL CHECK (typeof(run_number) = \'integer\' AND run_number >= 1)',
+  );
+  static const VerificationMeta _stonesMeta = const VerificationMeta('stones');
+  late final GeneratedColumn<int> stones = GeneratedColumn<int>(
+    'stones',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (typeof(stones) = \'integer\' AND stones BETWEEN 0 AND 3)',
+  );
+  static const VerificationMeta _stampsMeta = const VerificationMeta('stamps');
+  late final GeneratedColumn<int> stamps = GeneratedColumn<int>(
+    'stamps',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (typeof(stamps) = \'integer\' AND stamps BETWEEN 0 AND 4)',
+  );
+  static const VerificationMeta _clearedMeta = const VerificationMeta(
+    'cleared',
+  );
+  late final GeneratedColumn<int> cleared = GeneratedColumn<int>(
+    'cleared',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (cleared IN (0, 1))',
+  );
+  static const VerificationMeta _challengeSolvedMeta = const VerificationMeta(
+    'challengeSolved',
+  );
+  late final GeneratedColumn<int> challengeSolved = GeneratedColumn<int>(
+    'challenge_solved',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (challenge_solved IN (0, 1))',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    childId,
+    runNumber,
+    stones,
+    stamps,
+    cleared,
+    challengeSolved,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'rain_map_runs';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<RainMapRun> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('child_id')) {
+      context.handle(
+        _childIdMeta,
+        childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('run_number')) {
+      context.handle(
+        _runNumberMeta,
+        runNumber.isAcceptableOrUnknown(data['run_number']!, _runNumberMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_runNumberMeta);
+    }
+    if (data.containsKey('stones')) {
+      context.handle(
+        _stonesMeta,
+        stones.isAcceptableOrUnknown(data['stones']!, _stonesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_stonesMeta);
+    }
+    if (data.containsKey('stamps')) {
+      context.handle(
+        _stampsMeta,
+        stamps.isAcceptableOrUnknown(data['stamps']!, _stampsMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_stampsMeta);
+    }
+    if (data.containsKey('cleared')) {
+      context.handle(
+        _clearedMeta,
+        cleared.isAcceptableOrUnknown(data['cleared']!, _clearedMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_clearedMeta);
+    }
+    if (data.containsKey('challenge_solved')) {
+      context.handle(
+        _challengeSolvedMeta,
+        challengeSolved.isAcceptableOrUnknown(
+          data['challenge_solved']!,
+          _challengeSolvedMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_challengeSolvedMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {childId};
+  @override
+  RainMapRun map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RainMapRun(
+      childId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}child_id'],
+      )!,
+      runNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}run_number'],
+      )!,
+      stones: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}stones'],
+      )!,
+      stamps: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}stamps'],
+      )!,
+      cleared: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}cleared'],
+      )!,
+      challengeSolved: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}challenge_solved'],
+      )!,
+    );
+  }
+
+  @override
+  RainMapRuns createAlias(String alias) {
+    return RainMapRuns(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const [
+    'CHECK(stamps < 4 OR stones = 0)',
+    'CHECK((run_number = 1 AND cleared =(stamps = 4))OR(run_number > 1 AND cleared = 1))',
+    'CHECK(challenge_solved <= cleared)',
+  ];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class RainMapRun extends DataClass implements Insertable<RainMapRun> {
+  final String childId;
+  final int runNumber;
+  final int stones;
+  final int stamps;
+  final int cleared;
+  final int challengeSolved;
+  const RainMapRun({
+    required this.childId,
+    required this.runNumber,
+    required this.stones,
+    required this.stamps,
+    required this.cleared,
+    required this.challengeSolved,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['child_id'] = Variable<String>(childId);
+    map['run_number'] = Variable<int>(runNumber);
+    map['stones'] = Variable<int>(stones);
+    map['stamps'] = Variable<int>(stamps);
+    map['cleared'] = Variable<int>(cleared);
+    map['challenge_solved'] = Variable<int>(challengeSolved);
+    return map;
+  }
+
+  RainMapRunsCompanion toCompanion(bool nullToAbsent) {
+    return RainMapRunsCompanion(
+      childId: Value(childId),
+      runNumber: Value(runNumber),
+      stones: Value(stones),
+      stamps: Value(stamps),
+      cleared: Value(cleared),
+      challengeSolved: Value(challengeSolved),
+    );
+  }
+
+  factory RainMapRun.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RainMapRun(
+      childId: serializer.fromJson<String>(json['child_id']),
+      runNumber: serializer.fromJson<int>(json['run_number']),
+      stones: serializer.fromJson<int>(json['stones']),
+      stamps: serializer.fromJson<int>(json['stamps']),
+      cleared: serializer.fromJson<int>(json['cleared']),
+      challengeSolved: serializer.fromJson<int>(json['challenge_solved']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'child_id': serializer.toJson<String>(childId),
+      'run_number': serializer.toJson<int>(runNumber),
+      'stones': serializer.toJson<int>(stones),
+      'stamps': serializer.toJson<int>(stamps),
+      'cleared': serializer.toJson<int>(cleared),
+      'challenge_solved': serializer.toJson<int>(challengeSolved),
+    };
+  }
+
+  RainMapRun copyWith({
+    String? childId,
+    int? runNumber,
+    int? stones,
+    int? stamps,
+    int? cleared,
+    int? challengeSolved,
+  }) => RainMapRun(
+    childId: childId ?? this.childId,
+    runNumber: runNumber ?? this.runNumber,
+    stones: stones ?? this.stones,
+    stamps: stamps ?? this.stamps,
+    cleared: cleared ?? this.cleared,
+    challengeSolved: challengeSolved ?? this.challengeSolved,
+  );
+  RainMapRun copyWithCompanion(RainMapRunsCompanion data) {
+    return RainMapRun(
+      childId: data.childId.present ? data.childId.value : this.childId,
+      runNumber: data.runNumber.present ? data.runNumber.value : this.runNumber,
+      stones: data.stones.present ? data.stones.value : this.stones,
+      stamps: data.stamps.present ? data.stamps.value : this.stamps,
+      cleared: data.cleared.present ? data.cleared.value : this.cleared,
+      challengeSolved: data.challengeSolved.present
+          ? data.challengeSolved.value
+          : this.challengeSolved,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RainMapRun(')
+          ..write('childId: $childId, ')
+          ..write('runNumber: $runNumber, ')
+          ..write('stones: $stones, ')
+          ..write('stamps: $stamps, ')
+          ..write('cleared: $cleared, ')
+          ..write('challengeSolved: $challengeSolved')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(childId, runNumber, stones, stamps, cleared, challengeSolved);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RainMapRun &&
+          other.childId == this.childId &&
+          other.runNumber == this.runNumber &&
+          other.stones == this.stones &&
+          other.stamps == this.stamps &&
+          other.cleared == this.cleared &&
+          other.challengeSolved == this.challengeSolved);
+}
+
+class RainMapRunsCompanion extends UpdateCompanion<RainMapRun> {
+  final Value<String> childId;
+  final Value<int> runNumber;
+  final Value<int> stones;
+  final Value<int> stamps;
+  final Value<int> cleared;
+  final Value<int> challengeSolved;
+  final Value<int> rowid;
+  const RainMapRunsCompanion({
+    this.childId = const Value.absent(),
+    this.runNumber = const Value.absent(),
+    this.stones = const Value.absent(),
+    this.stamps = const Value.absent(),
+    this.cleared = const Value.absent(),
+    this.challengeSolved = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  RainMapRunsCompanion.insert({
+    required String childId,
+    required int runNumber,
+    required int stones,
+    required int stamps,
+    required int cleared,
+    required int challengeSolved,
+    this.rowid = const Value.absent(),
+  }) : childId = Value(childId),
+       runNumber = Value(runNumber),
+       stones = Value(stones),
+       stamps = Value(stamps),
+       cleared = Value(cleared),
+       challengeSolved = Value(challengeSolved);
+  static Insertable<RainMapRun> custom({
+    Expression<String>? childId,
+    Expression<int>? runNumber,
+    Expression<int>? stones,
+    Expression<int>? stamps,
+    Expression<int>? cleared,
+    Expression<int>? challengeSolved,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (childId != null) 'child_id': childId,
+      if (runNumber != null) 'run_number': runNumber,
+      if (stones != null) 'stones': stones,
+      if (stamps != null) 'stamps': stamps,
+      if (cleared != null) 'cleared': cleared,
+      if (challengeSolved != null) 'challenge_solved': challengeSolved,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  RainMapRunsCompanion copyWith({
+    Value<String>? childId,
+    Value<int>? runNumber,
+    Value<int>? stones,
+    Value<int>? stamps,
+    Value<int>? cleared,
+    Value<int>? challengeSolved,
+    Value<int>? rowid,
+  }) {
+    return RainMapRunsCompanion(
+      childId: childId ?? this.childId,
+      runNumber: runNumber ?? this.runNumber,
+      stones: stones ?? this.stones,
+      stamps: stamps ?? this.stamps,
+      cleared: cleared ?? this.cleared,
+      challengeSolved: challengeSolved ?? this.challengeSolved,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (childId.present) {
+      map['child_id'] = Variable<String>(childId.value);
+    }
+    if (runNumber.present) {
+      map['run_number'] = Variable<int>(runNumber.value);
+    }
+    if (stones.present) {
+      map['stones'] = Variable<int>(stones.value);
+    }
+    if (stamps.present) {
+      map['stamps'] = Variable<int>(stamps.value);
+    }
+    if (cleared.present) {
+      map['cleared'] = Variable<int>(cleared.value);
+    }
+    if (challengeSolved.present) {
+      map['challenge_solved'] = Variable<int>(challengeSolved.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RainMapRunsCompanion(')
+          ..write('childId: $childId, ')
+          ..write('runNumber: $runNumber, ')
+          ..write('stones: $stones, ')
+          ..write('stamps: $stamps, ')
+          ..write('cleared: $cleared, ')
+          ..write('challengeSolved: $challengeSolved, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class CompanionMemories extends Table
+    with TableInfo<CompanionMemories, CompanionMemory> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  CompanionMemories(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _childIdMeta = const VerificationMeta(
+    'childId',
+  );
+  late final GeneratedColumn<String> childId = GeneratedColumn<String>(
+    'child_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL REFERENCES child_profiles(id)',
+  );
+  static const VerificationMeta _petIdMeta = const VerificationMeta('petId');
+  late final GeneratedColumn<String> petId = GeneratedColumn<String>(
+    'pet_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL CHECK (pet_id IN (\'fox\', \'rabbit\', \'cat\'))',
+  );
+  static const VerificationMeta _momentMeta = const VerificationMeta('moment');
+  late final GeneratedColumn<String> moment = GeneratedColumn<String>(
+    'moment',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (moment IN (\'touch\', \'call\'))',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [childId, petId, moment];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'companion_memories';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CompanionMemory> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('child_id')) {
+      context.handle(
+        _childIdMeta,
+        childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('pet_id')) {
+      context.handle(
+        _petIdMeta,
+        petId.isAcceptableOrUnknown(data['pet_id']!, _petIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_petIdMeta);
+    }
+    if (data.containsKey('moment')) {
+      context.handle(
+        _momentMeta,
+        moment.isAcceptableOrUnknown(data['moment']!, _momentMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_momentMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {childId, petId, moment};
+  @override
+  CompanionMemory map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CompanionMemory(
+      childId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}child_id'],
+      )!,
+      petId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}pet_id'],
+      )!,
+      moment: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}moment'],
+      )!,
+    );
+  }
+
+  @override
+  CompanionMemories createAlias(String alias) {
+    return CompanionMemories(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const [
+    'PRIMARY KEY(child_id, pet_id, moment)',
+  ];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class CompanionMemory extends DataClass implements Insertable<CompanionMemory> {
+  final String childId;
+  final String petId;
+  final String moment;
+  const CompanionMemory({
+    required this.childId,
+    required this.petId,
+    required this.moment,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['child_id'] = Variable<String>(childId);
+    map['pet_id'] = Variable<String>(petId);
+    map['moment'] = Variable<String>(moment);
+    return map;
+  }
+
+  CompanionMemoriesCompanion toCompanion(bool nullToAbsent) {
+    return CompanionMemoriesCompanion(
+      childId: Value(childId),
+      petId: Value(petId),
+      moment: Value(moment),
+    );
+  }
+
+  factory CompanionMemory.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CompanionMemory(
+      childId: serializer.fromJson<String>(json['child_id']),
+      petId: serializer.fromJson<String>(json['pet_id']),
+      moment: serializer.fromJson<String>(json['moment']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'child_id': serializer.toJson<String>(childId),
+      'pet_id': serializer.toJson<String>(petId),
+      'moment': serializer.toJson<String>(moment),
+    };
+  }
+
+  CompanionMemory copyWith({String? childId, String? petId, String? moment}) =>
+      CompanionMemory(
+        childId: childId ?? this.childId,
+        petId: petId ?? this.petId,
+        moment: moment ?? this.moment,
+      );
+  CompanionMemory copyWithCompanion(CompanionMemoriesCompanion data) {
+    return CompanionMemory(
+      childId: data.childId.present ? data.childId.value : this.childId,
+      petId: data.petId.present ? data.petId.value : this.petId,
+      moment: data.moment.present ? data.moment.value : this.moment,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CompanionMemory(')
+          ..write('childId: $childId, ')
+          ..write('petId: $petId, ')
+          ..write('moment: $moment')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(childId, petId, moment);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CompanionMemory &&
+          other.childId == this.childId &&
+          other.petId == this.petId &&
+          other.moment == this.moment);
+}
+
+class CompanionMemoriesCompanion extends UpdateCompanion<CompanionMemory> {
+  final Value<String> childId;
+  final Value<String> petId;
+  final Value<String> moment;
+  final Value<int> rowid;
+  const CompanionMemoriesCompanion({
+    this.childId = const Value.absent(),
+    this.petId = const Value.absent(),
+    this.moment = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CompanionMemoriesCompanion.insert({
+    required String childId,
+    required String petId,
+    required String moment,
+    this.rowid = const Value.absent(),
+  }) : childId = Value(childId),
+       petId = Value(petId),
+       moment = Value(moment);
+  static Insertable<CompanionMemory> custom({
+    Expression<String>? childId,
+    Expression<String>? petId,
+    Expression<String>? moment,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (childId != null) 'child_id': childId,
+      if (petId != null) 'pet_id': petId,
+      if (moment != null) 'moment': moment,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CompanionMemoriesCompanion copyWith({
+    Value<String>? childId,
+    Value<String>? petId,
+    Value<String>? moment,
+    Value<int>? rowid,
+  }) {
+    return CompanionMemoriesCompanion(
+      childId: childId ?? this.childId,
+      petId: petId ?? this.petId,
+      moment: moment ?? this.moment,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (childId.present) {
+      map['child_id'] = Variable<String>(childId.value);
+    }
+    if (petId.present) {
+      map['pet_id'] = Variable<String>(petId.value);
+    }
+    if (moment.present) {
+      map['moment'] = Variable<String>(moment.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CompanionMemoriesCompanion(')
+          ..write('childId: $childId, ')
+          ..write('petId: $petId, ')
+          ..write('moment: $moment, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$FamilyDatabase extends GeneratedDatabase {
   _$FamilyDatabase(QueryExecutor e) : super(e);
   $FamilyDatabaseManager get managers => $FamilyDatabaseManager(this);
@@ -10803,6 +11498,8 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
   late final WindowStoryMilestones windowStoryMilestones =
       WindowStoryMilestones(this);
   late final WindStoryRuns windStoryRuns = WindStoryRuns(this);
+  late final RainMapRuns rainMapRuns = RainMapRuns(this);
+  late final CompanionMemories companionMemories = CompanionMemories(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -10842,6 +11539,8 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
     baseFurnishings,
     windowStoryMilestones,
     windStoryRuns,
+    rainMapRuns,
+    companionMemories,
   ];
 }
 
@@ -11453,6 +12152,45 @@ final class $ChildProfilesReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<RainMapRuns, List<RainMapRun>>
+  _rainMapRunsRefsTable(_$FamilyDatabase db) => MultiTypedResultKey.fromTable(
+    db.rainMapRuns,
+    aliasName: 'child_profiles__id__rain_map_runs__child_id',
+  );
+
+  $RainMapRunsProcessedTableManager get rainMapRunsRefs {
+    final manager = $RainMapRunsTableManager(
+      $_db,
+      $_db.rainMapRuns,
+    ).filter((f) => f.childId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_rainMapRunsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<CompanionMemories, List<CompanionMemory>>
+  _companionMemoriesRefsTable(_$FamilyDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.companionMemories,
+        aliasName: 'child_profiles__id__companion_memories__child_id',
+      );
+
+  $CompanionMemoriesProcessedTableManager get companionMemoriesRefs {
+    final manager = $CompanionMemoriesTableManager(
+      $_db,
+      $_db.companionMemories,
+    ).filter((f) => f.childId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _companionMemoriesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $ChildProfilesFilterComposer
@@ -11643,6 +12381,56 @@ class $ChildProfilesFilterComposer
           }) => $WindStoryRunsFilterComposer(
             $db: $db,
             $table: $db.windStoryRuns,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> rainMapRunsRefs(
+    Expression<bool> Function($RainMapRunsFilterComposer f) f,
+  ) {
+    final $RainMapRunsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.rainMapRuns,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $RainMapRunsFilterComposer(
+            $db: $db,
+            $table: $db.rainMapRuns,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> companionMemoriesRefs(
+    Expression<bool> Function($CompanionMemoriesFilterComposer f) f,
+  ) {
+    final $CompanionMemoriesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.companionMemories,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CompanionMemoriesFilterComposer(
+            $db: $db,
+            $table: $db.companionMemories,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -11893,6 +12681,56 @@ class $ChildProfilesAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> rainMapRunsRefs<T extends Object>(
+    Expression<T> Function($RainMapRunsAnnotationComposer a) f,
+  ) {
+    final $RainMapRunsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.rainMapRuns,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $RainMapRunsAnnotationComposer(
+            $db: $db,
+            $table: $db.rainMapRuns,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> companionMemoriesRefs<T extends Object>(
+    Expression<T> Function($CompanionMemoriesAnnotationComposer a) f,
+  ) {
+    final $CompanionMemoriesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.companionMemories,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CompanionMemoriesAnnotationComposer(
+            $db: $db,
+            $table: $db.companionMemories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $ChildProfilesTableManager
@@ -11916,6 +12754,8 @@ class $ChildProfilesTableManager
             bool wishesRefs,
             bool windowStoryMilestonesRefs,
             bool windStoryRunsRefs,
+            bool rainMapRunsRefs,
+            bool companionMemoriesRefs,
           })
         > {
   $ChildProfilesTableManager(_$FamilyDatabase db, ChildProfiles table)
@@ -11974,6 +12814,8 @@ class $ChildProfilesTableManager
                 wishesRefs = false,
                 windowStoryMilestonesRefs = false,
                 windStoryRunsRefs = false,
+                rainMapRunsRefs = false,
+                companionMemoriesRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -11984,6 +12826,8 @@ class $ChildProfilesTableManager
                     if (wishesRefs) db.wishes,
                     if (windowStoryMilestonesRefs) db.windowStoryMilestones,
                     if (windStoryRunsRefs) db.windStoryRuns,
+                    if (rainMapRunsRefs) db.rainMapRuns,
+                    if (companionMemoriesRefs) db.companionMemories,
                   ],
                   addJoins:
                       <
@@ -12137,6 +12981,46 @@ class $ChildProfilesTableManager
                           referencedColumn: 'child_id',
                           typedResults: items,
                         ),
+                      if (rainMapRunsRefs)
+                        await $_getPrefetchedDataByColumns<
+                          ChildProfile,
+                          ChildProfiles,
+                          RainMapRun,
+                          RainMapRuns
+                        >(
+                          currentTable: table,
+                          referencedTable: $ChildProfilesReferences
+                              ._rainMapRunsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $ChildProfilesReferences(
+                                db,
+                                table,
+                                p0,
+                              ).rainMapRunsRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'child_id',
+                          typedResults: items,
+                        ),
+                      if (companionMemoriesRefs)
+                        await $_getPrefetchedDataByColumns<
+                          ChildProfile,
+                          ChildProfiles,
+                          CompanionMemory,
+                          CompanionMemories
+                        >(
+                          currentTable: table,
+                          referencedTable: $ChildProfilesReferences
+                              ._companionMemoriesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $ChildProfilesReferences(
+                                db,
+                                table,
+                                p0,
+                              ).companionMemoriesRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'child_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -12165,6 +13049,8 @@ typedef $ChildProfilesProcessedTableManager =
         bool wishesRefs,
         bool windowStoryMilestonesRefs,
         bool windStoryRunsRefs,
+        bool rainMapRunsRefs,
+        bool companionMemoriesRefs,
       })
     >;
 typedef $WindowMathBookmarksCreateCompanionBuilder =
@@ -22642,6 +23528,619 @@ typedef $WindStoryRunsProcessedTableManager =
       WindStoryRun,
       PrefetchHooks Function({bool childId})
     >;
+typedef $RainMapRunsCreateCompanionBuilder = RainMapRunsCompanion Function({
+  required String childId,
+  required int runNumber,
+  required int stones,
+  required int stamps,
+  required int cleared,
+  required int challengeSolved,
+  Value<int> rowid,
+});
+typedef $RainMapRunsUpdateCompanionBuilder = RainMapRunsCompanion Function({
+  Value<String> childId,
+  Value<int> runNumber,
+  Value<int> stones,
+  Value<int> stamps,
+  Value<int> cleared,
+  Value<int> challengeSolved,
+  Value<int> rowid,
+});
+
+final class $RainMapRunsReferences
+    extends BaseReferences<_$FamilyDatabase, RainMapRuns, RainMapRun> {
+  $RainMapRunsReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static ChildProfiles _childIdTable(_$FamilyDatabase db) => db.childProfiles
+      .createAlias('rain_map_runs__child_id__child_profiles__id');
+
+  $ChildProfilesProcessedTableManager get childId {
+    final $_column = $_itemColumn<String>('child_id')!;
+
+    final manager = $ChildProfilesTableManager(
+      $_db,
+      $_db.childProfiles,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $RainMapRunsFilterComposer
+    extends Composer<_$FamilyDatabase, RainMapRuns> {
+  $RainMapRunsFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get runNumber => $composableBuilder(
+    column: $table.runNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get stones => $composableBuilder(
+    column: $table.stones,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get stamps => $composableBuilder(
+    column: $table.stamps,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get cleared => $composableBuilder(
+    column: $table.cleared,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get challengeSolved => $composableBuilder(
+    column: $table.challengeSolved,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $ChildProfilesFilterComposer get childId {
+    final $ChildProfilesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesFilterComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $RainMapRunsOrderingComposer
+    extends Composer<_$FamilyDatabase, RainMapRuns> {
+  $RainMapRunsOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get runNumber => $composableBuilder(
+    column: $table.runNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get stones => $composableBuilder(
+    column: $table.stones,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get stamps => $composableBuilder(
+    column: $table.stamps,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get cleared => $composableBuilder(
+    column: $table.cleared,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get challengeSolved => $composableBuilder(
+    column: $table.challengeSolved,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $ChildProfilesOrderingComposer get childId {
+    final $ChildProfilesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesOrderingComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $RainMapRunsAnnotationComposer
+    extends Composer<_$FamilyDatabase, RainMapRuns> {
+  $RainMapRunsAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get runNumber =>
+      $composableBuilder(column: $table.runNumber, builder: (column) => column);
+
+  GeneratedColumn<int> get stones =>
+      $composableBuilder(column: $table.stones, builder: (column) => column);
+
+  GeneratedColumn<int> get stamps =>
+      $composableBuilder(column: $table.stamps, builder: (column) => column);
+
+  GeneratedColumn<int> get cleared =>
+      $composableBuilder(column: $table.cleared, builder: (column) => column);
+
+  GeneratedColumn<int> get challengeSolved => $composableBuilder(
+    column: $table.challengeSolved,
+    builder: (column) => column,
+  );
+
+  $ChildProfilesAnnotationComposer get childId {
+    final $ChildProfilesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesAnnotationComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $RainMapRunsTableManager
+    extends
+        RootTableManager<
+          _$FamilyDatabase,
+          RainMapRuns,
+          RainMapRun,
+          $RainMapRunsFilterComposer,
+          $RainMapRunsOrderingComposer,
+          $RainMapRunsAnnotationComposer,
+          $RainMapRunsCreateCompanionBuilder,
+          $RainMapRunsUpdateCompanionBuilder,
+          (RainMapRun, $RainMapRunsReferences),
+          RainMapRun,
+          PrefetchHooks Function({bool childId})
+        > {
+  $RainMapRunsTableManager(_$FamilyDatabase db, RainMapRuns table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $RainMapRunsFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $RainMapRunsOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $RainMapRunsAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> childId = const Value.absent(),
+                Value<int> runNumber = const Value.absent(),
+                Value<int> stones = const Value.absent(),
+                Value<int> stamps = const Value.absent(),
+                Value<int> cleared = const Value.absent(),
+                Value<int> challengeSolved = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => RainMapRunsCompanion(
+                childId: childId,
+                runNumber: runNumber,
+                stones: stones,
+                stamps: stamps,
+                cleared: cleared,
+                challengeSolved: challengeSolved,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String childId,
+                required int runNumber,
+                required int stones,
+                required int stamps,
+                required int cleared,
+                required int challengeSolved,
+                Value<int> rowid = const Value.absent(),
+              }) => RainMapRunsCompanion.insert(
+                childId: childId,
+                runNumber: runNumber,
+                stones: stones,
+                stamps: stamps,
+                cleared: cleared,
+                challengeSolved: challengeSolved,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<RainMapRuns, RainMapRun>(table),
+                  $RainMapRunsReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (childId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.childId,
+                        referencedTable: $RainMapRunsReferences._childIdTable(
+                          db,
+                        ),
+                        referencedColumn: $RainMapRunsReferences
+                            ._childIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $RainMapRunsProcessedTableManager =
+    ProcessedTableManager<
+      _$FamilyDatabase,
+      RainMapRuns,
+      RainMapRun,
+      $RainMapRunsFilterComposer,
+      $RainMapRunsOrderingComposer,
+      $RainMapRunsAnnotationComposer,
+      $RainMapRunsCreateCompanionBuilder,
+      $RainMapRunsUpdateCompanionBuilder,
+      (RainMapRun, $RainMapRunsReferences),
+      RainMapRun,
+      PrefetchHooks Function({bool childId})
+    >;
+typedef $CompanionMemoriesCreateCompanionBuilder =
+    CompanionMemoriesCompanion Function({
+      required String childId,
+      required String petId,
+      required String moment,
+      Value<int> rowid,
+    });
+typedef $CompanionMemoriesUpdateCompanionBuilder =
+    CompanionMemoriesCompanion Function({
+      Value<String> childId,
+      Value<String> petId,
+      Value<String> moment,
+      Value<int> rowid,
+    });
+
+final class $CompanionMemoriesReferences
+    extends
+        BaseReferences<_$FamilyDatabase, CompanionMemories, CompanionMemory> {
+  $CompanionMemoriesReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static ChildProfiles _childIdTable(_$FamilyDatabase db) => db.childProfiles
+      .createAlias('companion_memories__child_id__child_profiles__id');
+
+  $ChildProfilesProcessedTableManager get childId {
+    final $_column = $_itemColumn<String>('child_id')!;
+
+    final manager = $ChildProfilesTableManager(
+      $_db,
+      $_db.childProfiles,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $CompanionMemoriesFilterComposer
+    extends Composer<_$FamilyDatabase, CompanionMemories> {
+  $CompanionMemoriesFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get petId => $composableBuilder(
+    column: $table.petId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get moment => $composableBuilder(
+    column: $table.moment,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $ChildProfilesFilterComposer get childId {
+    final $ChildProfilesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesFilterComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $CompanionMemoriesOrderingComposer
+    extends Composer<_$FamilyDatabase, CompanionMemories> {
+  $CompanionMemoriesOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get petId => $composableBuilder(
+    column: $table.petId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get moment => $composableBuilder(
+    column: $table.moment,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $ChildProfilesOrderingComposer get childId {
+    final $ChildProfilesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesOrderingComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $CompanionMemoriesAnnotationComposer
+    extends Composer<_$FamilyDatabase, CompanionMemories> {
+  $CompanionMemoriesAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get petId =>
+      $composableBuilder(column: $table.petId, builder: (column) => column);
+
+  GeneratedColumn<String> get moment =>
+      $composableBuilder(column: $table.moment, builder: (column) => column);
+
+  $ChildProfilesAnnotationComposer get childId {
+    final $ChildProfilesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesAnnotationComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $CompanionMemoriesTableManager
+    extends
+        RootTableManager<
+          _$FamilyDatabase,
+          CompanionMemories,
+          CompanionMemory,
+          $CompanionMemoriesFilterComposer,
+          $CompanionMemoriesOrderingComposer,
+          $CompanionMemoriesAnnotationComposer,
+          $CompanionMemoriesCreateCompanionBuilder,
+          $CompanionMemoriesUpdateCompanionBuilder,
+          (CompanionMemory, $CompanionMemoriesReferences),
+          CompanionMemory,
+          PrefetchHooks Function({bool childId})
+        > {
+  $CompanionMemoriesTableManager(_$FamilyDatabase db, CompanionMemories table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $CompanionMemoriesFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $CompanionMemoriesOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $CompanionMemoriesAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> childId = const Value.absent(),
+                Value<String> petId = const Value.absent(),
+                Value<String> moment = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CompanionMemoriesCompanion(
+                childId: childId,
+                petId: petId,
+                moment: moment,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String childId,
+                required String petId,
+                required String moment,
+                Value<int> rowid = const Value.absent(),
+              }) => CompanionMemoriesCompanion.insert(
+                childId: childId,
+                petId: petId,
+                moment: moment,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<CompanionMemories, CompanionMemory>(table),
+                  $CompanionMemoriesReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (childId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.childId,
+                        referencedTable: $CompanionMemoriesReferences
+                            ._childIdTable(db),
+                        referencedColumn: $CompanionMemoriesReferences
+                            ._childIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $CompanionMemoriesProcessedTableManager =
+    ProcessedTableManager<
+      _$FamilyDatabase,
+      CompanionMemories,
+      CompanionMemory,
+      $CompanionMemoriesFilterComposer,
+      $CompanionMemoriesOrderingComposer,
+      $CompanionMemoriesAnnotationComposer,
+      $CompanionMemoriesCreateCompanionBuilder,
+      $CompanionMemoriesUpdateCompanionBuilder,
+      (CompanionMemory, $CompanionMemoriesReferences),
+      CompanionMemory,
+      PrefetchHooks Function({bool childId})
+    >;
 
 class $FamilyDatabaseManager {
   final _$FamilyDatabase _db;
@@ -22696,4 +24195,8 @@ class $FamilyDatabaseManager {
       $WindowStoryMilestonesTableManager(_db, _db.windowStoryMilestones);
   $WindStoryRunsTableManager get windStoryRuns =>
       $WindStoryRunsTableManager(_db, _db.windStoryRuns);
+  $RainMapRunsTableManager get rainMapRuns =>
+      $RainMapRunsTableManager(_db, _db.rainMapRuns);
+  $CompanionMemoriesTableManager get companionMemories =>
+      $CompanionMemoriesTableManager(_db, _db.companionMemories);
 }

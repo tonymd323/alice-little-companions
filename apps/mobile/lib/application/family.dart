@@ -8,9 +8,11 @@ import '../data/checkpoints.dart';
 import '../data/database.dart';
 import '../data/device.dart';
 import '../data/snapshot.dart';
+import '../domain/companion_bond.dart';
 import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/pin.dart';
+import '../domain/rain_map.dart';
 import '../domain/rules.dart';
 import '../domain/wind_progress.dart';
 import '../domain/window_page.dart';
@@ -32,6 +34,11 @@ class FamilyOverview {
       ),
       experience = row['experience'] as int,
       windowsLit = (row['windows_lit'] as int) != 0,
+      rainMapCleared = row['rain_map_cleared'] == 1,
+      bond = CompanionBond(
+        touched: row['companion_touched'] == 1,
+        called: row['companion_called'] == 1,
+      ),
       days = row['growth_days'] as int,
       revision = row['domain_revision'] as int,
       latestDay = row['latest_local_day'] as String?;
@@ -43,6 +50,8 @@ class FamilyOverview {
   final int stage;
   final int experience;
   final bool windowsLit;
+  final bool rainMapCleared;
+  final CompanionBond bond;
   final int days;
   final int revision;
   final String? latestDay;
@@ -123,7 +132,7 @@ class SerialWork {
   }
 }
 
-class FamilyService {
+class FamilyService implements RainMapCommands {
   FamilyService(
     this.db,
     this.pin,
@@ -178,12 +187,21 @@ class FamilyService {
       await service.overview();
       final state = await device.control(generation);
       if (state['state'] == 'EXPORTING') {
+        final draft = state.remove('draft_outgoing_id');
+        if (draft is String &&
+            RegExp(r'^[a-f0-9-]{36}$').hasMatch(draft) &&
+            draft != state['outgoing_id']) {
+          final abandoned = device.outgoingBackup(generation, draft);
+          if (await abandoned.exists()) await abandoned.delete();
+        }
         await device.updateControl(generation, {
           ...state,
           'state': 'IDLE',
-          'outgoing_id': null,
-          'outgoing_mode': null,
-          'outgoing_sha256': null,
+          if (draft == null) ...{
+            'outgoing_id': null,
+            'outgoing_mode': null,
+            'outgoing_sha256': null,
+          },
         });
       } else {
         service.frozen = state['state'] != 'IDLE';
@@ -251,6 +269,11 @@ class FamilyService {
     final row = await db.row('''
       SELECT h.*, c.id AS child_id, c.nickname, c.active_pet_id, a.balance,
         (EXISTS(SELECT 1 FROM window_story_milestones) OR EXISTS(SELECT 1 FROM window_math_bookmarks WHERE page IN ('sunny','puzzle','finished'))) AS windows_lit,
+        EXISTS(SELECT 1 FROM rain_map_runs r WHERE r.child_id = c.id AND r.cleared = 1) AS rain_map_cleared,
+        EXISTS(SELECT 1 FROM companion_memories m WHERE m.child_id = c.id
+          AND m.pet_id = c.active_pet_id AND m.moment = 'touch') AS companion_touched,
+        EXISTS(SELECT 1 FROM companion_memories m WHERE m.child_id = c.id
+          AND m.pet_id = c.active_pet_id AND m.moment = 'call') AS companion_called,
         (SELECT COUNT(*) FROM completions WHERE is_valid = 1) AS experience,
         (SELECT COUNT(DISTINCT actual_date) FROM completions WHERE is_valid = 1) AS growth_days,
         COALESCE((SELECT MAX(stage) FROM growth_awards WHERE child_id = c.id), 1) AS stage
@@ -396,6 +419,147 @@ class FamilyService {
       return {};
     });
     return windProgress();
+  }
+
+  Future<RainMapProgress> rainMapProgress() async {
+    final row = await db.row('SELECT * FROM rain_map_runs');
+    if (row == null) return const RainMapProgress();
+    return RainMapProgress(
+      run: row['run_number'] as int,
+      stones: row['stones'] as int,
+      stamps: row['stamps'] as int,
+      cleared: row['cleared'] == 1,
+      challengeSolved: row['challenge_solved'] == 1,
+    );
+  }
+
+  Future<RainMapProgress> _rainMapCommand(
+    String action,
+    List<int> args,
+    Future<void> Function(FamilyOverview, RainMapProgress) apply,
+  ) async {
+    await _command('rain_$action', args, 'rain/$action/${args.join('/')}', (
+      _,
+      family,
+    ) async {
+      await apply(family, await rainMapProgress());
+      return {};
+    });
+    return rainMapProgress();
+  }
+
+  @override
+  Future<RainMapProgress> beginRainMap() =>
+      _rainMapCommand('begin', const [], (family, progress) async {
+        if (!family.windowsLit) {
+          throw const UserError('先和桃桃修好暖廊的彩窗。');
+        }
+        if (progress.started) return;
+        await db.insertRow('rain_map_runs', {
+          'child_id': family.childId,
+          'run_number': 1,
+          'stones': 0,
+          'stamps': 0,
+          'cleared': 0,
+          'challenge_solved': 0,
+        });
+      });
+
+  @override
+  Future<RainMapProgress> stepRainMapStone({
+    required int run,
+    required int group,
+    required int stone,
+  }) => _rainMapCommand('step', [run, group, stone], (family, progress) async {
+    if (run < 1 ||
+        progress.run != run ||
+        progress.complete ||
+        group != progress.stamps) {
+      throw const UserError('请回到奶油所在的这一段路。');
+    }
+    if (stone != progress.stones || stone >= RainMapProgress.groupSize) {
+      throw const UserError('从脚边那块还没踩过的石板开始。');
+    }
+    await db.customStatement(
+      'UPDATE rain_map_runs SET stones = stones + 1 WHERE child_id = ?',
+      [family.childId],
+    );
+  });
+
+  @override
+  Future<RainMapProgress> stampRainMap({
+    required int run,
+    required int group,
+  }) => _rainMapCommand('stamp', [run, group], (family, progress) async {
+    if (run < 1 ||
+        progress.run != run ||
+        group != progress.stamps ||
+        !progress.canStamp) {
+      throw const UserError('每踩过三块石板，就能在地图上盖一个爪印。');
+    }
+    final last = group + 1 == RainMapProgress.groupCount;
+    await db.customStatement(
+      '''
+      UPDATE rain_map_runs
+      SET stones = 0, stamps = stamps + 1, cleared = MAX(cleared, ?)
+      WHERE child_id = ?
+    ''',
+      [last ? 1 : 0, family.childId],
+    );
+  });
+
+  @override
+  Future<RainMapProgress> restartRainMap({required int run}) =>
+      _rainMapCommand('replay', [run], (family, progress) async {
+        if (progress.run != run || !progress.complete) {
+          throw const UserError('画完地图即可再走一次。');
+        }
+        await db.customStatement(
+          '''
+          UPDATE rain_map_runs
+          SET run_number = run_number + 1, stones = 0, stamps = 0
+          WHERE child_id = ?
+        ''',
+          [family.childId],
+        );
+      });
+
+  @override
+  Future<RainMapProgress> solveRainMapChallenge(int stones) =>
+      _rainMapCommand('challenge', [stones], (family, progress) async {
+        if (!progress.cleared) {
+          throw const UserError('把完整的回家地图画好，就能试试这条小路。');
+        }
+        if (stones != RainMapProgress.challengeAnswer) {
+          throw const UserError('看看三个爪印，每个都代表三块石板。');
+        }
+        await db.customStatement(
+          'UPDATE rain_map_runs SET challenge_solved = 1 WHERE child_id = ?',
+          [family.childId],
+        );
+      });
+
+  Future<void> recordCompanionMoment(
+    Companion companion,
+    CompanionMoment moment,
+  ) async {
+    final args = [companion.name, moment.name];
+    await _command('companion_moment', args, 'companion/${args.join('/')}', (
+      _,
+      family,
+    ) async {
+      if (family.companion != companion) {
+        throw const UserError('这次互动属于刚才的伙伴。');
+      }
+      await db.customStatement(
+        '''
+        INSERT OR IGNORE INTO companion_memories(child_id, pet_id, moment)
+        VALUES (?, ?, ?)
+      ''',
+        [family.childId, companion.name, moment.name],
+      );
+      return {};
+    });
   }
 
   Future<({WindowPage page, Set<int> pattern, bool started})>

@@ -416,8 +416,17 @@ extension TaskRules on FamilyService {
     commandId,
     (id, family) async {
       _validateActualDate(actual);
-      if (correcting != null && (await task(correcting)).state != 'CORRECTED') {
-        throw const UserError('请先完成原成果的更正。');
+      if (correcting != null) {
+        if ((await task(correcting)).state != 'CORRECTED') {
+          throw const UserError('请先完成原成果的更正。');
+        }
+        final replacement = await db.value(
+          'SELECT 1 FROM task_instances WHERE prior_instance_id = ? LIMIT 1',
+          [correcting],
+        );
+        if (replacement != null) {
+          throw const UserError('这条成果已补正，如需调整请打开新的成果记录。');
+        }
       }
       final saved = await _saveVersion(draft, family, mode: 'once');
       final instance = uuid.v4();

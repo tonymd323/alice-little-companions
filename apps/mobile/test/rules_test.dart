@@ -222,8 +222,10 @@ void main() {
         '',
         session: parent,
         correcting: id,
+        commandId: 'supplement-once',
       );
       expect(newResult['balance'], 2);
+      final experienceBeforeRetry = (await service.overview())!.experience;
       expect(
         await service.db.value(
           'SELECT prior_instance_id FROM task_instances WHERE id = ?',
@@ -231,6 +233,29 @@ void main() {
         ),
         id,
       );
+      expect(
+        await service.backfill(
+          light,
+          service.today,
+          '',
+          session: parent,
+          correcting: id,
+          commandId: 'supplement-once',
+        ),
+        newResult,
+      );
+      await expectLater(
+        service.backfill(
+          light,
+          service.today,
+          '',
+          session: parent,
+          correcting: id,
+        ),
+        throwsA(isA<UserError>()),
+      );
+      expect((await service.overview())!.balance, 2);
+      expect((await service.overview())!.experience, experienceBeforeRetry);
     },
   );
 

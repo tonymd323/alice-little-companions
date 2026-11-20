@@ -20,6 +20,7 @@ class RainMapProgress {
   bool get canStamp => !complete && stones == groupSize;
   int get totalStones => stamps * groupSize + stones;
 }
+
 const rainMapTitle = '奶油的雨天地图';
 
 abstract interface class RainMapCommands {

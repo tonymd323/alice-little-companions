@@ -1,18 +1,26 @@
+import 'dart:async';
+
 import 'package:material_ui/material_ui.dart';
 
 import '../application/controller.dart';
 import '../application/family.dart';
+import '../domain/companion_bond.dart';
 import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
+import '../domain/pin.dart';
+import '../domain/rain_map.dart';
 import '../illustration/wind_sound.dart';
 import 'common.dart';
 import 'garden.dart';
+import 'rain_map_chapter.dart';
 import 'rewards.dart';
 import 'spaces.dart';
 import 'tasks.dart';
 import 'storybook.dart';
 import 'wind_chapter.dart';
 import 'window_math.dart';
+
+enum _HomeChapter { wind, rainMap }
 
 class FamilyHome extends StatefulWidget {
   const FamilyHome({super.key, required this.controller});
@@ -25,6 +33,7 @@ class FamilyHome extends StatefulWidget {
 class _FamilyHomeState extends State<FamilyHome> {
   int tab = 0;
   bool openingChapter = false;
+  final _remembering = <(FamilyService, Companion, CompanionMoment)>{};
   late HomeView view = widget.controller.homeLayout.isEmpty
       ? HomeView.courtyard
       : HomeView.veranda;
@@ -51,6 +60,31 @@ class _FamilyHomeState extends State<FamilyHome> {
     );
   }
 
+  Future<void> _remember(CompanionMoment moment) async {
+    final service = controller.service;
+    if (service == null || service.frozen || family.bond.has(moment)) return;
+    final companion = family.companion;
+    final memory = (service, companion, moment);
+    if (!_remembering.add(memory)) return;
+    try {
+      await service.recordCompanionMoment(companion, moment);
+      if (mounted && controller.service == service) await controller.refresh();
+    } on UserError catch (error) {
+      if (mounted &&
+          controller.service == service &&
+          !service.frozen &&
+          family.companion == companion) {
+        showNotice(context, error.message);
+      }
+    } catch (_) {
+      if (mounted && controller.service == service) {
+        showNotice(context, '这次回忆没能写入手记，再摸摸它或叫它过来。');
+      }
+    } finally {
+      _remembering.remove(memory);
+    }
+  }
+
   GardenScene familyScene(
     double height,
     HomeView location, {
@@ -66,61 +100,116 @@ class _FamilyHomeState extends State<FamilyHome> {
     outfit: outfitFiles(controller.outfit),
     view: location,
     onViewChanged: changeView,
+    onTouched: changeView == null
+        ? null
+        : () => unawaited(_remember(CompanionMoment.touch)),
+    onCalled: changeView == null
+        ? null
+        : () => unawaited(_remember(CompanionMoment.call)),
     chapterButton: chapterButton,
     showLabel: false,
     immersive: true,
     height: height,
   );
 
-  Future<void> openMath() async {
+  Future<void> _openMainline() async {
     final service = controller.service!;
     if (openingChapter || service.frozen) return;
     setState(() => openingChapter = true);
     try {
-      final bookmark = await service.windowMathBookmark();
-      final progress = await service.windProgress();
-      final muted = await WindSound.isMuted();
-      if (!mounted || controller.service != service || service.frozen) return;
+      final chapter = family.windowsLit
+          ? await _chooseChapter()
+          : _HomeChapter.wind;
+      if (chapter == null ||
+          !mounted ||
+          controller.service != service ||
+          service.frozen) {
+        return;
+      }
       setState(() => view = HomeView.veranda);
-      await openPage<void>(
-        context,
-        WindChapter(
-          initial: progress,
-          initialMuted: muted,
-          service: service,
-          hasNotebook: bookmark.started,
-          openNotebook: (resume) async {
-            final saved = await service.windowMathBookmark();
-            if (!mounted || service.frozen || controller.service != service) {
-              return;
-            }
-            final page = resume || saved.page == WindowPage.finished
-                ? saved.page
-                : WindowPage.puzzle;
-            await openPage<void>(
-              context,
-              WindowMathChapter(
-                initialPage: page,
-                initialPattern: saved.page == page ? saved.pattern : const {},
-                companion: family.companion,
-                backLabel: '回到风过暖廊',
-                verandaBuilder: (height) =>
-                    familyScene(height, HomeView.veranda),
-                save: (next, pattern) async {
-                  await service.saveWindowMathBookmark(next, pattern);
-                  if (controller.service == service) await controller.refresh();
-                },
-              ),
-            );
-          },
-        ),
-      );
+      if (chapter == _HomeChapter.rainMap) {
+        await _showRainMap(service);
+      } else {
+        await _showWindChapter(service);
+      }
       if (mounted && controller.service == service) await controller.refresh();
+    } on UserError catch (error) {
+      if (mounted) showNotice(context, error.message);
     } catch (_) {
-      if (mounted) showNotice(context, '暂时打不开彩窗，请再试一次。');
+      if (mounted) showNotice(context, '暂时打不开故事，请再试一次。');
     } finally {
       if (mounted) setState(() => openingChapter = false);
     }
+  }
+
+  Future<_HomeChapter?> _chooseChapter() => showModalBottomSheet<_HomeChapter>(
+    context: context,
+    builder: (context) => SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            title: const Text('风过暖廊'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).pop(_HomeChapter.wind),
+          ),
+          ListTile(
+            title: const Text(rainMapTitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).pop(_HomeChapter.rainMap),
+          ),
+        ],
+      ),
+    ),
+  );
+
+  Future<void> _showRainMap(FamilyService service) async {
+    final progress = await service.rainMapProgress();
+    if (!mounted || controller.service != service || service.frozen) return;
+    await openPage<void>(
+      context,
+      RainMapChapter(initial: progress, service: service),
+    );
+  }
+
+  Future<void> _showWindChapter(FamilyService service) async {
+    final bookmark = await service.windowMathBookmark();
+    final progress = await service.windProgress();
+    final muted = await WindSound.isMuted();
+    if (!mounted || controller.service != service || service.frozen) return;
+    await openPage<void>(
+      context,
+      WindChapter(
+        initial: progress,
+        initialMuted: muted,
+        service: service,
+        hasNotebook: bookmark.started,
+        openNextChapter: () => _showRainMap(service),
+        openNotebook: (resume) async {
+          final saved = await service.windowMathBookmark();
+          if (!mounted || service.frozen || controller.service != service) {
+            return;
+          }
+          final page = resume || saved.page == WindowPage.finished
+              ? saved.page
+              : WindowPage.puzzle;
+          await openPage<void>(
+            context,
+            WindowMathChapter(
+              initialPage: page,
+              initialPattern: saved.page == page ? saved.pattern : const {},
+              companion: family.companion,
+              backLabel: '回到风过暖廊',
+              verandaBuilder: (height) => familyScene(height, HomeView.veranda),
+              save: (next, pattern) async {
+                await service.saveWindowMathBookmark(next, pattern);
+                if (controller.service == service) await controller.refresh();
+              },
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -375,9 +464,9 @@ class _FamilyHomeState extends State<FamilyHome> {
           view,
           changeView: (v) => setState(() => view = v),
           chapterButton: TextButton.icon(
-            onPressed: frozen || openingChapter ? null : openMath,
+            onPressed: frozen || openingChapter ? null : _openMainline,
             icon: const Icon(Icons.grid_view_rounded, size: 17),
-            label: const Text('主线 · 风过暖廊'),
+            label: Text(family.windowsLit ? '主线' : '主线 · 风过暖廊'),
             style: TextButton.styleFrom(
               foregroundColor: ink,
               minimumSize: const Size(48, 44),
@@ -555,6 +644,7 @@ class GrowthPage extends StatelessWidget {
                           '${family.companion.nickname} · ${stageNames[family.stage - 1]}',
                         ),
                         _Experience(family, controller.rules.thresholds),
+                        Text('亲密度 · ${family.bond.label}'),
                         if (family.stage > 1)
                           TextButton.icon(
                             onPressed: () => showEvolution(
@@ -587,6 +677,20 @@ class GrowthPage extends StatelessWidget {
                     child: ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: const Icon(
+                        Icons.favorite_border,
+                        color: terracotta,
+                      ),
+                      title: const Text('伙伴回忆'),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () =>
+                          openPage(context, _MemoriesPage(family: family)),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  GardenCard(
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(
                         Icons.menu_book_outlined,
                         color: terracotta,
                       ),
@@ -604,6 +708,56 @@ class GrowthPage extends StatelessWidget {
                 ],
               );
             },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MemoriesPage extends StatelessWidget {
+  const _MemoriesPage({required this.family});
+  final FamilyOverview family;
+
+  @override
+  Widget build(BuildContext context) {
+    final pet = family.companion.nickname;
+    final memories = [
+      if (family.bond.touched) '第一次摸摸$pet',
+      if (family.bond.called) '第一次叫$pet过来',
+      if (family.windowsLit) '暖廊的三扇彩窗',
+      if (family.rainMapCleared) rainMapTitle,
+    ];
+    return Scaffold(
+      appBar: AppBar(title: const Text('伙伴回忆')),
+      body: PageBody(
+        child: GardenCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '$pet · 亲密度 ${family.bond.label}',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              if (memories.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.only(top: 12),
+                  child: Text('回小家摸摸伙伴，或叫它过来。'),
+                ),
+              for (final memory in memories)
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Text(memory),
+                ),
+              if (family.rainMapCleared)
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 385),
+                    child: RainMapPaper(stamps: RainMapProgress.groupCount),
+                  ),
+                ),
+            ],
           ),
         ),
       ),

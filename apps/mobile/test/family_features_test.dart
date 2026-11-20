@@ -1,0 +1,356 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:alice_companions/application/controller.dart';
+import 'package:alice_companions/application/family.dart';
+import 'package:alice_companions/application/transfer.dart';
+import 'package:alice_companions/data/device.dart';
+import 'package:alice_companions/data/snapshot.dart';
+import 'package:alice_companions/domain/companion_bond.dart';
+import 'package:alice_companions/domain/companions.dart';
+import 'package:alice_companions/domain/pin.dart';
+import 'package:alice_companions/domain/rain_map.dart';
+import 'package:alice_companions/domain/window_page.dart';
+import 'package:alice_companions/main.dart';
+import 'package:flutter/widgets.dart' show Size, SizedBox, ValueKey;
+import 'package:flutter_test/flutter_test.dart';
+import 'package:path/path.dart' as p;
+import 'package:sqlite3/sqlite3.dart';
+
+import 'support/families.dart';
+
+final assets = (jsonDecode(
+  File('assets/config/runtime_assets.json').readAsStringSync(),
+) as Map<String, dynamic>).keys.toSet();
+
+Future<void> waitFor(WidgetTester tester, Finder finder) async {
+  for (var attempt = 0; attempt < 40 && !tester.any(finder); attempt++) {
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 20)),
+    );
+    await tester.pump(const Duration(milliseconds: 50));
+  }
+  expect(finder, findsOneWidget);
+}
+
+void main() {
+  test(
+    'a v6 home keeps the same save and gains empty map and memory sections',
+    () async {
+      final stock = await TestFamily.create();
+      addTearDown(stock.dispose);
+      await stock.service.saveWindowMathBookmark(WindowPage.finished, {1, 3});
+      final run = (await stock.service.beginWindStory()).run;
+      await stock.service.placeWindLeaf(2, run: run);
+      final id = stock.service.pin.generation;
+      final file = stock.device.databaseFile(id);
+      await stock.service.close();
+      final legacy = sqlite3.open(file.path);
+      try {
+        legacy.execute(
+          'DROP TABLE rain_map_runs; DROP TABLE companion_memories; PRAGMA user_version = 6',
+        );
+      } finally {
+        legacy.close();
+      }
+      final schema = await expectedSchema();
+      final old = await checkSnapshot(file.path, schema, stock.rules, assets);
+      stock.service = await FamilyService.load(stock.device, id, stock.rules);
+      final upgraded = await checkSnapshot(
+        file.path,
+        schema,
+        stock.rules,
+        assets,
+      );
+      expect((old.schemaVersion, upgraded.schemaVersion), (6, 7));
+      expect(upgraded.businessDigest, old.businessDigest);
+      expect(upgraded.summary, old.summary);
+      expect((await stock.service.overview())!.bond.label, '初见');
+      expect((await stock.service.rainMapProgress()).started, isFalse);
+      expect((await stock.service.windProgress()).mask, 1 << 2);
+      expect((await stock.service.windowMathBookmark()).pattern, {1, 3});
+    },
+  );
+
+  test(
+    'rain map, companionship and replay survive an encrypted round trip',
+    () async {
+      final stock = await TestFamily.create(pet: Companion.fox);
+      addTearDown(stock.dispose);
+      var source = stock.service;
+      await expectLater(source.beginRainMap(), throwsA(isA<UserError>()));
+      final parent = await source.pin.unlock(TestFamily.pin);
+      await source.backfill(
+        const TaskDraft('测试任务A', '', '测试标准A', 'focus'),
+        source.today,
+        '',
+        session: parent,
+      );
+      await source.saveWindowMathBookmark(WindowPage.finished, {1, 3});
+      final ledger = await source.ledger();
+      final first = (await source.overview())!;
+      await Future.wait([
+        for (var i = 0; i < 4; i++)
+          source.recordCompanionMoment(Companion.fox, CompanionMoment.touch),
+      ]);
+      expect((await source.overview())!.revision, first.revision + 1);
+      expect((await source.overview())!.bond.label, '熟悉');
+      await source.recordCompanionMoment(Companion.fox, CompanionMoment.call);
+      expect((await source.overview())!.bond.label, '默契');
+      await source.selectCompanion(Companion.cat);
+      expect((await source.overview())!.bond.label, '初见');
+      await source.recordCompanionMoment(Companion.cat, CompanionMoment.call);
+      await source.selectCompanion(Companion.fox);
+      expect((await source.overview())!.bond.label, '默契');
+
+      final initial = await source.beginRainMap();
+      expect(initial.run, 1);
+      await expectLater(
+        source.stampRainMap(run: 1, group: 0),
+        throwsA(isA<UserError>()),
+      );
+      await expectLater(
+        source.stepRainMapStone(run: 1, group: 0, stone: 2),
+        throwsA(isA<UserError>()),
+      );
+      await Future.wait([
+        source.stepRainMapStone(run: 1, group: 0, stone: 0),
+        source.stepRainMapStone(run: 1, group: 0, stone: 0),
+      ]);
+      await stock.reopen();
+      source = stock.service;
+      final halfway = await source.rainMapProgress();
+      expect((halfway.run, halfway.stamps, halfway.stones), (1, 0, 1));
+      for (var group = 0; group < RainMapProgress.groupCount; group++) {
+        for (
+          var stone = group == 0 ? halfway.stones : 0;
+          stone < RainMapProgress.groupSize;
+          stone++
+        ) {
+          await source.stepRainMapStone(run: 1, group: group, stone: stone);
+        }
+        await source.stampRainMap(run: 1, group: group);
+      }
+      final finish = await source.rainMapProgress();
+      expect(
+        (finish.complete, finish.cleared, finish.totalStones),
+        (true, true, 12),
+      );
+      await expectLater(
+        source.solveRainMapChallenge(6),
+        throwsA(isA<UserError>()),
+      );
+      expect((await source.solveRainMapChallenge(9)).challengeSolved, isTrue);
+      final replay = await source.restartRainMap(run: 1);
+      expect(
+        (replay.run, replay.complete, replay.cleared, replay.challengeSolved),
+        (2, false, true, true),
+      );
+      await source.stepRainMapStone(run: replay.run, group: 0, stone: 0);
+      // An old action can be retried without changing the new round.
+      expect((await source.stampRainMap(run: 1, group: 0)).stones, 1);
+      expect(await source.ledger(), ledger);
+
+      const password = '家园备份测试密码-1234';
+      final exporting = TransferService(
+        device: stock.device,
+        rules: stock.rules,
+        availableAssets: assets,
+        current: () => source,
+      );
+      final session = await source.pin.unlock(TestFamily.pin);
+      final ticket = await exporting.prepareExport(
+        'migration',
+        password,
+        session,
+      );
+      await exporting.finishExport(ticket, SaveOutcome.handedToSystem);
+      expect(source.frozen, isTrue);
+      await expectLater(
+        source.stampRainMap(run: 2, group: 0),
+        throwsA(isA<UserError>()),
+      );
+      await expectLater(
+        source.recordCompanionMoment(Companion.fox, CompanionMoment.touch),
+        throwsA(isA<UserError>()),
+      );
+      FamilyService? targetFamily;
+      final target = TransferService(
+        device: DeviceStore(
+          Directory(p.join(stock.root.path, 'new-device')),
+          MemorySecureValues(),
+        ),
+        rules: stock.rules,
+        availableAssets: assets,
+        current: () => targetFamily,
+      );
+      final preview = await target.inspect(ticket.file, password, null);
+      addTearDown(preview.close);
+      final restored = (await target.activate(
+        preview,
+        TestFamily.pin,
+        PinGate.newRecoveryCode(),
+        session: null,
+        replace: false,
+      )).service;
+      targetFamily = restored;
+      addTearDown(restored.close);
+      final family = (await restored.overview())!;
+      final progress = await restored.rainMapProgress();
+      expect(
+        (family.balance, family.experience, family.companion),
+        (first.balance, first.experience, Companion.fox),
+      );
+      expect((family.bond.label, family.rainMapCleared), ('默契', true));
+      expect(
+        (
+          progress.run,
+          progress.stones,
+          progress.stamps,
+          progress.challengeSolved,
+        ),
+        (2, 1, 0, true),
+      );
+      expect(await restored.ledger(), ledger);
+      expect((await restored.windowMathBookmark()).pattern, {1, 3});
+      await restored.selectCompanion(Companion.cat);
+      expect((await restored.overview())!.bond.label, '熟悉');
+      await restored.stepRainMapStone(run: 2, group: 0, stone: 1);
+      final targetSession = await restored.pin.unlock(TestFamily.pin);
+      final returnTicket = await target.prepareExport(
+        'migration',
+        password,
+        targetSession,
+      );
+      await target.finishExport(returnTicket, SaveOutcome.handedToSystem);
+      expect(restored.frozen, isTrue);
+      final returned = await exporting.inspect(
+        returnTicket.file,
+        password,
+        session,
+      );
+      addTearDown(returned.close);
+      final replacement = (await exporting.activate(
+        returned,
+        TestFamily.pin,
+        PinGate.newRecoveryCode(),
+        session: session,
+        replace: true,
+        protection: await exporting.protectCurrent(session),
+      )).service;
+      addTearDown(replacement.close);
+      final roundTrip = (await replacement.overview())!;
+      expect(
+        (roundTrip.companion, roundTrip.bond.label, roundTrip.rainMapCleared),
+        (Companion.cat, '熟悉', true),
+      );
+      expect((await replacement.rainMapProgress()).totalStones, 2);
+      expect((roundTrip.balance, roundTrip.experience), (3, 1));
+      expect(await replacement.ledger(), ledger);
+    },
+    timeout: const Timeout(Duration(minutes: 4)),
+  );
+
+  testWidgets('the real home interaction writes a memory visible in Growth', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final stock = (await tester.runAsync(TestFamily.create))!;
+    addTearDown(stock.dispose);
+    final controller = FamilyController(
+      stock.device,
+      stock.rules,
+      assets: assets,
+    )..service = stock.service;
+    addTearDown(controller.dispose);
+    await tester.runAsync(controller.refresh);
+    await tester.pumpWidget(CompanionsApp(controller: controller));
+    await tester.pump(const Duration(milliseconds: 80));
+    await tester.runAsync(() => tester.tap(find.text('摸摸桃桃').hitTestable()));
+    await tester.runAsync(() async {
+      for (
+        var attempt = 0;
+        attempt < 40 && controller.family?.bond.touched != true;
+        attempt++
+      ) {
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+      }
+    });
+    await tester.pump();
+    expect(controller.family?.bond.label, '熟悉');
+    await tester.runAsync(() => tester.tap(find.text('过来').hitTestable()));
+    await tester.runAsync(() async {
+      for (
+        var attempt = 0;
+        attempt < 40 && controller.family?.bond.called != true;
+        attempt++
+      ) {
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+      }
+    });
+    await tester.pump();
+    expect(controller.family?.bond.label, '默契');
+    expect((controller.family?.balance, controller.family?.experience), (0, 0));
+    await tester.tap(find.text('成长').hitTestable());
+    await tester.pump(const Duration(milliseconds: 150));
+    expect(find.text('亲密度 · 默契'), findsOneWidget);
+    await tester.ensureVisible(find.text('伙伴回忆'));
+    await tester.tap(find.text('伙伴回忆').hitTestable());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.text('第一次摸摸桃桃'), findsOneWidget);
+    expect(find.text('第一次叫桃桃过来'), findsOneWidget);
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('the mainline opens the map and resumes at its saved scene', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final stock = (await tester.runAsync(TestFamily.create))!;
+    addTearDown(stock.dispose);
+    final controller = FamilyController(
+      stock.device,
+      stock.rules,
+      assets: assets,
+    )..service = stock.service;
+    addTearDown(controller.dispose);
+    await tester.runAsync(() async {
+      await stock.service.saveWindowMathBookmark(WindowPage.finished, {1, 3});
+      await stock.service.beginRainMap();
+      await stock.service.stepRainMapStone(run: 1, group: 0, stone: 0);
+      await controller.refresh();
+    });
+    await tester.pumpWidget(CompanionsApp(controller: controller));
+    await tester.pump(const Duration(milliseconds: 80));
+    await tester.tap(find.text('主线').hitTestable());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.runAsync(
+      () => tester.tap(find.text(rainMapTitle).hitTestable()),
+    );
+    await tester.pump();
+    final next = find.byKey(const ValueKey('rain-map-stone-1'));
+    await waitFor(tester, next);
+    expect(find.text('和奶油出发'), findsNothing);
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.ensureVisible(next);
+    await tester.runAsync(() => tester.tap(next.hitTestable()));
+    final progress = await tester.runAsync(() async {
+      var value = await stock.service.rainMapProgress();
+      for (var attempt = 0; attempt < 40 && value.stones != 2; attempt++) {
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        value = await stock.service.rainMapProgress();
+      }
+      return value;
+    });
+    expect(progress?.totalStones, 2);
+    await tester.pumpWidget(const SizedBox());
+  });
+}

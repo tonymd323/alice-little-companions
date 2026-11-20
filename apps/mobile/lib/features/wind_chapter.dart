@@ -7,6 +7,7 @@ import '../domain/pin.dart';
 import '../domain/wind_progress.dart';
 import '../illustration/wind_sound.dart';
 import '../illustration/wind_stage.dart';
+import 'common.dart';
 import 'garden.dart';
 
 class WindChapter extends StatefulWidget {
@@ -17,6 +18,7 @@ class WindChapter extends StatefulWidget {
     required this.initialMuted,
     required this.hasNotebook,
     required this.openNotebook,
+    this.openNextChapter,
   });
 
   final FamilyService service;
@@ -24,6 +26,7 @@ class WindChapter extends StatefulWidget {
   final bool initialMuted;
   final bool hasNotebook;
   final Future<void> Function(bool resume) openNotebook;
+  final Future<void> Function()? openNextChapter;
 
   @override
   State<WindChapter> createState() => _WindChapterState();
@@ -309,6 +312,13 @@ class _WindChapterState extends State<WindChapter> with WidgetsBindingObserver {
                         onPressed: busy ? null : replay,
                         child: const Text('再演一次'),
                       ),
+                      if (widget.openNextChapter case final open?)
+                        ActionButton(
+                          label: '去画雨天地图',
+                          action: open,
+                          enabled: !busy,
+                          outlined: true,
+                        ),
                     ],
                   ),
                 ],

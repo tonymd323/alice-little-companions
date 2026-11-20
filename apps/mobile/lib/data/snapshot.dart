@@ -15,6 +15,7 @@ import 'database.dart';
 const schemaQuery = '''
   SELECT type, name, tbl_name, sql FROM sqlite_schema ORDER BY type, name
 ''';
+const _v7Tables = {'rain_map_runs', 'companion_memories'};
 
 class Snapshot {
   const Snapshot({
@@ -87,6 +88,7 @@ Snapshot _check(
       throw const UserError('此存档结构需要兼容版本的 App。');
     }
     final expected = schema
+        .where((row) => version >= 7 || !_v7Tables.contains(row['tbl_name']))
         .where((row) => version >= 6 || row['tbl_name'] != 'wind_story_runs')
         .where(
           (row) => version >= 5 || row['tbl_name'] != 'window_story_milestones',
@@ -122,6 +124,18 @@ Snapshot _check(
           )
         ''')) {
       throw const UserError('暖廊的修复记录与窗格进度不一致。');
+    }
+    if (version >= 7 &&
+        invalid("""
+          SELECT 1 FROM rain_map_runs r
+          WHERE NOT EXISTS (
+            SELECT 1 FROM window_story_milestones m WHERE m.child_id = r.child_id
+          ) AND NOT EXISTS (
+            SELECT 1 FROM window_math_bookmarks b
+            WHERE b.child_id = r.child_id AND b.page IN ('sunny','puzzle','finished')
+          )
+        """)) {
+      throw const UserError('雨天地图缺少前一章的修窗记录。');
     }
 
     final parent = db.select('''
@@ -351,7 +365,8 @@ Snapshot _check(
           (table == 'base_furnishings' ||
               table == 'window_math_bookmarks' ||
               table == 'window_story_milestones' ||
-              table == 'wind_story_runs')) {
+              table == 'wind_story_runs' ||
+              _v7Tables.contains(table))) {
         continue;
       }
       content.add(utf8.encode('$table\n'));

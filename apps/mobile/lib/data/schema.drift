@@ -253,3 +253,22 @@ CREATE TABLE wind_story_runs (
   run_number INTEGER NOT NULL CHECK (typeof(run_number) = 'integer' AND run_number >= 1),
   leaf_mask INTEGER NOT NULL CHECK (typeof(leaf_mask) = 'integer' AND leaf_mask BETWEEN 0 AND 31)
 );
+
+CREATE TABLE rain_map_runs (
+  child_id TEXT NOT NULL PRIMARY KEY REFERENCES child_profiles(id),
+  run_number INTEGER NOT NULL CHECK (typeof(run_number) = 'integer' AND run_number >= 1),
+  stones INTEGER NOT NULL CHECK (typeof(stones) = 'integer' AND stones BETWEEN 0 AND 3),
+  stamps INTEGER NOT NULL CHECK (typeof(stamps) = 'integer' AND stamps BETWEEN 0 AND 4),
+  cleared INTEGER NOT NULL CHECK (cleared IN (0, 1)),
+  challenge_solved INTEGER NOT NULL CHECK (challenge_solved IN (0, 1)),
+  CHECK (stamps < 4 OR stones = 0),
+  CHECK ((run_number = 1 AND cleared = (stamps = 4)) OR (run_number > 1 AND cleared = 1)),
+  CHECK (challenge_solved <= cleared)
+);
+
+CREATE TABLE companion_memories (
+  child_id TEXT NOT NULL REFERENCES child_profiles(id),
+  pet_id TEXT NOT NULL CHECK (pet_id IN ('fox', 'rabbit', 'cat')),
+  moment TEXT NOT NULL CHECK (moment IN ('touch', 'call')),
+  PRIMARY KEY (child_id, pet_id, moment)
+);

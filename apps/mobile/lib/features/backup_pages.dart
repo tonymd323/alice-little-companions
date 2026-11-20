@@ -181,6 +181,81 @@ String checkpointTime(File file) {
         );
 }
 
+mixin _TransferFeedback<T extends StatefulWidget> on State<T> {
+  TransferOperation? _operation;
+  TransferPhase? _phase;
+  bool _cancelling = false;
+
+  bool get transferBusy => _operation != null;
+
+  Future<R> runTransfer<R>(Future<R> Function(TransferOperation) action) async {
+    final operation = TransferOperation((phase) {
+      if (mounted) setState(() => _phase = phase);
+    });
+    setState(() => _operation = operation);
+    try {
+      return await action(operation);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _operation = null;
+          _phase = null;
+          _cancelling = false;
+        });
+      }
+    }
+  }
+
+  Widget transferAction(Widget action) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Offstage(offstage: transferBusy, child: action),
+      if (transferBusy) _transferFeedback(),
+    ],
+  );
+
+  Widget _transferFeedback() {
+    final label = _cancelling
+        ? '正在取消…'
+        : switch (_phase) {
+            null => '正在准备…',
+            TransferPhase.snapshot => '正在整理当前存档…',
+            TransferPhase.checking => '正在检查存档…',
+            TransferPhase.encrypting => '正在加密存档…',
+            TransferPhase.readback => '正在回读验证…',
+            TransferPhase.decrypting => '正在读取并解密…',
+          };
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(child: Semantics(liveRegion: true, child: Text(label))),
+            TextButton(
+              onPressed: _operation?.canCancel != true
+                  ? null
+                  : () {
+                      final operation = _operation;
+                      if (operation == null || !operation.canCancel) return;
+                      operation.cancel();
+                      setState(() => _cancelling = true);
+                    },
+              child: const Text('取消'),
+            ),
+          ],
+        ),
+        const LinearProgressIndicator(),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    _operation?.cancel();
+    super.dispose();
+  }
+}
+
 class ExportPage extends StatefulWidget {
   const ExportPage({super.key, required this.controller, required this.mode});
   final FamilyController controller;
@@ -190,10 +265,11 @@ class ExportPage extends StatefulWidget {
   State<ExportPage> createState() => _ExportPageState();
 }
 
-class _ExportPageState extends State<ExportPage> {
+class _ExportPageState extends State<ExportPage>
+    with _TransferFeedback<ExportPage> {
   final password = TextEditingController();
   final repeated = TextEditingController();
-  String? phase;
+  String? status;
   bool get migrating => widget.mode == 'migration';
 
   @override
@@ -207,50 +283,73 @@ class _ExportPageState extends State<ExportPage> {
     if (password.text != repeated.text) throw const UserError('两次输入的备份口令不一致。');
     BackupCodec.checkPassphrase(password.text);
     FocusScope.of(context).unfocus();
-    setState(() => phase = '正在生成和回读校验…');
-    final transfer = widget.controller.transfer;
-    final ticket = await transfer.prepareExport(
-      widget.mode,
-      password.text,
-      widget.controller.session,
-    );
-    password.clear();
-    repeated.clear();
-    await widget.controller.refresh();
+    setState(() => status = null);
+    final controller = widget.controller;
+    final transfer = controller.transfer;
+    late final ExportTicket ticket;
+    try {
+      ticket = await runTransfer(
+        (operation) => transfer.prepareExport(
+          widget.mode,
+          password.text,
+          controller.session,
+          operation: operation,
+        ),
+      );
+    } on TransferCancelled {
+      if (mounted) setState(() => status = '已取消备份生成。');
+      return;
+    }
     if (!mounted) {
       await transfer.finishExport(ticket, SaveOutcome.cancelled);
       return;
     }
-    setState(() => phase = '请选择 App 外的保存位置。');
-    var outcome = SaveOutcome.handedToSystem;
+    setState(() => status = '请选择 App 外的保存位置。');
+    late final SaveOutcome outcome;
     try {
-      final location = await FilePicker.saveFile(
-        fileName: ticket.name,
-        bytes: await ticket.file.readAsBytes(),
-        mimeType: 'application/octet-stream',
-      );
-      if (location == null) {
-        outcome = SaveOutcome.cancelled;
-      } else if (location.scheme == 'file') {
-        final external = File.fromUri(location);
-        if (await external.exists() &&
-            await fileHash(external) == await fileHash(ticket.file)) {
-          outcome = SaveOutcome.externallyVerified;
-        }
-      }
+      outcome = await _saveExternal(ticket);
     } catch (_) {
-      // A provider can stop responding after a write. Keep the receipt pending for readback.
+      await transfer.finishExport(ticket, SaveOutcome.cancelled);
+      rethrow;
     }
     await transfer.finishExport(ticket, outcome);
-    await widget.controller.refresh();
     if (!mounted) return;
+    await controller.refresh();
+    if (!mounted) return;
+    if (outcome != SaveOutcome.cancelled) {
+      password.clear();
+      repeated.clear();
+    }
     final message = switch (outcome) {
       SaveOutcome.cancelled => '已取消文件保存。',
       SaveOutcome.handedToSystem => '请确认文件已保存，再从数据页回读验证。',
       SaveOutcome.externallyVerified => '外部文件已保存并验证。',
     };
-    setState(() => phase = message);
+    setState(() => status = message);
     showNotice(context, message);
+  }
+
+  Future<SaveOutcome> _saveExternal(ExportTicket ticket) async {
+    final bytes = await ticket.file.readAsBytes();
+    if (!mounted) return SaveOutcome.cancelled;
+    try {
+      final location = await FilePicker.saveFile(
+        fileName: ticket.name,
+        bytes: bytes,
+        mimeType: 'application/octet-stream',
+      );
+      if (location == null) return SaveOutcome.cancelled;
+      if (location.scheme == 'file') {
+        final external = File.fromUri(location);
+        if (await external.exists() &&
+            await fileHash(external) == await fileHash(ticket.file)) {
+          return SaveOutcome.externallyVerified;
+        }
+      }
+    } catch (_) {
+      // A provider can stop responding after a write. Keep the receipt pending for readback.
+    }
+    return SaveOutcome.handedToSystem;
   }
 
   @override
@@ -285,8 +384,8 @@ class _ExportPageState extends State<ExportPage> {
                 controller: repeated,
                 secret: true,
               ),
-              ActionButton(label: '生成并保存文件', action: export),
-              if (phase != null) ...[const SizedBox(height: 8), Text(phase!)],
+              transferAction(ActionButton(label: '生成并保存文件', action: export)),
+              if (status != null) ...[const SizedBox(height: 8), Text(status!)],
             ],
           ),
         ),
@@ -310,7 +409,8 @@ class RestorePage extends StatefulWidget {
   State<RestorePage> createState() => _RestorePageState();
 }
 
-class _RestorePageState extends State<RestorePage> {
+class _RestorePageState extends State<RestorePage>
+    with _TransferFeedback<RestorePage> {
   final password = TextEditingController();
   final pin = TextEditingController();
   final repeated = TextEditingController();
@@ -355,26 +455,43 @@ class _RestorePageState extends State<RestorePage> {
     if (widget.checkpoint == null && selected == null) {
       throw const UserError('请先选择备份文件。');
     }
+    setState(() => status = null);
+    try {
+      await inspectSelected();
+    } on TransferCancelled {
+      if (mounted) setState(() => status = '已取消文件检查。');
+    }
+  }
+
+  Future<void> inspectSelected() async {
     if (widget.verifyOnly) {
-      await transfer.verifyExternal(
-        File(selected!.path!),
-        password.text,
-        controller.session,
+      await runTransfer(
+        (operation) => transfer.verifyExternal(
+          File(selected!.path!),
+          password.text,
+          controller.session,
+          operation: operation,
+        ),
       );
+      if (!mounted) return;
       password.clear();
-      if (mounted) setState(() => status = '已验证外部文件。');
+      setState(() => status = '已验证外部文件。');
       return;
     }
-    final data = widget.checkpoint == null
-        ? await transfer.inspect(
-            File(selected!.path!),
-            password.text,
-            controller.session,
-          )
-        : await transfer.inspectCheckpoint(
-            widget.checkpoint!,
-            controller.session,
-          );
+    final data = await runTransfer(
+      (operation) => widget.checkpoint == null
+          ? transfer.inspect(
+              File(selected!.path!),
+              password.text,
+              controller.session,
+              operation: operation,
+            )
+          : transfer.inspectCheckpoint(
+              widget.checkpoint!,
+              controller.session,
+              operation: operation,
+            ),
+    );
     if (!mounted) {
       await data.close();
       return;
@@ -401,7 +518,16 @@ class _RestorePageState extends State<RestorePage> {
     }
     FocusScope.of(context).unfocus();
     if (controller.family != null) {
-      protection = await transfer.protectCurrent(controller.session);
+      setState(() => status = null);
+      try {
+        protection = await runTransfer(
+          (operation) =>
+              transfer.protectCurrent(controller.session, operation: operation),
+        );
+      } on TransferCancelled {
+        if (mounted) setState(() => status = '已取消建立恢复点。');
+        return;
+      }
       if (!mounted) return;
       final ok = await confirmChoice(
         context,
@@ -473,15 +599,17 @@ class _RestorePageState extends State<RestorePage> {
       children: [
         if (widget.checkpoint == null) ...[
           OutlinedButton.icon(
-            onPressed: () async {
-              try {
-                await choose();
-              } on UserError catch (error) {
-                if (mounted) showNotice(context, error.message);
-              } catch (_) {
-                if (mounted) showNotice(context, '系统暂时无法读取文件。');
-              }
-            },
+            onPressed: transferBusy
+                ? null
+                : () async {
+                    try {
+                      await choose();
+                    } on UserError catch (error) {
+                      if (mounted) showNotice(context, error.message);
+                    } catch (_) {
+                      if (mounted) showNotice(context, '系统暂时无法读取文件。');
+                    }
+                  },
             label: const Text('选择备份文件'),
             icon: const Icon(Icons.folder_open_outlined),
           ),
@@ -498,9 +626,11 @@ class _RestorePageState extends State<RestorePage> {
           Text(checkpointTime(widget.checkpoint!)),
           const SizedBox(height: 12),
         ],
-        ActionButton(
-          label: widget.verifyOnly ? '验证文件' : '验证并预览',
-          action: inspect,
+        transferAction(
+          ActionButton(
+            label: widget.verifyOnly ? '验证文件' : '验证并预览',
+            action: inspect,
+          ),
         ),
         if (status != null)
           Padding(
@@ -597,10 +727,17 @@ class _RestorePageState extends State<RestorePage> {
                 secret: true,
                 keyboard: TextInputType.number,
               ),
-              ActionButton(
-                label: current == null ? '下一步' : '保护当前数据并确认',
-                action: prepare,
+              transferAction(
+                ActionButton(
+                  label: current == null ? '下一步' : '保护当前数据并确认',
+                  action: prepare,
+                ),
               ),
+              if (status != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(status!),
+                ),
             ],
           ),
         ),

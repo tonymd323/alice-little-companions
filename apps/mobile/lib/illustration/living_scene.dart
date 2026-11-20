@@ -85,6 +85,8 @@ class GardenScene extends StatefulWidget {
     this.playable = false,
     this.chapterButton,
     this.windowsLit = false,
+    this.onTouched,
+    this.onCalled,
   });
   final Companion companion;
   final Widget? chapterButton;
@@ -100,6 +102,7 @@ class GardenScene extends StatefulWidget {
   final Rect? detailFrame;
   final HomeView view;
   final ValueChanged<HomeView>? onViewChanged;
+  final VoidCallback? onTouched, onCalled;
   @override
   State<GardenScene> createState() => _GardenSceneState();
 }
@@ -181,6 +184,7 @@ class _GardenSceneState extends State<GardenScene>
     _play(PetAction.nuzzle, 1.85 + ready - _time.seconds);
     if (_still) _notice('${widget.companion.nickname}蹭了蹭你的手');
     _time.tick(0);
+    widget.onTouched?.call();
   }
 
   void _skill() {
@@ -199,10 +203,12 @@ class _GardenSceneState extends State<GardenScene>
     final target = map
         .normalized(Offset(map.viewport.width * (left ? .31 : .67), 0))
         .dx;
-    _walk(
+    final accepted = _walk(
       Offset(target.clamp(_outdoor ? .23 : .15, _outdoor ? .56 : .82), .864),
     );
+    if (!accepted) return;
     if (_still) _notice('${widget.companion.nickname}来到你身边');
+    widget.onCalled?.call();
   }
 
   double _gaze = 0;
@@ -369,9 +375,10 @@ class _GardenSceneState extends State<GardenScene>
       );
     }
     _time.tick(0);
+    widget.onTouched?.call();
   }
 
-  void _walk(Offset p) {
+  bool _walk(Offset p) {
     final floor = _base && !_veranda
         ? (widget.scene?.floor ??
               const [
@@ -386,12 +393,12 @@ class _GardenSceneState extends State<GardenScene>
     final onFloor = floor == null
         ? p.dx > .09 && p.dx < .91 && p.dy > .66 && p.dy < .965
         : contains(floor, p.dx, p.dy);
-    if (!onFloor) return;
+    if (!onFloor) return false;
     _action = PetAction.rest;
     _hello = -20;
     _nextIdle = _time.seconds + 7;
     if (_walkRig case final rig?) {
-      if (_walkPlan != null && p == _end) return;
+      if (_walkPlan != null && p == _end) return true;
       final world = _walkWorldPoint(p);
       final from =
           _walkPose ??
@@ -401,7 +408,7 @@ class _GardenSceneState extends State<GardenScene>
             _left,
             walkWorld.height * _petFactor / walkOrigin.dy,
           );
-      if ((world - from.root).distance < 1) return;
+      if ((world - from.root).distance < 1) return true;
       _start = _end = p;
       if (_still) {
         _left = p.dx < _walkNormalized(from.root).dx;
@@ -410,7 +417,7 @@ class _GardenSceneState extends State<GardenScene>
         _advanceWalk(_time.seconds);
       }
       _time.tick(0);
-      return;
+      return true;
     }
     _start = _foot;
     _left = p.dx < _start.dx;
@@ -419,6 +426,7 @@ class _GardenSceneState extends State<GardenScene>
     _walkDuration = (.63 + (_end - _start).distance * 3.6).clamp(.63, 1.8);
     if (_still) _start = _end;
     _time.tick(0);
+    return true;
   }
 
   double get _petFactor =>
