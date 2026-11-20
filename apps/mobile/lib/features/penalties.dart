@@ -10,7 +10,7 @@ import '../domain/rules.dart';
 import 'common.dart';
 import 'garden.dart';
 import 'parent_access.dart';
-import 'tasks.dart' show DayChoice, TaskTile;
+import 'tasks.dart' show AllTaskEntries, DayChoice, TaskTileList;
 
 class PenaltiesPage extends StatefulWidget {
   const PenaltiesPage({super.key, required this.controller});
@@ -310,26 +310,21 @@ class CorrectionsPage extends StatelessWidget {
   Widget build(BuildContext context) => ParentFrame(
     controller: controller,
     title: '误奖更正',
-    child: ListenableBuilder(
-      listenable: controller,
-      builder: (context, _) => PageBody(
-        child: Column(
+    child: AllTaskEntries(
+      controller: controller,
+      builder: (context, tasks) => TaskTileList(
+        entries: tasks.where((task) => task.state == 'APPROVED').toList(),
+        onTap: controller.service!.frozen
+            ? null
+            : (context, task) => openPage(
+                context,
+                CorrectionPage(controller: controller, task: task),
+              ),
+        header: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const GardenCard(child: Text('选择要更正的成果，再核对可追回积分及拟保留的兑换。')),
             const SizedBox(height: 12),
-            for (final task in controller.tasks.where(
-              (task) => task.state == 'APPROVED',
-            ))
-              TaskTile(
-                task: task,
-                onTap: controller.service!.frozen
-                    ? null
-                    : () => openPage(
-                        context,
-                        CorrectionPage(controller: controller, task: task),
-                      ),
-              ),
           ],
         ),
       ),

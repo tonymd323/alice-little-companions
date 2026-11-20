@@ -27,7 +27,10 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
   PinGate? get parentGate => service?.pin ?? repairGate;
   bool get needsRepair => repairGate != null;
   FamilyOverview? family;
-  List<TaskEntry> tasks = [];
+  List<TaskEntry> currentTasks = [];
+  Future<List<TaskEntry>>? _allTaskEntries;
+  Future<List<TaskEntry>> get allTaskEntries => _allTaskEntries ??=
+      service?.tasks(includeClosedDetails: false) ?? Future.value(const []);
   Json? baseSpace;
   List<Json> homeLayout = [];
   List<Json> outfit = [];
@@ -114,7 +117,7 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
     await active?.processCalendar();
     _seenDay = active?.today;
     final loaded = await active?.overview();
-    final entries = await active?.tasks() ?? <TaskEntry>[];
+    final entries = await active?.currentTasks() ?? <TaskEntry>[];
     final spaces = await active?.spaces() ?? <Json>[];
     final base = spaces
         .where((space) => space['scene_id'] == 'base_room')
@@ -128,7 +131,8 @@ class FamilyController extends ChangeNotifier with WidgetsBindingObserver {
     final desired = await active?.wish();
     if (current != _refreshId) return;
     family = loaded;
-    tasks = entries;
+    currentTasks = entries;
+    _allTaskEntries = null;
     baseSpace = base;
     homeLayout = placed;
     outfit = worn;

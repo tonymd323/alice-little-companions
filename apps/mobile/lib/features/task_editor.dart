@@ -7,7 +7,8 @@ import 'common.dart';
 import 'garden.dart';
 import 'spaces.dart' show outfitFiles;
 import 'parent_access.dart';
-import 'tasks.dart' show DayChoice, TaskDetails, TaskTile, TypeChoice;
+import 'tasks.dart'
+    show AllTaskEntries, DayChoice, TaskDetails, TaskTileList, TypeChoice;
 
 class PublishPage extends StatefulWidget {
   const PublishPage({
@@ -389,8 +390,22 @@ class _ManageTasksPageState extends State<ManageTasksPage> {
   Widget build(BuildContext context) => ParentFrame(
     controller: widget.controller,
     title: '小事与计划',
-    child: PageBody(
-      child: Column(
+    child: AllTaskEntries(
+      controller: widget.controller,
+      builder: taskList,
+      loading: taskList(context, const [], loading: true),
+    ),
+  );
+
+  Widget taskList(BuildContext context, List<TaskEntry> tasks, {
+    bool loading = false,
+  }) => TaskTileList(
+      entries: tasks,
+      onTap: (context, entry) => openPage(
+        context,
+        ManageInstancePage(controller: widget.controller, task: entry),
+      ),
+      header: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text('重复计划', style: Theme.of(context).textTheme.titleLarge),
@@ -424,27 +439,9 @@ class _ManageTasksPageState extends State<ManageTasksPage> {
           const SizedBox(height: 16),
           Text('小事实例', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 10),
-          ListenableBuilder(
-            listenable: widget.controller,
-            builder: (context, _) => Column(
-              children: [
-                for (final entry in widget.controller.tasks)
-                  TaskTile(
-                    task: entry,
-                    onTap: () => openPage(
-                      context,
-                      ManageInstancePage(
-                        controller: widget.controller,
-                        task: entry,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
+          if (loading) const LinearProgressIndicator(),
         ],
       ),
-    ),
   );
 }
 
@@ -528,7 +525,7 @@ class ManageInstancePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TaskDetails(task: task),
+          TaskDetails(service: controller.service!, task: task),
           const SizedBox(height: 12),
           if (task.state == 'EXPIRED')
             ActionButton(

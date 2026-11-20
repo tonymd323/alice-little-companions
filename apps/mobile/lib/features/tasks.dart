@@ -51,12 +51,96 @@ class TaskTile extends StatelessWidget {
   );
 }
 
-class TaskDetails extends StatelessWidget {
-  const TaskDetails({super.key, required this.task});
-  final TaskEntry task;
+class TaskTileList extends StatelessWidget {
+  const TaskTileList({
+    super.key,
+    required this.header,
+    required this.entries,
+    this.onTap,
+  });
+  final Widget header;
+  final List<TaskEntry> entries;
+  final void Function(BuildContext, TaskEntry)? onTap;
 
   @override
-  Widget build(BuildContext context) => GardenCard(
+  Widget build(BuildContext context) => SafeArea(
+    top: false,
+    child: Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 720),
+        child: ListView.builder(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
+          itemCount: entries.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) return header;
+            final entry = entries[index - 1];
+            return TaskTile(
+              key: ValueKey(entry.id),
+              task: entry,
+              onTap: onTap == null ? null : () => onTap!(context, entry),
+            );
+          },
+        ),
+      ),
+    ),
+  );
+}
+
+class TaskDetails extends StatefulWidget {
+  const TaskDetails({
+    super.key,
+    required this.service,
+    required this.task,
+    this.readCurrent = false,
+  });
+  final FamilyService service;
+  final TaskEntry task;
+  final bool readCurrent;
+
+  bool get canUseSnapshot => !readCurrent && task.detailsLoaded;
+
+  @override
+  State<TaskDetails> createState() => _TaskDetailsState();
+}
+
+class _TaskDetailsState extends State<TaskDetails> {
+  late Future<TaskEntry>? details = load();
+
+  Future<TaskEntry>? load() => widget.canUseSnapshot
+      ? null
+      : widget.service.task(widget.task.id);
+
+  @override
+  void didUpdateWidget(covariant TaskDetails oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.service != widget.service ||
+        oldWidget.task != widget.task ||
+        oldWidget.readCurrent != widget.readCurrent) {
+      details = load();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.canUseSnapshot) return card(context, widget.task);
+    return FutureBuilder<TaskEntry>(
+      future: details,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const GardenCard(child: LinearProgressIndicator());
+        }
+        if (snapshot.data case final task?) return card(context, task);
+        return GardenCard(
+          child: TextButton(
+            onPressed: () => setState(() => details = load()),
+            child: const Text('重新读取小事详情'),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget card(BuildContext context, TaskEntry task) => GardenCard(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -135,19 +219,26 @@ class _ChildTaskPageState extends State<ChildTaskPage> {
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: widget.controller,
     builder: (context, _) {
-      final task =
-          widget.controller.tasks
-              .where((entry) => entry.id == widget.task.id)
-              .firstOrNull ??
-          widget.task;
+      final current = widget.controller.currentTasks
+          .where((entry) => entry.id == widget.task.id)
+          .firstOrNull;
+      final task = current ?? widget.task;
       return Scaffold(
         appBar: AppBar(title: const Text('我的小事')),
         body: PageBody(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TaskDetails(task: task),
-              if (task.canSubmit && !widget.controller.service!.frozen) ...[
+              TaskDetails(
+                key: current == null
+                    ? ValueKey(widget.controller.family?.revision)
+                    : null,
+                service: widget.controller.service!,
+                task: task,
+                readCurrent: current == null,
+              ),
+              if (current?.canSubmit == true &&
+                  !widget.controller.service!.frozen) ...[
                 const SizedBox(height: 16),
                 FormFieldLabel(
                   label: '想留一句话（选填）',
@@ -173,6 +264,49 @@ class _ChildTaskPageState extends State<ChildTaskPage> {
   );
 }
 
+class AllTaskEntries extends StatelessWidget {
+  const AllTaskEntries({
+    super.key,
+    required this.controller,
+    required this.builder,
+    this.loading,
+  });
+  final FamilyController controller;
+  final Widget Function(BuildContext, List<TaskEntry>) builder;
+  final Widget? loading;
+
+  @override
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: controller,
+    builder: (context, _) {
+      // The underlying history page can stay mounted behind the parent route.
+      final visible = ModalRoute.of(context)?.isCurrent ?? true;
+      return FutureBuilder<List<TaskEntry>>(
+        future: visible ? controller.allTaskEntries : null,
+        builder: (context, snapshot) {
+          if (snapshot.data case final entries?
+              when snapshot.connectionState == ConnectionState.done || !visible) {
+            return builder(context, entries);
+          }
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasError) {
+            return PageBody(
+              child: ActionButton(
+                label: '重新读取小事',
+                action: controller.refresh,
+              ),
+            );
+          }
+          return loading ?? const Align(
+            alignment: Alignment.topCenter,
+            child: LinearProgressIndicator(),
+          );
+        },
+      );
+    },
+  );
+}
+
 class TaskList extends StatefulWidget {
   const TaskList({super.key, required this.controller});
   final FamilyController controller;
@@ -193,11 +327,29 @@ class _TaskListState extends State<TaskList> {
 
   @override
   Widget build(BuildContext context) {
-    final entries = widget.controller.tasks
-        .where(includes)
-        .toList(growable: false);
-    return PageBody(
-      child: Column(
+    if (filter == 2) {
+      return AllTaskEntries(
+        controller: widget.controller,
+        builder: body,
+        loading: body(context, const [], loading: true),
+      );
+    }
+    return body(context, widget.controller.currentTasks);
+  }
+
+  Widget body(
+    BuildContext context,
+    List<TaskEntry> tasks, {
+    bool loading = false,
+  }) {
+    final entries = tasks.where(includes).toList(growable: false);
+    return TaskTileList(
+      entries: entries,
+      onTap: (context, entry) => openPage(
+        context,
+        ChildTaskPage(controller: widget.controller, task: entry),
+      ),
+      header: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text('我的小事', style: Theme.of(context).textTheme.titleLarge),
@@ -214,7 +366,9 @@ class _TaskListState extends State<TaskList> {
             ],
           ),
           const SizedBox(height: 12),
-          if (entries.isEmpty)
+          if (loading)
+            const LinearProgressIndicator()
+          else if (entries.isEmpty)
             GardenCard(
               child: Column(
                 children: [
@@ -229,19 +383,11 @@ class _TaskListState extends State<TaskList> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    filter == 0 && widget.controller.tasks.isEmpty
+                    filter == 0 && widget.controller.family!.taskCount == 0
                         ? '家长还没有添加任务。'
                         : '这里还没有${filters[filter]}的小事。',
                   ),
                 ],
-              ),
-            ),
-          for (final entry in entries)
-            TaskTile(
-              task: entry,
-              onTap: () => openPage(
-                context,
-                ChildTaskPage(controller: widget.controller, task: entry),
               ),
             ),
         ],
@@ -262,7 +408,7 @@ class ParentHome extends StatelessWidget {
     child: ListenableBuilder(
       listenable: controller,
       builder: (context, _) {
-        final waiting = controller.tasks.where(
+        final waiting = controller.currentTasks.where(
           (task) => task.state == 'SUBMITTED',
         );
         return PageBody(
@@ -496,7 +642,7 @@ class _ApprovePageState extends State<ApprovePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TaskDetails(task: widget.task),
+          TaskDetails(service: widget.controller.service!, task: widget.task),
           const SizedBox(height: 16),
           DayChoice(
             label: '实际发生日期',

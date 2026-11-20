@@ -33,6 +33,7 @@ class FamilyOverview {
         rules.earnedStage(row['experience'] as int),
       ),
       experience = row['experience'] as int,
+      taskCount = row['task_count'] as int,
       windowsLit = (row['windows_lit'] as int) != 0,
       rainMapCleared = row['rain_map_cleared'] == 1,
       bond = CompanionBond(
@@ -49,6 +50,7 @@ class FamilyOverview {
   final int balance;
   final int stage;
   final int experience;
+  final int taskCount;
   final bool windowsLit;
   final bool rainMapCleared;
   final CompanionBond bond;
@@ -94,7 +96,8 @@ class TaskEntry {
       actual = row['actual_date'] as String?,
       feedback = row['feedback'] as String?,
       resolution = row['resolution_note'] as String,
-      submission = row['submission_note'] as String?;
+      submission = row['submission_note'] as String?,
+      detailsLoaded = row['details_loaded'] != 0;
   final String id;
   final String title;
   final String? projectTitle;
@@ -108,6 +111,7 @@ class TaskEntry {
   final String? feedback;
   final String resolution;
   final String? submission;
+  final bool detailsLoaded;
 
   bool get canSubmit => state == 'OPEN' || state == 'RETURNED';
   String get stateLabel => switch (state) {
@@ -275,6 +279,7 @@ class FamilyService implements RainMapCommands {
         EXISTS(SELECT 1 FROM companion_memories m WHERE m.child_id = c.id
           AND m.pet_id = c.active_pet_id AND m.moment = 'call') AS companion_called,
         (SELECT COUNT(*) FROM completions WHERE is_valid = 1) AS experience,
+        (SELECT COUNT(*) FROM task_instances) AS task_count,
         (SELECT COUNT(DISTINCT actual_date) FROM completions WHERE is_valid = 1) AS growth_days,
         COALESCE((SELECT MAX(stage) FROM growth_awards WHERE child_id = c.id), 1) AS stage
       FROM households h JOIN child_profiles c ON h.id = c.family_id
@@ -283,25 +288,50 @@ class FamilyService implements RainMapCommands {
     return row == null ? null : FamilyOverview(row, rules);
   }
 
-  static const taskFields = '''
-    SELECT i.*, COALESCE(s.title, v.title) AS title,
-      CASE WHEN s.id IS NULL THEN NULL ELSE v.title END AS project_title,
-      v.content, COALESCE(s.criteria, v.criteria) AS criteria,
-      COALESCE(s.reward, v.reward) AS reward, c.feedback,
-      (SELECT note FROM submissions WHERE instance_id = i.id ORDER BY created_at DESC, rowid DESC LIMIT 1)
-        AS submission_note
-    FROM task_instances i JOIN task_versions v ON v.id = i.version_id
-    LEFT JOIN project_stages s ON s.id = i.stage_id LEFT JOIN completions c ON c.instance_id = i.id
-    ''';
+  static const _currentTaskStates =
+      "i.state IN ('OPEN', 'RETURNED', 'SUBMITTED', 'WAITING')";
 
-  Future<List<TaskEntry>> tasks() async => (await db.rows('''
-        $taskFields
+  static String _taskFields({bool includeClosedDetails = true}) {
+    final details = includeClosedDetails
+        ? '1'
+        : _currentTaskStates;
+    return '''
+      SELECT i.id, i.state, i.planned_day, i.due_day, i.actual_date,
+        COALESCE(s.title, v.title) AS title,
+        CASE WHEN s.id IS NULL THEN NULL ELSE v.title END AS project_title,
+        COALESCE(s.reward, v.reward) AS reward, ($details) AS details_loaded,
+        CASE WHEN $details THEN v.content ELSE '' END AS content,
+        CASE WHEN $details THEN COALESCE(s.criteria, v.criteria) ELSE '' END AS criteria,
+        CASE WHEN $details THEN i.resolution_note ELSE '' END AS resolution_note,
+        c.feedback,
+        CASE WHEN $details THEN (
+          SELECT note FROM submissions WHERE instance_id = i.id
+          ORDER BY created_at DESC, rowid DESC LIMIT 1
+        ) END AS submission_note
+      FROM task_instances i JOIN task_versions v ON v.id = i.version_id
+      LEFT JOIN project_stages s ON s.id = i.stage_id
+      LEFT JOIN completions c ON c.instance_id = i.id AND ($details)
+      ''';
+  }
+
+  Future<List<TaskEntry>> tasks({bool includeClosedDetails = true}) =>
+      _listTasks(includeClosedDetails: includeClosedDetails);
+
+  Future<List<TaskEntry>> currentTasks() => _listTasks(currentOnly: true);
+
+  Future<List<TaskEntry>> _listTasks({
+    bool includeClosedDetails = true,
+    bool currentOnly = false,
+  }) async =>
+      (await db.rows('''
+        ${_taskFields(includeClosedDetails: includeClosedDetails)}
+        ${currentOnly ? 'WHERE $_currentTaskStates' : ''}
         ORDER BY COALESCE(i.actual_date, i.planned_day) DESC, COALESCE(i.approved_at, 0) DESC,
         i.version_id, i.slot, i.rowid
         ''')).map(TaskEntry.new).toList(growable: false);
 
   Future<TaskEntry> task(String id) async {
-    final row = await db.row('$taskFields WHERE i.id = ?', [id]);
+    final row = await db.row('${_taskFields()} WHERE i.id = ?', [id]);
     if (row == null) throw const UserError('这件小事已不存在。');
     return TaskEntry(row);
   }

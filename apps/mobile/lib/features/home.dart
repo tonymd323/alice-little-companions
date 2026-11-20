@@ -305,8 +305,8 @@ class _FamilyHomeState extends State<FamilyHome> {
   );
 
   Widget garden() {
-    final pending = controller.tasks.where((task) => task.canSubmit).length;
-    final waiting = controller.tasks
+    final pending = controller.currentTasks.where((task) => task.canSubmit).length;
+    final waiting = controller.currentTasks
         .where((task) => task.state == 'SUBMITTED')
         .length;
     final frozen = controller.service!.frozen;
@@ -424,7 +424,7 @@ class _FamilyHomeState extends State<FamilyHome> {
               ),
               subtitle: Text(
                 pending + waiting == 0
-                    ? (controller.tasks.isEmpty ? '家长还没有添加任务。' : '暂时没有待完成的小事。')
+                    ? (family.taskCount == 0 ? '家长还没有添加任务。' : '暂时没有待完成的小事。')
                     : [
                         if (pending > 0) '$pending 件待完成',
                         if (waiting > 0) '$waiting 件待家长确认',
@@ -593,9 +593,19 @@ class GrowthPage extends StatelessWidget {
   final FamilyController controller;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => AllTaskEntries(
+    controller: controller,
+    builder: historyBody,
+    loading: historyBody(context, const [], loading: true),
+  );
+
+  Widget historyBody(
+    BuildContext context,
+    List<TaskEntry> entries, {
+    bool loading = false,
+  }) {
     final family = controller.family!;
-    final records = controller.tasks.where(
+    final records = entries.where(
       (task) => task.state == 'APPROVED' || task.state == 'CORRECTED',
     );
     final history = records.toList(growable: false);
@@ -611,7 +621,10 @@ class GrowthPage extends StatelessWidget {
               if (index > 0) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10),
-                  child: TaskDetails(task: history[index - 1]),
+                  child: TaskDetails(
+                    service: controller.service!,
+                    task: history[index - 1],
+                  ),
                 );
               }
               return Column(
@@ -709,7 +722,9 @@ class GrowthPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  if (history.isEmpty)
+                  if (loading)
+                    const LinearProgressIndicator()
+                  else if (history.isEmpty)
                     const GardenCard(child: Text('家长确认的小事会留在这里。')),
                 ],
               );

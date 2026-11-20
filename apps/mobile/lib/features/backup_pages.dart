@@ -365,7 +365,7 @@ class _ExportPageState extends State<ExportPage>
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                '余额 ${summary.balance} 分 · ${widget.controller.tasks.length} 件小事',
+                '余额 ${summary.balance} 分 · ${summary.taskCount} 件小事',
               ),
               const SizedBox(height: 8),
               Text(
@@ -685,7 +685,7 @@ class _RestorePageState extends State<RestorePage>
                   Text('当前小家', style: Theme.of(context).textTheme.titleMedium),
                   Text(current.nickname),
                   Text(
-                    '${current.balance} 分 · ${controller.tasks.where((t) => t.state == 'APPROVED').length} 份有效成果',
+                    '${current.balance} 分 · ${current.experience} 份有效成果',
                   ),
                   Text('${current.experience} 经验 · 伙伴阶段 ${current.stage}'),
                 ],

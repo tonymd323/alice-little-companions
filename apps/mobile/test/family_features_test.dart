@@ -320,6 +320,86 @@ void main() {
     timeout: const Timeout(Duration(minutes: 4)),
   );
 
+  testWidgets('closed task details load in Growth and in the completed list', (
+    tester,
+  ) async {
+    final stock = (await tester.runAsync(TestFamily.create))!;
+    addTearDown(stock.dispose);
+    final controller = FamilyController(stock.device, stock.rules)
+      ..service = stock.service;
+    addTearDown(controller.dispose);
+    await tester.runAsync(() async {
+      final parent = await stock.service.pin.unlock(TestFamily.pin);
+      await stock.service.backfill(
+        const TaskDraft('测试成果A', '测试详情A', '测试标准A', 'focus'),
+        stock.service.today,
+        '测试反馈A',
+        session: parent,
+      );
+      await controller.refresh();
+    });
+    expect(controller.currentTasks, isEmpty);
+    expect(controller.family!.taskCount, 1);
+
+    await tester.pumpWidget(CompanionsApp(controller: controller));
+    await tester.tap(find.text('成长').hitTestable());
+    await tester.pump();
+    expect(find.text('成长记录'), findsOneWidget);
+    await waitFor(tester, find.text('测试反馈A'));
+    expect(find.text('测试详情A'), findsOneWidget);
+    expect(find.text('测试标准A'), findsOneWidget);
+
+    await tester.tap(find.text('小事').hitTestable());
+    await tester.pump();
+    expect(find.text('这里还没有待完成的小事。'), findsOneWidget);
+    await tester.tap(find.text('已完成'));
+    await tester.pump();
+    final title = find.text('测试成果A');
+    await waitFor(tester, title);
+    await tester.tap(title.hitTestable());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await waitFor(tester, find.text('测试反馈A'));
+    expect(find.text('测试标准A'), findsOneWidget);
+    expect((controller.family!.balance, controller.family!.experience), (3, 1));
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('an open task detail reflects expiry after a calendar refresh', (
+    tester,
+  ) async {
+    var clock = DateTime.utc(2026, 11, 18);
+    final stock = (await tester.runAsync(() => TestFamily.create(now: () => clock)))!;
+    addTearDown(stock.dispose);
+    final controller = FamilyController(stock.device, stock.rules)
+      ..service = stock.service;
+    addTearDown(controller.dispose);
+    await tester.runAsync(() async {
+      final parent = await stock.service.pin.unlock(TestFamily.pin);
+      await stock.service.publish(
+        TaskDraft('测试限期小事', '', '测试标准', 'light', due: stock.service.today),
+        session: parent,
+      );
+      await controller.refresh();
+    });
+    await tester.pumpWidget(CompanionsApp(controller: controller));
+    await tester.tap(find.text('小事').hitTestable());
+    await tester.pump();
+    await tester.tap(find.text('测试限期小事').hitTestable());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.text('我完成了'), findsOneWidget);
+
+    clock = clock.add(const Duration(days: 1));
+    await tester.runAsync(controller.refresh);
+    await tester.pump();
+    expect(find.text('我完成了'), findsNothing);
+    await waitFor(tester, find.text('已到期'));
+    expect(find.text('测试标准'), findsOneWidget);
+    expect(controller.family!.balance, 0);
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('the real home interaction writes a memory visible in Growth', (
     tester,
   ) async {
