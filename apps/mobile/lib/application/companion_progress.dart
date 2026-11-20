@@ -1,9 +1,28 @@
 part of 'family.dart';
 
-const _companionExperience = '''
-  SELECT COUNT(*) FROM companion_completions x
-  JOIN completions a ON a.id = x.completion_id AND a.is_valid = 1
-  WHERE x.child_id = p.child_id AND x.pet_id = p.pet_id
+const _completionBelongsToCompanion = '''
+  EXISTS (
+    SELECT 1 FROM companion_completions x
+    WHERE x.completion_id = a.id AND x.child_id = p.child_id AND x.pet_id = p.pet_id
+  )
+''';
+
+// Each credit references a completion. Read the smaller validity group by
+// its index so large histories also stay efficient after many corrections.
+const _companionExperience =
+    '''
+  SELECT CASE
+    WHEN (SELECT COUNT(*) FROM completions WHERE is_valid = 0) <
+         (SELECT COUNT(*) FROM completions WHERE is_valid = 1)
+    THEN
+      (SELECT COUNT(*) FROM companion_completions x
+       WHERE x.child_id = p.child_id AND x.pet_id = p.pet_id) -
+      (SELECT COUNT(*) FROM completions a
+       WHERE a.is_valid = 0 AND $_completionBelongsToCompanion)
+    ELSE
+      (SELECT COUNT(*) FROM completions a
+       WHERE a.is_valid = 1 AND $_completionBelongsToCompanion)
+  END
 ''';
 
 class CompanionProgress {

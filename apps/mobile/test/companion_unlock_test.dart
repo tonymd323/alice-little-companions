@@ -125,4 +125,37 @@ void main() {
       throwsA(isA<UserError>()),
     );
   });
+
+  test(
+    'correcting the only credited completion leaves zero experience',
+    () async {
+      final family = await TestFamily.create();
+      addTearDown(family.dispose);
+      final service = family.service;
+      final parent = await service.pin.unlock(TestFamily.pin);
+      final result = await service.backfill(
+        const TaskDraft('测试任务A', '测试内容', '测试标准', 'focus'),
+        service.today,
+        '',
+        session: parent,
+      );
+      expect((await service.overview())!.experience, 1);
+
+      final quote = await service.correctionQuote(
+        result['instance_id'] as String,
+        const [],
+        parent,
+      );
+      await service.correctAward(quote, '测试更正', false, session: parent);
+
+      final after = (await service.overview())!;
+      expect(
+        (after.balance, after.validCompletionCount, after.experience),
+        (0, 0, 0),
+      );
+      final progress = (await service.companionProgress())[Companion.rabbit]!;
+      expect((progress.experience, progress.stage), (0, 1));
+      await service.verifyAccounting();
+    },
+  );
 }
