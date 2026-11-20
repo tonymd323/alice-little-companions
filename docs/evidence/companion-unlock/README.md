@@ -22,7 +22,7 @@
 
 同一个 GitHub 提交发布 APK、`latest.json` 和 SHA-256 清单。独立 Git 副本取回 APK 和更新记录，与签名机构建结果逐字节一致。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.0-android.apk?raw=true) · [发布回执](github-download.json)
 
-在两个隔离的安卓测试用户间，通过系统文件界面保存、回读并恢复同一份结构 8 迁移包。恢复前后的 30 张业务表一致。[系统文件迁移实测](native-migration/README.md)
+在两个隔离的安卓测试用户间，通过系统文件界面保存、回读并往返恢复。首台归档后接收返程，保护旧档。冷启动核对两位伙伴各自经验、第二块石板进度和 30 张业务表均一致。[系统文件迁移实测](native-migration/README.md)
 
 ## 万条流水旧档
 

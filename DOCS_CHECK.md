@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1109 项通过。下面列出逐项结果。
+- 本次准备检查 1117 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -139,6 +139,7 @@
 - 内部链接有效：docs/PLAN.md → evidence/device-acceptance/README.md
 - 内部链接有效：docs/PLAN.md → evidence/companion-unlock/README.md
 - 内部链接有效：docs/PLAN.md → BACKUP_MIGRATION.md
+- 内部链接有效：docs/PLAN.md → evidence/companion-unlock/native-migration/README.md
 - 内部链接有效：docs/PLAN.md → evidence/task-performance/README.md
 - 内部链接有效：docs/PLAN.md → evidence/migration-return/README.md
 - 内部链接有效：docs/PLAN.md → GAME_STUDIO.md
@@ -347,6 +348,12 @@
 - 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → source-archived.png
 - 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → target-rain-resumed.png
 - 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → verification.json
+- 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → b-to-a-readback.png
+- 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → verification.json
+- 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → return-compare.png
+- 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → return-independent-progress.png
+- 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → verification.json
+- 内部链接有效：docs/evidence/companion-unlock/native-migration/README.md → ../../device-acceptance/README.md
 - 内部链接有效：docs/evidence/courtyard-motion/README.md → courtyard-stairs.mp4
 - 内部链接有效：docs/evidence/courtyard-motion/README.md → cat-three-walks.mp4
 - 内部链接有效：docs/evidence/courtyard-motion/README.md → ../../../apps/mobile/assets/art/garden.webp
@@ -411,7 +418,8 @@
 - 内部链接有效：docs/evidence/device-acceptance/README.md → android-restored-home.png
 - 内部链接有效：docs/evidence/device-acceptance/README.md → android-restoration.json
 - 内部链接有效：docs/evidence/device-acceptance/README.md → ../../ACCEPTANCE.md
-- 内部链接有效：docs/evidence/device-acceptance/README.md → ../migration-return/README.md
+- 内部链接有效：docs/evidence/device-acceptance/README.md → ../companion-unlock/native-migration/README.md
+- 内部链接有效：docs/evidence/device-acceptance/README.md → ../companion-unlock/README.md
 - 内部链接有效：docs/evidence/device-acceptance/README.md → ../../ACCEPTANCE.md
 - 内部链接有效：docs/evidence/device-acceptance/README.md → ../acceptance.csv
 - 内部链接有效：docs/evidence/family-functions/README.md → package.json
