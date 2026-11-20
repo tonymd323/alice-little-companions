@@ -1,0 +1,23 @@
+0.18.0+16 (4a54fb6)
+AC40 fixture {"sqlite":"3.54.1","dart":"3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on \"linux_x64\"","snapshot_bytes":52256768,"schema":7,"revision":6872,"seeded_backfill_extensions":6811,"summary":{"balance":20584,"ledger_count":6871,"valid_completion_count":6866,"owned_item_count":5,"space_count":1,"max_growth_stage":6},"digest":"d68ae179580f9d559b44730fe94ce9c5e9184fdb76014f25c9565e1c52f46caa"}
+AC40 export {"total_ms":21131,"preparing_ms":6,"phases_ms":{"snapshot":102,"checking":2756,"encrypting":8629,"readback":9638}}
+AC40 handoff {"local_copy_and_receipt_ms":115,"container_bytes":17355477}
+AC40 restore {"total_ms":19414,"preview":{"total_ms":11134,"preparing_ms":2,"phases_ms":{"decrypting":7820,"checking":3312}},"protect_target":{"total_ms":110,"preparing_ms":3,"phases_ms":{"snapshot":9,"checking":11,"encrypting":87}},"activate_ms":8169}
+AC40 verification {"restored_snapshot_bytes":52256768,"activated_target_digest":"d68ae179580f9d559b44730fe94ce9c5e9184fdb76014f25c9565e1c52f46caa","same_summary":true,"same_business_digest":true,"target_generation_switched":true,"source_balance_preserved":true}
+01:02 +1: All tests passed!
+
+0.19.0+17 (c55dbd1) run 1
+AC40 fixture {"sqlite":"3.54.1","dart":"3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on \"linux_x64\"","snapshot_bytes":52256768,"schema":7,"revision":6872,"seeded_backfill_extensions":6811,"summary":{"balance":20584,"ledger_count":6871,"valid_completion_count":6866,"owned_item_count":5,"space_count":1,"max_growth_stage":6},"digest":"55d3eb093feb4c5d24833dd772be1f651286dd5b16734ad459a4fc8ca7ea4928"}
+AC40 export {"total_ms":18415,"preparing_ms":6,"phases_ms":{"snapshot":108,"checking":1311,"encrypting":8143,"readback":8847}}
+AC40 handoff {"local_copy_and_receipt_ms":55,"container_bytes":17356461}
+AC40 restore {"total_ms":13968,"preview":{"total_ms":8574,"preparing_ms":1,"phases_ms":{"decrypting":7303,"checking":1270}},"protect_target":{"total_ms":93,"preparing_ms":2,"phases_ms":{"snapshot":5,"checking":10,"encrypting":76}},"activate_ms":5299}
+AC40 verification {"restored_snapshot_bytes":52256768,"activated_target_digest":"55d3eb093feb4c5d24833dd772be1f651286dd5b16734ad459a4fc8ca7ea4928","same_summary":true,"same_business_digest":true,"target_generation_switched":true,"source_balance_preserved":true}
+00:51 +1: All tests passed!
+
+0.19.0+17 (c55dbd1) run 2
+AC40 fixture {"sqlite":"3.54.1","dart":"3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on \"linux_x64\"","snapshot_bytes":52256768,"schema":7,"revision":6872,"seeded_backfill_extensions":6811,"summary":{"balance":20584,"ledger_count":6871,"valid_completion_count":6866,"owned_item_count":5,"space_count":1,"max_growth_stage":6},"digest":"54353113c2ed110292a4c2dbeaffe626b9f40649aca721ea02ea1c4d07640c7f"}
+AC40 export {"total_ms":18486,"preparing_ms":17,"phases_ms":{"snapshot":142,"checking":1347,"encrypting":8298,"readback":8682}}
+AC40 handoff {"local_copy_and_receipt_ms":58,"container_bytes":17355977}
+AC40 restore {"total_ms":13963,"preview":{"total_ms":8181,"preparing_ms":2,"phases_ms":{"decrypting":6804,"checking":1375}},"protect_target":{"total_ms":125,"preparing_ms":5,"phases_ms":{"snapshot":9,"checking":16,"encrypting":95}},"activate_ms":5656}
+AC40 verification {"restored_snapshot_bytes":52256768,"activated_target_digest":"54353113c2ed110292a4c2dbeaffe626b9f40649aca721ea02ea1c4d07640c7f","same_summary":true,"same_business_digest":true,"target_generation_switched":true,"source_balance_preserved":true}
+00:51 +1: All tests passed!
