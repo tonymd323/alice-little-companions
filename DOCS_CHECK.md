@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1056 项通过。下面列出逐项结果。
+- 本次准备检查 1070 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -20,7 +20,7 @@
 - 内部链接有效：AGENTS.md → docs/evidence/fox-walk/README.md
 - 内部链接有效：AGENTS.md → docs/DELIVERY.md
 - 内部链接有效：README.md → docs/DELIVERY.md
-- 内部链接有效：README.md → docs/evidence/backup-performance/README.md
+- 内部链接有效：README.md → docs/evidence/task-performance/README.md
 - 内部链接有效：README.md → docs/evidence/family-functions/README.md
 - 内部链接有效：README.md → docs/evidence/fox-walk/README.md
 - 内部链接有效：README.md → docs/evidence/rabbit-hop/README.md
@@ -72,7 +72,7 @@
 - 内部链接有效：docs/DELIVERY.md → evidence/M5/README.md
 - 内部链接有效：docs/DELIVERY.md → OWNER_WALKTHROUGH.md
 - 内部链接有效：docs/DELIVERY.md → BACKUP_MIGRATION.md
-- 内部链接有效：docs/DELIVERY.md → evidence/backup-performance/README.md
+- 内部链接有效：docs/DELIVERY.md → evidence/task-performance/README.md
 - 内部链接有效：docs/DELIVERY.md → evidence/device-acceptance/README.md
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/references/pet-stages.png
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/references/garden-color.png
@@ -137,6 +137,7 @@
 - 内部链接有效：docs/PLAN.md → evidence/android-updates/README.md
 - 内部链接有效：docs/PLAN.md → evidence/backup-performance/README.md
 - 内部链接有效：docs/PLAN.md → evidence/device-acceptance/README.md
+- 内部链接有效：docs/PLAN.md → evidence/task-performance/README.md
 - 内部链接有效：docs/PLAN.md → GAME_STUDIO.md
 - 内部链接有效：docs/PLAN.md → evidence/wind/README.md
 - 内部链接有效：docs/PLAN.md → evidence/M0/README.md
@@ -500,6 +501,19 @@
 - 内部链接有效：docs/evidence/rabbit-hop/README.md → ../../../apps/mobile/assets/art/rabbit-1.webp
 - 内部链接有效：docs/evidence/rabbit-hop/README.md → ../../../apps/mobile/assets/art/leap-rabbit-1.webp
 - 内部链接有效：docs/evidence/rabbit-hop/README.md → ../../../design/production/wind/actors/rabbit-poses.ora
+- 内部链接有效：docs/evidence/task-performance/README.md → ../device-acceptance/README.md
+- 内部链接有效：docs/evidence/task-performance/README.md → timing.log
+- 内部链接有效：docs/evidence/task-performance/README.md → ../acceptance.csv
+- 内部链接有效：docs/evidence/task-performance/README.md → tests.log
+- 内部链接有效：docs/evidence/task-performance/README.md → preflight.json
+- 内部链接有效：docs/evidence/task-performance/README.md → android-upgrade.json
+- 内部链接有效：docs/evidence/task-performance/README.md → android-home.png
+- 内部链接有效：docs/evidence/task-performance/README.md → android-task-details.png
+- 内部链接有效：docs/evidence/task-performance/README.md → package.json
+- 内部链接有效：docs/evidence/task-performance/README.md → github-download.json
+- 内部链接有效：docs/evidence/task-performance/README.md → art-daily.json
+- 内部链接有效：docs/evidence/task-performance/README.md → art-wind.json
+- 内部链接有效：docs/evidence/task-performance/README.md → ui_performance_test.dart
 - 内部链接有效：docs/evidence/wind/README.md → capture/wind-veranda.mp4
 - 内部链接有效：docs/evidence/wind/README.md → capture/README.md
 - 内部链接有效：docs/evidence/wind/README.md → capture/wind-contact-sheet.jpg

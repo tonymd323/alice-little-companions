@@ -1,6 +1,6 @@
 # 安卓与 iPad 真机验收
 
-双端使用 0.19.0+17，构建源码 `c55dbd1605215c78cb13101a273bfa53ace01819`。记录设备型号、系统版本、签名方式和测试证据。[安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.19.0-android.apk?raw=true) · [iPad 签名安装](../../DELIVERY.md#ipad-首次试装)
+双端使用同一候选版本。最新候选为 0.20.0+18，构建源码 `0b3aa4d8b6a2de22be99bd35666a9b7e66ffbf6a`。记录设备型号、系统版本、签名方式和测试证据。[安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.20.0-android.apk?raw=true) · [iPad 签名安装](../../DELIVERY.md#ipad-首次试装)
 
 ## 导入测试家庭
 
