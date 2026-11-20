@@ -16,4 +16,8 @@
 
 首台用原家长 PIN 打开恢复预览。App 建好加密内部恢复点后确认替换，并启用新的家长 PIN。首台冷启动后 30 张业务表与第二端迁出前一致，余额 7 分，团团 1 经验、奶油 16 经验，第二块石板进度保留。首台新存档可记账，原来 5 分的存档保留在原归档代。[恢复比较](return-compare.png) · [回迁后伙伴](return-independent-progress.png) · [摘要](verification.json)
 
+用新 PIN 解锁，再次通过系统文件面板选取同一返程档。App 显示已经恢复，活动存储代和 30 张业务表与首次恢复相同。[重复恢复提示](return-already-restored.png)
+
+首台恢复后归档第二端。第二端冷启动仍为只读，业务摘要与迁出前一致。最终首台可记账，第二端保留归档。[第二端归档](target-archived.png) · [摘要](verification.json)
+
 同一构建的 iPad 安装与 iPad、安卓真机双向迁移待设备接入。[真机验收](../../device-acceptance/README.md)
