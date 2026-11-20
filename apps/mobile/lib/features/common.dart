@@ -246,11 +246,14 @@ class _RecoveryCardState extends State<RecoveryCard> {
           ),
         ),
         const SizedBox(height: 8),
-        CheckboxListTile(
-          contentPadding: EdgeInsets.zero,
-          value: saved,
-          onChanged: (value) => setState(() => saved = value ?? false),
-          title: const Text('我已妥善保存'),
+        Material(
+          color: Colors.transparent,
+          child: CheckboxListTile(
+            contentPadding: EdgeInsets.zero,
+            value: saved,
+            onChanged: (value) => setState(() => saved = value ?? false),
+            title: const Text('我已妥善保存'),
+          ),
         ),
         ActionButton(
           label: widget.label,

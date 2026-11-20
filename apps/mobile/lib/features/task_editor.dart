@@ -429,7 +429,10 @@ class _ManageTasksPageState extends State<ManageTasksPage> {
                         ),
                       );
                       if (mounted) {
-                        setState(() => plans = service.recurringTemplates());
+                        final updated = service.recurringTemplates();
+                        setState(() {
+                          plans = updated;
+                        });
                       }
                     },
                   ),

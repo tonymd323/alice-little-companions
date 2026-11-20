@@ -46,6 +46,14 @@ class CatalogPage extends StatefulWidget {
 class _CatalogPageState extends State<CatalogPage> {
   late Future<List<Json>> history = widget.controller.service!.purchases();
 
+  void reloadHistory() {
+    if (!mounted) return;
+    final purchases = widget.controller.service!.purchases();
+    setState(() {
+      history = purchases;
+    });
+  }
+
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: widget.controller,
@@ -89,11 +97,7 @@ class _CatalogPageState extends State<CatalogPage> {
                       context,
                       PurchaseHistoryPage(controller: widget.controller),
                     );
-                    if (mounted) {
-                      setState(
-                        () => history = widget.controller.service!.purchases(),
-                      );
-                    }
+                    reloadHistory();
                   },
                   label: const Text('我的兑换'),
                   icon: const Icon(Icons.inventory_2_outlined),
@@ -141,12 +145,7 @@ class _CatalogPageState extends State<CatalogPage> {
                                       model: widget.model,
                                     ),
                                   );
-                                  if (mounted) {
-                                    setState(
-                                      () => history = widget.controller.service!
-                                          .purchases(),
-                                    );
-                                  }
+                                  reloadHistory();
                                 },
                               ),
                             ),
@@ -282,7 +281,11 @@ class _RewardPageState extends State<RewardPage> {
 
   Future<void> reload() async {
     await widget.controller.refresh();
-    if (mounted) setState(() => state = load());
+    if (!mounted) return;
+    final updated = load();
+    setState(() {
+      state = updated;
+    });
   }
 
   @override
@@ -555,9 +558,10 @@ class _PurchaseHistoryPageState extends State<PurchaseHistoryPage> {
                                 );
                                 await widget.controller.refresh();
                                 if (mounted) {
-                                  setState(
-                                    () => snapshot = service.purchases(),
-                                  );
+                                  final updated = service.purchases();
+                                  setState(() {
+                                    snapshot = updated;
+                                  });
                                 }
                               },
                             )

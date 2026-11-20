@@ -75,7 +75,10 @@ class _SpacesPageState extends State<SpacesPage> {
                                 ),
                               );
                               if (mounted) {
-                                setState(() => spaces = service.spaces());
+                                final updated = service.spaces();
+                                setState(() {
+                                  spaces = updated;
+                                });
                               }
                             },
                             child: Text('进入${space['name']}'),
@@ -116,6 +119,14 @@ class _SpacePageState extends State<SpacePage> {
     await service.wardrobe(widget.controller.family!.companion),
   );
 
+  void reload() {
+    if (!mounted) return;
+    final updated = load();
+    setState(() {
+      data = updated;
+    });
+  }
+
   Future<void> rename(Json space) async {
     final result = await openPage<String>(
       context,
@@ -128,7 +139,7 @@ class _SpacePageState extends State<SpacePage> {
       result,
     );
     await widget.controller.refresh();
-    if (mounted) setState(() => data = load());
+    reload();
   }
 
   @override
@@ -178,7 +189,7 @@ class _SpacePageState extends State<SpacePage> {
                                   section: CatalogSection.furniture,
                                 ),
                               );
-                              if (mounted) setState(() => data = load());
+                              reload();
                             },
                             icon: const Icon(Icons.chair_outlined),
                             label: const Text('浏览家具'),

@@ -30,7 +30,12 @@ class _PenaltiesPageState extends State<PenaltiesPage> {
     await service.penaltyUsed(service.today),
   );
 
-  void reload() => setState(() => snapshot = load());
+  void reload() {
+    final updated = load();
+    setState(() {
+      snapshot = updated;
+    });
+  }
 
   @override
   Widget build(BuildContext context) => ParentFrame(

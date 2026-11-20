@@ -29,9 +29,17 @@ class _DataPageState extends State<DataPage> {
   Future<(Json, List<File>)> load() async =>
       (await transfer.status(), await transfer.checkpoints.files());
 
+  void reload() {
+    if (!mounted) return;
+    final updated = load();
+    setState(() {
+      states = updated;
+    });
+  }
+
   Future<void> visit(Widget page) async {
     await openPage(context, page);
-    if (mounted) setState(() => states = load());
+    reload();
   }
 
   @override
@@ -160,7 +168,7 @@ class _DataPageState extends State<DataPage> {
       session: widget.controller.session,
     );
     await widget.controller.refresh();
-    if (mounted) setState(() => states = load());
+    reload();
   }
 }
 

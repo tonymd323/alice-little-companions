@@ -31,7 +31,10 @@ class _CompanionCollectionState extends State<CompanionCollection> {
     await service.unlockCompanion(pet);
     await widget.controller.refresh();
     if (!mounted) return;
-    setState(() => progress = service.companionProgress());
+    final updated = service.companionProgress();
+    setState(() {
+      progress = updated;
+    });
   }
 
   Future<void> select(Companion pet) async {

@@ -132,7 +132,12 @@ class _TaskDetailsState extends State<TaskDetails> {
         if (snapshot.data case final task?) return card(context, task);
         return GardenCard(
           child: TextButton(
-            onPressed: () => setState(() => details = load()),
+            onPressed: () {
+              final updated = load();
+              setState(() {
+                details = updated;
+              });
+            },
             child: const Text('重新读取小事详情'),
           ),
         );
