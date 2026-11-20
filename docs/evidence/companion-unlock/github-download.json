@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "version": "0.21.0",
+  "versionCode": 19,
+  "file": "alice-0.21.0-android.apk",
+  "sha256": "579a85ac9e2a0a1c421755e803cf416b3f9bb614577d254cacc86710060fda58",
+  "sizeBytes": 83168804,
+  "branch": "android-downloads",
+  "commit": "ccc157aa10630a1d289311dcb23bdf7a23734ab7",
+  "sourceBranch": "codex/native-app",
+  "sourceAtPublication": "49fcf818cf070b30b4df7f23fdf7ee466bc7be03",
+  "buildCommit": "f3a7184aaeff2589f3ffe6ef6618ac21c0618288"
+}

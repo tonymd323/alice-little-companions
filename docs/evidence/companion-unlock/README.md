@@ -18,4 +18,8 @@
 
 打开团团的兑换确认并返回，余额仍为 35 分。重新打开并确认，积分只扣 30 分，团团显示 1 级、0 经验。切换到团团后，家长确认原先申报的一件 2 分小事。杀进程重开，余额为 7 分，团团拥有 1 经验，奶油拥有 16 经验。[解锁后截图](02-new-companion.png) · [重开后截图](03-independent-experience.png) · [数据库复核](android-verification.json)
 
+预览尚未解锁的桃桃 6 级外观后返回小家，积分、账本、当前伙伴、解锁记录和两位实际拥有的伙伴经验均与预览前相同。[外观预览截图](04-locked-rabbit-preview.png)
+
+同一个 GitHub 提交发布 APK、`latest.json` 和 SHA-256 清单。独立 Git 副本取回 APK 和更新记录，与签名机构建结果逐字节一致。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.0-android.apk?raw=true) · [发布回执](github-download.json)
+
 iPad 安装与双向真机迁移等待 Mac、Apple Team 和家庭设备接入。[设备条件](../../DELIVERY.md#ipad-首次试装)

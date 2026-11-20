@@ -108,5 +108,11 @@
         -30
       ]
     ]
+  },
+  "preview": {
+    "companion": "rabbit",
+    "level": 6,
+    "locked": true,
+    "samePersistedState": true
   }
 }
