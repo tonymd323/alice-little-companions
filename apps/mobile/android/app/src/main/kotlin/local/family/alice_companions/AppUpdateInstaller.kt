@@ -100,7 +100,10 @@ internal class AppUpdateInstaller(private val activity: Activity) {
             PackageManager.GET_SIGNATURES
         }
         val installed = installedPackage(flags)
-        val candidate = archivedPackage(archive, flags)
+        // Android 9 only collects archive certificates when GET_SIGNATURES is set.
+        @Suppress("DEPRECATION")
+        val archiveFlags = flags or PackageManager.GET_SIGNATURES
+        val candidate = archivedPackage(archive, archiveFlags)
             ?: throw UpdateError("invalid_apk", "安装包无法读取，请重新下载。")
 
         if (candidate.packageName != activity.packageName) {
