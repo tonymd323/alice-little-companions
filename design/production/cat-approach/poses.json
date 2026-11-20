@@ -1,0 +1,38 @@
+{
+  "canvas": [720, 464],
+  "source": "apps/mobile/assets/art/cat-1.webp",
+  "rootStart": [230, 440],
+  "rootEnd": [362, 440],
+  "sourceOrigin": [41, 0],
+  "fps": 30,
+  "duration": 2.9,
+  "pawSources": {
+    "nearHind": [153, 433],
+    "nearFront": [218, 435],
+    "farFront": [286, 426]
+  },
+  "poses": [
+    {"time":0,    "beat":"坐定",       "advance":0,   "head":[0,0,0],       "shoulders":[0,0],  "rump":[0,0],    "tail":[0,0],    "farFront":[0,0],   "nearFront":[0,0],   "nearHind":[0,0],   "gaze":0, "blink":0},
+    {"time":0.15, "beat":"先瞄一眼",   "advance":0,   "head":[4,2,0.012],  "shoulders":[0,0],  "rump":[0,0],    "tail":[0,0],    "farFront":[0,0],   "nearFront":[0,0],   "nearHind":[0,0],   "gaze":4, "blink":0},
+    {"time":0.33, "beat":"尾尖摆一下", "advance":0,   "head":[7,4,0.020],  "shoulders":[2,4],  "rump":[-2,1],   "tail":[-10,-8], "farFront":[0,0],   "nearFront":[0,0],   "nearHind":[0,0],   "gaze":5, "blink":0},
+    {"time":0.53, "beat":"压前掌",     "advance":0,   "head":[10,12,0.025],"shoulders":[6,8],  "rump":[-3,-5],  "tail":[-13,-13],"farFront":[0,0],   "nearFront":[0,0],   "nearHind":[0,0],   "gaze":4, "blink":0},
+    {"time":0.8,  "beat":"撑起",       "advance":5,   "head":[12,12,0.026],"shoulders":[8,-12],"rump":[-2,-37], "tail":[-6,-7],  "farFront":[0,0],   "nearFront":[0,0],    "nearHind":[0,0],   "gaze":3, "blink":0},
+    {"time":0.95, "beat":"抬远前掌",   "advance":19,  "head":[12,15,0.027],"shoulders":[10,-9],"rump":[-3,-36], "tail":[-5,2],   "farFront":[35,-30],"nearFront":[0,0],    "nearHind":[0,0],   "gaze":2, "blink":0},
+    {"time":1.12, "beat":"远前掌踩实", "advance":36,  "head":[10,17,0.035],"shoulders":[8,-4], "rump":[-5,-30], "tail":[-6,7],   "farFront":[64,0],  "nearFront":[0,0],    "nearHind":[0,0],   "gaze":1, "blink":0},
+    {"time":1.20, "beat":"近前掌提起", "advance":44,  "head":[9,15,0.025], "shoulders":[12,-7],"rump":[-4,-29], "tail":[-8,5],   "farFront":[64,0],  "nearFront":[13,-16], "nearHind":[0,0],   "gaze":1, "blink":0},
+    {"time":1.27, "beat":"近掌跟上",   "advance":52,  "head":[8,15,0.023], "shoulders":[9,-10],"rump":[-1,-35], "tail":[-8,3],   "farFront":[64,0],  "nearFront":[33,-24], "nearHind":[12,-10],"gaze":1, "blink":0},
+    {"time":1.36, "beat":"后掌离地",   "advance":60,  "head":[7,14,0.024], "shoulders":[6,-6], "rump":[0,-38],  "tail":[-8,1],   "farFront":[64,0],  "nearFront":[54,-7],  "nearHind":[40,-17],"gaze":1, "blink":0},
+    {"time":1.45, "beat":"第一步收稳", "advance":66,  "head":[8,16,0.021], "shoulders":[7,-3], "rump":[-3,-30], "tail":[-7,-3],  "farFront":[64,0],  "nearFront":[57,0],   "nearHind":[63,0],  "gaze":1, "blink":0},
+    {"time":1.60, "beat":"再抬远前掌", "advance":82,  "head":[10,14,0.025],"shoulders":[9,-8], "rump":[-3,-34], "tail":[-5,-4],  "farFront":[95,-28],"nearFront":[57,0],   "nearHind":[63,0],  "gaze":1, "blink":0},
+    {"time":1.77, "beat":"远前掌再承重","advance":101,"head":[7,17,0.030], "shoulders":[7,-3], "rump":[-5,-31], "tail":[-5,1],   "farFront":[132,0], "nearFront":[57,0],   "nearHind":[63,0],  "gaze":0, "blink":0},
+    {"time":1.85, "beat":"近前掌收近", "advance":110, "head":[6,16,0.026], "shoulders":[10,-7],"rump":[-4,-29], "tail":[-6,3],   "farFront":[132,0], "nearFront":[75,-16], "nearHind":[63,0],  "gaze":0, "blink":0},
+    {"time":1.93, "beat":"换到前掌承重","advance":117,"head":[6,15,0.022], "shoulders":[8,-10],"rump":[-1,-37], "tail":[-6,3],   "farFront":[132,0], "nearFront":[99,-24], "nearHind":[79,-11],"gaze":0, "blink":0},
+    {"time":2.02, "beat":"后掌跟上",   "advance":125, "head":[5,14,0.020], "shoulders":[5,-5], "rump":[0,-29],  "tail":[-6,2],   "farFront":[132,0], "nearFront":[124,-7], "nearHind":[109,-17],"gaze":0, "blink":0},
+    {"time":2.13, "beat":"两步落稳",   "advance":132, "head":[3,12,0.017], "shoulders":[4,0],  "rump":[-4,-18], "tail":[-6,2],   "farFront":[132,0], "nearFront":[132,0],  "nearHind":[132,0], "gaze":0, "blink":0},
+    {"time":2.45, "beat":"坐回",       "advance":132, "head":[0,0,0],      "shoulders":[0,0],  "rump":[0,0],    "tail":[0,0],    "farFront":[132,0], "nearFront":[132,0], "nearHind":[132,0], "gaze":0, "blink":0},
+    {"time":2.58, "beat":"眼睑轻合",   "advance":132, "head":[0,0,0],      "shoulders":[0,0],  "rump":[0,0],    "tail":[0,0],    "farFront":[132,0], "nearFront":[132,0], "nearHind":[132,0], "gaze":0, "blink":0.78},
+    {"time":2.62, "beat":"眨眼",       "advance":132, "head":[0,0,0],      "shoulders":[0,0],  "rump":[0,0],    "tail":[0,0],    "farFront":[132,0], "nearFront":[132,0], "nearHind":[132,0], "gaze":0, "blink":1},
+    {"time":2.73, "beat":"睁眼",       "advance":132, "head":[0,0,0],      "shoulders":[0,0],  "rump":[0,0],    "tail":[0,0],    "farFront":[132,0], "nearFront":[132,0], "nearHind":[132,0], "gaze":0, "blink":0},
+    {"time":2.9,  "beat":"停一拍",     "advance":132, "head":[0,0,0],      "shoulders":[0,0],  "rump":[0,0],    "tail":[0,0],    "farFront":[132,0], "nearFront":[132,0], "nearHind":[132,0], "gaze":0, "blink":0}
+  ]
+}

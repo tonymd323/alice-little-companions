@@ -9,10 +9,14 @@ import '../domain/rules.dart';
 import 'puppet.dart';
 import 'animated_backdrop.dart';
 import 'companion_walk.dart';
+
 import 'companion_motion.dart';
 
 import 'room_painting.dart';
 export 'room_painting.dart';
+
+const _hideRehearsalActor = bool.fromEnvironment('COURTYARD_EMPTY_REHEARSAL');
+const _rehearsal = String.fromEnvironment('COURTYARD_REHEARSAL') != '';
 
 enum HomeView { courtyard, veranda }
 
@@ -255,7 +259,7 @@ class _GardenSceneState extends State<GardenScene>
       : _veranda
       ? const Offset(.58, .916)
       : _base
-      ? const Offset(.47, .937)
+      ? const Offset(.47, _rehearsal ? .895 : .937)
       : const Offset(.54, .929);
   String get _back => _veranda
       ? 'assets/art/veranda.webp'
@@ -630,20 +634,23 @@ class _GardenSceneState extends State<GardenScene>
                     children: [
                       for (final layer in painting.layers.where(behind))
                         images[layer]!,
-                      Positioned(
-                        left: foot.dx - contactWidth / 2,
-                        top: foot.dy - rect.height * .043,
-                        width: contactWidth,
-                        height: rect.height * .075,
-                        child: CustomPaint(
-                          painter: _ContactShadow(
-                            _outdoor
-                                ? const Color(0x80313C26)
-                                : const Color(0x79573B2C),
+                      if (!_hideRehearsalActor)
+                        Positioned(
+                          left: foot.dx - contactWidth / 2,
+                          top: foot.dy - rect.height * .043,
+                          width: contactWidth,
+                          height: rect.height * .075,
+                          child: CustomPaint(
+                            painter: _ContactShadow(
+                              _outdoor
+                                  ? const Color(0x80313C26)
+                                  : const Color(0x79573B2C),
+                            ),
                           ),
                         ),
-                      ),
-                      if (walkPose != null && walkPose.ink > 0)
+                      if (!_hideRehearsalActor &&
+                          walkPose != null &&
+                          walkPose.ink > 0)
                         for (final paw in walkPose.paws)
                           Positioned.fromRect(
                             rect: Rect.fromCenter(
@@ -668,16 +675,17 @@ class _GardenSceneState extends State<GardenScene>
                             ),
                           ),
                       if (showSkill) effects(false),
-                      Positioned.fromRect(
-                        key: const ValueKey('home-companion'),
-                        rect: _hasWalk
-                            ? actorRect.inflate(rect.width / 4)
-                            : actorRect,
-                        child: Transform.flip(
-                          flipX: !_hasWalk && _left,
-                          child: child!,
+                      if (!_hideRehearsalActor)
+                        Positioned.fromRect(
+                          key: const ValueKey('home-companion'),
+                          rect: _hasWalk
+                              ? actorRect.inflate(rect.width / 4)
+                              : actorRect,
+                          child: Transform.flip(
+                            flipX: !_hasWalk && _left,
+                            child: child!,
+                          ),
                         ),
-                      ),
                       if (showSkill) effects(true),
                       for (final layer in painting.layers.where(
                         (p) => !behind(p),
