@@ -1,0 +1,398 @@
+{
+  "environment": {
+    "source_user": 0,
+    "target_user": 10,
+    "android_sdk": 28,
+    "environment": "Android 9 x86_64 software emulator, separate Android users",
+    "version": "0.21.2+21",
+    "apk_sha256": "a91fda73a0f1c65995f2dd9ac314f61c1fd2ebc290eb274474ee376941c0e017",
+    "signer_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+    "source_commit": "ae09472607a72dcc1bad1ab6574cd4ef337f6873",
+    "seed_sha256": "88552abff53896d880bb80037aa4913ceff607480000430928ebf050a0d4d118",
+    "airplane_mode": true
+  },
+  "independent_first_archive_review": {
+    "input": "a-to-b.alicebackup",
+    "mode": "migration",
+    "schema": 8,
+    "encrypted_sha256": "35cda0571103fbc2fceac83a1aa2e5ddabf3454e00d038333b2ea2b8868c46a8",
+    "sqlite_sha256": "12bd480ded0ceb3ebefad9dd60dc1857db67bd19d168e5380fcdf4e28ecf11fd",
+    "business_rows_sha256": "201690cb2d6e13d06091ce7a6c6feaa694e48fe31da721876341e8a0aa3aaceb",
+    "business_tables": 30,
+    "balance": 5,
+    "active_companion_experience": 16,
+    "owned_companions": 2,
+    "valid_completions": 16,
+    "ledger_entries": 20
+  },
+  "native_app_checkpoints": {
+    "source-initial": {
+      "android_user": 0,
+      "generation_sha256": "f9470062b823c90ed49c97274fb67eb2ea2aa9aef936345f278b4ff6f0201c33",
+      "device_id_sha256": "e17a0768ad58e1df98f4759daa64d89d8fb291f96d96dd1cdfca7559a9f56703",
+      "state": "IDLE",
+      "external_receipt": null,
+      "schema": 8,
+      "all_business_rows_sha256": "201690cb2d6e13d06091ce7a6c6feaa694e48fe31da721876341e8a0aa3aaceb",
+      "tables": {
+        "accounts": 1,
+        "base_furnishings": 0,
+        "child_profiles": 1,
+        "companion_completions": 16,
+        "companion_memories": 3,
+        "completions": 16,
+        "correction_records": 0,
+        "entitlements": 3,
+        "growth_awards": 0,
+        "households": 1,
+        "ledger_entries": 20,
+        "owned_companions": 2,
+        "penalty_day_usage": 0,
+        "penalty_events": 0,
+        "penalty_rules": 0,
+        "pet_state": 1,
+        "placements": 0,
+        "processed_commands": 49,
+        "project_stages": 0,
+        "purchases": 4,
+        "rain_map_runs": 1,
+        "spaces": 1,
+        "submissions": 1,
+        "task_instances": 17,
+        "task_templates": 17,
+        "task_versions": 17,
+        "wind_story_runs": 0,
+        "window_math_bookmarks": 1,
+        "window_story_milestones": 1,
+        "wishes": 1
+      },
+      "balance": 5,
+      "reconciled_ledger": true,
+      "valid_completions": 16,
+      "pending": 1,
+      "active": "fox",
+      "owned": [
+        [
+          "cat",
+          1,
+          0,
+          30
+        ],
+        [
+          "fox",
+          3,
+          16,
+          null
+        ]
+      ],
+      "inventory": [
+        "accessory_scarf",
+        "decor_vase",
+        "single_armchair"
+      ],
+      "wardrobe": [
+        [
+          "fox",
+          "accessory_scarf"
+        ]
+      ],
+      "story": [
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "memories": [
+        [
+          "cat",
+          "call"
+        ],
+        [
+          "fox",
+          "call"
+        ],
+        [
+          "fox",
+          "touch"
+        ]
+      ]
+    },
+    "a-to-b-verified": {
+      "android_user": 0,
+      "generation_sha256": "f9470062b823c90ed49c97274fb67eb2ea2aa9aef936345f278b4ff6f0201c33",
+      "device_id_sha256": "e17a0768ad58e1df98f4759daa64d89d8fb291f96d96dd1cdfca7559a9f56703",
+      "state": "MIGRATION_PENDING",
+      "external_receipt": "verified",
+      "schema": 8,
+      "all_business_rows_sha256": "201690cb2d6e13d06091ce7a6c6feaa694e48fe31da721876341e8a0aa3aaceb",
+      "tables": {
+        "accounts": 1,
+        "base_furnishings": 0,
+        "child_profiles": 1,
+        "companion_completions": 16,
+        "companion_memories": 3,
+        "completions": 16,
+        "correction_records": 0,
+        "entitlements": 3,
+        "growth_awards": 0,
+        "households": 1,
+        "ledger_entries": 20,
+        "owned_companions": 2,
+        "penalty_day_usage": 0,
+        "penalty_events": 0,
+        "penalty_rules": 0,
+        "pet_state": 1,
+        "placements": 0,
+        "processed_commands": 49,
+        "project_stages": 0,
+        "purchases": 4,
+        "rain_map_runs": 1,
+        "spaces": 1,
+        "submissions": 1,
+        "task_instances": 17,
+        "task_templates": 17,
+        "task_versions": 17,
+        "wind_story_runs": 0,
+        "window_math_bookmarks": 1,
+        "window_story_milestones": 1,
+        "wishes": 1
+      },
+      "balance": 5,
+      "reconciled_ledger": true,
+      "valid_completions": 16,
+      "pending": 1,
+      "active": "fox",
+      "owned": [
+        [
+          "cat",
+          1,
+          0,
+          30
+        ],
+        [
+          "fox",
+          3,
+          16,
+          null
+        ]
+      ],
+      "inventory": [
+        "accessory_scarf",
+        "decor_vase",
+        "single_armchair"
+      ],
+      "wardrobe": [
+        [
+          "fox",
+          "accessory_scarf"
+        ]
+      ],
+      "story": [
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "memories": [
+        [
+          "cat",
+          "call"
+        ],
+        [
+          "fox",
+          "call"
+        ],
+        [
+          "fox",
+          "touch"
+        ]
+      ]
+    },
+    "target-received": {
+      "android_user": 10,
+      "generation_sha256": "c626a1b3893d97225790123867ef1c39c64fb3c33bb75a281122e7daf65baf63",
+      "device_id_sha256": "a02ddeac787b5693311365484b6ae0f2cc72bfdfbd626237d366c97fa97677e5",
+      "state": "IDLE",
+      "external_receipt": null,
+      "schema": 8,
+      "all_business_rows_sha256": "201690cb2d6e13d06091ce7a6c6feaa694e48fe31da721876341e8a0aa3aaceb",
+      "tables": {
+        "accounts": 1,
+        "base_furnishings": 0,
+        "child_profiles": 1,
+        "companion_completions": 16,
+        "companion_memories": 3,
+        "completions": 16,
+        "correction_records": 0,
+        "entitlements": 3,
+        "growth_awards": 0,
+        "households": 1,
+        "ledger_entries": 20,
+        "owned_companions": 2,
+        "penalty_day_usage": 0,
+        "penalty_events": 0,
+        "penalty_rules": 0,
+        "pet_state": 1,
+        "placements": 0,
+        "processed_commands": 49,
+        "project_stages": 0,
+        "purchases": 4,
+        "rain_map_runs": 1,
+        "spaces": 1,
+        "submissions": 1,
+        "task_instances": 17,
+        "task_templates": 17,
+        "task_versions": 17,
+        "wind_story_runs": 0,
+        "window_math_bookmarks": 1,
+        "window_story_milestones": 1,
+        "wishes": 1
+      },
+      "balance": 5,
+      "reconciled_ledger": true,
+      "valid_completions": 16,
+      "pending": 1,
+      "active": "fox",
+      "owned": [
+        [
+          "cat",
+          1,
+          0,
+          30
+        ],
+        [
+          "fox",
+          3,
+          16,
+          null
+        ]
+      ],
+      "inventory": [
+        "accessory_scarf",
+        "decor_vase",
+        "single_armchair"
+      ],
+      "wardrobe": [
+        [
+          "fox",
+          "accessory_scarf"
+        ]
+      ],
+      "story": [
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "memories": [
+        [
+          "cat",
+          "call"
+        ],
+        [
+          "fox",
+          "call"
+        ],
+        [
+          "fox",
+          "touch"
+        ]
+      ]
+    },
+    "source-archived": {
+      "android_user": 0,
+      "generation_sha256": "f9470062b823c90ed49c97274fb67eb2ea2aa9aef936345f278b4ff6f0201c33",
+      "device_id_sha256": "e17a0768ad58e1df98f4759daa64d89d8fb291f96d96dd1cdfca7559a9f56703",
+      "state": "ARCHIVED",
+      "external_receipt": "verified",
+      "schema": 8,
+      "all_business_rows_sha256": "201690cb2d6e13d06091ce7a6c6feaa694e48fe31da721876341e8a0aa3aaceb",
+      "tables": {
+        "accounts": 1,
+        "base_furnishings": 0,
+        "child_profiles": 1,
+        "companion_completions": 16,
+        "companion_memories": 3,
+        "completions": 16,
+        "correction_records": 0,
+        "entitlements": 3,
+        "growth_awards": 0,
+        "households": 1,
+        "ledger_entries": 20,
+        "owned_companions": 2,
+        "penalty_day_usage": 0,
+        "penalty_events": 0,
+        "penalty_rules": 0,
+        "pet_state": 1,
+        "placements": 0,
+        "processed_commands": 49,
+        "project_stages": 0,
+        "purchases": 4,
+        "rain_map_runs": 1,
+        "spaces": 1,
+        "submissions": 1,
+        "task_instances": 17,
+        "task_templates": 17,
+        "task_versions": 17,
+        "wind_story_runs": 0,
+        "window_math_bookmarks": 1,
+        "window_story_milestones": 1,
+        "wishes": 1
+      },
+      "balance": 5,
+      "reconciled_ledger": true,
+      "valid_completions": 16,
+      "pending": 1,
+      "active": "fox",
+      "owned": [
+        [
+          "cat",
+          1,
+          0,
+          30
+        ],
+        [
+          "fox",
+          3,
+          16,
+          null
+        ]
+      ],
+      "inventory": [
+        "accessory_scarf",
+        "decor_vase",
+        "single_armchair"
+      ],
+      "wardrobe": [
+        [
+          "fox",
+          "accessory_scarf"
+        ]
+      ],
+      "story": [
+        2,
+        1,
+        0,
+        1,
+        1
+      ],
+      "memories": [
+        [
+          "cat",
+          "call"
+        ],
+        [
+          "fox",
+          "call"
+        ],
+        [
+          "fox",
+          "touch"
+        ]
+      ]
+    }
+  }
+}
