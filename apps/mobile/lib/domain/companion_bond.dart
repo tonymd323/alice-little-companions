@@ -1,18 +1,24 @@
+const affinityCandyItemId = 'affinity_candy';
+const affinityCandyName = '亲密度糖果';
+
 enum CompanionMoment { touch, call }
 
 class CompanionBond {
-  const CompanionBond({this.touched = false, this.called = false});
+  const CompanionBond(this.value);
 
-  final bool touched, called;
+  static const _tiers = [
+    (label: '初见', threshold: 0),
+    (label: '熟悉', threshold: 1),
+    (label: '默契', threshold: 2),
+    (label: '相伴', threshold: 8),
+    (label: '挚友', threshold: 20),
+  ];
 
-  bool has(CompanionMoment moment) => switch (moment) {
-    CompanionMoment.touch => touched,
-    CompanionMoment.call => called,
-  };
+  final int value;
 
-  String get label => touched && called
-      ? '默契'
-      : touched || called
-      ? '熟悉'
-      : '初见';
+  String get label => _tiers.lastWhere((tier) => tier.threshold <= value).label;
+  String get summary => '亲密度 $value · $label';
+
+  ({String label, int threshold})? get next =>
+      _tiers.where((tier) => tier.threshold > value).firstOrNull;
 }

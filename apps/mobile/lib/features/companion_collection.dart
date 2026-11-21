@@ -98,8 +98,10 @@ class _CompanionCollectionState extends State<CompanionCollection> {
                   pet.nickname,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                if (state != null)
+                if (state != null) ...[
                   Text('${state.stage} 级 · ${state.experience} 经验'),
+                  Text(state.bond.summary),
+                ],
                 if (current)
                   const Text('正在陪伴', style: TextStyle(color: mutedInk))
                 else if (state != null)

@@ -378,7 +378,7 @@ void main() {
         // The live interaction records its first memory before the preview.
         await fixture.service.serial.run(() async {});
         final touched = (await fixture.service.overview())!;
-        expect(touched.bond.touched, isTrue);
+        expect(touched.bond.value, 1);
         expect(touched.revision, initial.revision + 1);
         expect((touched.balance, touched.experience), (3, 1));
         return touched;

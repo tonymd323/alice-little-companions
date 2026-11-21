@@ -33,6 +33,10 @@ class Rules {
       weeklyReference = rules['weekly_pricing_reference'] as int,
       companionUnlockPrice =
           (rules['companions'] as Json)['unlock_price'] as int,
+      affinityCandyPrice =
+          (rules['companions'] as Json)['affinity_candy_price'] as int,
+      affinityPerCandy =
+          (rules['companions'] as Json)['affinity_per_candy'] as int,
       maxPerDay = rules['max_instances_per_day_per_template'] as int,
       penaltyCap = (rules['penalty'] as Json)['daily_actual_cap'] as int,
       catalogVersion = catalog['catalog_version'] as String,
@@ -60,6 +64,8 @@ class Rules {
   final int pinIterations;
   final int weeklyReference;
   final int companionUnlockPrice;
+  final int affinityCandyPrice;
+  final int affinityPerCandy;
   final int maxPerDay;
   final int penaltyCap;
   final String catalogVersion;

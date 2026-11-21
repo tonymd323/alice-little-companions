@@ -2,9 +2,11 @@ import 'package:material_ui/material_ui.dart';
 
 import '../application/controller.dart';
 import '../application/family.dart';
+import '../domain/companion_bond.dart';
 import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/rules.dart';
+import 'affinity_candy.dart';
 import 'common.dart';
 import 'garden.dart';
 import 'parent_access.dart';
@@ -91,16 +93,32 @@ class _CatalogPageState extends State<CatalogPage> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                OutlinedButton.icon(
-                  onPressed: () async {
-                    await openPage(
-                      context,
-                      PurchaseHistoryPage(controller: widget.controller),
-                    );
-                    reloadHistory();
-                  },
-                  label: const Text('我的兑换'),
-                  icon: const Icon(Icons.inventory_2_outlined),
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    if (widget.section == CatalogSection.all)
+                      OutlinedButton(
+                        onPressed: () async {
+                          await openPage(
+                            context,
+                            AffinityCandyPage(controller: widget.controller),
+                          );
+                          reloadHistory();
+                        },
+                        child: const Text(affinityCandyName),
+                      ),
+                    OutlinedButton.icon(
+                      onPressed: () async {
+                        await openPage(
+                          context,
+                          PurchaseHistoryPage(controller: widget.controller),
+                        );
+                        reloadHistory();
+                      },
+                      label: const Text('我的兑换'),
+                      icon: const Icon(Icons.inventory_2_outlined),
+                    ),
+                  ],
                 ),
                 for (final tier in groups.entries) ...[
                   const SizedBox(height: 18),
@@ -491,6 +509,12 @@ class _RewardPageState extends State<RewardPage> {
   );
 }
 
+String _purchaseStatus(Json row) {
+  if (row['refunded_at'] != null) return '已退回';
+  final pet = row['fed_pet_id'] as String?;
+  return pet == null ? '已兑换' : '已喂给${Companion.values.byName(pet).nickname}';
+}
+
 class PurchaseHistoryPage extends StatefulWidget {
   const PurchaseHistoryPage({
     super.key,
@@ -534,9 +558,11 @@ class _PurchaseHistoryPageState extends State<PurchaseHistoryPage> {
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         Text(
-                          '${row['price_paid']} 分 · ${row['refunded_at'] == null ? '已兑换' : '已退回'}',
+                          '${row['price_paid']} 分 · ${_purchaseStatus(row)}',
                         ),
-                        if (row['refundable'] == 1 && row['refunded_at'] == null && !service.frozen)
+                        if (row['refundable'] == 1 &&
+                            row['refunded_at'] == null &&
+                            !service.frozen)
                           if (widget.parent ||
                               service.canChildUndo(row['id'] as String))
                             ActionButton(
@@ -546,7 +572,9 @@ class _PurchaseHistoryPageState extends State<PurchaseHistoryPage> {
                                 final ok = await confirmChoice(
                                   context,
                                   '退回${row['name']}？',
-                                  '返还原付积分。此成果附带的物品将收回，另购物品保留。',
+                                  row['item_id'] == affinityCandyItemId
+                                      ? '收回一颗糖果，返还原付积分。'
+                                      : '返还原付积分。此成果附带的物品将收回，另购物品保留。',
                                   '确认退回',
                                 );
                                 if (!ok) return;

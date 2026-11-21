@@ -101,14 +101,16 @@ class TransferService {
     return generation == null ? {} : device.control(generation);
   }
 
-  Future<Snapshot> _read(File file, {bool compareLegacyCompanions = false}) async =>
-      checkSnapshot(
-        file.path,
-        await schema,
-        rules,
-        availableAssets,
-        compareLegacyCompanions: compareLegacyCompanions,
-      );
+  Future<Snapshot> _read(
+    File file, {
+    int compareWithSchemaVersion = currentSchemaVersion,
+  }) async => checkSnapshot(
+    file.path,
+    await schema,
+    rules,
+    availableAssets,
+    compareWithSchemaVersion: compareWithSchemaVersion,
+  );
 
   Future<SnapshotInfo> _validate(File file) async =>
       validateSnapshot(file.path, await schema, rules, availableAssets);
@@ -556,7 +558,7 @@ class TransferService {
         fault?.call('credentials');
         final verified = await _read(
           destination,
-          compareLegacyCompanions: preview.info.schemaVersion < companionSchemaVersion,
+          compareWithSchemaVersion: preview.info.schemaVersion,
         );
         if (verified.businessDigest != preview.info.businessDigest) {
           throw const UserError('恢复后的存档校验失败。');

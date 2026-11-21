@@ -25,26 +25,113 @@ const _companionExperience =
   END
 ''';
 
+const _companionAffinity = '''
+  SELECT
+    (SELECT COUNT(*) FROM companion_affinity_days a
+     WHERE a.child_id = p.child_id AND a.pet_id = p.pet_id) +
+    COALESCE((SELECT SUM(c.affinity) FROM companion_candies c
+              WHERE c.child_id = p.child_id AND c.pet_id = p.pet_id), 0)
+''';
+
 class CompanionProgress {
   CompanionProgress(Json row, Rules rules)
     : experience = row['experience'] as int,
+      bond = CompanionBond(row['affinity'] as int),
       stage = max(
         row['retained_stage'] as int,
         rules.earnedStage(row['experience'] as int),
       );
 
   final int experience;
+  final CompanionBond bond;
   final int stage;
 }
 
 extension FamilyCompanions on FamilyService {
   Future<Map<Companion, CompanionProgress>> companionProgress() async => {
     for (final row in await db.rows('''
-      SELECT p.pet_id, p.retained_stage, ($_companionExperience) AS experience
+      SELECT p.pet_id, p.retained_stage, ($_companionExperience) AS experience,
+        ($_companionAffinity) AS affinity
       FROM owned_companions p
       '''))
       rules.companion(row['pet_id'] as String): CompanionProgress(row, rules),
   };
+
+  Future<({String id, int affinity, int count})?>
+  availableAffinityCandy() async {
+    final row = await db.row('''
+      SELECT c.purchase_id, c.affinity, COUNT(*) OVER () AS available
+      FROM companion_candies c JOIN purchases p ON p.id = c.purchase_id
+      WHERE c.pet_id IS NULL AND p.refunded_at IS NULL
+      ORDER BY p.rowid LIMIT 1
+      ''');
+    if (row == null) return null;
+    return (
+      id: row['purchase_id'] as String,
+      affinity: row['affinity'] as int,
+      count: row['available'] as int,
+    );
+  }
+
+  Future<Json> redeemAffinityCandy({String? commandId}) async {
+    String? fresh;
+    final price = rules.affinityCandyPrice;
+    final result = await _command(
+      'redeem-candy',
+      affinityCandyItemId,
+      commandId,
+      (id, family) async {
+        if (family.balance < price) {
+          throw UserError('还差 ${price - family.balance} 分。');
+        }
+        final receipt = await _recordPurchase(
+          id,
+          affinityCandyItemId,
+          affinityCandyName,
+          affinityCandyItemId,
+          price,
+        );
+        await db.insertRow('companion_candies', {
+          'purchase_id': receipt['id'],
+          'child_id': family.childId,
+          'affinity': rules.affinityPerCandy,
+        });
+        fault?.call('ownership');
+        fresh = receipt['id'] as String;
+        return receipt;
+      },
+    );
+    if (fresh != null) {
+      _childUndoStarts[fresh!] = _undoClock.elapsedMilliseconds;
+    }
+    return result;
+  }
+
+  Future<Json> feedAffinityCandy(String candyId, Companion companion) =>
+      _command('feed-candy', [candyId, companion.name], 'feed-candy/$candyId', (
+        _,
+        family,
+      ) async {
+        if (family.companion != companion) {
+          throw const UserError('请先带要喂的伙伴回小家。');
+        }
+        final candy = await db.row(
+          '''
+        SELECT c.affinity FROM companion_candies c JOIN purchases p ON p.id = c.purchase_id
+        WHERE c.purchase_id = ? AND c.child_id = ?
+          AND c.pet_id IS NULL AND p.refunded_at IS NULL
+        ''',
+          [candyId, family.childId],
+        );
+        if (candy == null) throw const UserError('这颗糖果已经用掉或退回了。');
+        await db.customStatement(
+          '''
+        UPDATE companion_candies SET pet_id = ?, fed_at = ? WHERE purchase_id = ?
+        ''',
+          [companion.name, now, candyId],
+        );
+        return {'affinity': candy['affinity']};
+      });
 
   Future<Json> selectCompanion(Companion companion, {String? commandId}) =>
       _command('select', companion.name, commandId, (_, family) async {

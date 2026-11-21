@@ -9,6 +9,7 @@ import 'package:alice_companions/data/database.dart';
 import 'package:alice_companions/data/device.dart';
 import 'package:alice_companions/data/snapshot.dart';
 import 'package:alice_companions/domain/backup_codec.dart';
+import 'package:alice_companions/domain/companion_bond.dart';
 import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/domain/pin.dart';
 import 'package:alice_companions/domain/rules.dart';
@@ -288,7 +289,7 @@ void main() {
       await expectedSchema(),
       source.rules,
       assets,
-      compareLegacyCompanions: true,
+      compareWithSchemaVersion: legacyInfo.schemaVersion,
     );
     expect(oldAfter.businessDigest, legacyInfo.businessDigest);
     final restored = await incoming.activate(
@@ -430,7 +431,7 @@ void main() {
     expect(before.schemaVersion, 2);
     stock.service = await FamilyService.load(stock.device, id, stock.rules);
     final service = stock.service;
-    final after = await checkSnapshot(file.path, schema, stock.rules, assets, compareLegacyCompanions: true);
+    final after = await checkSnapshot(file.path, schema, stock.rules, assets, compareWithSchemaVersion: before.schemaVersion);
     expect(after.schemaVersion, currentSchemaVersion);
     expect(after.businessDigest, before.businessDigest);
     expect(after.summary, {...before.summary, 'owned_companion_count': 1, 'active_companion_experience': 1});
@@ -447,10 +448,203 @@ void main() {
     expect(saved.pattern, {1, 3});
     expect((await stock.service.overview())!.balance, 3);
     expect(await stock.service.ledger(), hasLength(1));
-    final current = await checkSnapshot(file.path, schema, stock.rules, assets, compareLegacyCompanions: true);
+    final current = await checkSnapshot(file.path, schema, stock.rules, assets, compareWithSchemaVersion: before.schemaVersion);
     expect(current.businessDigest, isNot(after.businessDigest));
     expect(current.summary, after.summary);
   });
+
+  test('a v8 encrypted backup restores first memories and allows new affinity', () async {
+    final stock = await TestFamily.create(pet: Companion.cat);
+    addTearDown(stock.dispose);
+    final service = stock.service;
+    final parent = await service.pin.unlock(TestFamily.pin);
+    await service.backfill(fixtureDraft, service.today, '', session: parent);
+    await service.recordCompanionMoment(Companion.cat, CompanionMoment.touch);
+    await service.recordCompanionMoment(Companion.cat, CompanionMoment.call);
+    final outgoing = transfers(stock);
+    final ticket = await outgoing.prepareExport('backup', password, parent);
+    await outgoing.finishExport(ticket, SaveOutcome.handedToSystem);
+
+    final device = DeviceStore(
+      Directory(p.join(stock.root.path, 'affinity-target')),
+      MemorySecureValues(),
+    );
+    final incoming = TransferService(
+      device: device,
+      rules: stock.rules,
+      availableAssets: assets,
+      current: () => null,
+    );
+    final current = await incoming.inspect(ticket.file, password, null);
+    addTearDown(current.close);
+    final oldDb = await current.database.copy(
+      p.join(stock.root.path, 'v8.sqlite'),
+    );
+    final sql = sqlite3.open(oldDb.path);
+    try {
+      sql.execute(
+        "${dropAffinityTables}DELETE FROM processed_commands WHERE id LIKE 'affinity/%'; PRAGMA user_version=8",
+      );
+    } finally {
+      sql.close();
+    }
+    final schema = await expectedSchema();
+    final oldInfo = await checkSnapshot(
+      oldDb.path,
+      schema,
+      service.rules,
+      assets,
+    );
+    final archive = File(p.join(stock.root.path, 'v8.alicebackup'));
+    await codec.write(
+      oldDb,
+      {
+        ...current.manifest,
+        'schema_version': oldInfo.schemaVersion,
+        'summary': oldInfo.summary,
+      },
+      password,
+      archive,
+    );
+    final preview = await incoming.inspect(archive, password, null);
+    addTearDown(preview.close);
+    final restored = (await incoming.activate(
+      preview,
+      pin,
+      PinGate.newRecoveryCode(),
+      session: null,
+      replace: false,
+    )).service;
+    addTearDown(restored.close);
+    final saved = (await restored.overview())!;
+    expect(saved.memories, CompanionMoment.values.toSet());
+    expect(
+      (saved.bond.value, saved.bond.label, saved.experience, saved.balance),
+      (2, '默契', 1, 3),
+    );
+    expect(
+      await restored.recordCompanionMoment(
+        Companion.cat,
+        CompanionMoment.touch,
+      ),
+      isTrue,
+    );
+    expect((await restored.overview())!.bond.value, 3);
+    expect(
+      await restored.recordCompanionMoment(
+        Companion.cat,
+        CompanionMoment.touch,
+      ),
+      isFalse,
+    );
+    expect(await restored.ledger(), await service.ledger());
+  }, timeout: const Timeout(Duration(minutes: 2)));
+
+  test('candy transactions and an encrypted restore keep stock and affinity separate', () async {
+    final stock = await TestFamily.create(pet: Companion.cat);
+    addTearDown(stock.dispose);
+    final service = stock.service;
+    final parent = await service.pin.unlock(TestFamily.pin);
+    await fails(service.redeemAffinityCandy());
+    final last = await service.backfill(
+      const TaskDraft('测试奖励', '', '测试标准', 'challenge'),
+      service.today,
+      '',
+      session: parent,
+    );
+    for (var index = 0; index < 7; index++) {
+      await service.backfill(
+        const TaskDraft('测试任务A', '', '测试标准', 'challenge'),
+        service.today,
+        '',
+        session: parent,
+      );
+    }
+    await service.unlockCompanion(Companion.fox);
+    final repeated = await Future.wait([
+      service.redeemAffinityCandy(commandId: 'test-candy-once'),
+      service.redeemAffinityCandy(commandId: 'test-candy-once'),
+    ]);
+    expect(repeated.first, repeated.last);
+    final fed = repeated.first['id'] as String;
+    final held = (await service.redeemAffinityCandy())['id'] as String;
+    final cancelled = (await service.redeemAffinityCandy())['id'] as String;
+    expect((await service.availableAffinityCandy())?.count, 3);
+    expect((await service.overview())!.balance, 1);
+    await fails(service.redeemAffinityCandy());
+    await fails(service.feedAffinityCandy(fed, Companion.fox));
+    final ledger = await service.ledger();
+    final results = await Future.wait([
+      service.feedAffinityCandy(fed, Companion.cat),
+      service.feedAffinityCandy(fed, Companion.cat),
+    ]);
+    expect(results.map((row) => row['affinity']), [3, 3]);
+    expect((await service.overview())!.bond.value, 3);
+    expect(await service.ledger(), ledger);
+    final quote = await service.correctionQuote(
+      last['instance_id'] as String,
+      [],
+      parent,
+    );
+    expect(
+      quote.related.map((row) => row['id']),
+      unorderedEquals([held, cancelled]),
+    );
+    await fails(service.refund(fed, session: parent));
+    await service.refund(cancelled);
+    expect((await service.availableAffinityCandy())?.id, held);
+    expect((await service.overview())!.balance, 4);
+    await service.selectCompanion(Companion.fox);
+    expect((await service.overview())!.bond.value, 0);
+
+    final outgoing = transfers(stock);
+    final ticket = await outgoing.prepareExport('backup', password, parent);
+    await outgoing.finishExport(ticket, SaveOutcome.handedToSystem);
+    final incoming = TransferService(
+      device: DeviceStore(
+        Directory(p.join(stock.root.path, 'candy-target')),
+        MemorySecureValues(),
+      ),
+      rules: stock.rules,
+      availableAssets: assets,
+      current: () => null,
+    );
+    final preview = await incoming.inspect(ticket.file, password, null);
+    addTearDown(preview.close);
+    final restored = (await incoming.activate(
+      preview,
+      pin,
+      PinGate.newRecoveryCode(),
+      session: null,
+      replace: false,
+    )).service;
+    addTearDown(restored.close);
+    final progress = await restored.companionProgress();
+    expect(
+      (
+        progress[Companion.cat]!.bond.value,
+        progress[Companion.cat]!.experience,
+      ),
+      (3, 8),
+    );
+    expect(
+      (
+        progress[Companion.fox]!.bond.value,
+        progress[Companion.fox]!.experience,
+      ),
+      (0, 0),
+    );
+    expect(await restored.availableAffinityCandy(), (
+      id: held,
+      affinity: 3,
+      count: 1,
+    ));
+    expect(await restored.ledger(), await service.ledger());
+    await restored.feedAffinityCandy(held, Companion.fox);
+    expect((await restored.overview())!.bond.value, 3);
+    expect(await restored.availableAffinityCandy(), isNull);
+    expect(await restored.ledger(), await service.ledger());
+  }, timeout: const Timeout(Duration(minutes: 2)));
 
   test('Wind scene survives a v5 upgrade and partial encrypted handoff independently of the old chapter', () async {
     final stock = await TestFamily.create();
@@ -478,7 +672,7 @@ void main() {
       schema,
       stock.rules,
       assets,
-      compareLegacyCompanions: true,
+      compareWithSchemaVersion: old.schemaVersion,
     );
     expect(upgraded.businessDigest, old.businessDigest);
     expect(upgraded.summary, {...old.summary, 'owned_companion_count': 1, 'active_companion_experience': 0});

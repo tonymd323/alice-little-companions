@@ -12046,6 +12046,705 @@ class CompanionCompletionsCompanion
   }
 }
 
+class CompanionAffinityDays extends Table
+    with TableInfo<CompanionAffinityDays, CompanionAffinityDay> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  CompanionAffinityDays(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _childIdMeta = const VerificationMeta(
+    'childId',
+  );
+  late final GeneratedColumn<String> childId = GeneratedColumn<String>(
+    'child_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _petIdMeta = const VerificationMeta('petId');
+  late final GeneratedColumn<String> petId = GeneratedColumn<String>(
+    'pet_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _momentMeta = const VerificationMeta('moment');
+  late final GeneratedColumn<String> moment = GeneratedColumn<String>(
+    'moment',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _localDayMeta = const VerificationMeta(
+    'localDay',
+  );
+  late final GeneratedColumn<String> localDay = GeneratedColumn<String>(
+    'local_day',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (local_day = \'\' OR(local_day GLOB \'[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\' AND date(local_day, \'+0 days\') IS local_day))',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [childId, petId, moment, localDay];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'companion_affinity_days';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CompanionAffinityDay> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('child_id')) {
+      context.handle(
+        _childIdMeta,
+        childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('pet_id')) {
+      context.handle(
+        _petIdMeta,
+        petId.isAcceptableOrUnknown(data['pet_id']!, _petIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_petIdMeta);
+    }
+    if (data.containsKey('moment')) {
+      context.handle(
+        _momentMeta,
+        moment.isAcceptableOrUnknown(data['moment']!, _momentMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_momentMeta);
+    }
+    if (data.containsKey('local_day')) {
+      context.handle(
+        _localDayMeta,
+        localDay.isAcceptableOrUnknown(data['local_day']!, _localDayMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_localDayMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {childId, petId, moment, localDay};
+  @override
+  CompanionAffinityDay map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CompanionAffinityDay(
+      childId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}child_id'],
+      )!,
+      petId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}pet_id'],
+      )!,
+      moment: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}moment'],
+      )!,
+      localDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}local_day'],
+      )!,
+    );
+  }
+
+  @override
+  CompanionAffinityDays createAlias(String alias) {
+    return CompanionAffinityDays(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const [
+    'PRIMARY KEY(child_id, pet_id, moment, local_day)',
+    'FOREIGN KEY(child_id, pet_id)REFERENCES owned_companions(child_id, pet_id)',
+    'FOREIGN KEY(child_id, pet_id, moment)REFERENCES companion_memories(child_id, pet_id, moment)',
+  ];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class CompanionAffinityDay extends DataClass
+    implements Insertable<CompanionAffinityDay> {
+  final String childId;
+  final String petId;
+  final String moment;
+  final String localDay;
+  const CompanionAffinityDay({
+    required this.childId,
+    required this.petId,
+    required this.moment,
+    required this.localDay,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['child_id'] = Variable<String>(childId);
+    map['pet_id'] = Variable<String>(petId);
+    map['moment'] = Variable<String>(moment);
+    map['local_day'] = Variable<String>(localDay);
+    return map;
+  }
+
+  CompanionAffinityDaysCompanion toCompanion(bool nullToAbsent) {
+    return CompanionAffinityDaysCompanion(
+      childId: Value(childId),
+      petId: Value(petId),
+      moment: Value(moment),
+      localDay: Value(localDay),
+    );
+  }
+
+  factory CompanionAffinityDay.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CompanionAffinityDay(
+      childId: serializer.fromJson<String>(json['child_id']),
+      petId: serializer.fromJson<String>(json['pet_id']),
+      moment: serializer.fromJson<String>(json['moment']),
+      localDay: serializer.fromJson<String>(json['local_day']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'child_id': serializer.toJson<String>(childId),
+      'pet_id': serializer.toJson<String>(petId),
+      'moment': serializer.toJson<String>(moment),
+      'local_day': serializer.toJson<String>(localDay),
+    };
+  }
+
+  CompanionAffinityDay copyWith({
+    String? childId,
+    String? petId,
+    String? moment,
+    String? localDay,
+  }) => CompanionAffinityDay(
+    childId: childId ?? this.childId,
+    petId: petId ?? this.petId,
+    moment: moment ?? this.moment,
+    localDay: localDay ?? this.localDay,
+  );
+  CompanionAffinityDay copyWithCompanion(CompanionAffinityDaysCompanion data) {
+    return CompanionAffinityDay(
+      childId: data.childId.present ? data.childId.value : this.childId,
+      petId: data.petId.present ? data.petId.value : this.petId,
+      moment: data.moment.present ? data.moment.value : this.moment,
+      localDay: data.localDay.present ? data.localDay.value : this.localDay,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CompanionAffinityDay(')
+          ..write('childId: $childId, ')
+          ..write('petId: $petId, ')
+          ..write('moment: $moment, ')
+          ..write('localDay: $localDay')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(childId, petId, moment, localDay);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CompanionAffinityDay &&
+          other.childId == this.childId &&
+          other.petId == this.petId &&
+          other.moment == this.moment &&
+          other.localDay == this.localDay);
+}
+
+class CompanionAffinityDaysCompanion
+    extends UpdateCompanion<CompanionAffinityDay> {
+  final Value<String> childId;
+  final Value<String> petId;
+  final Value<String> moment;
+  final Value<String> localDay;
+  final Value<int> rowid;
+  const CompanionAffinityDaysCompanion({
+    this.childId = const Value.absent(),
+    this.petId = const Value.absent(),
+    this.moment = const Value.absent(),
+    this.localDay = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CompanionAffinityDaysCompanion.insert({
+    required String childId,
+    required String petId,
+    required String moment,
+    required String localDay,
+    this.rowid = const Value.absent(),
+  }) : childId = Value(childId),
+       petId = Value(petId),
+       moment = Value(moment),
+       localDay = Value(localDay);
+  static Insertable<CompanionAffinityDay> custom({
+    Expression<String>? childId,
+    Expression<String>? petId,
+    Expression<String>? moment,
+    Expression<String>? localDay,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (childId != null) 'child_id': childId,
+      if (petId != null) 'pet_id': petId,
+      if (moment != null) 'moment': moment,
+      if (localDay != null) 'local_day': localDay,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CompanionAffinityDaysCompanion copyWith({
+    Value<String>? childId,
+    Value<String>? petId,
+    Value<String>? moment,
+    Value<String>? localDay,
+    Value<int>? rowid,
+  }) {
+    return CompanionAffinityDaysCompanion(
+      childId: childId ?? this.childId,
+      petId: petId ?? this.petId,
+      moment: moment ?? this.moment,
+      localDay: localDay ?? this.localDay,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (childId.present) {
+      map['child_id'] = Variable<String>(childId.value);
+    }
+    if (petId.present) {
+      map['pet_id'] = Variable<String>(petId.value);
+    }
+    if (moment.present) {
+      map['moment'] = Variable<String>(moment.value);
+    }
+    if (localDay.present) {
+      map['local_day'] = Variable<String>(localDay.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CompanionAffinityDaysCompanion(')
+          ..write('childId: $childId, ')
+          ..write('petId: $petId, ')
+          ..write('moment: $moment, ')
+          ..write('localDay: $localDay, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class CompanionCandies extends Table
+    with TableInfo<CompanionCandies, CompanionCandy> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  CompanionCandies(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _purchaseIdMeta = const VerificationMeta(
+    'purchaseId',
+  );
+  late final GeneratedColumn<String> purchaseId = GeneratedColumn<String>(
+    'purchase_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY REFERENCES purchases(id)',
+  );
+  static const VerificationMeta _childIdMeta = const VerificationMeta(
+    'childId',
+  );
+  late final GeneratedColumn<String> childId = GeneratedColumn<String>(
+    'child_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL REFERENCES child_profiles(id)',
+  );
+  static const VerificationMeta _petIdMeta = const VerificationMeta('petId');
+  late final GeneratedColumn<String> petId = GeneratedColumn<String>(
+    'pet_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _affinityMeta = const VerificationMeta(
+    'affinity',
+  );
+  late final GeneratedColumn<int> affinity = GeneratedColumn<int>(
+    'affinity',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL CHECK (typeof(affinity) = \'integer\' AND affinity > 0)',
+  );
+  static const VerificationMeta _fedAtMeta = const VerificationMeta('fedAt');
+  late final GeneratedColumn<int> fedAt = GeneratedColumn<int>(
+    'fed_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'CHECK (fed_at IS NULL OR typeof(fed_at) = \'integer\')',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    purchaseId,
+    childId,
+    petId,
+    affinity,
+    fedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'companion_candies';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CompanionCandy> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('purchase_id')) {
+      context.handle(
+        _purchaseIdMeta,
+        purchaseId.isAcceptableOrUnknown(data['purchase_id']!, _purchaseIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_purchaseIdMeta);
+    }
+    if (data.containsKey('child_id')) {
+      context.handle(
+        _childIdMeta,
+        childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('pet_id')) {
+      context.handle(
+        _petIdMeta,
+        petId.isAcceptableOrUnknown(data['pet_id']!, _petIdMeta),
+      );
+    }
+    if (data.containsKey('affinity')) {
+      context.handle(
+        _affinityMeta,
+        affinity.isAcceptableOrUnknown(data['affinity']!, _affinityMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_affinityMeta);
+    }
+    if (data.containsKey('fed_at')) {
+      context.handle(
+        _fedAtMeta,
+        fedAt.isAcceptableOrUnknown(data['fed_at']!, _fedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {purchaseId};
+  @override
+  CompanionCandy map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CompanionCandy(
+      purchaseId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}purchase_id'],
+      )!,
+      childId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}child_id'],
+      )!,
+      petId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}pet_id'],
+      ),
+      affinity: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}affinity'],
+      )!,
+      fedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}fed_at'],
+      ),
+    );
+  }
+
+  @override
+  CompanionCandies createAlias(String alias) {
+    return CompanionCandies(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const [
+    'CHECK((pet_id IS NULL)=(fed_at IS NULL))',
+    'FOREIGN KEY(child_id, pet_id)REFERENCES owned_companions(child_id, pet_id)',
+  ];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class CompanionCandy extends DataClass implements Insertable<CompanionCandy> {
+  final String purchaseId;
+  final String childId;
+  final String? petId;
+  final int affinity;
+  final int? fedAt;
+  const CompanionCandy({
+    required this.purchaseId,
+    required this.childId,
+    this.petId,
+    required this.affinity,
+    this.fedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['purchase_id'] = Variable<String>(purchaseId);
+    map['child_id'] = Variable<String>(childId);
+    if (!nullToAbsent || petId != null) {
+      map['pet_id'] = Variable<String>(petId);
+    }
+    map['affinity'] = Variable<int>(affinity);
+    if (!nullToAbsent || fedAt != null) {
+      map['fed_at'] = Variable<int>(fedAt);
+    }
+    return map;
+  }
+
+  CompanionCandiesCompanion toCompanion(bool nullToAbsent) {
+    return CompanionCandiesCompanion(
+      purchaseId: Value(purchaseId),
+      childId: Value(childId),
+      petId: petId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(petId),
+      affinity: Value(affinity),
+      fedAt: fedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fedAt),
+    );
+  }
+
+  factory CompanionCandy.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CompanionCandy(
+      purchaseId: serializer.fromJson<String>(json['purchase_id']),
+      childId: serializer.fromJson<String>(json['child_id']),
+      petId: serializer.fromJson<String?>(json['pet_id']),
+      affinity: serializer.fromJson<int>(json['affinity']),
+      fedAt: serializer.fromJson<int?>(json['fed_at']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'purchase_id': serializer.toJson<String>(purchaseId),
+      'child_id': serializer.toJson<String>(childId),
+      'pet_id': serializer.toJson<String?>(petId),
+      'affinity': serializer.toJson<int>(affinity),
+      'fed_at': serializer.toJson<int?>(fedAt),
+    };
+  }
+
+  CompanionCandy copyWith({
+    String? purchaseId,
+    String? childId,
+    Value<String?> petId = const Value.absent(),
+    int? affinity,
+    Value<int?> fedAt = const Value.absent(),
+  }) => CompanionCandy(
+    purchaseId: purchaseId ?? this.purchaseId,
+    childId: childId ?? this.childId,
+    petId: petId.present ? petId.value : this.petId,
+    affinity: affinity ?? this.affinity,
+    fedAt: fedAt.present ? fedAt.value : this.fedAt,
+  );
+  CompanionCandy copyWithCompanion(CompanionCandiesCompanion data) {
+    return CompanionCandy(
+      purchaseId: data.purchaseId.present
+          ? data.purchaseId.value
+          : this.purchaseId,
+      childId: data.childId.present ? data.childId.value : this.childId,
+      petId: data.petId.present ? data.petId.value : this.petId,
+      affinity: data.affinity.present ? data.affinity.value : this.affinity,
+      fedAt: data.fedAt.present ? data.fedAt.value : this.fedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CompanionCandy(')
+          ..write('purchaseId: $purchaseId, ')
+          ..write('childId: $childId, ')
+          ..write('petId: $petId, ')
+          ..write('affinity: $affinity, ')
+          ..write('fedAt: $fedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(purchaseId, childId, petId, affinity, fedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CompanionCandy &&
+          other.purchaseId == this.purchaseId &&
+          other.childId == this.childId &&
+          other.petId == this.petId &&
+          other.affinity == this.affinity &&
+          other.fedAt == this.fedAt);
+}
+
+class CompanionCandiesCompanion extends UpdateCompanion<CompanionCandy> {
+  final Value<String> purchaseId;
+  final Value<String> childId;
+  final Value<String?> petId;
+  final Value<int> affinity;
+  final Value<int?> fedAt;
+  final Value<int> rowid;
+  const CompanionCandiesCompanion({
+    this.purchaseId = const Value.absent(),
+    this.childId = const Value.absent(),
+    this.petId = const Value.absent(),
+    this.affinity = const Value.absent(),
+    this.fedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CompanionCandiesCompanion.insert({
+    required String purchaseId,
+    required String childId,
+    this.petId = const Value.absent(),
+    required int affinity,
+    this.fedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : purchaseId = Value(purchaseId),
+       childId = Value(childId),
+       affinity = Value(affinity);
+  static Insertable<CompanionCandy> custom({
+    Expression<String>? purchaseId,
+    Expression<String>? childId,
+    Expression<String>? petId,
+    Expression<int>? affinity,
+    Expression<int>? fedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (purchaseId != null) 'purchase_id': purchaseId,
+      if (childId != null) 'child_id': childId,
+      if (petId != null) 'pet_id': petId,
+      if (affinity != null) 'affinity': affinity,
+      if (fedAt != null) 'fed_at': fedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CompanionCandiesCompanion copyWith({
+    Value<String>? purchaseId,
+    Value<String>? childId,
+    Value<String?>? petId,
+    Value<int>? affinity,
+    Value<int?>? fedAt,
+    Value<int>? rowid,
+  }) {
+    return CompanionCandiesCompanion(
+      purchaseId: purchaseId ?? this.purchaseId,
+      childId: childId ?? this.childId,
+      petId: petId ?? this.petId,
+      affinity: affinity ?? this.affinity,
+      fedAt: fedAt ?? this.fedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (purchaseId.present) {
+      map['purchase_id'] = Variable<String>(purchaseId.value);
+    }
+    if (childId.present) {
+      map['child_id'] = Variable<String>(childId.value);
+    }
+    if (petId.present) {
+      map['pet_id'] = Variable<String>(petId.value);
+    }
+    if (affinity.present) {
+      map['affinity'] = Variable<int>(affinity.value);
+    }
+    if (fedAt.present) {
+      map['fed_at'] = Variable<int>(fedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CompanionCandiesCompanion(')
+          ..write('purchaseId: $purchaseId, ')
+          ..write('childId: $childId, ')
+          ..write('petId: $petId, ')
+          ..write('affinity: $affinity, ')
+          ..write('fedAt: $fedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$FamilyDatabase extends GeneratedDatabase {
   _$FamilyDatabase(QueryExecutor e) : super(e);
   $FamilyDatabaseManager get managers => $FamilyDatabaseManager(this);
@@ -12085,7 +12784,7 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
   late final Purchases purchases = Purchases(this);
   late final Index purchasedOnce = Index(
     'purchased_once',
-    'CREATE UNIQUE INDEX purchased_once ON purchases (item_id) WHERE refunded_at IS NULL',
+    'CREATE UNIQUE INDEX purchased_once ON purchases (item_id) WHERE refunded_at IS NULL AND item_id != \'affinity_candy\'',
   );
   late final Spaces spaces = Spaces(this);
   late final Entitlements entitlements = Entitlements(this);
@@ -12123,6 +12822,13 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
   late final Index companionCompletionPetIdx = Index(
     'companion_completion_pet_idx',
     'CREATE INDEX companion_completion_pet_idx ON companion_completions (child_id, pet_id, completion_id)',
+  );
+  late final CompanionAffinityDays companionAffinityDays =
+      CompanionAffinityDays(this);
+  late final CompanionCandies companionCandies = CompanionCandies(this);
+  late final Index candyRecipientIdx = Index(
+    'candy_recipient_idx',
+    'CREATE INDEX candy_recipient_idx ON companion_candies (child_id, pet_id)',
   );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -12169,6 +12875,9 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
     oneStarterCompanion,
     companionCompletions,
     companionCompletionPetIdx,
+    companionAffinityDays,
+    companionCandies,
+    candyRecipientIdx,
   ];
 }
 
@@ -12840,6 +13549,27 @@ final class $ChildProfilesReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<CompanionCandies, List<CompanionCandy>>
+  _companionCandiesRefsTable(_$FamilyDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.companionCandies,
+        aliasName: 'child_profiles__id__companion_candies__child_id',
+      );
+
+  $CompanionCandiesProcessedTableManager get companionCandiesRefs {
+    final manager = $CompanionCandiesTableManager(
+      $_db,
+      $_db.companionCandies,
+    ).filter((f) => f.childId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _companionCandiesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $ChildProfilesFilterComposer
@@ -13105,6 +13835,31 @@ class $ChildProfilesFilterComposer
           }) => $OwnedCompanionsFilterComposer(
             $db: $db,
             $table: $db.ownedCompanions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> companionCandiesRefs(
+    Expression<bool> Function($CompanionCandiesFilterComposer f) f,
+  ) {
+    final $CompanionCandiesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.companionCandies,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CompanionCandiesFilterComposer(
+            $db: $db,
+            $table: $db.companionCandies,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -13430,6 +14185,31 @@ class $ChildProfilesAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> companionCandiesRefs<T extends Object>(
+    Expression<T> Function($CompanionCandiesAnnotationComposer a) f,
+  ) {
+    final $CompanionCandiesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.companionCandies,
+      getReferencedColumn: (t) => t.childId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CompanionCandiesAnnotationComposer(
+            $db: $db,
+            $table: $db.companionCandies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $ChildProfilesTableManager
@@ -13456,6 +14236,7 @@ class $ChildProfilesTableManager
             bool rainMapRunsRefs,
             bool companionMemoriesRefs,
             bool ownedCompanionsRefs,
+            bool companionCandiesRefs,
           })
         > {
   $ChildProfilesTableManager(_$FamilyDatabase db, ChildProfiles table)
@@ -13517,6 +14298,7 @@ class $ChildProfilesTableManager
                 rainMapRunsRefs = false,
                 companionMemoriesRefs = false,
                 ownedCompanionsRefs = false,
+                companionCandiesRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -13530,6 +14312,7 @@ class $ChildProfilesTableManager
                     if (rainMapRunsRefs) db.rainMapRuns,
                     if (companionMemoriesRefs) db.companionMemories,
                     if (ownedCompanionsRefs) db.ownedCompanions,
+                    if (companionCandiesRefs) db.companionCandies,
                   ],
                   addJoins:
                       <
@@ -13743,6 +14526,26 @@ class $ChildProfilesTableManager
                           referencedColumn: 'child_id',
                           typedResults: items,
                         ),
+                      if (companionCandiesRefs)
+                        await $_getPrefetchedDataByColumns<
+                          ChildProfile,
+                          ChildProfiles,
+                          CompanionCandy,
+                          CompanionCandies
+                        >(
+                          currentTable: table,
+                          referencedTable: $ChildProfilesReferences
+                              ._companionCandiesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $ChildProfilesReferences(
+                                db,
+                                table,
+                                p0,
+                              ).companionCandiesRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'child_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -13774,6 +14577,7 @@ typedef $ChildProfilesProcessedTableManager =
         bool rainMapRunsRefs,
         bool companionMemoriesRefs,
         bool ownedCompanionsRefs,
+        bool companionCandiesRefs,
       })
     >;
 typedef $WindowMathBookmarksCreateCompanionBuilder =
@@ -20011,6 +20815,27 @@ final class $PurchasesReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<CompanionCandies, List<CompanionCandy>>
+  _companionCandiesRefsTable(_$FamilyDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.companionCandies,
+        aliasName: 'purchases__id__companion_candies__purchase_id',
+      );
+
+  $CompanionCandiesProcessedTableManager get companionCandiesRefs {
+    final manager = $CompanionCandiesTableManager(
+      $_db,
+      $_db.companionCandies,
+    ).filter((f) => f.purchaseId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _companionCandiesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $PurchasesFilterComposer extends Composer<_$FamilyDatabase, Purchases> {
@@ -20150,6 +20975,31 @@ class $PurchasesFilterComposer extends Composer<_$FamilyDatabase, Purchases> {
           }) => $OwnedCompanionsFilterComposer(
             $db: $db,
             $table: $db.ownedCompanions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> companionCandiesRefs(
+    Expression<bool> Function($CompanionCandiesFilterComposer f) f,
+  ) {
+    final $CompanionCandiesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.companionCandies,
+      getReferencedColumn: (t) => t.purchaseId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CompanionCandiesFilterComposer(
+            $db: $db,
+            $table: $db.companionCandies,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -20364,6 +21214,31 @@ class $PurchasesAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> companionCandiesRefs<T extends Object>(
+    Expression<T> Function($CompanionCandiesAnnotationComposer a) f,
+  ) {
+    final $CompanionCandiesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.companionCandies,
+      getReferencedColumn: (t) => t.purchaseId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CompanionCandiesAnnotationComposer(
+            $db: $db,
+            $table: $db.companionCandies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $PurchasesTableManager
@@ -20384,6 +21259,7 @@ class $PurchasesTableManager
             bool spacesRefs,
             bool entitlementsRefs,
             bool ownedCompanionsRefs,
+            bool companionCandiesRefs,
           })
         > {
   $PurchasesTableManager(_$FamilyDatabase db, Purchases table)
@@ -20459,6 +21335,7 @@ class $PurchasesTableManager
                 spacesRefs = false,
                 entitlementsRefs = false,
                 ownedCompanionsRefs = false,
+                companionCandiesRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -20466,6 +21343,7 @@ class $PurchasesTableManager
                     if (spacesRefs) db.spaces,
                     if (entitlementsRefs) db.entitlements,
                     if (ownedCompanionsRefs) db.ownedCompanions,
+                    if (companionCandiesRefs) db.companionCandies,
                   ],
                   addJoins:
                       <
@@ -20553,6 +21431,25 @@ class $PurchasesTableManager
                           referencedColumn: 'purchase_id',
                           typedResults: items,
                         ),
+                      if (companionCandiesRefs)
+                        await $_getPrefetchedDataByColumns<
+                          Purchase,
+                          Purchases,
+                          CompanionCandy,
+                          CompanionCandies
+                        >(
+                          currentTable: table,
+                          referencedTable: $PurchasesReferences
+                              ._companionCandiesRefsTable(db),
+                          managerFromTypedResult: (p0) => $PurchasesReferences(
+                            db,
+                            table,
+                            p0,
+                          ).companionCandiesRefs,
+                          currentColumn: 'id',
+                          referencedColumn: 'purchase_id',
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -20578,6 +21475,7 @@ typedef $PurchasesProcessedTableManager =
         bool spacesRefs,
         bool entitlementsRefs,
         bool ownedCompanionsRefs,
+        bool companionCandiesRefs,
       })
     >;
 typedef $SpacesCreateCompanionBuilder = SpacesCompanion Function({
@@ -25726,6 +26624,607 @@ typedef $CompanionCompletionsProcessedTableManager =
       CompanionCompletion,
       PrefetchHooks Function({bool completionId})
     >;
+typedef $CompanionAffinityDaysCreateCompanionBuilder =
+    CompanionAffinityDaysCompanion Function({
+      required String childId,
+      required String petId,
+      required String moment,
+      required String localDay,
+      Value<int> rowid,
+    });
+typedef $CompanionAffinityDaysUpdateCompanionBuilder =
+    CompanionAffinityDaysCompanion Function({
+      Value<String> childId,
+      Value<String> petId,
+      Value<String> moment,
+      Value<String> localDay,
+      Value<int> rowid,
+    });
+
+class $CompanionAffinityDaysFilterComposer
+    extends Composer<_$FamilyDatabase, CompanionAffinityDays> {
+  $CompanionAffinityDaysFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get childId => $composableBuilder(
+    column: $table.childId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get petId => $composableBuilder(
+    column: $table.petId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get moment => $composableBuilder(
+    column: $table.moment,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get localDay => $composableBuilder(
+    column: $table.localDay,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $CompanionAffinityDaysOrderingComposer
+    extends Composer<_$FamilyDatabase, CompanionAffinityDays> {
+  $CompanionAffinityDaysOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get childId => $composableBuilder(
+    column: $table.childId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get petId => $composableBuilder(
+    column: $table.petId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get moment => $composableBuilder(
+    column: $table.moment,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get localDay => $composableBuilder(
+    column: $table.localDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $CompanionAffinityDaysAnnotationComposer
+    extends Composer<_$FamilyDatabase, CompanionAffinityDays> {
+  $CompanionAffinityDaysAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get childId =>
+      $composableBuilder(column: $table.childId, builder: (column) => column);
+
+  GeneratedColumn<String> get petId =>
+      $composableBuilder(column: $table.petId, builder: (column) => column);
+
+  GeneratedColumn<String> get moment =>
+      $composableBuilder(column: $table.moment, builder: (column) => column);
+
+  GeneratedColumn<String> get localDay =>
+      $composableBuilder(column: $table.localDay, builder: (column) => column);
+}
+
+class $CompanionAffinityDaysTableManager
+    extends
+        RootTableManager<
+          _$FamilyDatabase,
+          CompanionAffinityDays,
+          CompanionAffinityDay,
+          $CompanionAffinityDaysFilterComposer,
+          $CompanionAffinityDaysOrderingComposer,
+          $CompanionAffinityDaysAnnotationComposer,
+          $CompanionAffinityDaysCreateCompanionBuilder,
+          $CompanionAffinityDaysUpdateCompanionBuilder,
+          (
+            CompanionAffinityDay,
+            BaseReferences<
+              _$FamilyDatabase,
+              CompanionAffinityDays,
+              CompanionAffinityDay
+            >,
+          ),
+          CompanionAffinityDay,
+          PrefetchHooks Function()
+        > {
+  $CompanionAffinityDaysTableManager(
+    _$FamilyDatabase db,
+    CompanionAffinityDays table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $CompanionAffinityDaysFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $CompanionAffinityDaysOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $CompanionAffinityDaysAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> childId = const Value.absent(),
+                Value<String> petId = const Value.absent(),
+                Value<String> moment = const Value.absent(),
+                Value<String> localDay = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CompanionAffinityDaysCompanion(
+                childId: childId,
+                petId: petId,
+                moment: moment,
+                localDay: localDay,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String childId,
+                required String petId,
+                required String moment,
+                required String localDay,
+                Value<int> rowid = const Value.absent(),
+              }) => CompanionAffinityDaysCompanion.insert(
+                childId: childId,
+                petId: petId,
+                moment: moment,
+                localDay: localDay,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<CompanionAffinityDays, CompanionAffinityDay>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$FamilyDatabase,
+                    CompanionAffinityDays,
+                    CompanionAffinityDay
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $CompanionAffinityDaysProcessedTableManager =
+    ProcessedTableManager<
+      _$FamilyDatabase,
+      CompanionAffinityDays,
+      CompanionAffinityDay,
+      $CompanionAffinityDaysFilterComposer,
+      $CompanionAffinityDaysOrderingComposer,
+      $CompanionAffinityDaysAnnotationComposer,
+      $CompanionAffinityDaysCreateCompanionBuilder,
+      $CompanionAffinityDaysUpdateCompanionBuilder,
+      (
+        CompanionAffinityDay,
+        BaseReferences<
+          _$FamilyDatabase,
+          CompanionAffinityDays,
+          CompanionAffinityDay
+        >,
+      ),
+      CompanionAffinityDay,
+      PrefetchHooks Function()
+    >;
+typedef $CompanionCandiesCreateCompanionBuilder =
+    CompanionCandiesCompanion Function({
+      required String purchaseId,
+      required String childId,
+      Value<String?> petId,
+      required int affinity,
+      Value<int?> fedAt,
+      Value<int> rowid,
+    });
+typedef $CompanionCandiesUpdateCompanionBuilder =
+    CompanionCandiesCompanion Function({
+      Value<String> purchaseId,
+      Value<String> childId,
+      Value<String?> petId,
+      Value<int> affinity,
+      Value<int?> fedAt,
+      Value<int> rowid,
+    });
+
+final class $CompanionCandiesReferences
+    extends BaseReferences<_$FamilyDatabase, CompanionCandies, CompanionCandy> {
+  $CompanionCandiesReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static Purchases _purchaseIdTable(_$FamilyDatabase db) =>
+      db.purchases.createAlias('companion_candies__purchase_id__purchases__id');
+
+  $PurchasesProcessedTableManager get purchaseId {
+    final $_column = $_itemColumn<String>('purchase_id')!;
+
+    final manager = $PurchasesTableManager(
+      $_db,
+      $_db.purchases,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_purchaseIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static ChildProfiles _childIdTable(_$FamilyDatabase db) => db.childProfiles
+      .createAlias('companion_candies__child_id__child_profiles__id');
+
+  $ChildProfilesProcessedTableManager get childId {
+    final $_column = $_itemColumn<String>('child_id')!;
+
+    final manager = $ChildProfilesTableManager(
+      $_db,
+      $_db.childProfiles,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $CompanionCandiesFilterComposer
+    extends Composer<_$FamilyDatabase, CompanionCandies> {
+  $CompanionCandiesFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get petId => $composableBuilder(
+    column: $table.petId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get affinity => $composableBuilder(
+    column: $table.affinity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get fedAt => $composableBuilder(
+    column: $table.fedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $PurchasesFilterComposer get purchaseId {
+    final $PurchasesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.purchaseId,
+      referencedTable: $db.purchases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $PurchasesFilterComposer(
+            $db: $db,
+            $table: $db.purchases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $ChildProfilesFilterComposer get childId {
+    final $ChildProfilesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesFilterComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $CompanionCandiesOrderingComposer
+    extends Composer<_$FamilyDatabase, CompanionCandies> {
+  $CompanionCandiesOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get petId => $composableBuilder(
+    column: $table.petId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get affinity => $composableBuilder(
+    column: $table.affinity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get fedAt => $composableBuilder(
+    column: $table.fedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $PurchasesOrderingComposer get purchaseId {
+    final $PurchasesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.purchaseId,
+      referencedTable: $db.purchases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $PurchasesOrderingComposer(
+            $db: $db,
+            $table: $db.purchases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $ChildProfilesOrderingComposer get childId {
+    final $ChildProfilesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesOrderingComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $CompanionCandiesAnnotationComposer
+    extends Composer<_$FamilyDatabase, CompanionCandies> {
+  $CompanionCandiesAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get petId =>
+      $composableBuilder(column: $table.petId, builder: (column) => column);
+
+  GeneratedColumn<int> get affinity =>
+      $composableBuilder(column: $table.affinity, builder: (column) => column);
+
+  GeneratedColumn<int> get fedAt =>
+      $composableBuilder(column: $table.fedAt, builder: (column) => column);
+
+  $PurchasesAnnotationComposer get purchaseId {
+    final $PurchasesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.purchaseId,
+      referencedTable: $db.purchases,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $PurchasesAnnotationComposer(
+            $db: $db,
+            $table: $db.purchases,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $ChildProfilesAnnotationComposer get childId {
+    final $ChildProfilesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.childId,
+      referencedTable: $db.childProfiles,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $ChildProfilesAnnotationComposer(
+            $db: $db,
+            $table: $db.childProfiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $CompanionCandiesTableManager
+    extends
+        RootTableManager<
+          _$FamilyDatabase,
+          CompanionCandies,
+          CompanionCandy,
+          $CompanionCandiesFilterComposer,
+          $CompanionCandiesOrderingComposer,
+          $CompanionCandiesAnnotationComposer,
+          $CompanionCandiesCreateCompanionBuilder,
+          $CompanionCandiesUpdateCompanionBuilder,
+          (CompanionCandy, $CompanionCandiesReferences),
+          CompanionCandy,
+          PrefetchHooks Function({bool purchaseId, bool childId})
+        > {
+  $CompanionCandiesTableManager(_$FamilyDatabase db, CompanionCandies table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $CompanionCandiesFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $CompanionCandiesOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $CompanionCandiesAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> purchaseId = const Value.absent(),
+                Value<String> childId = const Value.absent(),
+                Value<String?> petId = const Value.absent(),
+                Value<int> affinity = const Value.absent(),
+                Value<int?> fedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CompanionCandiesCompanion(
+                purchaseId: purchaseId,
+                childId: childId,
+                petId: petId,
+                affinity: affinity,
+                fedAt: fedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String purchaseId,
+                required String childId,
+                Value<String?> petId = const Value.absent(),
+                required int affinity,
+                Value<int?> fedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CompanionCandiesCompanion.insert(
+                purchaseId: purchaseId,
+                childId: childId,
+                petId: petId,
+                affinity: affinity,
+                fedAt: fedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<CompanionCandies, CompanionCandy>(table),
+                  $CompanionCandiesReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({purchaseId = false, childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (purchaseId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.purchaseId,
+                        referencedTable: $CompanionCandiesReferences
+                            ._purchaseIdTable(db),
+                        referencedColumn: $CompanionCandiesReferences
+                            ._purchaseIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+                    if (childId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.childId,
+                        referencedTable: $CompanionCandiesReferences
+                            ._childIdTable(db),
+                        referencedColumn: $CompanionCandiesReferences
+                            ._childIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $CompanionCandiesProcessedTableManager =
+    ProcessedTableManager<
+      _$FamilyDatabase,
+      CompanionCandies,
+      CompanionCandy,
+      $CompanionCandiesFilterComposer,
+      $CompanionCandiesOrderingComposer,
+      $CompanionCandiesAnnotationComposer,
+      $CompanionCandiesCreateCompanionBuilder,
+      $CompanionCandiesUpdateCompanionBuilder,
+      (CompanionCandy, $CompanionCandiesReferences),
+      CompanionCandy,
+      PrefetchHooks Function({bool purchaseId, bool childId})
+    >;
 
 class $FamilyDatabaseManager {
   final _$FamilyDatabase _db;
@@ -25788,4 +27287,8 @@ class $FamilyDatabaseManager {
       $OwnedCompanionsTableManager(_db, _db.ownedCompanions);
   $CompanionCompletionsTableManager get companionCompletions =>
       $CompanionCompletionsTableManager(_db, _db.companionCompletions);
+  $CompanionAffinityDaysTableManager get companionAffinityDays =>
+      $CompanionAffinityDaysTableManager(_db, _db.companionAffinityDays);
+  $CompanionCandiesTableManager get companionCandies =>
+      $CompanionCandiesTableManager(_db, _db.companionCandies);
 }

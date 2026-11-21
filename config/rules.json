@@ -57,7 +57,9 @@
     "repeat_unique_item_purchase": false
   },
   "companions": {
-    "unlock_price": 30
+    "unlock_price": 30,
+    "affinity_candy_price": 3,
+    "affinity_per_candy": 3
   },
   "growth": {
     "thresholds": [

@@ -38,10 +38,11 @@ class FamilyOverview {
       taskCount = row['task_count'] as int,
       windowsLit = (row['windows_lit'] as int) != 0,
       rainMapCleared = row['rain_map_cleared'] == 1,
-      bond = CompanionBond(
-        touched: row['companion_touched'] == 1,
-        called: row['companion_called'] == 1,
-      ),
+      bond = CompanionBond(row['affinity'] as int),
+      memories = {
+        if (row['companion_touched'] == 1) CompanionMoment.touch,
+        if (row['companion_called'] == 1) CompanionMoment.call,
+      },
       days = row['growth_days'] as int,
       revision = row['domain_revision'] as int,
       latestDay = row['latest_local_day'] as String?;
@@ -57,6 +58,7 @@ class FamilyOverview {
   final bool windowsLit;
   final bool rainMapCleared;
   final CompanionBond bond;
+  final Set<CompanionMoment> memories;
   final int days;
   final int revision;
   final String? latestDay;
@@ -286,6 +288,7 @@ class FamilyService implements RainMapCommands {
         EXISTS(SELECT 1 FROM companion_memories m WHERE m.child_id = c.id
           AND m.pet_id = c.active_pet_id AND m.moment = 'call') AS companion_called,
         ($_companionExperience) AS experience,
+        ($_companionAffinity) AS affinity,
         (SELECT COUNT(*) FROM completions WHERE is_valid = 1) AS valid_completion_count,
         (SELECT COUNT(*) FROM task_instances) AS task_count,
         (SELECT COUNT(DISTINCT actual_date) FROM completions WHERE is_valid = 1) AS growth_days,
@@ -578,12 +581,14 @@ class FamilyService implements RainMapCommands {
         );
       });
 
-  Future<void> recordCompanionMoment(
+  Future<bool> recordCompanionMoment(
     Companion companion,
     CompanionMoment moment,
   ) async {
-    final args = [companion.name, moment.name];
-    await _command('companion_moment', args, 'companion/${args.join('/')}', (
+    final day = today;
+    final args = [companion.name, moment.name, day];
+    var added = false;
+    await _command('companion_moment', args, 'affinity/${args.join('/')}', (
       _,
       family,
     ) async {
@@ -597,8 +602,16 @@ class FamilyService implements RainMapCommands {
       ''',
         [family.childId, companion.name, moment.name],
       );
+      await db.insertRow('companion_affinity_days', {
+        'child_id': family.childId,
+        'pet_id': companion.name,
+        'moment': moment.name,
+        'local_day': day,
+      });
+      added = true;
       return {};
     });
+    return added;
   }
 
   Future<({WindowPage page, Set<int> pattern, bool started})>

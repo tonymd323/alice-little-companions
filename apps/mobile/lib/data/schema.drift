@@ -163,7 +163,7 @@ CREATE TABLE purchases (
   asset_id TEXT NOT NULL
 );
 
-CREATE UNIQUE INDEX purchased_once ON purchases(item_id) WHERE refunded_at IS NULL;
+CREATE UNIQUE INDEX purchased_once ON purchases(item_id) WHERE refunded_at IS NULL AND item_id != 'affinity_candy';
 
 CREATE TABLE spaces (
   id TEXT NOT NULL PRIMARY KEY,
@@ -291,3 +291,28 @@ CREATE TABLE companion_completions (
 );
 
 CREATE INDEX companion_completion_pet_idx ON companion_completions(child_id, pet_id, completion_id);
+
+CREATE TABLE companion_affinity_days (
+  child_id TEXT NOT NULL,
+  pet_id TEXT NOT NULL,
+  moment TEXT NOT NULL,
+  local_day TEXT NOT NULL CHECK (local_day = '' OR (
+    local_day GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+    AND date(local_day, '+0 days') IS local_day
+  )),
+  PRIMARY KEY (child_id, pet_id, moment, local_day),
+  FOREIGN KEY (child_id, pet_id) REFERENCES owned_companions(child_id, pet_id),
+  FOREIGN KEY (child_id, pet_id, moment) REFERENCES companion_memories(child_id, pet_id, moment)
+);
+
+CREATE TABLE companion_candies (
+  purchase_id TEXT NOT NULL PRIMARY KEY REFERENCES purchases(id),
+  child_id TEXT NOT NULL REFERENCES child_profiles(id),
+  pet_id TEXT,
+  affinity INTEGER NOT NULL CHECK (typeof(affinity) = 'integer' AND affinity > 0),
+  fed_at INTEGER CHECK (fed_at IS NULL OR typeof(fed_at) = 'integer'),
+  CHECK ((pet_id IS NULL) = (fed_at IS NULL)),
+  FOREIGN KEY (child_id, pet_id) REFERENCES owned_companions(child_id, pet_id)
+);
+
+CREATE INDEX candy_recipient_idx ON companion_candies(child_id, pet_id);

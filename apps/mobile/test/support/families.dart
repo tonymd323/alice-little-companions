@@ -1,12 +1,17 @@
 import 'dart:io';
 
 import 'package:alice_companions/application/family.dart';
+import 'package:alice_companions/data/database.dart';
 import 'package:alice_companions/data/device.dart';
 import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/domain/pin.dart';
 import 'package:alice_companions/domain/rules.dart';
 
-const dropCompanionTables = 'DROP TABLE companion_completions; DROP TABLE owned_companions; ';
+const dropAffinityTables =
+    'DROP TABLE companion_candies; DROP TABLE companion_affinity_days; '
+    'DROP INDEX purchased_once; $legacyPurchaseIndexSql; ';
+const dropCompanionTables =
+    '${dropAffinityTables}DROP TABLE companion_completions; DROP TABLE owned_companions; ';
 
 class MemorySecureValues implements SecureValues {
   final data = <String, String>{};

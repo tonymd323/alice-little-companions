@@ -10,6 +10,7 @@ import '../domain/layout_rules.dart';
 import '../domain/pin.dart';
 import '../domain/rain_map.dart';
 import '../illustration/wind_sound.dart';
+import 'affinity_candy.dart';
 import 'common.dart';
 import 'companion_collection.dart';
 import 'garden.dart';
@@ -63,13 +64,15 @@ class _FamilyHomeState extends State<FamilyHome> {
 
   Future<void> _remember(CompanionMoment moment) async {
     final service = controller.service;
-    if (service == null || service.frozen || family.bond.has(moment)) return;
+    if (service == null || service.frozen) return;
     final companion = family.companion;
     final memory = (service, companion, moment);
     if (!_remembering.add(memory)) return;
     try {
-      await service.recordCompanionMoment(companion, moment);
-      if (mounted && controller.service == service) await controller.refresh();
+      final added = await service.recordCompanionMoment(companion, moment);
+      if (added && mounted && controller.service == service) {
+        await controller.refresh();
+      }
     } on UserError catch (error) {
       if (mounted &&
           controller.service == service &&
@@ -363,7 +366,14 @@ class _FamilyHomeState extends State<FamilyHome> {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(18, 0, 18, 8),
-          child: _Experience(family, controller.rules.thresholds),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _Experience(family, controller.rules.thresholds),
+              const SizedBox(height: 6),
+              Text(family.bond.summary, style: const TextStyle(color: ink)),
+            ],
+          ),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(12, 4, 12, 10),
@@ -603,42 +613,62 @@ class GrowthPage extends StatelessWidget {
                             ),
                             const SizedBox(width: 14),
                             Expanded(
-                              child: Text(
-                                '成长记录',
-                                style: Theme.of(context).textTheme.titleLarge,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '成长记录',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge,
+                                  ),
+                                  Text(
+                                    '${family.companion.nickname} · ${stageNames[family.stage - 1]}',
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 8),
-                        Text(
-                          '${family.companion.nickname} · ${stageNames[family.stage - 1]}',
-                        ),
                         _Experience(family, controller.rules.thresholds),
-                        Text('亲密度 · ${family.bond.label}'),
-                        if (family.stage > 1)
-                          TextButton.icon(
-                            onPressed: () => showEvolution(
-                              context,
-                              family.companion,
-                              family.stage - 1,
-                              family.stage,
-                              outfit: outfitFiles(controller.outfit),
-                            ),
-                            icon: const Icon(Icons.replay),
-                            label: const Text('回看进化'),
-                          ),
                         const SizedBox(height: 8),
-                        OutlinedButton(
-                          onPressed: () => openPage(
-                            context,
-                            AppearancePreview(
-                              initial: family.companion,
-                              initialStage: family.stage,
-                              outfit: outfitFiles(controller.outfit),
+                        _BondProgress(family.bond),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          children: [
+                            OutlinedButton(
+                              onPressed: () => openPage(
+                                context,
+                                AffinityCandyPage(controller: controller),
+                              ),
+                              child: const Text(affinityCandyName),
                             ),
-                          ),
-                          child: const Text('外观预览'),
+                            OutlinedButton(
+                              onPressed: () => openPage(
+                                context,
+                                AppearancePreview(
+                                  initial: family.companion,
+                                  initialStage: family.stage,
+                                  outfit: outfitFiles(controller.outfit),
+                                ),
+                              ),
+                              child: const Text('外观预览'),
+                            ),
+                            if (family.stage > 1)
+                              TextButton.icon(
+                                onPressed: () => showEvolution(
+                                  context,
+                                  family.companion,
+                                  family.stage - 1,
+                                  family.stage,
+                                  outfit: outfitFiles(controller.outfit),
+                                ),
+                                icon: const Icon(Icons.replay),
+                                label: const Text('回看进化'),
+                              ),
+                          ],
                         ),
                       ],
                     ),
@@ -708,8 +738,8 @@ class _MemoriesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final pet = family.companion.nickname;
     final memories = [
-      if (family.bond.touched) '第一次摸摸$pet',
-      if (family.bond.called) '第一次叫$pet过来',
+      if (family.memories.contains(CompanionMoment.touch)) '第一次摸摸$pet',
+      if (family.memories.contains(CompanionMoment.call)) '第一次叫$pet过来',
       if (family.windowsLit) '暖廊的三扇彩窗',
       if (family.rainMapCleared) rainMapTitle,
     ];
@@ -720,15 +750,11 @@ class _MemoriesPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '$pet · 亲密度 ${family.bond.label}',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              if (memories.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.only(top: 12),
-                  child: Text('回小家摸摸伙伴，或叫它过来。'),
-                ),
+              Text(pet, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              _BondProgress(family.bond),
+              const SizedBox(height: 8),
+              const Text('每天首次摸摸和呼唤各 +1', style: TextStyle(color: mutedInk)),
               for (final memory in memories)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
@@ -746,6 +772,31 @@ class _MemoriesPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BondProgress extends StatelessWidget {
+  const _BondProgress(this.bond);
+  final CompanionBond bond;
+
+  @override
+  Widget build(BuildContext context) {
+    final next = bond.next;
+    return Wrap(
+      spacing: 10,
+      runSpacing: 4,
+      children: [
+        Text(
+          bond.summary,
+          style: const TextStyle(color: ink, fontWeight: FontWeight.w600),
+        ),
+        if (next != null)
+          Text(
+            '距${next.label}还差 ${next.threshold - bond.value}',
+            style: const TextStyle(color: mutedInk),
+          ),
+      ],
     );
   }
 }

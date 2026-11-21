@@ -62,7 +62,7 @@ void main() {
         schema,
         stock.rules,
         assets,
-        compareLegacyCompanions: true,
+        compareWithSchemaVersion: old.schemaVersion,
       );
       expect((old.schemaVersion, upgraded.schemaVersion), (6, currentSchemaVersion));
       expect(upgraded.businessDigest, old.businessDigest);
@@ -71,6 +71,91 @@ void main() {
       expect((await stock.service.rainMapProgress()).started, isFalse);
       expect((await stock.service.windProgress()).mask, 1 << 2);
       expect((await stock.service.windowMathBookmark()).pattern, {1, 3});
+    },
+  );
+
+  test(
+    'affinity grows by family day and follows the individual companion',
+    () async {
+      var clock = DateTime.utc(2026, 11, 20, 15, 59);
+      final stock = await TestFamily.create(
+        now: () => clock,
+        pet: Companion.cat,
+      );
+      addTearDown(stock.dispose);
+      var service = stock.service;
+      final session = await service.pin.unlock(TestFamily.pin);
+      for (
+        var index = 0;
+        index < stock.rules.companionUnlockPrice ~/ 5;
+        index++
+      ) {
+        await service.backfill(
+          const TaskDraft('测试任务A', '', '测试标准', 'challenge'),
+          service.today,
+          '',
+          session: session,
+        );
+      }
+      await service.unlockCompanion(Companion.fox);
+      final ledger = await service.ledger();
+      final first = (await service.overview())!;
+      expect(first.bond.value, 0);
+      expect(
+        await Future.wait([
+          service.recordCompanionMoment(Companion.cat, CompanionMoment.touch),
+          service.recordCompanionMoment(Companion.cat, CompanionMoment.touch),
+          service.recordCompanionMoment(Companion.cat, CompanionMoment.call),
+        ]),
+        [true, false, true],
+      );
+      expect((await service.overview())!.revision, first.revision + 2);
+
+      clock = clock.add(const Duration(minutes: 1));
+      expect(service.today, '2026-11-21');
+      await service.recordCompanionMoment(Companion.cat, CompanionMoment.touch);
+      await service.recordCompanionMoment(Companion.cat, CompanionMoment.call);
+      await service.selectCompanion(Companion.fox);
+      expect((await service.overview())!.bond.value, 0);
+      await service.recordCompanionMoment(Companion.fox, CompanionMoment.touch);
+
+      await stock.reopen(now: () => clock);
+      service = stock.service;
+      expect(
+        await service.recordCompanionMoment(
+          Companion.fox,
+          CompanionMoment.touch,
+        ),
+        isFalse,
+      );
+      final progress = await service.companionProgress();
+      expect(progress[Companion.fox]!.bond.value, 1);
+      expect(progress[Companion.fox]!.experience, 0);
+      expect(progress[Companion.cat]!.bond.value, 4);
+      expect(progress[Companion.cat]!.experience, first.experience);
+      await service.selectCompanion(Companion.cat);
+      for (var index = 0; index < 8; index++) {
+        clock = clock.add(const Duration(days: 1));
+        await service.recordCompanionMoment(
+          Companion.cat,
+          CompanionMoment.touch,
+        );
+        await service.recordCompanionMoment(
+          Companion.cat,
+          CompanionMoment.call,
+        );
+        if (index == 1) {
+          final bond = (await service.overview())!.bond;
+          expect((bond.value, bond.label), (8, '相伴'));
+        }
+      }
+      final finalFamily = (await service.overview())!;
+      expect(
+        (finalFamily.bond.value, finalFamily.bond.label, finalFamily.bond.next),
+        (20, '挚友', null),
+      );
+      expect(finalFamily.memories, CompanionMoment.values.toSet());
+      expect(await service.ledger(), ledger);
     },
   );
 
@@ -558,7 +643,7 @@ void main() {
     await tester.runAsync(() async {
       for (
         var attempt = 0;
-        attempt < 40 && controller.family?.bond.touched != true;
+        attempt < 40 && controller.family?.bond.value != 1;
         attempt++
       ) {
         await Future<void>.delayed(const Duration(milliseconds: 20));
@@ -566,11 +651,12 @@ void main() {
     });
     await tester.pump();
     expect(controller.family?.bond.label, '熟悉');
+    expect(find.text('亲密度 1 · 熟悉'), findsOneWidget);
     await tester.runAsync(() => tester.tap(find.text('过来').hitTestable()));
     await tester.runAsync(() async {
       for (
         var attempt = 0;
-        attempt < 40 && controller.family?.bond.called != true;
+        attempt < 40 && controller.family?.bond.value != 2;
         attempt++
       ) {
         await Future<void>.delayed(const Duration(milliseconds: 20));
@@ -581,7 +667,8 @@ void main() {
     expect((controller.family?.balance, controller.family?.experience), (0, 0));
     await tester.tap(find.text('成长').hitTestable());
     await tester.pump(const Duration(milliseconds: 150));
-    expect(find.text('亲密度 · 默契'), findsOneWidget);
+    expect(find.text('亲密度 2 · 默契'), findsOneWidget);
+    expect(find.text('距相伴还差 6'), findsOneWidget);
     await tester.ensureVisible(find.text('伙伴回忆'));
     await tester.tap(find.text('伙伴回忆').hitTestable());
     await tester.pump();

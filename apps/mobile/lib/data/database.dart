@@ -7,7 +7,10 @@ import 'package:sqlite3/sqlite3.dart' as sqlite;
 part 'database.g.dart';
 
 const companionSchemaVersion = 8;
-const currentSchemaVersion = companionSchemaVersion;
+const affinitySchemaVersion = 9;
+const currentSchemaVersion = affinitySchemaVersion;
+const legacyPurchaseIndexSql =
+    'CREATE UNIQUE INDEX purchased_once ON purchases (item_id) WHERE refunded_at IS NULL';
 const v2Indexes = [
   'ledger_day_kind_idx',
   'purchase_ledger_idx',
@@ -64,6 +67,19 @@ class FamilyDatabase extends _$FamilyDatabase {
             JOIN task_instances i ON i.id = x.instance_id
             JOIN task_templates t ON t.id = i.template_id
             JOIN child_profiles c ON c.family_id = t.family_id
+            ''');
+        }
+        if (from < affinitySchemaVersion) {
+          await migrator.createTable(companionAffinityDays);
+          await migrator.createTable(companionCandies);
+          await migrator.createIndex(candyRecipientIdx);
+          await customStatement('DROP INDEX purchased_once');
+          await migrator.createIndex(purchasedOnce);
+          // Preserve the starting value from first memories without dating them.
+          await customStatement('''
+            INSERT INTO companion_affinity_days(child_id, pet_id, moment, local_day)
+            SELECT m.child_id, m.pet_id, m.moment, '' FROM companion_memories m
+            JOIN owned_companions p ON p.child_id = m.child_id AND p.pet_id = m.pet_id
             ''');
         }
       });

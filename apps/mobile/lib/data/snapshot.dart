@@ -7,6 +7,7 @@ import 'package:crypto/crypto.dart';
 import 'package:drift/native.dart';
 import 'package:sqlite3/sqlite3.dart';
 
+import '../domain/companion_bond.dart';
 import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/pin.dart';
@@ -18,6 +19,7 @@ const schemaQuery = '''
 ''';
 const _v7Tables = {'rain_map_runs', 'companion_memories'};
 const _v8Tables = {'owned_companions', 'companion_completions'};
+const _v9Tables = {'companion_affinity_days', 'companion_candies'};
 
 class SnapshotInfo {
   const SnapshotInfo({
@@ -92,18 +94,16 @@ Future<Snapshot> checkSnapshot(
   List<Json> schema,
   Rules rules,
   Set<String> available, {
-  bool compareLegacyCompanions = false,
+  int compareWithSchemaVersion = currentSchemaVersion,
 }) => Isolate.run(
   () => _check(
     path,
     schema,
     rules,
     available,
-    (db, tables, info) => Snapshot(
-      info,
-      _businessDigest(db, tables, compareLegacyCompanions),
-    ),
-    compareLegacyCompanions: compareLegacyCompanions,
+    (db, tables, info) =>
+        Snapshot(info, _businessDigest(db, tables, compareWithSchemaVersion)),
+    compareLegacyCompanions: compareWithSchemaVersion < companionSchemaVersion,
   ),
 );
 
@@ -127,6 +127,11 @@ T _check<T>(
     final expected = schema
         .where(
           (row) =>
+              version >= affinitySchemaVersion ||
+              !_v9Tables.contains(row['tbl_name']),
+        )
+        .where(
+          (row) =>
               version >= companionSchemaVersion ||
               !_v8Tables.contains(row['tbl_name']),
         )
@@ -138,6 +143,12 @@ T _check<T>(
         .where((row) => version != 1 || !v2Indexes.contains(row['name']))
         .where(
           (row) => version >= 3 || row['tbl_name'] != 'window_math_bookmarks',
+        )
+        .map(
+          (row) =>
+              version < affinitySchemaVersion && row['name'] == 'purchased_once'
+              ? {...row, 'sql': legacyPurchaseIndexSql}
+              : row,
         )
         .toList();
     final actual = db
@@ -207,6 +218,11 @@ T _check<T>(
           companion['purchase_id']: rules.companion(
             companion['pet_id'] as String,
           ),
+    };
+    final candyPurchases = {
+      if (version >= affinitySchemaVersion)
+        for (final candy in db.select('SELECT * FROM companion_candies'))
+          candy['purchase_id']: candy,
     };
 
     var balance = 0;
@@ -330,6 +346,19 @@ T _check<T>(
         [purchase['id']],
       );
       final companion = companionPurchases[purchase['id']];
+      if (purchase['item_id'] == affinityCandyItemId) {
+        final candy = candyPurchases.remove(purchase['id']);
+        if (candy == null ||
+            candy['child_id'] != family['child_id'] ||
+            purchase['asset_id'] != affinityCandyItemId ||
+            (candy['pet_id'] != null && purchase['refunded_at'] != null) ||
+            owned.isNotEmpty ||
+            spaces.isNotEmpty ||
+            companion != null) {
+          throw const UserError('备份的亲密度糖果记录有误。');
+        }
+        continue;
+      }
       if (companion != null) {
         if (purchase['item_id'] != companion.unlockItemId ||
             purchase['asset_id'] != companion.firstStageAssetId ||
@@ -367,6 +396,9 @@ T _check<T>(
         }
         assets.add(part['asset_id'] as String);
       }
+    }
+    if (candyPurchases.isNotEmpty) {
+      throw const UserError('备份的亲密度糖果关联有误。');
     }
     for (final row in db.select("""
       SELECT x.*, s.scene_id, e.asset_id, e.name FROM placements x
@@ -481,14 +513,21 @@ T _check<T>(
 String _businessDigest(
   Database db,
   List<Json> schema,
-  bool compareLegacyCompanions,
+  int compareWithSchemaVersion,
 ) {
   // Feed each row separately to avoid keeping a second copy of the database.
   final sink = _DigestResult();
   final content = sha256.startChunkedConversion(sink);
   for (final row in schema.where((row) => row['type'] == 'table')) {
     final table = row['name'] as String;
-    if (compareLegacyCompanions && _v8Tables.contains(table)) continue;
+    if (compareWithSchemaVersion < affinitySchemaVersion &&
+        _v9Tables.contains(table)) {
+      continue;
+    }
+    if (compareWithSchemaVersion < companionSchemaVersion &&
+        _v8Tables.contains(table)) {
+      continue;
+    }
     final records = db.select('SELECT * FROM "$table" ORDER BY rowid');
     if (records.isEmpty &&
         (table == 'base_furnishings' ||
