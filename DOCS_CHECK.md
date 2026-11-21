@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1274 项通过。下面列出逐项结果。
+- 本次准备检查 1285 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -365,6 +365,7 @@
 - 内部链接有效：docs/evidence/backup-ui-0213/README.md → independent-readback.json
 - 内部链接有效：docs/evidence/backup-ui-0213/README.md → github-download.json
 - 内部链接有效：docs/evidence/backup-ui-0213/README.md → ../first-run-0213/README.md
+- 内部链接有效：docs/evidence/backup-ui-0213/README.md → ../mainline-0213/README.md
 - 内部链接有效：docs/evidence/backup-ui-0213/README.md → ../device-acceptance/README.md
 - 内部链接有效：docs/evidence/cat-walk/README.md → ../../../design/production/cat-walk/acting-rehearsal.mp4
 - 内部链接有效：docs/evidence/cat-walk/README.md → ../../../design/production/cat-walk/README.md
@@ -643,6 +644,16 @@
 - 内部链接有效：docs/evidence/furnishings/README.md → installation.json
 - 内部链接有效：docs/evidence/furnishings/README.md → packaged-art.json
 - 内部链接有效：docs/evidence/furnishings/README.md → github-download.json
+- 内部链接有效：docs/evidence/mainline-0213/README.md → ../backup-ui-0213/README.md
+- 内部链接有效：docs/evidence/mainline-0213/README.md → analyze.log
+- 内部链接有效：docs/evidence/mainline-0213/README.md → rain-resumed.png
+- 内部链接有效：docs/evidence/mainline-0213/README.md → tests.log
+- 内部链接有效：docs/evidence/mainline-0213/README.md → companion-memories.png
+- 内部链接有效：docs/evidence/mainline-0213/README.md → rain-replay.png
+- 内部链接有效：docs/evidence/mainline-0213/README.md → verification.json
+- 内部链接有效：docs/evidence/mainline-0213/README.md → verification.json
+- 内部链接有效：docs/evidence/mainline-0213/README.md → ../device-acceptance/README.md
+- 内部链接有效：docs/evidence/mainline-0213/README.md → mainline_0213_probe_test.dart
 - 内部链接有效：docs/evidence/math-family/README.md → home.png
 - 内部链接有效：docs/evidence/math-family/README.md → chapter.png
 - 内部链接有效：docs/evidence/math-family/README.md → finished.png

@@ -1,0 +1,77 @@
+{
+  "before": {
+    "balance": 3,
+    "active": "cat",
+    "ledger_entries": 8,
+    "ledger_sha256": "b6e8c66212b4d50003c442bf98a31fa9c7910adcdaf9665a805f996a4549bcd7",
+    "progress": {
+      "rabbit": {
+        "level": 2,
+        "experience": 6
+      },
+      "cat": {
+        "level": 1,
+        "experience": 1
+      }
+    }
+  },
+  "after": {
+    "balance": 3,
+    "active": "cat",
+    "ledger_entries": 8,
+    "ledger_sha256": "b6e8c66212b4d50003c442bf98a31fa9c7910adcdaf9665a805f996a4549bcd7",
+    "progress": {
+      "rabbit": {
+        "level": 2,
+        "experience": 6
+      },
+      "cat": {
+        "level": 1,
+        "experience": 1
+      }
+    }
+  },
+  "replay": {
+    "run": 2,
+    "stamps": 0,
+    "stones": 1,
+    "cleared": true,
+    "challenge_solved": true
+  },
+  "restored_backup": {
+    "archive_sha256": "748edeeb9bc387387e88f9fc518c535f05483841f4dff9906044122b564ace9e",
+    "business_sha256": "2c723654714d2b3f104392c0d183983d51b9ff52dc763cff496ce7f5f6f76571",
+    "replay_run": 2,
+    "replay_stone": 1,
+    "windows_lit": true,
+    "shortcut_solved": true,
+    "active_bond": "默契",
+    "other_bond": "初见",
+    "accounting": {
+      "balance": 3,
+      "active": "cat",
+      "ledger_entries": 8,
+      "ledger_sha256": "b6e8c66212b4d50003c442bf98a31fa9c7910adcdaf9665a805f996a4549bcd7",
+      "progress": {
+        "rabbit": {
+          "level": 2,
+          "experience": 6
+        },
+        "cat": {
+          "level": 1,
+          "experience": 1
+        }
+      }
+    }
+  },
+  "observations": [
+    "团团通过小家的触摸和呼唤获得两件回忆，余额和两位伙伴的经验一致。",
+    "从正式家庭首页完成前章五次取叶嵌窗，返回小家后主线开放两章。",
+    "少石请求盖章、先点第3块都给可执行提示。第一段前两块分别在退出章节和重开同一 SQLite 家庭后保留。",
+    "四段各踩3块并手动盖印。第4印显示12块的团聚结局。",
+    "近路8块和10块均只能纠正。减回9块后桃桃过桥，出现近路结局。",
+    "重开后在成长的伙伴回忆看到两章、团团的两件回忆及四印地图，主线保留近路结局。",
+    "重玩第二轮第一块石板在重开后保留，原结局和近路已完成。全程保留3分、8条流水、团团1经验与桃桃6经验。",
+    "加密备份在独立测试档恢复后，两章结局、近路、重玩书签、亲密度及各自经验均读回。"
+  ]
+}
