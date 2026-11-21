@@ -1,5 +1,7 @@
 # 0.18 安卓应用更新
 
+当前家庭版的更新复测见 [0.21.2 安卓更新复测](../android-update-0212/README.md)。
+
 应用版本 `0.18.0+16`，Android release 构建提交 `4a54fb6cfb0337dcf57331a37b8a2e184037e98a`。APK 沿用原家庭版证书。首次从 GitHub 覆盖安装后，可在「家长入口 → 应用更新」检查下一版。[安卓 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.18.0-android.apk?raw=true) · [安装与授权](../../DELIVERY.md#app-内更新)
 
 公开 GitHub 仓库可匿名检查。当前 APK 在原私有分支发布。版本请求优先使用设备已配置的只读令牌，未配置时直接匿名查询。遇到仓库访问拒绝时提示本机录入。令牌仅发送给 GitHub API 同源请求，保存在设备安全存储中。文件下载完毕后才进入 SHA-256、包名、签名和递增版本校验。

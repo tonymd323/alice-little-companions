@@ -1,0 +1,61 @@
+{
+  "platform": "Android 9 x86_64 software emulator",
+  "airplane_mode": true,
+  "installation": "Android system package installer from Downloads",
+  "transfer": {
+    "source_file": "cache-handoff.apk",
+    "published_file": "alice-0.21.2-android.apk",
+    "size_bytes": 83250720,
+    "sha256": "a91fda73a0f1c65995f2dd9ac314f61c1fd2ebc290eb274474ee376941c0e017",
+    "signer_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+    "download_branch_commit": "d4b29d6960052cc555174ee83a612cee74797fcd"
+  },
+  "source_before": "772db06b8df394332a8aee1297ec05658ed5e66a",
+  "source_after": "ae09472607a72dcc1bad1ab6574cd4ef337f6873",
+  "before": {
+    "version_code": 20,
+    "version": "0.21.1",
+    "uid": 10067,
+    "first_install_time": "2026-11-19 00:29:54",
+    "apk_sha256": "6a3930f07ac58d7b5b257e9bc73a92ff9df47ea671d151cafd9644d3230e0979"
+  },
+  "after": {
+    "version_code": 21,
+    "version": "0.21.2",
+    "uid": 10067,
+    "first_install_time": "2026-11-19 00:29:54",
+    "apk_sha256": "a91fda73a0f1c65995f2dd9ac314f61c1fd2ebc290eb274474ee376941c0e017"
+  },
+  "retained_generation_sha256": "07f8f6f22b219d2474b440000a150b390590ac9b1ab0fbdc237f14e2b9d6fb34",
+  "business_rows_sha256": "201690cb2d6e13d06091ce7a6c6feaa694e48fe31da721876341e8a0aa3aaceb",
+  "business_tables": 30,
+  "retained_balance": 5,
+  "retained_pending": 1,
+  "retained_companions": [
+    [
+      "cat",
+      1,
+      0,
+      30
+    ],
+    [
+      "fox",
+      3,
+      16,
+      null
+    ]
+  ],
+  "retained_story": [
+    2,
+    1,
+    0,
+    1,
+    1
+  ],
+  "retained_wardrobe": [
+    [
+      "fox",
+      "accessory_scarf"
+    ]
+  ]
+}

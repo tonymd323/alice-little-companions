@@ -1,0 +1,4 @@
+00:00 +0: loading /workspace/scratch/alice-native-update-0212/widget/apps/mobile/test/published_update_0212_probe_test.dart
+00:00 +0: published signed APK streams through the family update flow and is reused after permission
+Shell: APK-UPDATE {"version_code":21,"apk_bytes":83250720,"sha256":"a91fda73a0f1c65995f2dd9ac314f61c1fd2ebc290eb274474ee376941c0e017","raw_api_headers_verified":true,"unauthenticated_prompt_verified":true,"apk_get_requests":1,"installer_channel_requests":2,"cache_reused_after_parent_unlock":true,"already_installed_version_ignored":true}
+00:25 +1: All tests passed!

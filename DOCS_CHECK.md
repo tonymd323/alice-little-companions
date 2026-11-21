@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1235 项通过。下面列出逐项结果。
+- 本次准备检查 1247 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -267,6 +267,18 @@
 - 内部链接有效：docs/evidence/M6/README.md → preflight.json
 - 内部链接有效：docs/evidence/M6/README.md → ../acceptance.csv
 - 内部链接有效：docs/evidence/M6/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/android-update-0212/README.md → ../backup-export-performance/github-download.json
+- 内部链接有效：docs/evidence/android-update-0212/README.md → published_update_0212_probe_test.dart
+- 内部链接有效：docs/evidence/android-update-0212/README.md → download-test.log
+- 内部链接有效：docs/evidence/android-update-0212/README.md → ../roundtrip-0212/verification.json
+- 内部链接有效：docs/evidence/android-update-0212/README.md → system-source-warning.png
+- 内部链接有效：docs/evidence/android-update-0212/README.md → system-update-confirmation.png
+- 内部链接有效：docs/evidence/android-update-0212/README.md → cold-after-system-install.png
+- 内部链接有效：docs/evidence/android-update-0212/README.md → system-update-result.json
+- 内部链接有效：docs/evidence/android-update-0212/README.md → update-page-0.21.1.png
+- 内部链接有效：docs/evidence/android-update-0212/README.md → update-page-0.21.2.png
+- 内部链接有效：docs/evidence/android-update-0212/README.md → ../device-acceptance/README.md
+- 内部链接有效：docs/evidence/android-updates/README.md → ../android-update-0212/README.md
 - 内部链接有效：docs/evidence/android-updates/README.md → ../../DELIVERY.md
 - 内部链接有效：docs/evidence/android-updates/README.md → analyze.log
 - 内部链接有效：docs/evidence/android-updates/README.md → flutter-tests.log
