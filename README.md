@@ -2,9 +2,9 @@
 
 2026-11-18　｜　交付基线 2.0　｜　iOS、iPadOS、Android
 
-安卓家庭候选版 **0.22.0+23** 增加每只伙伴独立的亲密度与糖果。0.18 及后续家庭版可在「家长入口 → 应用更新」检查并覆盖安装。也可以在手机浏览器登录 GitHub 后下载家庭包。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.22.0-android.apk?raw=true) · [应用更新说明](docs/DELIVERY.md#app-内更新) · [本轮测试](docs/evidence/affinity-0220/README.md)
+安卓家庭候选版 **0.23.0+24** 将经验和亲密度统一为进度条，并增加进化与亲密度徽章。0.18 及后续家庭版可在「家长入口 → 应用更新」检查并覆盖安装。也可以在手机浏览器登录 GitHub 后下载家庭包。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.23.0-android.apk?raw=true) · [应用更新说明](docs/DELIVERY.md#app-内更新) · [本轮测试](docs/evidence/achievements-0230/README.md)
 
-修好暖廊彩窗后，从小家的「主线」打开《奶油的雨天地图》。小家显示当前伙伴的亲密度，「成长」可看下一阶段、伙伴回忆和糖果。[家庭功能实测](docs/evidence/family-functions/README.md)
+修好暖廊彩窗后，从小家的「主线」打开《奶油的雨天地图》。小家显示当前伙伴的两条成长进度，「成长 → 成就」可切换查看各伙伴已获得的徽章。[家庭功能实测](docs/evidence/family-functions/README.md)
 
 伙伴步态和场景融稿继续按原画制作批次推进。奶油的固定镜头录像和桃桃的同机位基线已归档。[奶油步态](docs/evidence/fox-walk/README.md) · [桃桃基线](docs/evidence/rabbit-hop/README.md) · [开发计划](docs/PLAN.md)
 

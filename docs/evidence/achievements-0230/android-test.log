@@ -1,0 +1,8 @@
+Starting baseline
+Verified the existing offline 0.22.0 synthetic household and its 32 business tables.
+Starting upgrade
+The same-signed package is installed and its growth bars match the old save.
+The original signing identity covered 0.22.0. Progress and retroactive badges matched the old save with no database writes.
+Starting interact
+The cat reached the second affinity milestone by an in-app touch.
+The first touch unlocked the cat’s next milestone. A repeated touch and a cold restart preserved both pets’ independent achievements.
