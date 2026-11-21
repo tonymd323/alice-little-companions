@@ -12,9 +12,13 @@ import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/domain/pin.dart';
 import 'package:alice_companions/domain/rain_map.dart';
 import 'package:alice_companions/domain/window_page.dart';
+import 'package:alice_companions/features/garden.dart' show gardenTheme;
+import 'package:alice_companions/features/tasks.dart' show ApprovePage;
 import 'package:alice_companions/main.dart';
 import 'package:flutter/widgets.dart' show Size, SizedBox, ValueKey;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart'
+    show LinearProgressIndicator, MaterialApp, MediaQuery, TextScaler;
 import 'package:path/path.dart' as p;
 import 'package:sqlite3/sqlite3.dart';
 
@@ -107,7 +111,7 @@ void main() {
           service.recordCompanionMoment(Companion.cat, CompanionMoment.touch),
           service.recordCompanionMoment(Companion.cat, CompanionMoment.call),
         ]),
-        [true, false, true],
+        [1, null, 2],
       );
       expect((await service.overview())!.revision, first.revision + 2);
 
@@ -126,7 +130,7 @@ void main() {
           Companion.fox,
           CompanionMoment.touch,
         ),
-        isFalse,
+        isNull,
       );
       final progress = await service.companionProgress();
       expect(progress[Companion.fox]!.bond.value, 1);
@@ -639,6 +643,18 @@ void main() {
     await tester.runAsync(controller.refresh);
     await tester.pumpWidget(CompanionsApp(controller: controller));
     await tester.pump(const Duration(milliseconds: 80));
+    double? progress(String label) => tester
+        .widget<LinearProgressIndicator>(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is LinearProgressIndicator &&
+          (widget.semanticsLabel?.startsWith('$label ') ?? false),
+          ),
+        )
+        .value;
+    expect(find.text('0 / 3'), findsOneWidget);
+    expect(progress('经验'), 0);
+    expect(progress('亲密度 · 初见'), 0);
     await tester.runAsync(() => tester.tap(find.text('摸摸桃桃').hitTestable()));
     await tester.runAsync(() async {
       for (
@@ -651,7 +667,8 @@ void main() {
     });
     await tester.pump();
     expect(controller.family?.bond.label, '熟悉');
-    expect(find.text('亲密度 1 · 熟悉'), findsOneWidget);
+    expect(find.text('1 / 2'), findsOneWidget);
+    expect(progress('亲密度 · 熟悉'), .5);
     await tester.runAsync(() => tester.tap(find.text('过来').hitTestable()));
     await tester.runAsync(() async {
       for (
@@ -667,14 +684,76 @@ void main() {
     expect((controller.family?.balance, controller.family?.experience), (0, 0));
     await tester.tap(find.text('成长').hitTestable());
     await tester.pump(const Duration(milliseconds: 150));
-    expect(find.text('亲密度 2 · 默契'), findsOneWidget);
-    expect(find.text('距相伴还差 6'), findsOneWidget);
+    expect(find.text('2 / 8'), findsOneWidget);
+    expect(progress('亲密度 · 默契'), .25);
+    final revision = controller.family!.revision;
+    final semantics = tester.ensureSemantics();
+    try {
+      await tester.runAsync(() => tester.tap(find.text('成就').hitTestable()));
+      await tester.pump(const Duration(milliseconds: 400));
+      await waitFor(tester, find.text('2 / 9'));
+      expect(find.bySemanticsLabel('默契，亲密度 2 点，已获得'), findsOneWidget);
+      expect(find.bySemanticsLabel('小小成长，2 级，未获得'), findsOneWidget);
+    } finally {
+      semantics.dispose();
+    }
+    expect(controller.family!.revision, revision);
+    await tester.binding.handlePopRoute();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
     await tester.ensureVisible(find.text('伙伴回忆'));
     await tester.tap(find.text('伙伴回忆').hitTestable());
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('第一次摸摸桃桃'), findsOneWidget);
     expect(find.text('第一次叫桃桃过来'), findsOneWidget);
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('a real approval presents the earned evolution medal', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(360, 800);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final stock = (await tester.runAsync(TestFamily.create))!;
+    addTearDown(stock.dispose);
+    final service = stock.service;
+    final controller = FamilyController(stock.device, stock.rules)
+      ..service = service;
+    addTearDown(controller.dispose);
+    final task = (await tester.runAsync(() async {
+      final parent = await service.pin.unlock(TestFamily.pin);
+      controller.session = parent;
+      const draft = TaskDraft('测试成果', '', '测试标准', 'focus');
+      await service.backfill(draft, service.today, '', session: parent);
+      await service.backfill(draft, service.today, '', session: parent);
+      final draftResult = await service.publish(draft, session: parent);
+      final id = draftResult['instance_id'] as String;
+      await service.submit(id, '');
+      await controller.refresh();
+      return service.task(id);
+    }))!;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: gardenTheme(),
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            disableAnimations: true,
+            textScaler: const TextScaler.linear(1.3),
+          ),
+          child: child!,
+        ),
+        home: ApprovePage(controller: controller, task: task),
+      ),
+    );
+    final confirm = find.text('确认并入账 3 分');
+    await tester.ensureVisible(confirm);
+    await tester.runAsync(() => tester.tap(confirm.hitTestable()));
+    await waitFor(tester, find.text('获得「小小成长」徽章'));
+    expect((controller.family!.stage, controller.family!.experience), (2, 3));
+    expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
   });
 

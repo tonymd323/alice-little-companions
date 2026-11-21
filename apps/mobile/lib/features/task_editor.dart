@@ -148,6 +148,7 @@ class _PublishPageState extends State<PublishPage> {
         confirmed!['previous_stage'] as int,
         confirmed['stage'] as int,
         outfit: outfitFiles(widget.controller.outfit),
+        showBadge: true,
         receipt: '${draft.title} · +${confirmed['delta']} 分 · +1 经验',
       );
       if (!mounted) return;

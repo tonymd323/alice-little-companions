@@ -5,6 +5,7 @@ import '../application/family.dart';
 import '../domain/companions.dart';
 import 'common.dart';
 import 'garden.dart';
+import 'growth_bars.dart';
 
 class CompanionCollection extends StatefulWidget {
   const CompanionCollection({super.key, required this.controller});
@@ -99,8 +100,18 @@ class _CompanionCollectionState extends State<CompanionCollection> {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 if (state != null) ...[
-                  Text('${state.stage} 级 · ${state.experience} 经验'),
-                  Text(state.bond.summary),
+                  Text(
+                    '${state.stage} 级',
+                    style: const TextStyle(color: mutedInk),
+                  ),
+                  const SizedBox(height: 6),
+                  CompanionProgressBars(
+                    stage: state.stage,
+                    experience: state.experience,
+                    thresholds: service.rules.thresholds,
+                    bond: state.bond,
+                  ),
+                  const SizedBox(height: 6),
                 ],
                 if (current)
                   const Text('正在陪伴', style: TextStyle(color: mutedInk))

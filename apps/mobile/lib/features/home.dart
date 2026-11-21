@@ -4,16 +4,19 @@ import 'package:material_ui/material_ui.dart';
 
 import '../application/controller.dart';
 import '../application/family.dart';
+import '../domain/companion_badge.dart';
 import '../domain/companion_bond.dart';
 import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/pin.dart';
 import '../domain/rain_map.dart';
 import '../illustration/wind_sound.dart';
+import 'achievements.dart';
 import 'affinity_candy.dart';
 import 'common.dart';
 import 'companion_collection.dart';
 import 'garden.dart';
+import 'growth_bars.dart';
 import 'rain_map_chapter.dart';
 import 'rewards.dart';
 import 'spaces.dart';
@@ -69,9 +72,19 @@ class _FamilyHomeState extends State<FamilyHome> {
     final memory = (service, companion, moment);
     if (!_remembering.add(memory)) return;
     try {
-      final added = await service.recordCompanionMoment(companion, moment);
-      if (added && mounted && controller.service == service) {
+      final affinity = await service.recordCompanionMoment(companion, moment);
+      if (affinity != null && mounted && controller.service == service) {
         await controller.refresh();
+        final badge = CompanionBadge.affinityReached(
+          affinity - 1,
+          affinity,
+        ).firstOrNull;
+        if (badge != null &&
+            mounted &&
+            controller.family?.companion == companion &&
+            controller.service == service) {
+          showNotice(context, '获得「${badge.name}」徽章');
+        }
       }
     } on UserError catch (error) {
       if (mounted &&
@@ -366,13 +379,11 @@ class _FamilyHomeState extends State<FamilyHome> {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(18, 0, 18, 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _Experience(family, controller.rules.thresholds),
-              const SizedBox(height: 6),
-              Text(family.bond.summary, style: const TextStyle(color: ink)),
-            ],
+          child: CompanionProgressBars(
+            stage: family.stage,
+            experience: family.experience,
+            thresholds: controller.rules.thresholds,
+            bond: family.bond,
           ),
         ),
         Padding(
@@ -631,13 +642,23 @@ class GrowthPage extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        _Experience(family, controller.rules.thresholds),
-                        const SizedBox(height: 8),
-                        _BondProgress(family.bond),
+                        CompanionProgressBars(
+                          stage: family.stage,
+                          experience: family.experience,
+                          thresholds: controller.rules.thresholds,
+                          bond: family.bond,
+                        ),
                         const SizedBox(height: 8),
                         Wrap(
                           spacing: 8,
                           children: [
+                            OutlinedButton(
+                              onPressed: () => openPage(
+                                context,
+                                AchievementsPage(controller: controller),
+                              ),
+                              child: const Text('成就'),
+                            ),
                             OutlinedButton(
                               onPressed: () => openPage(
                                 context,
@@ -752,7 +773,7 @@ class _MemoriesPage extends StatelessWidget {
             children: [
               Text(pet, style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 8),
-              _BondProgress(family.bond),
+              AffinityProgressBar(family.bond),
               const SizedBox(height: 8),
               const Text('每天首次摸摸和呼唤各 +1', style: TextStyle(color: mutedInk)),
               for (final memory in memories)
@@ -772,69 +793,6 @@ class _MemoriesPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _BondProgress extends StatelessWidget {
-  const _BondProgress(this.bond);
-  final CompanionBond bond;
-
-  @override
-  Widget build(BuildContext context) {
-    final next = bond.next;
-    return Wrap(
-      spacing: 10,
-      runSpacing: 4,
-      children: [
-        Text(
-          bond.summary,
-          style: const TextStyle(color: ink, fontWeight: FontWeight.w600),
-        ),
-        if (next != null)
-          Text(
-            '距${next.label}还差 ${next.threshold - bond.value}',
-            style: const TextStyle(color: mutedInk),
-          ),
-      ],
-    );
-  }
-}
-
-class _Experience extends StatelessWidget {
-  const _Experience(this.family, this.thresholds);
-  final FamilyOverview family;
-  final List<int> thresholds;
-  @override
-  Widget build(BuildContext context) {
-    final next = family.stage <= thresholds.length
-        ? thresholds[family.stage - 1]
-        : null;
-    final prior = family.stage == 1 ? 0 : thresholds[family.stage - 2];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          next == null
-              ? '经验 ${family.experience} · 已到最终阶段'
-              : '经验 ${family.experience} · 距进化还差 ${next - family.experience}',
-          style: const TextStyle(color: ink, fontWeight: FontWeight.w600),
-        ),
-        if (next != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: LinearProgressIndicator(
-              value: ((family.experience - prior) / (next - prior)).clamp(
-                0.0,
-                1.0,
-              ),
-              minHeight: 4,
-              borderRadius: BorderRadius.circular(6),
-              color: terracotta,
-              backgroundColor: wheat,
-            ),
-          ),
-      ],
     );
   }
 }

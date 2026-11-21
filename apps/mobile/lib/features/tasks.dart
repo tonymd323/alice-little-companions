@@ -681,6 +681,7 @@ class _ApprovePageState extends State<ApprovePage> {
                   widget.controller.family!.companion,
                   result['previous_stage'] as int,
                   result['stage'] as int,
+                  showBadge: true,
                   receipt: [
                     widget.task.title,
                     '+${result['delta']} 分 · +1 经验',

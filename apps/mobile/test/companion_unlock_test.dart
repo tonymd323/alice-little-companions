@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:alice_companions/application/family.dart';
 import 'package:alice_companions/data/snapshot.dart';
+import 'package:alice_companions/domain/companion_badge.dart';
 import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/domain/pin.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -99,6 +100,13 @@ void main() {
     final progress = await restored.companionProgress();
     expect((progress[starter]!.experience, progress[starter]!.stage), (6, 2));
     expect((progress[newcomer]!.experience, progress[newcomer]!.stage), (2, 2));
+    final awards = CompanionBadge.evolutions.where(
+      (badge) => badge.isEarned(
+        stage: progress[newcomer]!.stage,
+        affinity: progress[newcomer]!.bond.value,
+      ),
+    );
+    expect(awards.map((badge) => badge.target), [2]);
     expect((await restored.overview())!.validCompletionCount, 8);
     await expectLater(
       restored.selectCompanion(Companion.rabbit),

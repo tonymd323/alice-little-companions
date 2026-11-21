@@ -2,10 +2,12 @@ import 'package:material_ui/material_ui.dart';
 
 import '../application/controller.dart';
 import '../application/family.dart';
+import '../domain/companion_badge.dart';
 import '../domain/companion_bond.dart';
 import '../domain/companions.dart';
 import 'common.dart';
 import 'garden.dart';
+import 'growth_bars.dart';
 
 class AffinityCandyPage extends StatefulWidget {
   const AffinityCandyPage({super.key, required this.controller});
@@ -50,9 +52,21 @@ class _AffinityCandyPageState extends State<AffinityCandyPage> {
       '确认喂食',
     );
     if (!confirmed || !mounted) return;
-    await service.feedAffinityCandy(id, pet);
+    final result = await service.feedAffinityCandy(id, pet);
     await reload();
-    if (mounted) showNotice(context, '${pet.nickname}的亲密度 +$affinity');
+    if (!mounted) return;
+    final before = result['previous_affinity'] as int?;
+    final gained = result['affinity'] as int;
+    final badges = before == null
+        ? ''
+        : CompanionBadge.affinityReached(
+            before,
+            before + gained,
+          ).map((badge) => '「${badge.name}」').join('、');
+    showNotice(
+      context,
+      '${pet.nickname}的亲密度 +$gained${badges.isEmpty ? '' : ' · 获得$badges徽章'}',
+    );
   }
 
   @override
@@ -100,7 +114,8 @@ class _AffinityCandyPageState extends State<AffinityCandyPage> {
                                 pet.nickname,
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
-                              Text(family.bond.summary),
+                              const SizedBox(height: 6),
+                              AffinityProgressBar(family.bond),
                             ],
                           ),
                         ),

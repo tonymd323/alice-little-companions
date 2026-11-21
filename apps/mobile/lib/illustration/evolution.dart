@@ -2,7 +2,9 @@ import 'dart:math' as math;
 
 import 'package:material_ui/material_ui.dart';
 
+import '../domain/companion_badge.dart';
 import '../domain/companions.dart';
+import 'achievement_medal.dart';
 import 'companion_motion.dart';
 import 'puppet.dart';
 import 'tailoring.dart';
@@ -14,6 +16,7 @@ Future<void> showEvolution(
   int to, {
   Map<String, String> outfit = const {},
   bool preview = false,
+  bool showBadge = false,
   String? receipt,
 }) => showDialog<void>(
   context: context,
@@ -28,6 +31,7 @@ Future<void> showEvolution(
         to: to,
         outfit: outfit,
         preview: preview,
+        badge: showBadge && !preview ? CompanionBadge.evolutions[to - 2] : null,
         receipt: receipt,
       ),
     ),
@@ -42,12 +46,14 @@ class EvolutionMoment extends StatefulWidget {
     required this.to,
     required this.outfit,
     this.preview = false,
+    this.badge,
     this.receipt,
   });
   final Companion pet;
   final int from, to;
   final Map<String, String> outfit;
   final bool preview;
+  final CompanionBadge? badge;
   final String? receipt;
   @override
   State<EvolutionMoment> createState() => _EvolutionMomentState();
@@ -119,6 +125,7 @@ class _EvolutionMomentState extends State<EvolutionMoment>
               animation: film,
               builder: (context, _) {
                 final t = film.value;
+                final badge = widget.badge;
                 final change = easeMotion(motionWindow(t, .43, .62)),
                     shine = pulse(t, .18, .83);
                 return Column(
@@ -225,6 +232,22 @@ class _EvolutionMomentState extends State<EvolutionMoment>
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(message, textAlign: TextAlign.center),
+                      ),
+                    if (t == 1 && badge != null)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 8,
+                          children: [
+                            AchievementMedal(badge, size: 32),
+                            Text(
+                              '获得「${badge.name}」徽章',
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),

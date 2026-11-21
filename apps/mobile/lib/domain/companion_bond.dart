@@ -6,7 +6,7 @@ enum CompanionMoment { touch, call }
 class CompanionBond {
   const CompanionBond(this.value);
 
-  static const _tiers = [
+  static const tiers = [
     (label: '初见', threshold: 0),
     (label: '熟悉', threshold: 1),
     (label: '默契', threshold: 2),
@@ -16,9 +16,8 @@ class CompanionBond {
 
   final int value;
 
-  String get label => _tiers.lastWhere((tier) => tier.threshold <= value).label;
-  String get summary => '亲密度 $value · $label';
+  String get label => tiers.lastWhere((tier) => tier.threshold <= value).label;
 
   ({String label, int threshold})? get next =>
-      _tiers.where((tier) => tier.threshold > value).firstOrNull;
+      tiers.where((tier) => tier.threshold > value).firstOrNull;
 }

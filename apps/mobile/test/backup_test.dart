@@ -9,6 +9,7 @@ import 'package:alice_companions/data/database.dart';
 import 'package:alice_companions/data/device.dart';
 import 'package:alice_companions/data/snapshot.dart';
 import 'package:alice_companions/domain/backup_codec.dart';
+import 'package:alice_companions/domain/companion_badge.dart';
 import 'package:alice_companions/domain/companion_bond.dart';
 import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/domain/pin.dart';
@@ -527,7 +528,7 @@ void main() {
         Companion.cat,
         CompanionMoment.touch,
       ),
-      isTrue,
+      3,
     );
     expect((await restored.overview())!.bond.value, 3);
     expect(
@@ -535,7 +536,7 @@ void main() {
         Companion.cat,
         CompanionMoment.touch,
       ),
-      isFalse,
+      isNull,
     );
     expect(await restored.ledger(), await service.ledger());
   }, timeout: const Timeout(Duration(minutes: 2)));
@@ -579,6 +580,11 @@ void main() {
       service.feedAffinityCandy(fed, Companion.cat),
     ]);
     expect(results.map((row) => row['affinity']), [3, 3]);
+    expect(results.map((row) => row['previous_affinity']), [0, 0]);
+    expect(CompanionBadge.affinityReached(0, 3).map((badge) => badge.name), [
+      '熟悉',
+      '默契',
+    ]);
     expect((await service.overview())!.bond.value, 3);
     expect(await service.ledger(), ledger);
     final quote = await service.correctionQuote(
@@ -633,6 +639,29 @@ void main() {
         progress[Companion.fox]!.experience,
       ),
       (0, 0),
+    );
+    final catalog = CompanionBadge.evolutions.followedBy(
+      CompanionBadge.affinities,
+    );
+    expect(
+      catalog
+          .where(
+            (badge) => badge.isEarned(
+              stage: progress[Companion.cat]!.stage,
+              affinity: progress[Companion.cat]!.bond.value,
+            ),
+          )
+          .map((badge) => badge.name),
+      ['小小成长', '熟悉', '默契'],
+    );
+    expect(
+      catalog.any(
+        (badge) => badge.isEarned(
+          stage: progress[Companion.fox]!.stage,
+          affinity: progress[Companion.fox]!.bond.value,
+        ),
+      ),
+      isFalse,
     );
     expect(await restored.availableAffinityCandy(), (
       id: held,

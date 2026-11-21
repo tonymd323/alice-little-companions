@@ -581,13 +581,14 @@ class FamilyService implements RainMapCommands {
         );
       });
 
-  Future<bool> recordCompanionMoment(
+  /// Returns the total after a new interaction, or null for a repeated one.
+  Future<int?> recordCompanionMoment(
     Companion companion,
     CompanionMoment moment,
   ) async {
     final day = today;
     final args = [companion.name, moment.name, day];
-    var added = false;
+    int? affinity;
     await _command('companion_moment', args, 'affinity/${args.join('/')}', (
       _,
       family,
@@ -608,10 +609,10 @@ class FamilyService implements RainMapCommands {
         'moment': moment.name,
         'local_day': day,
       });
-      added = true;
+      affinity = family.bond.value + 1;
       return {};
     });
-    return added;
+    return affinity;
   }
 
   Future<({WindowPage page, Set<int> pattern, bool started})>

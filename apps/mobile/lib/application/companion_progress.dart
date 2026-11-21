@@ -130,7 +130,10 @@ extension FamilyCompanions on FamilyService {
         ''',
           [companion.name, now, candyId],
         );
-        return {'affinity': candy['affinity']};
+        return {
+          'affinity': candy['affinity'],
+          'previous_affinity': family.bond.value,
+        };
       });
 
   Future<Json> selectCompanion(Companion companion, {String? commandId}) =>
