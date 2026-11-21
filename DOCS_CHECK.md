@@ -6,7 +6,7 @@
 - 18 项固定兑换和 3 种食物。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1334 项通过。下面列出逐项结果。
+- 本次准备检查 1350 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -20,7 +20,7 @@
 - 内部链接有效：AGENTS.md → docs/evidence/fox-walk/README.md
 - 内部链接有效：AGENTS.md → docs/DELIVERY.md
 - 内部链接有效：README.md → docs/DELIVERY.md
-- 内部链接有效：README.md → docs/evidence/achievements-0230/README.md
+- 内部链接有效：README.md → docs/evidence/feeding-0240/README.md
 - 内部链接有效：README.md → docs/evidence/family-functions/README.md
 - 内部链接有效：README.md → docs/evidence/fox-walk/README.md
 - 内部链接有效：README.md → docs/evidence/rabbit-hop/README.md
@@ -72,7 +72,7 @@
 - 内部链接有效：docs/DELIVERY.md → evidence/M5/README.md
 - 内部链接有效：docs/DELIVERY.md → OWNER_WALKTHROUGH.md
 - 内部链接有效：docs/DELIVERY.md → BACKUP_MIGRATION.md
-- 内部链接有效：docs/DELIVERY.md → evidence/achievements-0230/package.json
+- 内部链接有效：docs/DELIVERY.md → evidence/feeding-0240/package.json
 - 内部链接有效：docs/DELIVERY.md → evidence/device-acceptance/README.md
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/references/pet-stages.png
 - 内部链接有效：docs/DESIGN_SPEC.md → ../design/references/garden-color.png
@@ -149,6 +149,8 @@
 - 内部链接有效：docs/PLAN.md → evidence/affinity-0220/README.md
 - 内部链接有效：docs/PLAN.md → BACKUP_MIGRATION.md
 - 内部链接有效：docs/PLAN.md → evidence/achievements-0230/README.md
+- 内部链接有效：docs/PLAN.md → BACKUP_MIGRATION.md
+- 内部链接有效：docs/PLAN.md → evidence/feeding-0240/README.md
 - 内部链接有效：docs/PLAN.md → BACKUP_MIGRATION.md
 - 内部链接有效：docs/PLAN.md → evidence/task-performance/README.md
 - 内部链接有效：docs/PLAN.md → evidence/migration-return/README.md
@@ -630,6 +632,20 @@
 - 内部链接有效：docs/evidence/family-offline/README.md → ../backup-performance/README.md
 - 内部链接有效：docs/evidence/family-offline/backup-timing.md → timing-50m.log
 - 内部链接有效：docs/evidence/family-offline/backup-timing.md → backup_50m_benchmark_test.dart
+- 内部链接有效：docs/evidence/feeding-0240/README.md → ../../RULES.md
+- 内部链接有效：docs/evidence/feeding-0240/README.md → ../../OWNER_WALKTHROUGH.md
+- 内部链接有效：docs/evidence/feeding-0240/README.md → analyze.log
+- 内部链接有效：docs/evidence/feeding-0240/README.md → widget.log
+- 内部链接有效：docs/evidence/feeding-0240/README.md → flutter-tests.log
+- 内部链接有效：docs/evidence/feeding-0240/README.md → ../../BACKUP_MIGRATION.md
+- 内部链接有效：docs/evidence/feeding-0240/README.md → android-verification.json
+- 内部链接有效：docs/evidence/feeding-0240/README.md → shop.png
+- 内部链接有效：docs/evidence/feeding-0240/README.md → feeding-before.png
+- 内部链接有效：docs/evidence/feeding-0240/README.md → feeding-cold.png
+- 内部链接有效：docs/evidence/feeding-0240/README.md → android-test.log
+- 内部链接有效：docs/evidence/feeding-0240/README.md → package.json
+- 内部链接有效：docs/evidence/feeding-0240/README.md → github-download.json
+- 内部链接有效：docs/evidence/feeding-0240/README.md → ../../DELIVERY.md
 - 内部链接有效：docs/evidence/first-run-0213/README.md → environment.json
 - 内部链接有效：docs/evidence/first-run-0213/README.md → ../backup-ui-0213/github-download.json
 - 内部链接有效：docs/evidence/first-run-0213/README.md → first-home.png

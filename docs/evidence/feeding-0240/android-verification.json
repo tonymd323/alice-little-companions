@@ -1,0 +1,183 @@
+{
+  "androidSdk": 28,
+  "deviceType": "Android emulator",
+  "airplaneMode": true,
+  "beforeBuild": {
+    "version_code": 24,
+    "version": "0.23.0",
+    "uid": 10069,
+    "first_install_time": "2026-11-21 02:30:01",
+    "apk_sha256": "065d825ca371df4a3fdb1ac574f5c9dfb517bf757519f4bf469d60766b3c074d"
+  },
+  "afterBuild": {
+    "version_code": 25,
+    "version": "0.24.0",
+    "uid": 10069,
+    "first_install_time": "2026-11-21 02:30:01",
+    "apk_sha256": "7e606f12f970c74c9c82991e3b7155fda23e90700d7f4081a1ce070603f0acd9"
+  },
+  "before": {
+    "schema": 9,
+    "generation_sha256": "41a6c142527751d7369ae2711a3e88ae11004df064dac22ba27aa42abc8445ce",
+    "table_count": 32,
+    "business_tables_sha256": "426a5a9adfa9691737fa4f90b0d3d86d5b7c3190b703c379b21b5ef1b96ce2ee",
+    "purchase_index": "CREATE UNIQUE INDEX purchased_once ON purchases (item_id) WHERE refunded_at IS NULL AND item_id != 'affinity_candy'",
+    "ledger_sha256": "e5a83a2d4824841e561bc157f1092820a824bdd078ecd5d38d5174b1a6395962",
+    "ledger_count": 14,
+    "balance": 19,
+    "active_pet": "fox",
+    "experience": {
+      "cat": 0,
+      "fox": 11
+    },
+    "affinity": {
+      "cat": 0,
+      "fox": 3
+    },
+    "stock": {
+      "affinity_candy": 1
+    },
+    "fed": [
+      [
+        "affinity_candy",
+        "fox",
+        3
+      ]
+    ]
+  },
+  "upgraded": {
+    "schema": 10,
+    "generation_sha256": "41a6c142527751d7369ae2711a3e88ae11004df064dac22ba27aa42abc8445ce",
+    "table_count": 32,
+    "business_tables_sha256": "426a5a9adfa9691737fa4f90b0d3d86d5b7c3190b703c379b21b5ef1b96ce2ee",
+    "purchase_index": "CREATE UNIQUE INDEX purchased_once ON purchases (item_id) WHERE refunded_at IS NULL AND item_id NOT IN ('affinity_candy', 'affinity_cookie', 'affinity_pudding')",
+    "ledger_sha256": "e5a83a2d4824841e561bc157f1092820a824bdd078ecd5d38d5174b1a6395962",
+    "ledger_count": 14,
+    "balance": 19,
+    "active_pet": "fox",
+    "experience": {
+      "cat": 0,
+      "fox": 11
+    },
+    "affinity": {
+      "cat": 0,
+      "fox": 3
+    },
+    "stock": {
+      "affinity_candy": 1
+    },
+    "fed": [
+      [
+        "affinity_candy",
+        "fox",
+        3
+      ]
+    ]
+  },
+  "purchase": {
+    "schema": 10,
+    "generation_sha256": "41a6c142527751d7369ae2711a3e88ae11004df064dac22ba27aa42abc8445ce",
+    "table_count": 32,
+    "business_tables_sha256": "c0b736a4dc3919c0d8d44eb2dfcd9454b3758ec1aac0e1a01f275fade3a0a919",
+    "purchase_index": "CREATE UNIQUE INDEX purchased_once ON purchases (item_id) WHERE refunded_at IS NULL AND item_id NOT IN ('affinity_candy', 'affinity_cookie', 'affinity_pudding')",
+    "ledger_sha256": "ac14aa922027822f719053cccbf00813ea2fcfa76b43ebba7dd3b8d0284bceb5",
+    "ledger_count": 16,
+    "balance": 6,
+    "active_pet": "fox",
+    "experience": {
+      "cat": 0,
+      "fox": 11
+    },
+    "affinity": {
+      "cat": 0,
+      "fox": 3
+    },
+    "stock": {
+      "affinity_candy": 1,
+      "affinity_cookie": 1,
+      "affinity_pudding": 1
+    },
+    "fed": [
+      [
+        "affinity_candy",
+        "fox",
+        3
+      ]
+    ]
+  },
+  "foxFed": {
+    "schema": 10,
+    "generation_sha256": "41a6c142527751d7369ae2711a3e88ae11004df064dac22ba27aa42abc8445ce",
+    "table_count": 32,
+    "business_tables_sha256": "0f3932ddaa4ed48adcde34862ca71dd8857c5cd43d39af6459e3620898a3f356",
+    "purchase_index": "CREATE UNIQUE INDEX purchased_once ON purchases (item_id) WHERE refunded_at IS NULL AND item_id NOT IN ('affinity_candy', 'affinity_cookie', 'affinity_pudding')",
+    "ledger_sha256": "ac14aa922027822f719053cccbf00813ea2fcfa76b43ebba7dd3b8d0284bceb5",
+    "ledger_count": 16,
+    "balance": 6,
+    "active_pet": "fox",
+    "experience": {
+      "cat": 0,
+      "fox": 11
+    },
+    "affinity": {
+      "cat": 0,
+      "fox": 8
+    },
+    "stock": {
+      "affinity_candy": 1,
+      "affinity_pudding": 1
+    },
+    "fed": [
+      [
+        "affinity_candy",
+        "fox",
+        3
+      ],
+      [
+        "affinity_cookie",
+        "fox",
+        5
+      ]
+    ]
+  },
+  "catFed": {
+    "schema": 10,
+    "generation_sha256": "41a6c142527751d7369ae2711a3e88ae11004df064dac22ba27aa42abc8445ce",
+    "table_count": 32,
+    "business_tables_sha256": "d835205553ce2a4604dc509fd51ab58d75982fa8902d093aa0e28b76ec40aec1",
+    "purchase_index": "CREATE UNIQUE INDEX purchased_once ON purchases (item_id) WHERE refunded_at IS NULL AND item_id NOT IN ('affinity_candy', 'affinity_cookie', 'affinity_pudding')",
+    "ledger_sha256": "ac14aa922027822f719053cccbf00813ea2fcfa76b43ebba7dd3b8d0284bceb5",
+    "ledger_count": 16,
+    "balance": 6,
+    "active_pet": "cat",
+    "experience": {
+      "cat": 0,
+      "fox": 11
+    },
+    "affinity": {
+      "cat": 8,
+      "fox": 8
+    },
+    "stock": {
+      "affinity_candy": 1
+    },
+    "fed": [
+      [
+        "affinity_candy",
+        "fox",
+        3
+      ],
+      [
+        "affinity_cookie",
+        "fox",
+        5
+      ],
+      [
+        "affinity_pudding",
+        "cat",
+        8
+      ]
+    ]
+  },
+  "coldRestartMatches": true
+}

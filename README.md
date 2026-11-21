@@ -2,7 +2,7 @@
 
 2026-11-18　｜　交付基线 2.0　｜　iOS、iPadOS、Android
 
-安卓家庭候选版 **0.23.0+24** 将经验和亲密度统一为进度条，并增加进化与亲密度徽章。0.18 及后续家庭版可在「家长入口 → 应用更新」检查并覆盖安装。也可以在手机浏览器登录 GitHub 后下载家庭包。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.23.0-android.apk?raw=true) · [应用更新说明](docs/DELIVERY.md#app-内更新) · [本轮测试](docs/evidence/achievements-0230/README.md)
+安卓家庭候选版 **0.24.0+25** 在「成果兑换」加入糖果、饼干和布丁，可从「小家 → 喂食」给当前伙伴增加亲密度。0.18 及后续家庭版可在「家长入口 → 应用更新」检查并覆盖安装。也可以在手机浏览器登录 GitHub 后下载家庭包。[下载家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.24.0-android.apk?raw=true) · [应用更新说明](docs/DELIVERY.md#app-内更新) · [本轮测试](docs/evidence/feeding-0240/README.md)
 
 修好暖廊彩窗后，从小家的「主线」打开《奶油的雨天地图》。小家显示当前伙伴的两条成长进度，「成长 → 成就」可切换查看各伙伴已获得的徽章。[家庭功能实测](docs/evidence/family-functions/README.md)
 
