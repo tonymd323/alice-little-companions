@@ -1,0 +1,40 @@
+{
+  "schema": 9,
+  "generation_sha256": "9965002389df892122c957f9c6e0a82be6e6c5fefee370a695ee211f76e5e469",
+  "old_table_count": 30,
+  "old_tables_sha256": "b6acd9e9c0b458666e2bd16332fbb1a734233892bb0e852b64bb9c5a91dce974",
+  "all_tables_sha256": "94a4fe3f6951dfa78029491aac45bbfd15cee8cf3e01114de047ac6e59f28fe6",
+  "ledger_sha256": "5a602b439375bf89877c113ee0d400f95a03596b18256801817e5608819b687a",
+  "ledger_count": 21,
+  "balance": 2,
+  "pet": "fox",
+  "experience": {
+    "cat": 0,
+    "fox": 16
+  },
+  "memories": [
+    [
+      "cat",
+      "call"
+    ],
+    [
+      "fox",
+      "call"
+    ],
+    [
+      "fox",
+      "touch"
+    ]
+  ],
+  "starter_affinity": {
+    "cat": 1,
+    "fox": 2
+  },
+  "affinity": {
+    "cat": 1,
+    "fox": 4
+  },
+  "daily_credits": 2,
+  "candy_stock": 1,
+  "fed": []
+}
