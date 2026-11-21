@@ -12,3 +12,17 @@ PASS Node independently verified ALICEBK1 reference vector.
 Command: flutter build bundle --debug --target-platform ios --no-pub
 BLOCKED Target build_hooks failed: ProcessException: Failed to find "xcrun" in the search path.
 ON DEVICE NOT RUN: Swift Package linking, code signing, first launch, Files and Keychain.
+
+Source: 27c38ac41461720defcca73d848ca81cf1f18b32
+Candidate: 0.21.3+22, Flutter 3.50.0 / Dart 3.14.0, Linux x86_64
+PASS Flutter pub get --offline --enforce-lockfile
+PASS Locked cryptography_flutter 2.3.4 provides a Swift Package declaring iOS 13.0.
+PASS Locked file_picker_darwin 2.5.1 provides a Swift Package declaring iOS 14.0.
+PASS Locked flutter_secure_storage_darwin 0.4.3 provides a Swift Package declaring iOS 13.0.
+PASS Locked path_provider_foundation 2.6.0 is registered as a Dart-only platform implementation.
+PASS Runner iOS 16.0 and iPad device family in Debug, Profile, Release; four iPad orientations.
+PASS Backup extension declared; app storage exclusion and device-only Keychain configured in source.
+CHECK sqlite3 3.9.1 declares iOS arm64 device and arm64/x64 simulator artifacts.
+PASS Node independently verified ALICEBK1 reference vector.
+Missing Apple tools on this Linux host: xcodebuild, xcrun
+ON DEVICE NOT RUN: Swift Package linking, code signing, first launch, Files and Keychain.

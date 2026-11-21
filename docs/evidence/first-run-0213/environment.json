@@ -1,0 +1,17 @@
+{
+  "platform": "Android 9 x86_64 software emulator",
+  "airplane_mode": true,
+  "wifi": false,
+  "mobile_data": false,
+  "installed": {
+    "version_code": 22,
+    "version": "0.21.3",
+    "uid": 10069,
+    "first_install_time": "2026-11-21 01:10:40",
+    "apk_sha256": "92c12548303dd3cebfddb2f00be49f37681dfea85f25f09def4dcf0624629450"
+  },
+  "empty_store_before_onboarding": true,
+  "build_commit": "27c38ac41461720defcca73d848ca81cf1f18b32",
+  "download_branch_commit": "1750b2bf4ce80a55f0614fcda3128667ac4df2b9",
+  "signer_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05"
+}

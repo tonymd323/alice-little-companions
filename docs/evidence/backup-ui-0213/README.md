@@ -12,4 +12,6 @@ Flutter 3.50.0 锁定依赖解析和静态分析通过，80 项回归通过。�
 
 原私有下载分支提交 `1750b2b` 同时包含 APK、更新清单、SHA-256 和下载页链接。从独立 Git 副本取回 APK 与更新清单，逐字节匹配签名构建，并核对摘要及下载页版本。[下载 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.3-android.apk?raw=true) · [发布回执](github-download.json)
 
+同一 APK 已补测飞行模式首次建家、恢复密钥重设及冷启动后的 PIN 解锁。[首次建家实测](../first-run-0213/README.md)
+
 iPad 签名安装、真机私库授权更新及跨系统双向迁移仍待设备验收。两端采用同一构建提交。[设备验收](../device-acceptance/README.md)

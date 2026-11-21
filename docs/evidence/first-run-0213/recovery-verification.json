@@ -1,0 +1,11 @@
+{
+  "onboarding_requires_acknowledgment": true,
+  "reset_requires_acknowledgment": true,
+  "new_recovery_generated": true,
+  "issued_recovery_credential_tested_by_second_reset": true,
+  "old_pin_rejected": true,
+  "new_pin_unlocks_parent_after_cold_launch": true,
+  "retained_store_generation_sha256": "6940f0c9486828db1cc19293bb7866ce11067dc7407530430e03043c9f1ff59f",
+  "retained_business_rows_sha256": "0464ec88fd82d20fe40bc6d1ec297db368339828d21f75d74881eb92dc31de10",
+  "business_tables": 30
+}

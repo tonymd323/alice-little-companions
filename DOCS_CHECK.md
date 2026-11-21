@@ -6,7 +6,7 @@
 - 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1263 项通过。下面列出逐项结果。
+- 本次准备检查 1274 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -364,6 +364,7 @@
 - 内部链接有效：docs/evidence/backup-ui-0213/README.md → external-readback.json
 - 内部链接有效：docs/evidence/backup-ui-0213/README.md → independent-readback.json
 - 内部链接有效：docs/evidence/backup-ui-0213/README.md → github-download.json
+- 内部链接有效：docs/evidence/backup-ui-0213/README.md → ../first-run-0213/README.md
 - 内部链接有效：docs/evidence/backup-ui-0213/README.md → ../device-acceptance/README.md
 - 内部链接有效：docs/evidence/cat-walk/README.md → ../../../design/production/cat-walk/acting-rehearsal.mp4
 - 内部链接有效：docs/evidence/cat-walk/README.md → ../../../design/production/cat-walk/README.md
@@ -580,6 +581,16 @@
 - 内部链接有效：docs/evidence/family-offline/README.md → ../backup-performance/README.md
 - 内部链接有效：docs/evidence/family-offline/backup-timing.md → timing-50m.log
 - 内部链接有效：docs/evidence/family-offline/backup-timing.md → backup_50m_benchmark_test.dart
+- 内部链接有效：docs/evidence/first-run-0213/README.md → environment.json
+- 内部链接有效：docs/evidence/first-run-0213/README.md → ../backup-ui-0213/github-download.json
+- 内部链接有效：docs/evidence/first-run-0213/README.md → first-home.png
+- 内部链接有效：docs/evidence/first-run-0213/README.md → locked-companions.png
+- 内部链接有效：docs/evidence/first-run-0213/README.md → old-pin-rejected.png
+- 内部链接有效：docs/evidence/first-run-0213/README.md → recovery-verification.json
+- 内部链接有效：docs/evidence/first-run-0213/README.md → approval-receipt.png
+- 内部链接有效：docs/evidence/first-run-0213/README.md → locked-fox-preview.png
+- 内部链接有效：docs/evidence/first-run-0213/README.md → cold-after-preview.png
+- 内部链接有效：docs/evidence/first-run-0213/README.md → verification.json
 - 内部链接有效：docs/evidence/fox-walk/README.md → ../../../design/production/fox-walk/README.md
 - 内部链接有效：docs/evidence/fox-walk/README.md → ../../../design/production/fox-walk/acting-rehearsal.mp4
 - 内部链接有效：docs/evidence/fox-walk/README.md → three-walks.mp4

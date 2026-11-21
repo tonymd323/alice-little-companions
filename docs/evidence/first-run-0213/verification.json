@@ -1,0 +1,202 @@
+{
+  "initial_home": {
+    "generation_sha256": "6940f0c9486828db1cc19293bb7866ce11067dc7407530430e03043c9f1ff59f",
+    "all_business_rows_sha256": "0464ec88fd82d20fe40bc6d1ec297db368339828d21f75d74881eb92dc31de10",
+    "business_tables": 30,
+    "schema": 8,
+    "active": "cat",
+    "balance": 0,
+    "tasks": 0,
+    "pending": 0,
+    "valid_outcomes": 0,
+    "ledger_entries": 0,
+    "reconciled_ledger": true,
+    "companions": [
+      [
+        "cat",
+        1,
+        0,
+        null
+      ]
+    ],
+    "inventory": [],
+    "room_items": 0,
+    "state": "IDLE",
+    "external_receipt": null
+  },
+  "cold_after_reset": {
+    "generation_sha256": "6940f0c9486828db1cc19293bb7866ce11067dc7407530430e03043c9f1ff59f",
+    "all_business_rows_sha256": "0464ec88fd82d20fe40bc6d1ec297db368339828d21f75d74881eb92dc31de10",
+    "business_tables": 30,
+    "schema": 8,
+    "active": "cat",
+    "balance": 0,
+    "tasks": 0,
+    "pending": 0,
+    "valid_outcomes": 0,
+    "ledger_entries": 0,
+    "reconciled_ledger": true,
+    "companions": [
+      [
+        "cat",
+        1,
+        0,
+        null
+      ]
+    ],
+    "inventory": [],
+    "room_items": 0,
+    "state": "IDLE",
+    "external_receipt": null
+  },
+  "after_locked_partner_page": {
+    "generation_sha256": "6940f0c9486828db1cc19293bb7866ce11067dc7407530430e03043c9f1ff59f",
+    "all_business_rows_sha256": "0464ec88fd82d20fe40bc6d1ec297db368339828d21f75d74881eb92dc31de10",
+    "business_tables": 30,
+    "schema": 8,
+    "active": "cat",
+    "balance": 0,
+    "tasks": 0,
+    "pending": 0,
+    "valid_outcomes": 0,
+    "ledger_entries": 0,
+    "reconciled_ledger": true,
+    "companions": [
+      [
+        "cat",
+        1,
+        0,
+        null
+      ]
+    ],
+    "inventory": [],
+    "room_items": 0,
+    "state": "IDLE",
+    "external_receipt": null
+  },
+  "task_published": {
+    "generation_sha256": "6940f0c9486828db1cc19293bb7866ce11067dc7407530430e03043c9f1ff59f",
+    "all_business_rows_sha256": "0b1503dfb9f021e40aaee702f5e240ce95bc9dc98adbda42b5deac9239a14720",
+    "business_tables": 30,
+    "schema": 8,
+    "active": "cat",
+    "balance": 0,
+    "tasks": 1,
+    "pending": 0,
+    "valid_outcomes": 0,
+    "ledger_entries": 0,
+    "reconciled_ledger": true,
+    "companions": [
+      [
+        "cat",
+        1,
+        0,
+        null
+      ]
+    ],
+    "inventory": [],
+    "room_items": 0,
+    "state": "IDLE",
+    "external_receipt": null
+  },
+  "child_submitted": {
+    "generation_sha256": "6940f0c9486828db1cc19293bb7866ce11067dc7407530430e03043c9f1ff59f",
+    "all_business_rows_sha256": "415e58bd49676494bacedea95113d0e5da33f5e7d5556d4f85e6e19d4abd0912",
+    "business_tables": 30,
+    "schema": 8,
+    "active": "cat",
+    "balance": 0,
+    "tasks": 1,
+    "pending": 1,
+    "valid_outcomes": 0,
+    "ledger_entries": 0,
+    "reconciled_ledger": true,
+    "companions": [
+      [
+        "cat",
+        1,
+        0,
+        null
+      ]
+    ],
+    "inventory": [],
+    "room_items": 0,
+    "state": "IDLE",
+    "external_receipt": null
+  },
+  "parent_confirmed": {
+    "generation_sha256": "6940f0c9486828db1cc19293bb7866ce11067dc7407530430e03043c9f1ff59f",
+    "all_business_rows_sha256": "ceb4669ef878c46ec9b9e99c155860b7fc1df88db6a28d962e41b8af3d260d4e",
+    "business_tables": 30,
+    "schema": 8,
+    "active": "cat",
+    "balance": 2,
+    "tasks": 1,
+    "pending": 0,
+    "valid_outcomes": 1,
+    "ledger_entries": 1,
+    "reconciled_ledger": true,
+    "companions": [
+      [
+        "cat",
+        1,
+        1,
+        null
+      ]
+    ],
+    "inventory": [],
+    "room_items": 0,
+    "state": "IDLE",
+    "external_receipt": null
+  },
+  "after_appearance_preview": {
+    "generation_sha256": "6940f0c9486828db1cc19293bb7866ce11067dc7407530430e03043c9f1ff59f",
+    "all_business_rows_sha256": "ceb4669ef878c46ec9b9e99c155860b7fc1df88db6a28d962e41b8af3d260d4e",
+    "business_tables": 30,
+    "schema": 8,
+    "active": "cat",
+    "balance": 2,
+    "tasks": 1,
+    "pending": 0,
+    "valid_outcomes": 1,
+    "ledger_entries": 1,
+    "reconciled_ledger": true,
+    "companions": [
+      [
+        "cat",
+        1,
+        1,
+        null
+      ]
+    ],
+    "inventory": [],
+    "room_items": 0,
+    "state": "IDLE",
+    "external_receipt": null
+  },
+  "cold_after_preview": {
+    "generation_sha256": "6940f0c9486828db1cc19293bb7866ce11067dc7407530430e03043c9f1ff59f",
+    "all_business_rows_sha256": "ceb4669ef878c46ec9b9e99c155860b7fc1df88db6a28d962e41b8af3d260d4e",
+    "business_tables": 30,
+    "schema": 8,
+    "active": "cat",
+    "balance": 2,
+    "tasks": 1,
+    "pending": 0,
+    "valid_outcomes": 1,
+    "ledger_entries": 1,
+    "reconciled_ledger": true,
+    "companions": [
+      [
+        "cat",
+        1,
+        1,
+        null
+      ]
+    ],
+    "inventory": [],
+    "room_items": 0,
+    "state": "IDLE",
+    "external_receipt": null
+  }
+}
