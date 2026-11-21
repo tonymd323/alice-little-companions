@@ -166,11 +166,11 @@ extension FamilyEconomy on FamilyService {
   );
 
   Future<List<Json>> purchases() => db.rows('''
-    SELECT p.*, candy.pet_id AS fed_pet_id,
-      (candy.pet_id IS NULL AND NOT EXISTS(
+    SELECT p.*, food.pet_id AS fed_pet_id,
+      (food.pet_id IS NULL AND NOT EXISTS(
         SELECT 1 FROM owned_companions c WHERE c.purchase_id = p.id
       )) AS refundable
-    FROM purchases p LEFT JOIN companion_candies candy ON candy.purchase_id = p.id
+    FROM purchases p LEFT JOIN companion_candies food ON food.purchase_id = p.id
     ORDER BY p.rowid DESC
     ''');
   Future<List<Json>> items() =>
@@ -352,13 +352,13 @@ extension FamilyEconomy on FamilyService {
         null) {
       throw const UserError('解锁的伙伴会一直留在小家。');
     }
-    if (row['item_id'] == affinityCandyItemId &&
+    if (CompanionFood.forItem(row['item_id']) != null &&
         await db.value(
               'SELECT pet_id FROM companion_candies WHERE purchase_id = ?',
               [purchase],
             ) !=
             null) {
-      throw const UserError('已经喂掉的糖果无法退回。');
+      throw const UserError('已喂食的食物无法退回。');
     }
     final entitlementIds = 'SELECT id FROM entitlements WHERE purchase_id = ?';
     await db.customStatement(
@@ -423,8 +423,8 @@ extension FamilyEconomy on FamilyService {
     final related = await db.rows(
       '''
       SELECT p.* FROM purchases p JOIN ledger_entries l ON l.id = p.ledger_id
-      LEFT JOIN companion_candies candy ON candy.purchase_id = p.id
-      WHERE p.refunded_at IS NULL AND candy.pet_id IS NULL AND l.rowid >
+      LEFT JOIN companion_candies food ON food.purchase_id = p.id
+      WHERE p.refunded_at IS NULL AND food.pet_id IS NULL AND l.rowid >
         (SELECT rowid FROM ledger_entries WHERE source_key = ?)
         AND NOT EXISTS (SELECT 1 FROM owned_companions c WHERE c.purchase_id = p.id)
       ORDER BY l.rowid

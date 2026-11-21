@@ -3,10 +3,10 @@
 2026-11-18 开工基线。本检查读取文档、配置和交付素材；原生 App 的执行记录单独保存在验收执行表中。
 
 - 13 项产品需求、35 条业务规则、43 项原生验收用例。
-- 18 项可兑换商品。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
+- 18 项固定兑换和 3 种食物。20 个 Demo 素材已核验，正式素材状态 {'demo_candidate': 20, 'planned': 47, 'ready': 180}。
 - 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。
 - 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。
-- 本次准备检查 1332 项通过。下面列出逐项结果。
+- 本次准备检查 1334 项通过。下面列出逐项结果。
 
 ## 检查记录
 
@@ -111,6 +111,7 @@
 - 内部链接有效：docs/GAME_STUDIO.md → ../design/production/wind/audio/README.md
 - 内部链接有效：docs/GAME_STUDIO.md → ../.codex/config.toml
 - 内部链接有效：docs/OWNER_WALKTHROUGH.md → DELIVERY.md
+- 内部链接有效：docs/OWNER_WALKTHROUGH.md → BACKUP_MIGRATION.md
 - 内部链接有效：docs/OWNER_WALKTHROUGH.md → BACKUP_MIGRATION.md
 - 内部链接有效：docs/OWNER_WALKTHROUGH.md → DELIVERY.md
 - 内部链接有效：docs/OWNER_WALKTHROUGH.md → evidence/cat-walk/README.md
@@ -843,6 +844,7 @@
 - 成长阈值与阶段数一致
 - 每件有效成果给当前伙伴增加1经验
 - 伙伴解锁价格和运行配置一致
+- 食物定价与亲密度一致
 - 首次与核心写入无需服务器
 - 整套迁移与不合并账本一致
 - 备份格式参数一致

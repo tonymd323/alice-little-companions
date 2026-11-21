@@ -62,6 +62,7 @@ M0核对维护中的依赖版本与平台要求，锁定Flutter/Dart及pubspec.l
 | spaces / placements | 空间实例UUID、scene_id（含免费 base_room）、name、layout_version；物品实例ID、归一化x/y、rotation、flipped、z、使用挂点时的mount_id；同一活跃物品最多一个摆放位置 |
 | pet_state / growth_awards | `pet_state` 按伙伴和槽位保存穿戴。`growth_awards` 保留旧版阶段授予历史 |
 | owned_companions / companion_completions | 每个孩子只有一位无兑换记录的首宠。其余伙伴与支付流水和兑换记录关联，按伙伴保存历史最高等级。每件成果关联唯一获得经验的伙伴，有效成果数为该伙伴的经验 |
+| companion_affinity_days / companion_candies | 按伙伴保存每日有效的首次互动。每份食物用原兑换 ID 关联商品种类、实付积分和亲密度增量。喂食时在同一份库存记录保存伙伴与时间 |
 | wishes | child_id唯一、catalog_item_id、selected_price、selected_at |
 | processed_commands | command_id唯一、payload_hash、result_json、created_at；幂等回放 |
 | correction_records | 原记录、应收回、实收回、家长接受差额、说明 |

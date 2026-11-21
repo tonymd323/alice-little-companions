@@ -12784,7 +12784,7 @@ abstract class _$FamilyDatabase extends GeneratedDatabase {
   late final Purchases purchases = Purchases(this);
   late final Index purchasedOnce = Index(
     'purchased_once',
-    'CREATE UNIQUE INDEX purchased_once ON purchases (item_id) WHERE refunded_at IS NULL AND item_id != \'affinity_candy\'',
+    'CREATE UNIQUE INDEX purchased_once ON purchases (item_id) WHERE refunded_at IS NULL AND item_id NOT IN (\'affinity_candy\', \'affinity_cookie\', \'affinity_pudding\')',
   );
   late final Spaces spaces = Spaces(this);
   late final Entitlements entitlements = Entitlements(this);

@@ -26,6 +26,7 @@ check(r['penalty']['daily_actual_cap']==3 and not r['penalty']['allow_debt'],'�
 check(r['growth']['thresholds']==[3,10,20,35,55] and r['growth']['stage_count_including_initial']==6,'成长阈值与阶段数一致')
 check(r['growth'].get('metric')=='valid_parent_confirmed_completions' and r['growth'].get('experience_per_completion')==1 and r['growth'].get('shared_across_companions') is False,'每件有效成果给当前伙伴增加1经验')
 check(r['companions']['unlock_price']==30 and r==data('apps/mobile/assets/config/rules.json'),'伙伴解锁价格和运行配置一致')
+check(r['companions']['food']=={'candy': {'price':3,'affinity':3},'cookie': {'price':5,'affinity':5},'pudding': {'price':8,'affinity':8}},'食物定价与亲密度一致')
 check(r['offline']['first_run_supported'] and r['offline']['core_writes_supported'] and not r['offline']['server_required'],'首次与核心写入无需服务器')
 check(r['migration']['model']=='single_current_device' and not r['migration']['merge_supported'],'整套迁移与不合并账本一致')
 check(r['backup']['magic']=='ALICEBK1' and r['backup']['iterations']==600000 and r['backup']['tag_bytes']==16,'备份格式参数一致')
@@ -108,7 +109,7 @@ check(t['minimum_tap_target']>=48,'点击尺寸基线至少48')
 statuses=Counter(x['status'] for x in a['production_assets'])
 report=['# 开工包校验结果','','2026-11-18 开工基线。本检查读取文档、配置和交付素材；原生 App 的执行记录单独保存在验收执行表中。','',
         f'- {len(req)} 项产品需求、{len(rule)} 条业务规则、{len(ac)} 项原生验收用例。',
-        f'- {len(c["items"])} 项可兑换商品。{len(art)} 个 Demo 素材已核验，正式素材状态 {dict(statuses)}。',
+        f'- {len(c["items"])} 项固定兑换和 {len(r["companions"]["food"])} 种食物。{len(art)} 个 Demo 素材已核验，正式素材状态 {dict(statuses)}。',
         '- 已核对迁移样本 37 → 42，固定测试口令派生和备份容器摘要。',
         '- 网页 Demo 的模型回归已在发布提交重新运行，通过幂等、权限、余额和所有权断言。',
         f'- 本次准备检查 {len(checks)} 项通过。下面列出逐项结果。','','## 检查记录','']

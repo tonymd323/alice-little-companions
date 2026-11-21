@@ -7,7 +7,7 @@ import 'package:crypto/crypto.dart';
 import 'package:drift/native.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-import '../domain/companion_bond.dart';
+import '../domain/companion_food.dart';
 import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/pin.dart';
@@ -146,8 +146,13 @@ T _check<T>(
         )
         .map(
           (row) =>
-              version < affinitySchemaVersion && row['name'] == 'purchased_once'
-              ? {...row, 'sql': legacyPurchaseIndexSql}
+              version < foodSchemaVersion && row['name'] == 'purchased_once'
+              ? {
+                  ...row,
+                  'sql': version < affinitySchemaVersion
+                      ? legacyPurchaseIndexSql
+                      : candyPurchaseIndexSql,
+                }
               : row,
         )
         .toList();
@@ -219,10 +224,10 @@ T _check<T>(
             companion['pet_id'] as String,
           ),
     };
-    final candyPurchases = {
+    final foodPurchases = {
       if (version >= affinitySchemaVersion)
-        for (final candy in db.select('SELECT * FROM companion_candies'))
-          candy['purchase_id']: candy,
+        for (final food in db.select('SELECT * FROM companion_candies'))
+          food['purchase_id']: food,
     };
 
     var balance = 0;
@@ -346,16 +351,18 @@ T _check<T>(
         [purchase['id']],
       );
       final companion = companionPurchases[purchase['id']];
-      if (purchase['item_id'] == affinityCandyItemId) {
-        final candy = candyPurchases.remove(purchase['id']);
-        if (candy == null ||
-            candy['child_id'] != family['child_id'] ||
-            purchase['asset_id'] != affinityCandyItemId ||
-            (candy['pet_id'] != null && purchase['refunded_at'] != null) ||
+      final food = CompanionFood.forItem(purchase['item_id']);
+      if (food != null) {
+        final serving = foodPurchases.remove(purchase['id']);
+        if (serving == null ||
+            (version < foodSchemaVersion && food != CompanionFood.candy) ||
+            serving['child_id'] != family['child_id'] ||
+            purchase['asset_id'] != food.itemId ||
+            (serving['pet_id'] != null && purchase['refunded_at'] != null) ||
             owned.isNotEmpty ||
             spaces.isNotEmpty ||
             companion != null) {
-          throw const UserError('备份的亲密度糖果记录有误。');
+          throw const UserError('备份的食物记录有误。');
         }
         continue;
       }
@@ -397,8 +404,8 @@ T _check<T>(
         assets.add(part['asset_id'] as String);
       }
     }
-    if (candyPurchases.isNotEmpty) {
-      throw const UserError('备份的亲密度糖果关联有误。');
+    if (foodPurchases.isNotEmpty) {
+      throw const UserError('备份的食物关联有误。');
     }
     for (final row in db.select("""
       SELECT x.*, s.scene_id, e.asset_id, e.name FROM placements x

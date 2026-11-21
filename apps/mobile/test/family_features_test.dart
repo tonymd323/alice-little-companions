@@ -13,6 +13,7 @@ import 'package:alice_companions/domain/pin.dart';
 import 'package:alice_companions/domain/rain_map.dart';
 import 'package:alice_companions/domain/window_page.dart';
 import 'package:alice_companions/features/garden.dart' show gardenTheme;
+import 'package:alice_companions/features/home.dart' show FamilyHome;
 import 'package:alice_companions/features/tasks.dart' show ApprovePage;
 import 'package:alice_companions/main.dart';
 import 'package:flutter/widgets.dart' show Size, SizedBox, ValueKey;
@@ -709,6 +710,93 @@ void main() {
     expect(find.text('第一次叫桃桃过来'), findsOneWidget);
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets(
+    'home shop and feeding use the same stock at 360 px and large text',
+    (tester) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(360, 800);
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final stock = (await tester.runAsync(
+        () => TestFamily.create(pet: Companion.cat),
+      ))!;
+      addTearDown(stock.dispose);
+      final service = stock.service;
+      final controller = FamilyController(
+        stock.device,
+        stock.rules,
+        assets: assets,
+      )..service = service;
+      addTearDown(controller.dispose);
+      await tester.runAsync(() async {
+        final parent = await service.pin.unlock(TestFamily.pin);
+        for (var i = 0; i < 2; i++) {
+          await service.backfill(
+            const TaskDraft('测试任务A', '', '测试标准', 'challenge'),
+            service.today,
+            '',
+            session: parent,
+          );
+        }
+        await controller.refresh();
+      });
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: gardenTheme(),
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: const TextScaler.linear(1.3)),
+            child: child!,
+          ),
+          home: FamilyHome(controller: controller),
+        ),
+      );
+      Future<void> tap(String text) async {
+        final label = find.text(text).first;
+        await tester.ensureVisible(label);
+        await tester.runAsync(() => tester.tap(label.hitTestable()));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 400));
+      }
+
+      await tap('成果兑换');
+      await waitFor(tester, find.text('饼干'));
+      expect(find.text('糖果'), findsOneWidget);
+      expect(find.text('布丁'), findsOneWidget);
+      await tap('用 5 分兑换');
+      expect(find.text('兑换饼干？'), findsOneWidget);
+      await tap('确认兑换');
+      await waitFor(tester, find.text('已兑换饼干'));
+      expect(
+        (controller.family!.balance, controller.family!.bond.value),
+        (5, 0),
+      );
+
+      await tester.binding.handlePopRoute();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      await tap('喂食');
+      await waitFor(tester, find.text('饼干 × 1'));
+      await tap('喂饼干');
+      expect(find.text('喂给团团一份饼干？'), findsOneWidget);
+      await tap('确认喂食');
+      await waitFor(tester, find.text('还没有食物。'));
+      await waitFor(tester, find.textContaining('团团的亲密度 +5'));
+      expect(find.text('5 / 8'), findsOneWidget);
+      expect(
+        (controller.family!.balance, controller.family!.experience),
+        (5, 2),
+      );
+      await tap('去兑换食物');
+      await waitFor(tester, find.text('布丁'));
+      expect(find.text('食物'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 5));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
 
   testWidgets('a real approval presents the earned evolution medal', (
     tester,

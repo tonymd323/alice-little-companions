@@ -58,8 +58,11 @@
   },
   "companions": {
     "unlock_price": 30,
-    "affinity_candy_price": 3,
-    "affinity_per_candy": 3
+    "food": {
+      "candy": { "price": 3, "affinity": 3 },
+      "cookie": { "price": 5, "affinity": 5 },
+      "pudding": { "price": 8, "affinity": 8 }
+    }
   },
   "growth": {
     "thresholds": [

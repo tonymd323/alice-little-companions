@@ -12,9 +12,9 @@ import '../domain/pin.dart';
 import '../domain/rain_map.dart';
 import '../illustration/wind_sound.dart';
 import 'achievements.dart';
-import 'affinity_candy.dart';
 import 'common.dart';
 import 'companion_collection.dart';
+import 'feeding.dart';
 import 'garden.dart';
 import 'growth_bars.dart';
 import 'rain_map_chapter.dart';
@@ -413,6 +413,13 @@ class _FamilyHomeState extends State<FamilyHome> {
                 () => openPage(context, SpacesPage(controller: controller)),
               ),
               _WorkshopAction(
+                '喂食',
+                Icons.restaurant_rounded,
+                const Color(0xFFF1DBC0),
+                terracotta,
+                () => openPage(context, FeedingPage(controller: controller)),
+              ),
+              _WorkshopAction(
                 '成果兑换',
                 Icons.redeem_rounded,
                 const Color(0xFFE9DFE9),
@@ -662,9 +669,9 @@ class GrowthPage extends StatelessWidget {
                             OutlinedButton(
                               onPressed: () => openPage(
                                 context,
-                                AffinityCandyPage(controller: controller),
+                                FeedingPage(controller: controller),
                               ),
-                              child: const Text(affinityCandyName),
+                              child: const Text('喂食'),
                             ),
                             OutlinedButton(
                               onPressed: () => openPage(

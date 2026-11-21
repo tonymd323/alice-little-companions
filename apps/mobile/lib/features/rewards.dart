@@ -2,12 +2,12 @@ import 'package:material_ui/material_ui.dart';
 
 import '../application/controller.dart';
 import '../application/family.dart';
-import '../domain/companion_bond.dart';
+import '../domain/companion_food.dart';
 import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/rules.dart';
-import 'affinity_candy.dart';
 import 'common.dart';
+import 'food_card.dart';
 import 'garden.dart';
 import 'parent_access.dart';
 import 'spaces.dart';
@@ -23,6 +23,7 @@ const _tiers = {
 
 enum CatalogSection {
   all('成果兑换'),
+  food('食物'),
   furniture('家具图册'),
   clothes('衣服与配饰');
 
@@ -46,11 +47,15 @@ class CatalogPage extends StatefulWidget {
 }
 
 class _CatalogPageState extends State<CatalogPage> {
-  late Future<List<Json>> history = widget.controller.service!.purchases();
+  late Future<List<Json>> history = loadHistory();
+
+  Future<List<Json>> loadHistory() => widget.section == CatalogSection.food
+      ? Future.value(const [])
+      : widget.controller.service!.purchases();
 
   void reloadHistory() {
     if (!mounted) return;
-    final purchases = widget.controller.service!.purchases();
+    final purchases = loadHistory();
     setState(() {
       history = purchases;
     });
@@ -68,7 +73,7 @@ class _CatalogPageState extends State<CatalogPage> {
         ],
       ),
       body: PageBody(
-        maxWidth: 1050,
+        maxWidth: widget.section == CatalogSection.food ? 520 : 1050,
         child: FutureBuilder(
           future: history,
           builder: (context, snapshot) {
@@ -79,47 +84,44 @@ class _CatalogPageState extends State<CatalogPage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
-            final groups = widget.section == CatalogSection.all
-                ? _tiers
-                : widget.section == CatalogSection.clothes
-                ? {'single': '衣服', 'accessory': '配饰'}
-                : {
-                    'single': '家具',
-                    'small': '窗边小物',
-                    'bundle': '主题套装',
-                    'zone': '功能区',
-                    'shop': '店铺',
-                  };
+            final groups = switch (widget.section) {
+              CatalogSection.all => _tiers,
+              CatalogSection.food => const <String, String>{},
+              CatalogSection.clothes => const {
+                'single': '衣服',
+                'accessory': '配饰',
+              },
+              CatalogSection.furniture => const {
+                'single': '家具',
+                'small': '窗边小物',
+                'bundle': '主题套装',
+                'zone': '功能区',
+                'shop': '店铺',
+              },
+            };
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Wrap(
-                  spacing: 8,
-                  children: [
-                    if (widget.section == CatalogSection.all)
-                      OutlinedButton(
-                        onPressed: () async {
-                          await openPage(
-                            context,
-                            AffinityCandyPage(controller: widget.controller),
-                          );
-                          reloadHistory();
-                        },
-                        child: const Text(affinityCandyName),
-                      ),
-                    OutlinedButton.icon(
-                      onPressed: () async {
-                        await openPage(
-                          context,
-                          PurchaseHistoryPage(controller: widget.controller),
-                        );
-                        reloadHistory();
-                      },
-                      label: const Text('我的兑换'),
-                      icon: const Icon(Icons.inventory_2_outlined),
-                    ),
-                  ],
+                OutlinedButton.icon(
+                  onPressed: () async {
+                    await openPage(
+                      context,
+                      PurchaseHistoryPage(controller: widget.controller),
+                    );
+                    if (widget.section != CatalogSection.food) reloadHistory();
+                  },
+                  label: const Text('我的兑换'),
+                  icon: const Icon(Icons.inventory_2_outlined),
                 ),
+                if (widget.section == CatalogSection.all ||
+                    widget.section == CatalogSection.food) ...[
+                  if (widget.section == CatalogSection.all) ...[
+                    const SizedBox(height: 18),
+                    Text('食物', style: Theme.of(context).textTheme.titleLarge),
+                  ],
+                  const SizedBox(height: 10),
+                  _FoodShelf(controller: widget.controller),
+                ],
                 for (final tier in groups.entries) ...[
                   const SizedBox(height: 18),
                   Text(
@@ -178,6 +180,53 @@ class _CatalogPageState extends State<CatalogPage> {
         ),
       ),
     ),
+  );
+}
+
+class _FoodShelf extends StatelessWidget {
+  const _FoodShelf({required this.controller});
+
+  final FamilyController controller;
+
+  Future<void> redeem(
+    BuildContext context,
+    CompanionFood food,
+    FoodOffer offer,
+  ) async {
+    final remaining = controller.family!.balance - offer.price;
+    final confirmed = await confirmChoice(
+      context,
+      '兑换${food.label}？',
+      '花费 ${offer.price} 分，兑换后剩余 $remaining 分。喂食后亲密度 +${offer.affinity}。',
+      '确认兑换',
+    );
+    if (!confirmed || !context.mounted) return;
+    await controller.service!.redeemFood(food);
+    await controller.refresh();
+    if (context.mounted) showNotice(context, '已兑换${food.label}');
+  }
+
+  @override
+  Widget build(BuildContext context) => Column(
+    children: [
+      for (final MapEntry(key: food, value: offer)
+          in controller.rules.foodOffers.entries)
+        Padding(
+          key: ValueKey(food),
+          padding: const EdgeInsets.only(bottom: 8),
+          child: FoodCard(
+            food: food,
+            affinity: offer.affinity,
+            action: ActionButton(
+              label: '用 ${offer.price} 分兑换',
+              enabled:
+                  !controller.service!.frozen &&
+                  controller.family!.balance >= offer.price,
+              action: () => redeem(context, food, offer),
+            ),
+          ),
+        ),
+    ],
   );
 }
 
@@ -554,7 +603,8 @@ class _PurchaseHistoryPageState extends State<PurchaseHistoryPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          row['name'] as String,
+                          CompanionFood.forItem(row['item_id'])?.label ??
+                              row['name'] as String,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         Text(
@@ -569,11 +619,14 @@ class _PurchaseHistoryPageState extends State<PurchaseHistoryPage> {
                               label: widget.parent ? '退回误购' : '撤销兑换',
                               outlined: true,
                               action: () async {
+                                final food = CompanionFood.forItem(
+                                  row['item_id'],
+                                );
                                 final ok = await confirmChoice(
                                   context,
-                                  '退回${row['name']}？',
-                                  row['item_id'] == affinityCandyItemId
-                                      ? '收回一颗糖果，返还原付积分。'
+                                  '退回${food?.label ?? row['name']}？',
+                                  food != null
+                                      ? '收回一份${food.label}，返还原付积分。'
                                       : '返还原付积分。此成果附带的物品将收回，另购物品保留。',
                                   '确认退回',
                                 );

@@ -163,7 +163,7 @@ CREATE TABLE purchases (
   asset_id TEXT NOT NULL
 );
 
-CREATE UNIQUE INDEX purchased_once ON purchases(item_id) WHERE refunded_at IS NULL AND item_id != 'affinity_candy';
+CREATE UNIQUE INDEX purchased_once ON purchases(item_id) WHERE refunded_at IS NULL AND item_id NOT IN ('affinity_candy', 'affinity_cookie', 'affinity_pudding');
 
 CREATE TABLE spaces (
   id TEXT NOT NULL PRIMARY KEY,

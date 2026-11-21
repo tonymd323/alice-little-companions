@@ -1,6 +1,3 @@
-const affinityCandyItemId = 'affinity_candy';
-const affinityCandyName = '亲密度糖果';
-
 enum CompanionMoment { touch, call }
 
 class CompanionBond {

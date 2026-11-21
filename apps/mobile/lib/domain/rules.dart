@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'companion_food.dart';
 import 'companions.dart';
 import 'pin.dart';
 
 typedef Json = Map<String, Object?>;
+typedef FoodOffer = ({int price, int affinity});
 
 class TaskType {
   const TaskType(this.id, this.label, this.points);
@@ -33,10 +35,12 @@ class Rules {
       weeklyReference = rules['weekly_pricing_reference'] as int,
       companionUnlockPrice =
           (rules['companions'] as Json)['unlock_price'] as int,
-      affinityCandyPrice =
-          (rules['companions'] as Json)['affinity_candy_price'] as int,
-      affinityPerCandy =
-          (rules['companions'] as Json)['affinity_per_candy'] as int,
+      foodOffers = Map.unmodifiable({
+        for (final food in CompanionFood.values)
+          food: _foodOffer(
+            ((rules['companions'] as Json)['food'] as Json)[food.name] as Json,
+          ),
+      }),
       maxPerDay = rules['max_instances_per_day_per_template'] as int,
       penaltyCap = (rules['penalty'] as Json)['daily_actual_cap'] as int,
       catalogVersion = catalog['catalog_version'] as String,
@@ -64,8 +68,7 @@ class Rules {
   final int pinIterations;
   final int weeklyReference;
   final int companionUnlockPrice;
-  final int affinityCandyPrice;
-  final int affinityPerCandy;
+  final Map<CompanionFood, FoodOffer> foodOffers;
   final int maxPerDay;
   final int penaltyCap;
   final String catalogVersion;
@@ -83,6 +86,9 @@ class Rules {
 
   Companion companion(String id) => Companion.values.byName(id);
 }
+
+FoodOffer _foodOffer(Json row) =>
+    (price: row['price'] as int, affinity: row['affinity'] as int);
 
 String dateKey(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';

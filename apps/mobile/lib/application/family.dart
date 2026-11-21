@@ -9,6 +9,7 @@ import '../data/database.dart';
 import '../data/device.dart';
 import '../data/snapshot.dart';
 import '../domain/companion_bond.dart';
+import '../domain/companion_food.dart';
 import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/pin.dart';

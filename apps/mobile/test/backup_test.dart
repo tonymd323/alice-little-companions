@@ -11,6 +11,7 @@ import 'package:alice_companions/data/snapshot.dart';
 import 'package:alice_companions/domain/backup_codec.dart';
 import 'package:alice_companions/domain/companion_badge.dart';
 import 'package:alice_companions/domain/companion_bond.dart';
+import 'package:alice_companions/domain/companion_food.dart';
 import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/domain/pin.dart';
 import 'package:alice_companions/domain/rules.dart';
@@ -541,82 +542,290 @@ void main() {
     expect(await restored.ledger(), await service.ledger());
   }, timeout: const Timeout(Duration(minutes: 2)));
 
-  test('candy transactions and an encrypted restore keep stock and affinity separate', () async {
-    final stock = await TestFamily.create(pet: Companion.cat);
-    addTearDown(stock.dispose);
-    final service = stock.service;
-    final parent = await service.pin.unlock(TestFamily.pin);
-    await fails(service.redeemAffinityCandy());
-    final last = await service.backfill(
-      const TaskDraft('测试奖励', '', '测试标准', 'challenge'),
-      service.today,
-      '',
-      session: parent,
-    );
-    for (var index = 0; index < 7; index++) {
-      await service.backfill(
-        const TaskDraft('测试任务A', '', '测试标准', 'challenge'),
+  test(
+    'a v9 candy backup restores stock, affinity and idempotent receipts',
+    () async {
+      final stock = await TestFamily.create(pet: Companion.cat);
+      addTearDown(stock.dispose);
+      final service = stock.service;
+      final parent = await service.pin.unlock(TestFamily.pin);
+      await fails(service.redeemFood(CompanionFood.candy));
+      final last = await service.backfill(
+        const TaskDraft('测试奖励', '', '测试标准', 'challenge'),
         service.today,
         '',
         session: parent,
       );
+      for (var index = 0; index < 7; index++) {
+        await service.backfill(
+          const TaskDraft('测试任务A', '', '测试标准', 'challenge'),
+          service.today,
+          '',
+          session: parent,
+        );
+      }
+      await service.unlockCompanion(Companion.fox);
+      final repeated = await Future.wait([
+        service.redeemFood(CompanionFood.candy, commandId: 'test-candy-once'),
+        service.redeemFood(CompanionFood.candy, commandId: 'test-candy-once'),
+      ]);
+      expect(repeated.first, repeated.last);
+      final fed = repeated.first['id'] as String;
+      final held =
+          (await service.redeemFood(CompanionFood.candy))['id'] as String;
+      final cancelled =
+          (await service.redeemFood(CompanionFood.candy))['id'] as String;
+      expect((await service.availableFood())[CompanionFood.candy]?.count, 3);
+      expect((await service.overview())!.balance, 1);
+      await fails(service.redeemFood(CompanionFood.candy));
+      await fails(service.feedFood(fed, Companion.fox));
+      final ledger = await service.ledger();
+      final results = await Future.wait([
+        service.feedFood(fed, Companion.cat),
+        service.feedFood(fed, Companion.cat),
+      ]);
+      expect(results.map((row) => row['affinity']), [3, 3]);
+      expect(results.map((row) => row['previous_affinity']), [0, 0]);
+      expect(CompanionBadge.affinityReached(0, 3).map((badge) => badge.name), [
+        '熟悉',
+        '默契',
+      ]);
+      expect((await service.overview())!.bond.value, 3);
+      expect(await service.ledger(), ledger);
+      final quote = await service.correctionQuote(
+        last['instance_id'] as String,
+        [],
+        parent,
+      );
+      expect(
+        quote.related.map((row) => row['id']),
+        unorderedEquals([held, cancelled]),
+      );
+      await fails(service.refund(fed, session: parent));
+      await service.refund(cancelled);
+      expect((await service.availableFood())[CompanionFood.candy]?.id, held);
+      expect((await service.overview())!.balance, 4);
+      await service.selectCompanion(Companion.fox);
+      expect((await service.overview())!.bond.value, 0);
+
+      final outgoing = transfers(stock);
+      final ticket = await outgoing.prepareExport('backup', password, parent);
+      await outgoing.finishExport(ticket, SaveOutcome.handedToSystem);
+      final incoming = TransferService(
+        device: DeviceStore(
+          Directory(p.join(stock.root.path, 'candy-target')),
+          MemorySecureValues(),
+        ),
+        rules: stock.rules,
+        availableAssets: assets,
+        current: () => null,
+      );
+      final current = await incoming.inspect(ticket.file, password, null);
+      addTearDown(current.close);
+      final oldDb = await current.database.copy(
+        p.join(stock.root.path, 'v9.sqlite'),
+      );
+      final sql = sqlite3.open(oldDb.path);
+      try {
+        sql.execute('''
+        UPDATE purchases SET name = '亲密度糖果' WHERE item_id = 'affinity_candy';
+        DROP INDEX purchased_once;
+        $candyPurchaseIndexSql;
+        PRAGMA user_version = 9;
+        ''');
+      } finally {
+        sql.close();
+      }
+      final schema = await expectedSchema();
+      final oldInfo = await checkSnapshot(
+        oldDb.path,
+        schema,
+        stock.rules,
+        assets,
+      );
+      final archive = File(p.join(stock.root.path, 'v9.alicebackup'));
+      await codec.write(
+        oldDb,
+        {...current.manifest, 'schema_version': 9, 'summary': oldInfo.summary},
+        password,
+        archive,
+      );
+      final preview = await incoming.inspect(archive, password, null);
+      addTearDown(preview.close);
+      final restored = (await incoming.activate(
+        preview,
+        pin,
+        PinGate.newRecoveryCode(),
+        session: null,
+        replace: false,
+      )).service;
+      addTearDown(restored.close);
+      final upgraded = await checkSnapshot(
+        incoming.device.databaseFile(restored.pin.generation).path,
+        schema,
+        stock.rules,
+        assets,
+        compareWithSchemaVersion: 9,
+      );
+      expect(upgraded.schemaVersion, foodSchemaVersion);
+      expect(upgraded.businessDigest, oldInfo.businessDigest);
+      final progress = await restored.companionProgress();
+      expect(
+        (
+          progress[Companion.cat]!.bond.value,
+          progress[Companion.cat]!.experience,
+        ),
+        (3, 8),
+      );
+      expect(
+        (
+          progress[Companion.fox]!.bond.value,
+          progress[Companion.fox]!.experience,
+        ),
+        (0, 0),
+      );
+      final catalog = CompanionBadge.evolutions.followedBy(
+        CompanionBadge.affinities,
+      );
+      expect(
+        catalog
+            .where(
+              (badge) => badge.isEarned(
+                stage: progress[Companion.cat]!.stage,
+                affinity: progress[Companion.cat]!.bond.value,
+              ),
+            )
+            .map((badge) => badge.name),
+        ['小小成长', '熟悉', '默契'],
+      );
+      expect(
+        catalog.any(
+          (badge) => badge.isEarned(
+            stage: progress[Companion.fox]!.stage,
+            affinity: progress[Companion.fox]!.bond.value,
+          ),
+        ),
+        isFalse,
+      );
+      expect(await restored.availableFood(), {
+        CompanionFood.candy: (id: held, affinity: 3, count: 1),
+      });
+      expect(
+        await restored.redeemFood(
+          CompanionFood.candy,
+          commandId: 'test-candy-once',
+        ),
+        repeated.first,
+      );
+      expect(await restored.feedFood(fed, Companion.cat), results.first);
+      expect(await restored.ledger(), await service.ledger());
+      await restored.feedFood(held, Companion.fox);
+      expect((await restored.overview())!.bond.value, 3);
+      expect(await restored.availableFood(), isEmpty);
+      expect(await restored.ledger(), await service.ledger());
+    },
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
+
+  test('mixed food stock supports repeats, feeding, corrections and encrypted restore', () async {
+    final fixture = await TestFamily.create(pet: Companion.cat);
+    addTearDown(fixture.dispose);
+    final service = fixture.service;
+    final parent = await service.pin.unlock(TestFamily.pin);
+    Future<Json> grant() => service.backfill(
+      const TaskDraft('测试任务A', '', '测试标准', 'challenge'),
+      service.today,
+      '',
+      session: parent,
+    );
+    for (var index = 0; index < 13; index++) {
+      await grant();
     }
+    final award = (await grant())['instance_id'] as String;
     await service.unlockCompanion(Companion.fox);
+    Future<String> buy(CompanionFood food) async =>
+        (await service.redeemFood(food))['id'] as String;
+
+    final candy = await buy(CompanionFood.candy);
     final repeated = await Future.wait([
-      service.redeemAffinityCandy(commandId: 'test-candy-once'),
-      service.redeemAffinityCandy(commandId: 'test-candy-once'),
+      service.redeemFood(CompanionFood.cookie, commandId: 'cookie-repeat'),
+      service.redeemFood(CompanionFood.cookie, commandId: 'cookie-repeat'),
     ]);
     expect(repeated.first, repeated.last);
-    final fed = repeated.first['id'] as String;
-    final held = (await service.redeemAffinityCandy())['id'] as String;
-    final cancelled = (await service.redeemAffinityCandy())['id'] as String;
-    expect((await service.availableAffinityCandy())?.count, 3);
-    expect((await service.overview())!.balance, 1);
-    await fails(service.redeemAffinityCandy());
-    await fails(service.feedAffinityCandy(fed, Companion.fox));
+    await fails(
+      service.redeemFood(CompanionFood.pudding, commandId: 'cookie-repeat'),
+    );
+    final cookie = repeated.first['id'] as String;
+    final heldCookie = await buy(CompanionFood.cookie);
+    final pudding = await buy(CompanionFood.pudding);
+    final refunded = await buy(CompanionFood.pudding);
+    final corrected = await buy(CompanionFood.pudding);
+    expect(await service.availableFood(), {
+      CompanionFood.candy: (id: candy, affinity: 3, count: 1),
+      CompanionFood.cookie: (id: cookie, affinity: 5, count: 2),
+      CompanionFood.pudding: (id: pudding, affinity: 8, count: 3),
+    });
+    expect((await service.overview())!.balance, 3);
+    await fails(service.redeemFood(CompanionFood.cookie));
     final ledger = await service.ledger();
-    final results = await Future.wait([
-      service.feedAffinityCandy(fed, Companion.cat),
-      service.feedAffinityCandy(fed, Companion.cat),
+    await service.feedFood(cookie, Companion.cat);
+    await service.selectCompanion(Companion.fox);
+    final servings = await Future.wait([
+      service.feedFood(pudding, Companion.fox),
+      service.feedFood(pudding, Companion.fox),
     ]);
-    expect(results.map((row) => row['affinity']), [3, 3]);
-    expect(results.map((row) => row['previous_affinity']), [0, 0]);
-    expect(CompanionBadge.affinityReached(0, 3).map((badge) => badge.name), [
-      '熟悉',
-      '默契',
-    ]);
-    expect((await service.overview())!.bond.value, 3);
-    expect(await service.ledger(), ledger);
-    final quote = await service.correctionQuote(
-      last['instance_id'] as String,
-      [],
-      parent,
+    expect(servings.map((row) => row['affinity']), [8, 8]);
+    var progress = await service.companionProgress();
+    expect(
+      (
+        progress[Companion.cat]!.bond.value,
+        progress[Companion.cat]!.experience,
+      ),
+      (5, 14),
     );
     expect(
-      quote.related.map((row) => row['id']),
-      unorderedEquals([held, cancelled]),
+      (
+        progress[Companion.fox]!.bond.value,
+        progress[Companion.fox]!.experience,
+      ),
+      (8, 0),
     );
-    await fails(service.refund(fed, session: parent));
-    await service.refund(cancelled);
-    expect((await service.availableAffinityCandy())?.id, held);
-    expect((await service.overview())!.balance, 4);
-    await service.selectCompanion(Companion.fox);
-    expect((await service.overview())!.bond.value, 0);
+    expect(await service.ledger(), ledger);
+    await fails(service.refund(cookie, session: parent));
+    await fails(service.refund(pudding, session: parent));
+    await service.refund(refunded);
+    await fails(service.feedFood(refunded, Companion.fox));
+    final quote = await service.correctionQuote(award, [corrected], parent);
+    expect(quote.related.map((row) => row['id']), [
+      candy,
+      heldCookie,
+      corrected,
+    ]);
+    await service.correctAward(quote, '测试纠错', false, session: parent);
+    final heldPudding = await buy(CompanionFood.pudding);
+    final inventory = {
+      CompanionFood.candy: (id: candy, affinity: 3, count: 1),
+      CompanionFood.cookie: (id: heldCookie, affinity: 5, count: 1),
+      CompanionFood.pudding: (id: heldPudding, affinity: 8, count: 1),
+    };
+    expect(await service.availableFood(), inventory);
+    expect((await service.overview())!.balance, 6);
 
-    final outgoing = transfers(stock);
+    final outgoing = transfers(fixture);
     final ticket = await outgoing.prepareExport('backup', password, parent);
     await outgoing.finishExport(ticket, SaveOutcome.handedToSystem);
     final incoming = TransferService(
       device: DeviceStore(
-        Directory(p.join(stock.root.path, 'candy-target')),
+        Directory(p.join(fixture.root.path, 'food-target')),
         MemorySecureValues(),
       ),
-      rules: stock.rules,
+      rules: fixture.rules,
       availableAssets: assets,
       current: () => null,
     );
     final preview = await incoming.inspect(ticket.file, password, null);
     addTearDown(preview.close);
+    expect(preview.manifest['schema_version'], foodSchemaVersion);
     final restored = (await incoming.activate(
       preview,
       pin,
@@ -625,54 +834,24 @@ void main() {
       replace: false,
     )).service;
     addTearDown(restored.close);
-    final progress = await restored.companionProgress();
+    expect(await restored.availableFood(), inventory);
+    expect(await restored.purchases(), await service.purchases());
+    expect(await restored.ledger(), await service.ledger());
+    progress = await restored.companionProgress();
     expect(
       (
         progress[Companion.cat]!.bond.value,
         progress[Companion.cat]!.experience,
       ),
-      (3, 8),
+      (5, 13),
     );
     expect(
       (
         progress[Companion.fox]!.bond.value,
         progress[Companion.fox]!.experience,
       ),
-      (0, 0),
+      (8, 0),
     );
-    final catalog = CompanionBadge.evolutions.followedBy(
-      CompanionBadge.affinities,
-    );
-    expect(
-      catalog
-          .where(
-            (badge) => badge.isEarned(
-              stage: progress[Companion.cat]!.stage,
-              affinity: progress[Companion.cat]!.bond.value,
-            ),
-          )
-          .map((badge) => badge.name),
-      ['小小成长', '熟悉', '默契'],
-    );
-    expect(
-      catalog.any(
-        (badge) => badge.isEarned(
-          stage: progress[Companion.fox]!.stage,
-          affinity: progress[Companion.fox]!.bond.value,
-        ),
-      ),
-      isFalse,
-    );
-    expect(await restored.availableAffinityCandy(), (
-      id: held,
-      affinity: 3,
-      count: 1,
-    ));
-    expect(await restored.ledger(), await service.ledger());
-    await restored.feedAffinityCandy(held, Companion.fox);
-    expect((await restored.overview())!.bond.value, 3);
-    expect(await restored.availableAffinityCandy(), isNull);
-    expect(await restored.ledger(), await service.ledger());
   }, timeout: const Timeout(Duration(minutes: 2)));
 
   test('Wind scene survives a v5 upgrade and partial encrypted handoff independently of the old chapter', () async {
