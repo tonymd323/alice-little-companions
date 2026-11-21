@@ -2,7 +2,7 @@
 
 在发布包 0.21.2 对应的 Flutter 源码上，通过家长入口保存并返回备份页。调试环境复现 `setState` 回调返回 `Future` 的断言，备份页未重绘。修好刷新后，继续到恢复密钥的确认页，又触发勾选控件缺少就近 `Material` 的断言。该控件也用于首次建家和重设 PIN。[复现记录](tests.log)
 
-源码 `7ce0537` 把备份、伙伴、扣分、兑换、空间和小事页面的异步查询与界面状态赋值分开，并给恢复确认的勾选控件补上透明 `Material`。同一提交等待下一次原签名构建。当前可覆盖安装的安卓家庭包为 0.21.2+21，构建提交为 `ae09472`。[修复源码](https://github.com/tonymd323/alice-little-companions/commit/7ce053762a12ba2b602e5adf67b4355ef926d60a) · [家长安装入口](../../DELIVERY.md)
+源码 `7ce0537` 把备份、伙伴、扣分、兑换、空间和小事页面的异步查询与界面状态赋值分开，并给恢复确认的勾选控件补上透明 `Material`。修复已合入原签名家庭包 0.21.3+22，构建提交为 `27c38ac`。[修复源码](https://github.com/tonymd323/alice-little-companions/commit/7ce053762a12ba2b602e5adf67b4355ef926d60a) · [家庭包验证](../backup-ui-0213/README.md) · [家长安装入口](../../DELIVERY.md)
 
 复测在 Linux x86_64 上使用 Flutter 3.50.0 的调试测试。键盘通过 `viewInsets` 模拟，占 300–360 逻辑像素。文件选择器用临时本地文件和失焦事件模拟，业务层实际执行加密、回读、恢复与归档。实体 iPad 的键盘、文件选择器、钥匙串与两端迁移继续按设备验收执行。[真机验收](../device-acceptance/README.md)
 

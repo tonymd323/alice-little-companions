@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "version": "0.21.3",
+  "versionCode": 22,
+  "file": "alice-0.21.3-android.apk",
+  "sha256": "92c12548303dd3cebfddb2f00be49f37681dfea85f25f09def4dcf0624629450",
+  "sizeBytes": 83250724,
+  "buildCommit": "27c38ac41461720defcca73d848ca81cf1f18b32",
+  "applicationId": "local.family.alice_companions",
+  "signerCertificateSha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+  "zipalign16KiB": true,
+  "runtimeAssetsVerified": 247,
+  "warmVerandaFilesVerified": 58
+}

@@ -1,6 +1,6 @@
 # 0.18 安卓应用更新
 
-当前家庭版的更新复测见 [0.21.2 安卓更新复测](../android-update-0212/README.md)。
+应用内下载与系统安装的复测见 [0.21.2 安卓更新复测](../android-update-0212/README.md)。
 
 应用版本 `0.18.0+16`，Android release 构建提交 `4a54fb6cfb0337dcf57331a37b8a2e184037e98a`。APK 沿用原家庭版证书。首次从 GitHub 覆盖安装后，可在「家长入口 → 应用更新」检查下一版。[安卓 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.18.0-android.apk?raw=true) · [安装与授权](../../DELIVERY.md#app-内更新)
 

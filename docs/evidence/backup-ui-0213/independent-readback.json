@@ -1,0 +1,13 @@
+{
+  "mode": "backup",
+  "schema": 8,
+  "encrypted_sha256": "40a4339736434c5fd2ea3e96855f3f88ea89cab9281a24adb82adf13e39f6d3a",
+  "sqlite_sha256": "12bd480ded0ceb3ebefad9dd60dc1857db67bd19d168e5380fcdf4e28ecf11fd",
+  "business_rows_sha256": "201690cb2d6e13d06091ce7a6c6feaa694e48fe31da721876341e8a0aa3aaceb",
+  "business_tables": 30,
+  "balance": 5,
+  "active_companion_experience": 16,
+  "owned_companions": 2,
+  "valid_completions": 16,
+  "ledger_entries": 20
+}

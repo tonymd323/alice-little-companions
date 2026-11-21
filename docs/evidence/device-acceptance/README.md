@@ -1,6 +1,6 @@
 # 安卓与 iPad 真机验收
 
-双端使用 **0.21.2+21**，构建源码 `ae09472607a72dcc1bad1ab6574cd4ef337f6873`。记录设备型号、系统版本、签名方式和测试证据。[安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.2-android.apk?raw=true) · [iPad 签名安装](../../DELIVERY.md#ipad-首次试装)
+双端使用 **0.21.3+22**，构建源码 `27c38ac41461720defcca73d848ca81cf1f18b32`。记录设备型号、系统版本、签名方式和测试证据。[安卓安装包](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.21.3-android.apk?raw=true) · [iPad 签名安装](../../DELIVERY.md#ipad-首次试装)
 
 云端已核对 iPadOS 16 部署配置、四种 iPad 方向、Swift Package 依赖及 `.alicebackup` 类型声明。独立校验通过加密备份标准向量。Flutter 的 iOS 目标构建在原生依赖构建阶段缺少 `xcrun`。接入 Mac 后继续原生编译和签名，并实测首次建家、钥匙串和系统文件的保存、取消及重选。[iPad 工程核查](ios-project-review.log)
 
@@ -58,10 +58,10 @@ flutter pub get --enforce-lockfile
 ALICE_QA_OUTPUT_DIR="$alice_probe" flutter test --no-pub --reporter expanded test/backup_50m_benchmark_test.dart
 ```
 
-输出在 `$alice_probe/alice-qa-019-*`。用 0.21.2 的源码复核候选版导出的文件。升级旧档时会增加伙伴记录，因此每个方向都比较同为结构 8 的两份导出。
+输出在 `$alice_probe/alice-qa-019-*`。用 0.21.3 的源码复核候选版导出的文件。升级旧档时会增加伙伴记录，因此每个方向都比较同为结构 8 的两份导出。
 
 ```sh
-git -C "$alice_repo" worktree add --detach "$alice_probe/check" ae09472607a72dcc1bad1ab6574cd4ef337f6873
+git -C "$alice_repo" worktree add --detach "$alice_probe/check" 27c38ac41461720defcca73d848ca81cf1f18b32
 cp "$alice_repo/docs/evidence/family-offline/backup_50m_benchmark_test.dart" "$alice_probe/check/apps/mobile/test/"
 cd "$alice_probe/check/apps/mobile"
 flutter pub get --enforce-lockfile
