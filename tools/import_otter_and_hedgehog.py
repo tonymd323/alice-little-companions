@@ -62,6 +62,9 @@ def save(output, path, source, crop, job, returns, *, quality=None):
         output.save(path, lossless=True, exact=True)
     else:
         output.save(path, quality=quality, alpha_quality=100, method=6, exact=True)
+        with Image.open(path) as packed:
+            if packed.getchannel("A").tobytes() != output.getchannel("A").tobytes():
+                raise ValueError(f"Changed transparency in {path}")
     return {
         "work_order": job,
         "runtime_path": path.relative_to(ROOT).as_posix(),
@@ -145,6 +148,21 @@ def export_turns(returns):
     return entries
 
 
+def export_settling(returns):
+    entries = []
+    for pet, _, growth, _, _ in SPECIES:
+        with Image.open(ASSETS / f"art/{pet}-6.webp") as original:
+            size = original.size
+        source = returns / growth / "app-companions" / f"{pet}-six-settling-r02.png"
+        for row, view in enumerate(("opening-rear", "rear-profile")):
+            for col, suffix in enumerate(("", "-coat", "-apron")):
+                painting, crop = plate(source, row * 3 + col, (3, 2))
+                path = ASSETS / f"{pet}_walk/6-{view}{suffix}.webp"
+                entries.append(save(portrait(painting, size), path, source, crop,
+                                    growth, returns, quality=94))
+    return entries
+
+
 def export(returns):
     entries = []
     for pet, origin, growth, prefix, first_repaint in SPECIES:
@@ -225,7 +243,14 @@ def export(returns):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("returns", type=Path)
-    parser.add_argument("--turns-only", action="store_true")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--turns-only", action="store_true")
+    mode.add_argument("--settling-only", action="store_true")
     args = parser.parse_args()
-    base = [] if args.turns_only else export(args.returns)
-    print(json.dumps(base + export_turns(args.returns), ensure_ascii=False, indent=2))
+    if args.settling_only:
+        paintings = export_settling(args.returns)
+    elif args.turns_only:
+        paintings = export_turns(args.returns)
+    else:
+        paintings = export(args.returns) + export_turns(args.returns) + export_settling(args.returns)
+    print(json.dumps(paintings, ensure_ascii=False, indent=2))

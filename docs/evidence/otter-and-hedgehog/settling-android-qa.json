@@ -1,0 +1,14 @@
+{
+  "source_commit": "39bbd4e7d7ed5bfbe35d12fab3f2af8121dc8089",
+  "version": "0.25.0+26",
+  "apk_sha256": "b868f5407f8cc0d4d5c6511f854be6ee8a508141af09889e80adcce178be836a",
+  "apk_bytes": 104402023,
+  "bytes_below_update_limit": 455577,
+  "certificate": "local QA certificate",
+  "family_update_verifier": "rejects the QA certificate",
+  "runtime_images_checked": 658,
+  "asset_ids_checked": 259,
+  "wind_files_matched_to_checkout": 58,
+  "flutter_tests_passed": 109,
+  "physical_device": "NOT_RUN"
+}

@@ -14936,6 +14936,306 @@
             639
           ]
         }
+      },
+      {
+        "work_order": "EV-02",
+        "runtime_path": "apps/mobile/assets/otter_walk/6-opening-rear.webp",
+        "runtime_size": [
+          500,
+          303
+        ],
+        "ink_bounds": [
+          72,
+          2,
+          427,
+          301
+        ],
+        "sha256": "00a0d1fafad44277d530e9828c689e1775278b46fc7b819f1e9735798d9959c3",
+        "source": {
+          "path": "EV-02/app-companions/otter-six-settling-r02.png",
+          "sha256": "d6e2ec3219f0e1577fd92b592906fbe42db7fb905046b1270e6863f2f1987baa",
+          "crop_xyxy": [
+            85,
+            63,
+            510,
+            421
+          ]
+        }
+      },
+      {
+        "work_order": "EV-02",
+        "runtime_path": "apps/mobile/assets/otter_walk/6-opening-rear-coat.webp",
+        "runtime_size": [
+          500,
+          303
+        ],
+        "ink_bounds": [
+          77,
+          2,
+          423,
+          301
+        ],
+        "sha256": "196a2de946277e49a05768795a525133410ecc46cc0b5e28c30fd21dae3808fa",
+        "source": {
+          "path": "EV-02/app-companions/otter-six-settling-r02.png",
+          "sha256": "d6e2ec3219f0e1577fd92b592906fbe42db7fb905046b1270e6863f2f1987baa",
+          "crop_xyxy": [
+            677,
+            63,
+            1091,
+            421
+          ]
+        }
+      },
+      {
+        "work_order": "EV-02",
+        "runtime_path": "apps/mobile/assets/otter_walk/6-opening-rear-apron.webp",
+        "runtime_size": [
+          500,
+          303
+        ],
+        "ink_bounds": [
+          72,
+          2,
+          427,
+          301
+        ],
+        "sha256": "2e6efe9343d942f25e84ffe625305e484b10f64b56617da99a0dcd68c619cdad",
+        "source": {
+          "path": "EV-02/app-companions/otter-six-settling-r02.png",
+          "sha256": "d6e2ec3219f0e1577fd92b592906fbe42db7fb905046b1270e6863f2f1987baa",
+          "crop_xyxy": [
+            1268,
+            62,
+            1694,
+            421
+          ]
+        }
+      },
+      {
+        "work_order": "EV-02",
+        "runtime_path": "apps/mobile/assets/otter_walk/6-rear-profile.webp",
+        "runtime_size": [
+          500,
+          303
+        ],
+        "ink_bounds": [
+          32,
+          2,
+          467,
+          301
+        ],
+        "sha256": "dc72137bf287d795e5df7e2dadeb7d9a84a51c6e6f25dfbf4dc15bd3f5f53767",
+        "source": {
+          "path": "EV-02/app-companions/otter-six-settling-r02.png",
+          "sha256": "d6e2ec3219f0e1577fd92b592906fbe42db7fb905046b1270e6863f2f1987baa",
+          "crop_xyxy": [
+            85,
+            501,
+            551,
+            821
+          ]
+        }
+      },
+      {
+        "work_order": "EV-02",
+        "runtime_path": "apps/mobile/assets/otter_walk/6-rear-profile-coat.webp",
+        "runtime_size": [
+          500,
+          303
+        ],
+        "ink_bounds": [
+          28,
+          2,
+          471,
+          301
+        ],
+        "sha256": "f6e3f5d18382841ce2044af066110fd49e954c0bbdc90866003b5cea2315d989",
+        "source": {
+          "path": "EV-02/app-companions/otter-six-settling-r02.png",
+          "sha256": "d6e2ec3219f0e1577fd92b592906fbe42db7fb905046b1270e6863f2f1987baa",
+          "crop_xyxy": [
+            671,
+            501,
+            1144,
+            820
+          ]
+        }
+      },
+      {
+        "work_order": "EV-02",
+        "runtime_path": "apps/mobile/assets/otter_walk/6-rear-profile-apron.webp",
+        "runtime_size": [
+          500,
+          303
+        ],
+        "ink_bounds": [
+          28,
+          2,
+          472,
+          301
+        ],
+        "sha256": "405ed493f2a867fc9bbecef3a275814184cc7f342e26ff15a03995b15011b343",
+        "source": {
+          "path": "EV-02/app-companions/otter-six-settling-r02.png",
+          "sha256": "d6e2ec3219f0e1577fd92b592906fbe42db7fb905046b1270e6863f2f1987baa",
+          "crop_xyxy": [
+            1259,
+            501,
+            1734,
+            821
+          ]
+        }
+      },
+      {
+        "work_order": "EV-03",
+        "runtime_path": "apps/mobile/assets/hedgehog_walk/6-opening-rear.webp",
+        "runtime_size": [
+          500,
+          353
+        ],
+        "ink_bounds": [
+          70,
+          2,
+          430,
+          351
+        ],
+        "sha256": "25193eb03fdc1424427fae6db5e971b7970c071473b915d134b9ea4d4671a7fb",
+        "source": {
+          "path": "EV-03/app-companions/hedgehog-six-settling-r02.png",
+          "sha256": "11e81d99e48fa13ba59ae8b40b384e57ea9560c3d9f4d6f27fa26532b813956c",
+          "crop_xyxy": [
+            25,
+            28,
+            482,
+            471
+          ]
+        }
+      },
+      {
+        "work_order": "EV-03",
+        "runtime_path": "apps/mobile/assets/hedgehog_walk/6-opening-rear-coat.webp",
+        "runtime_size": [
+          500,
+          353
+        ],
+        "ink_bounds": [
+          71,
+          2,
+          429,
+          351
+        ],
+        "sha256": "d787ad04f4dad66dc3e56f7e71a561dfb768195f0dfc5a36e3fe66e597e07ccb",
+        "source": {
+          "path": "EV-03/app-companions/hedgehog-six-settling-r02.png",
+          "sha256": "11e81d99e48fa13ba59ae8b40b384e57ea9560c3d9f4d6f27fa26532b813956c",
+          "crop_xyxy": [
+            512,
+            30,
+            965,
+            471
+          ]
+        }
+      },
+      {
+        "work_order": "EV-03",
+        "runtime_path": "apps/mobile/assets/hedgehog_walk/6-opening-rear-apron.webp",
+        "runtime_size": [
+          500,
+          353
+        ],
+        "ink_bounds": [
+          72,
+          2,
+          428,
+          351
+        ],
+        "sha256": "7c93a10f57cee1b94316628a9c345701354fd00c7da839ef58a054621c3bacdf",
+        "source": {
+          "path": "EV-03/app-companions/hedgehog-six-settling-r02.png",
+          "sha256": "11e81d99e48fa13ba59ae8b40b384e57ea9560c3d9f4d6f27fa26532b813956c",
+          "crop_xyxy": [
+            1024,
+            29,
+            1475,
+            471
+          ]
+        }
+      },
+      {
+        "work_order": "EV-03",
+        "runtime_path": "apps/mobile/assets/hedgehog_walk/6-rear-profile.webp",
+        "runtime_size": [
+          500,
+          353
+        ],
+        "ink_bounds": [
+          41,
+          2,
+          459,
+          351
+        ],
+        "sha256": "58c476544b29f38bdc60f930c7fabcde699494cf9db063221cbdae71f002cd2d",
+        "source": {
+          "path": "EV-03/app-companions/hedgehog-six-settling-r02.png",
+          "sha256": "11e81d99e48fa13ba59ae8b40b384e57ea9560c3d9f4d6f27fa26532b813956c",
+          "crop_xyxy": [
+            14,
+            526,
+            505,
+            936
+          ]
+        }
+      },
+      {
+        "work_order": "EV-03",
+        "runtime_path": "apps/mobile/assets/hedgehog_walk/6-rear-profile-coat.webp",
+        "runtime_size": [
+          500,
+          353
+        ],
+        "ink_bounds": [
+          42,
+          2,
+          458,
+          351
+        ],
+        "sha256": "e859941082ea922a030064836151835f296fbcc4347ebcc65d780b7f016cc743",
+        "source": {
+          "path": "EV-03/app-companions/hedgehog-six-settling-r02.png",
+          "sha256": "11e81d99e48fa13ba59ae8b40b384e57ea9560c3d9f4d6f27fa26532b813956c",
+          "crop_xyxy": [
+            512,
+            527,
+            999,
+            936
+          ]
+        }
+      },
+      {
+        "work_order": "EV-03",
+        "runtime_path": "apps/mobile/assets/hedgehog_walk/6-rear-profile-apron.webp",
+        "runtime_size": [
+          500,
+          353
+        ],
+        "ink_bounds": [
+          39,
+          2,
+          461,
+          351
+        ],
+        "sha256": "af224700cecd5728e307854c1d2b1baefe21d32041d4e96a54327c9958c5d1d7",
+        "source": {
+          "path": "EV-03/app-companions/hedgehog-six-settling-r02.png",
+          "sha256": "11e81d99e48fa13ba59ae8b40b384e57ea9560c3d9f4d6f27fa26532b813956c",
+          "crop_xyxy": [
+            1024,
+            528,
+            1517,
+            936
+          ]
+        }
       }
     ],
     "device_qa": "pending"

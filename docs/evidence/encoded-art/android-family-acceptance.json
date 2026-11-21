@@ -1,0 +1,27 @@
+{
+  "version": "0.25.0",
+  "version_code": 26,
+  "application_id": "local.family.alice_companions",
+  "source_commit": "6ab7621d967d16b78c175b5a7a63240056035fba",
+  "source_tree": "608632cf3874a84d045cd5860b4ffc824944f7ed",
+  "pull_request": "https://github.com/tonymd323/alice-little-companions/pull/1",
+  "apk_file": "alice-0.25.0-android.apk",
+  "apk_size_bytes": 103805153,
+  "apk_sha256": "aebcce8bbf9dde1da3c4e2de28b1ece54e319e1d8daf927ce6eb5832360f7d40",
+  "family_certificate_sha256": "c046191e27395fff3ea806f44b1e501cc7577d70acdbae7639f0061158200e05",
+  "asset_files_matched_to_checkout": 708,
+  "asset_ids_checked": 259,
+  "runtime_images_checked": 646,
+  "android_emulator": {
+    "os": "Android 9, API 28, x86_64",
+    "fixture": "synthetic household",
+    "upgrade_from": "0.24.0+25",
+    "schema_before": 10,
+    "schema_after": 11,
+    "business_table_digests_unchanged": 32,
+    "upgrade_and_offline_cold_launch": "PASS"
+  },
+  "physical_android": "BLOCKED",
+  "physical_ipad": "BLOCKED",
+  "published_version": "0.24.0+25"
+}

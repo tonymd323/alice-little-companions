@@ -8,7 +8,9 @@ enum TurnView {
   towards('towards'),
   nearFront('near-front'),
   front('front'),
+  rearProfile('rear-profile'),
   shallowRear('shallow-rear'),
+  openingRear('opening-rear'),
   away('away'),
   middleRear('middle-rear'),
   nearRear('near-rear'),
@@ -18,13 +20,28 @@ enum TurnView {
   final String filename;
 
   bool get axial => this == front || this == rear;
-  bool get behind => index >= shallowRear.index;
+  bool get behind => index >= rearProfile.index;
 
   static TurnView? at(double yaw, Companion pet) {
     final depth = math.asin(math.sin(yaw)) / (math.pi / 2);
     final angle = depth.abs();
-    if (depth < 0 && pet == Companion.hedgehog && angle >= .12 && angle < .31) {
-      return shallowRear;
+    if (depth < 0) {
+      final intermediate = switch (pet) {
+        Companion.otter => switch (angle) {
+          >= .08 && < .21 => rearProfile,
+          >= .335 && < .50 => openingRear,
+          >= .50 && < .64 => middleRear,
+          _ => null,
+        },
+        Companion.hedgehog => switch (angle) {
+          >= .075 && < .145 => rearProfile,
+          >= .145 && < .265 => shallowRear,
+          >= .265 && < .335 => openingRear,
+          _ => null,
+        },
+        _ => null,
+      };
+      if (intermediate != null) return intermediate;
     }
     if (angle < .21) return null;
     if (depth > 0) {
@@ -34,8 +51,6 @@ enum TurnView {
           ? nearFront
           : front;
     }
-    if (pet == Companion.otter && angle >= .50 && angle < .64)
-      return middleRear;
     return angle < .50
         ? away
         : angle < .83
@@ -112,6 +127,28 @@ const _otter = {
       Offset(.684, .958),
       Offset(.594, .987),
     ],
+  ),
+  TurnView.rearProfile: TurnFit(
+    (Offset(.795, .248), Offset(.916, .240)),
+    (
+      crown: Offset(.677, .126),
+      ear: Offset(.606, .249),
+      neck: Offset(.701, .512),
+      width: .368,
+    ),
+    [Offset(.440, .966), Offset(.677, .973), null, Offset(.789, .951)],
+    profileEye: true,
+  ),
+  TurnView.openingRear: TurnFit(
+    (Offset(.831, .314), Offset(.891, .315)),
+    (
+      crown: Offset(.636, .110),
+      ear: Offset(.759, .148),
+      neck: Offset(.651, .450),
+      width: .367,
+    ),
+    [Offset(.577, .947), Offset(.741, .911), null, null],
+    farEar: Offset(.505, .154),
   ),
   TurnView.away: TurnFit(
     (Offset(.894, .327), Offset(.905, .327)),
@@ -197,6 +234,23 @@ const _hedgehog = {
     ),
     [null, Offset(.397, .989), null, Offset(.605, .987)],
   ),
+  TurnView.rearProfile: TurnFit(
+    (Offset(.785, .477), Offset(.909, .481)),
+    (
+      crown: Offset(.741, .277),
+      ear: Offset(.652, .383),
+      neck: Offset(.702, .721),
+      width: .303,
+    ),
+    [
+      Offset(.308, .972),
+      Offset(.568, .987),
+      Offset(.432, .950),
+      Offset(.698, .981),
+    ],
+    farEar: Offset(.821, .311),
+    profileEye: true,
+  ),
   TurnView.shallowRear: TurnFit(
     (Offset(.754, .522), Offset(.897, .494)),
     (
@@ -212,6 +266,17 @@ const _hedgehog = {
       Offset(.697, .976),
     ],
     farEar: Offset(.824, .335),
+    profileEye: true,
+  ),
+  TurnView.openingRear: TurnFit(
+    (Offset(.806, .441), Offset(.870, .455)),
+    (
+      crown: Offset(.745, .255),
+      ear: Offset(.728, .361),
+      neck: Offset(.703, .679),
+      width: .284,
+    ),
+    [Offset(.509, .980), Offset(.674, .967), Offset(.350, .966), null],
     profileEye: true,
   ),
   TurnView.away: TurnFit(

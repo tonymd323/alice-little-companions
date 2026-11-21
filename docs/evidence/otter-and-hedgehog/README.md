@@ -12,7 +12,21 @@
 
 按相同画布对比 f045→046 的人物轮廓。水獭前后帧的交并比从 .365 升到 .908，刺猬从 .683 升到 .882。两只都在指定草地停下。小溪 f205→206 收步时的轮廓仍从 163 像素变到 231 像素，尾瓣展开可见。栗栗的 f242→243 已稳定，f243→244 仍能看见鼻尖和背扇换画。[录帧测量](turns-measurements.json)
 
-使用 `python3 tools/import_otter_and_hedgehog.py ../returns` 可重导 163 张运行图。`--turns-only` 重导其中的 42 张换向图。换向原稿由内置 ImageGen 生成，原图和相应 `*-prompt.txt` 位于生产目录 `returns/EV-02/app-companions` 和 `returns/EV-03/app-companions`，文件名包含 `six-turns`、`six-near-axial` 或 `six-rear-bridge`。素材清单记录每张交件路径、尺寸、裁切、透明边界和 SHA-256。
+`python3 tools/import_otter_and_hedgehog.py ../returns --turns-only` 可重导本节的 42 张六阶换向图。换向原稿由内置 ImageGen 生成，原图和相应 `*-prompt.txt` 位于生产目录 `returns/EV-02/app-companions` 和 `returns/EV-03/app-companions`，文件名包含 `six-turns`、`six-near-axial` 或 `six-rear-bridge`。素材清单记录每张交件路径、尺寸、裁切、透明边界和 SHA-256。
+
+## 六阶收步
+
+`921145e` 为两只伙伴各补背转和侧脸两种中间姿态，原装、外套、围裙分别绘制。对照 `6ab7621` 从同一块近草点向庭院深处，247 帧小溪和 283 帧栗栗的路径、时序和步点记录一致。样片为同机位 25 fps，左侧为签名基线，右侧为新增画稿。[小溪收步](otter-settling.mp4) · [栗栗收步](hedgehog-settling.mp4)
+
+在 960 像素宽录帧上，按透明度至少 128 量轮廓。小溪收步窗口相邻帧最大的宽度变化从 68 像素降至 35 像素，最小轮廓交并比从 .620 升至 .690。栗栗从 54 像素降至 35 像素，最小交并比从 .778 升至 .806。独立逐帧复看确认小溪尾瓣逐步展开，栗栗背扇两次暗红闪变消失，围裙肩带与花纹跟住身体。小溪 f207→208 露眼、栗栗 f244→245 展开背扇时仍能看出换画，栗栗新帧刺脊高光偏亮。[同机位帧测量](settling-measurements.json)
+
+`39bbd4e` 另修正栗栗向左后转时的远侧耳结。以 50 fps 重录同一段庭院路线，第 466 帧的结心移到可见耳根，整段位置和落脚记录一致。
+
+内置 ImageGen 原稿 `*-six-settling-r02.png` 和同名提示词位于各自工单的 `app-companions`。运行 `python3 tools/import_otter_and_hedgehog.py ../returns --settling-only` 可重导 12 张新增 WebP。输出透明通道与重新编码前逐像素一致。无筛选参数可重新导出本组 175 张图。
+
+109 项 Flutter 回归通过。包含收步画的通用 Android 测试 APK 实测 99.57 MiB，包内 658 张图、259 个素材 ID 及《风过暖廊》58 个文件通过校验。[测试构建回执](settling-android-qa.json)
+
+## 存档验证
 
 升级测试使用两份合成家庭档。`pre_roster_v8.alicebackup` 由 `0a4cc13` 的结构 8 备份功能导出，核对 48 分、26 条流水。`pre_roster_v10.alicebackup` 由 0.24.0 发布源码 `6fc48ec` 导出，核对 27 分、29 条流水、团团与奶油的亲密度 6 和 1，以及两份未喂的布丁。两份档均测试原 SQLite 文件升级与加密备份激活，摘要、各自等级、搭配和外键一致。
 
