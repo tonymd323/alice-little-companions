@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 import 'dart:ui';
 
 import '../domain/companions.dart';
@@ -10,6 +11,8 @@ extension CompanionSkill on Companion {
     Companion.fox => '银杏叶舞',
     Companion.rabbit => '月牙连跳',
     Companion.cat => '踏云追风',
+    Companion.otter => '捧叶回桥',
+    Companion.hedgehog => '闻闻栗壳',
   };
 }
 
@@ -19,6 +22,23 @@ double motionWindow(double t, double from, double to) =>
 double easeMotion(double x) => x * x * (3 - 2 * x);
 double pulse(double t, double from, double to) =>
     math.sin(math.pi * motionWindow(t, from, to));
+
+bool meshKeepsShape(
+  Float32List positions,
+  Uint16List triangles,
+  double areaFloor, {
+  double facing = 1,
+}) {
+  for (var i = 0; i < triangles.length; i += 3) {
+    final a = triangles[i] * 2, b = triangles[i + 1] * 2;
+    final c = triangles[i + 2] * 2;
+    final area =
+        (positions[b] - positions[a]) * (positions[c + 1] - positions[a + 1]) -
+        (positions[b + 1] - positions[a + 1]) * (positions[c] - positions[a]);
+    if (area * facing > -areaFloor) return false;
+  }
+  return true;
+}
 
 class PetMotion {
   const PetMotion(this.action, this.progress);
@@ -46,19 +66,50 @@ class PetMotion {
       ? easeMotion(motionWindow(progress, .225, .34)) *
             (1 - easeMotion(motionWindow(progress, .69, .83)))
       : 0;
-  double height(Companion pet) {
-    if (action != PetAction.skill) return 0;
+  bool usesAirborneArt(Companion pet) => switch (pet) {
+    Companion.rabbit => height(pet) > .036,
+    Companion.fox => height(pet) > .042,
+    Companion.cat => keyPose >= .5,
+    Companion.otter || Companion.hedgehog => false,
+  };
+
+  bool usesGroundArt(Companion pet) {
+    if (action != PetAction.skill) return false;
     return switch (pet) {
-      Companion.rabbit =>
-        .42 * pulse(progress, .20, .56) + .24 * pulse(progress, .56, .86),
-      Companion.cat => .42 * pulse(progress, .20, .85),
-      Companion.fox => .28 * pulse(progress, .21, .80),
+      Companion.otter => progress > .24 && progress < .80,
+      Companion.hedgehog =>
+        progress > .23 && progress < .43 || progress > .51 && progress < .79,
+      _ => false,
     };
   }
 
-  double travel(Companion pet) => action == PetAction.skill
-      ? (pet == Companion.fox ? .26 : .15) * pulse(progress, .20, .84)
+  double get _firstJump => _jump(.18, .445);
+  double get _secondJump => _jump(.525, .82);
+
+  double _jump(double takeoff, double landing) =>
+      progress > takeoff && progress < landing
+      ? pulse(progress, takeoff, landing)
       : 0;
+
+  double height(Companion pet) {
+    if (action != PetAction.skill) return 0;
+    return switch (pet) {
+      Companion.rabbit => .42 * _firstJump + .26 * _secondJump,
+      Companion.cat => .42 * pulse(progress, .20, .85),
+      Companion.fox => .28 * pulse(progress, .21, .80),
+      Companion.otter || Companion.hedgehog => 0,
+    };
+  }
+
+  double travel(Companion pet) {
+    if (action != PetAction.skill) return 0;
+    return switch (pet) {
+      Companion.rabbit => .19 * _firstJump + .13 * _secondJump,
+      Companion.cat => .15 * pulse(progress, .20, .84),
+      Companion.fox => .26 * pulse(progress, .20, .84),
+      Companion.otter || Companion.hedgehog => 0,
+    };
+  }
 }
 
 class CompanionEffects {
@@ -197,7 +248,7 @@ class CompanionEffects {
     required bool front,
     required bool left,
   }) {
-    if (t <= 0 || t >= 1) return;
+    if (t <= 0 || t >= 1 || pet.hasGroundSkill) return;
     final fade = pulse(t, 0, 1);
     c.save();
     c.translate(foot.dx, foot.dy);
@@ -206,6 +257,8 @@ class CompanionEffects {
       Companion.fox => _gold,
       Companion.rabbit => _lilac,
       Companion.cat => _blue,
+      Companion.otter => const Color(0xff83c8bb),
+      Companion.hedgehog => const Color(0xffe6b780),
     };
     if (!front) {
       final r = Rect.fromCenter(
@@ -269,6 +322,8 @@ class CompanionEffects {
             -.2 + math.sin(a) * .27,
             strength,
           );
+        case Companion.otter || Companion.hedgehog:
+          break;
       }
       spark(
         c,

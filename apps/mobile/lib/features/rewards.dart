@@ -6,6 +6,8 @@ import '../domain/companion_food.dart';
 import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/rules.dart';
+import '../illustration/accessory_poses.dart';
+import '../illustration/tailoring.dart';
 import 'common.dart';
 import 'food_card.dart';
 import 'garden.dart';
@@ -37,9 +39,11 @@ class CatalogPage extends StatefulWidget {
     required this.controller,
     this.section = CatalogSection.all,
     this.model,
+    this.modelStage,
   });
   final CatalogSection section;
   final Companion? model;
+  final int? modelStage;
   final FamilyController controller;
 
   @override
@@ -59,6 +63,26 @@ class _CatalogPageState extends State<CatalogPage> {
     setState(() {
       history = purchases;
     });
+  }
+
+  int get _modelStage {
+    final family = widget.controller.family!;
+    return widget.modelStage ??
+        (widget.model == null || widget.model == family.companion
+            ? family.stage
+            : 0);
+  }
+
+  Companion get _model => widget.model ?? widget.controller.family!.companion;
+
+  FittedCoat? _coat(Json product) =>
+      fittedCoat(_model, _modelStage, product['asset_id'] as String);
+
+  String _thumbnail(Json product) {
+    final asset = product['asset_id'] as String;
+    return _coat(product)?.thumbnail ??
+        fittedAccessoryThumbnail(asset, _model, _modelStage) ??
+        artworkPath(asset);
   }
 
   @override
@@ -154,7 +178,11 @@ class _CatalogPageState extends State<CatalogPage> {
                             SizedBox(
                               width: width,
                               child: _RewardTile(
-                                item: product,
+                                name:
+                                    _coat(product)?.nameInWardrobe ??
+                                    product['name'] as String,
+                                price: product['price'] as int,
+                                imagePath: _thumbnail(product),
                                 owned: owned.contains(product['id']),
                                 onTap: () async {
                                   await openPage(
@@ -163,6 +191,7 @@ class _CatalogPageState extends State<CatalogPage> {
                                       controller: widget.controller,
                                       product: product,
                                       model: widget.model,
+                                      modelStage: widget.modelStage,
                                     ),
                                   );
                                   reloadHistory();
@@ -232,11 +261,14 @@ class _FoodShelf extends StatelessWidget {
 
 class _RewardTile extends StatelessWidget {
   const _RewardTile({
-    required this.item,
+    required this.name,
+    required this.price,
+    required this.imagePath,
     required this.owned,
     required this.onTap,
   });
-  final Json item;
+  final String name, imagePath;
+  final int price;
   final bool owned;
   final VoidCallback onTap;
 
@@ -259,18 +291,15 @@ class _RewardTile extends StatelessWidget {
               height: 95,
               width: double.infinity,
               child: Image.asset(
-                artworkPath(item['asset_id'] as String),
+                imagePath,
                 fit: BoxFit.contain,
                 excludeFromSemantics: true,
               ),
             ),
             const SizedBox(height: 9),
+            Text(name, style: const TextStyle(fontWeight: FontWeight.w700)),
             Text(
-              item['name'] as String,
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
-            Text(
-              owned ? '已拥有' : '${item['price']} 分',
+              owned ? '已拥有' : '$price 分',
               style: const TextStyle(color: terracotta),
             ),
           ],
@@ -286,8 +315,10 @@ class RewardPage extends StatefulWidget {
     required this.controller,
     required this.product,
     this.model,
+    this.modelStage,
   });
   final Companion? model;
+  final int? modelStage;
   final FamilyController controller;
   final Json product;
 
@@ -299,6 +330,13 @@ class _RewardPageState extends State<RewardPage> {
   FamilyService get service => widget.controller.service!;
   String get id => widget.product['id'] as String;
   Companion get pet => widget.model ?? widget.controller.family!.companion;
+  String _name(int stage) =>
+      fittedCoat(
+        pet,
+        stage,
+        widget.product['asset_id'] as String,
+      )?.nameInWardrobe ??
+      widget.product['name'] as String;
   late var state = load();
   bool preview = true;
 
@@ -360,11 +398,18 @@ class _RewardPageState extends State<RewardPage> {
     listenable: widget.controller,
     builder: (context, _) {
       final product = widget.product;
-      final balance = widget.controller.family!.balance;
+      final family = widget.controller.family!;
+      final balance = family.balance;
       final slot = product['slot'] as String?;
       final parts = (product['included_items'] as List?)?.cast<Json>();
       return Scaffold(
-        appBar: AppBar(title: Text(product['name'] as String)),
+        appBar: AppBar(
+          title: Text(
+            _name(
+              pet == family.companion ? family.stage : widget.modelStage ?? 0,
+            ),
+          ),
+        ),
         body: PageBody(
           maxWidth: 560,
           child: FutureBuilder(
@@ -382,6 +427,7 @@ class _RewardPageState extends State<RewardPage> {
                   : fixed;
               final price = fixed < wishPrice ? fixed : wishPrice;
               final asset = product['asset_id'] as String;
+              final name = _name(loaded.stage);
               final sceneId =
                   (loaded.room?['scene_id'] ??
                           product['space_id'] ??
@@ -447,7 +493,7 @@ class _RewardPageState extends State<RewardPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          product['name'] as String,
+                          name,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(height: 8),
@@ -497,7 +543,7 @@ class _RewardPageState extends State<RewardPage> {
                             action: () async {
                               final ok = await confirmChoice(
                                 context,
-                                '兑换${product['name']}？',
+                                '兑换$name？',
                                 '使用 $price 分，兑换后剩余 ${balance - price} 分。',
                                 '确认兑换',
                               );
@@ -512,7 +558,7 @@ class _RewardPageState extends State<RewardPage> {
                                   context,
                                   slot == null
                                       ? '家具已就位。'
-                                      : '${pet.nickname}穿上了${product['name']}。',
+                                      : '${pet.nickname}穿上了$name。',
                                 );
                               }
                             },

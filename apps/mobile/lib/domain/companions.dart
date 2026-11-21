@@ -1,12 +1,17 @@
 enum Companion {
   fox('银杏狐', '奶油'),
   rabbit('月牙耳兔', '桃桃'),
-  cat('云翼猫', '团团');
+  cat('云翼猫', '团团'),
+  otter('溪纹水獭', '小溪'),
+  hedgehog('栗蓬刺猬', '栗栗');
 
   const Companion(this.label, this.nickname);
 
   final String label;
   final String nickname;
+
+  static const starters = [fox, rabbit, cat];
+  bool get hasGroundSkill => this == otter || this == hedgehog;
 
   String get unlockItemId => 'companion_$name';
   String get firstStageAssetId => 'pet_${name}_1';
@@ -37,6 +42,22 @@ enum Companion {
         (232, 214),
         (340, 277),
         (415, 356),
+      ],
+      Companion.otter => const [
+        (442, 305),
+        (444, 314),
+        (446, 314),
+        (500, 329),
+        (500, 311),
+        (500, 303),
+      ],
+      Companion.hedgehog => const [
+        (418, 303),
+        (417, 319),
+        (426, 320),
+        (426, 329),
+        (500, 345),
+        (500, 353),
       ],
     }[stage - 1];
     return width / height;

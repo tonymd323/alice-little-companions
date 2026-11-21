@@ -1,0 +1,70 @@
+{
+  "source_commit": "377652efd6d25bf75c34bbe7f57cf5c4f15bbc9d",
+  "version": "0.25.0",
+  "version_code": 26,
+  "application_id": "local.family.alice_companions",
+  "build_type": "Flutter Android release with QA signing",
+  "sha256": "76656efd0e318db90355e20b96aa3cedd79e75f9b11333c00273d780e7569a7b",
+  "size_bytes": 103619915,
+  "size_budget_bytes": 104857600,
+  "remaining_bytes": 1237685,
+  "abis": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86_64"
+  ],
+  "min_sdk": 26,
+  "target_sdk": 36,
+  "test_certificate_sha256": "888792239353ec89d22b5bfba524188574e386fee4156502f625a785b8d40e20",
+  "apk_signature_v2_valid": true,
+  "zipalign_16_kib_valid": true,
+  "published_update_verifier_rejection": "Expected the single installed family signing certificate",
+  "published_reference_update_verified": {
+    "schema": 1,
+    "version": "0.24.0",
+    "versionCode": 25,
+    "file": "alice-0.24.0-android.apk",
+    "sha256": "7e606f12f970c74c9c82991e3b7155fda23e90700d7f4081a1ce070603f0acd9",
+    "sizeBytes": 83497840
+  },
+  "flutter_tests_passed": 109,
+  "runtime_art": {
+    "verified_asset_ids": 259,
+    "verified_runtime_images": 642,
+    "by_kind": {
+      "scene_background": 5,
+      "scene_foreground": 5,
+      "decoration": 4,
+      "accessory": 4,
+      "furniture": 2,
+      "garment": 2,
+      "bundle": 2,
+      "included_item": 18,
+      "zone": 2,
+      "shop": 2,
+      "free_base_item": 2,
+      "pet": 31,
+      "room_layer": 8,
+      "furnished_scene": 4,
+      "wearable_texture": 4,
+      "costumed_pet": 38,
+      "pet_action": 54,
+      "fitted_accessory": 18,
+      "cat_walk": 27,
+      "fox_walk": 27
+    },
+    "alpha_verified_for_all_new_paintings": true
+  },
+  "wind_chapter": {
+    "wind_files": 58,
+    "wind_bytes": 3933698,
+    "actor_webp": 25,
+    "room_webp": 18,
+    "wardrobe_webp": 6,
+    "pcm_cues": 7
+  },
+  "installation": "NOT_RUN",
+  "family_signing": "BLOCKED",
+  "physical_android": "BLOCKED",
+  "physical_ipad": "BLOCKED"
+}

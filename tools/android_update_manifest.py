@@ -33,8 +33,7 @@ def manifest(apk: Path, build_tools: Path) -> dict:
     if not (0 < build <= 2100000000 and re.fullmatch(r'\d{1,5}\.\d{1,5}\.\d{1,5}', version)):
         raise ValueError('Invalid installable family version')
 
-    with apk.open('rb') as content:
-        checksum = hashlib.file_digest(content, 'sha256').hexdigest()
+    checksum = hashlib.sha256(apk.read_bytes()).hexdigest()
     return {
         'schema': 1,
         'version': version,

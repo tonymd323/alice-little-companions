@@ -6,6 +6,7 @@ import '../domain/companion_badge.dart';
 import '../domain/companions.dart';
 import 'achievement_medal.dart';
 import 'companion_motion.dart';
+import 'growth_portrait.dart';
 import 'puppet.dart';
 import 'tailoring.dart';
 
@@ -16,6 +17,7 @@ Future<void> showEvolution(
   int to, {
   Map<String, String> outfit = const {},
   bool preview = false,
+  bool replay = false,
   bool showBadge = false,
   String? receipt,
 }) => showDialog<void>(
@@ -31,7 +33,10 @@ Future<void> showEvolution(
         to: to,
         outfit: outfit,
         preview: preview,
-        badge: showBadge && !preview ? CompanionBadge.evolutions[to - 2] : null,
+        replay: replay,
+        badge: showBadge && !preview && !replay
+            ? CompanionBadge.evolutions[to - 2]
+            : null,
         receipt: receipt,
       ),
     ),
@@ -46,13 +51,14 @@ class EvolutionMoment extends StatefulWidget {
     required this.to,
     required this.outfit,
     this.preview = false,
+    this.replay = false,
     this.badge,
     this.receipt,
   });
   final Companion pet;
   final int from, to;
   final Map<String, String> outfit;
-  final bool preview;
+  final bool preview, replay;
   final CompanionBadge? badge;
   final String? receipt;
   @override
@@ -66,10 +72,18 @@ class _EvolutionMomentState extends State<EvolutionMoment>
     duration: Duration(milliseconds: widget.preview ? 3200 : 1600),
   );
   bool loading = false, quiet = false;
+  bool get _usesGrowthPortrait => !widget.preview && widget.outfit.isEmpty;
+  bool get _opensWings =>
+      !widget.preview &&
+      widget.pet == Companion.cat &&
+      widget.from < 4 &&
+      widget.to == 4;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     quiet =
+        widget.from == widget.to ||
         MediaQuery.disableAnimationsOf(context) ||
         MediaQuery.accessibleNavigationOf(context);
     if (quiet) {
@@ -84,13 +98,12 @@ class _EvolutionMomentState extends State<EvolutionMoment>
 
   Future<void> _start() async {
     await Future.wait([
-      for (final stage in [widget.from, widget.to])
-        precacheImage(
-          AssetImage(
-            portraitArtwork(widget.pet, stage, true, widget.outfit['body']),
-          ),
-          context,
-        ),
+      for (final path in {
+        _artwork(widget.from, reveal: widget.preview),
+        _artwork(widget.to, reveal: true),
+        if (_opensWings) _artwork(widget.to, reveal: false),
+      })
+        precacheImage(AssetImage(path), context),
     ]);
     if (mounted && !quiet && film.value < 1) film.forward();
   }
@@ -101,21 +114,32 @@ class _EvolutionMomentState extends State<EvolutionMoment>
     super.dispose();
   }
 
-  Widget actor(int stage) => IllustratedPet(
-    pet: widget.pet,
-    stage: stage,
-    reveal: true,
-    outfit: widget.outfit,
-    clock: film,
-    seconds: () => film.value * (widget.preview ? 3.2 : 1.6),
-    reaction: () => 1,
-    walking: () => 0,
-    gaze: () => 0,
-    still: quiet,
-  );
+  String _artwork(int stage, {required bool reveal}) => _usesGrowthPortrait
+      ? growthArtwork(widget.pet, stage, reveal: reveal)
+      : portraitArtwork(widget.pet, stage, reveal, widget.outfit['body']);
+
+  Widget actor(int stage, {required bool reveal}) => _usesGrowthPortrait
+      ? GrowthPortrait(pet: widget.pet, stage: stage, reveal: reveal)
+      : IllustratedPet(
+          pet: widget.pet,
+          stage: stage,
+          reveal: reveal,
+          outfit: widget.outfit,
+          clock: film,
+          seconds: () => film.value * (widget.preview ? 3.2 : 1.6),
+          reaction: () => 1,
+          walking: () => 0,
+          gaze: () => 0,
+          still: quiet,
+        );
+
   @override
   Widget build(BuildContext context) {
-    final young = actor(widget.from), grown = actor(widget.to);
+    final young = widget.from < widget.to
+        ? actor(widget.from, reveal: widget.preview)
+        : null;
+    final grown = actor(widget.to, reveal: true);
+    final folded = _opensWings ? actor(widget.to, reveal: false) : null;
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
@@ -128,6 +152,13 @@ class _EvolutionMomentState extends State<EvolutionMoment>
                 final badge = widget.badge;
                 final change = easeMotion(motionWindow(t, .43, .62)),
                     shine = pulse(t, .18, .83);
+                final opened = folded == null
+                    ? 1.0
+                    : easeMotion(motionWindow(t, .63, .80));
+                final grownScale =
+                    .84 +
+                    .16 * easeMotion(motionWindow(t, .46, .84)) +
+                    .045 * pulse(t, .58, .88);
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -135,10 +166,11 @@ class _EvolutionMomentState extends State<EvolutionMoment>
                       aspectRatio: 1.65,
                       child: LayoutBuilder(
                         builder: (context, box) {
-                          final side = box.maxHeight * .76;
+                          final side =
+                              box.maxHeight * (_usesGrowthPortrait ? .94 : .76);
                           final center = Offset(
                             box.maxWidth * .5,
-                            box.maxHeight * .86,
+                            box.maxHeight * (_usesGrowthPortrait ? .92 : .86),
                           );
                           final frame = Rect.fromLTWH(
                             center.dx - side / 2,
@@ -172,34 +204,42 @@ class _EvolutionMomentState extends State<EvolutionMoment>
                                     painter: _EvolutionLight(widget.pet, t),
                                   ),
                                 ),
-                                Positioned.fromRect(
-                                  rect: frame,
-                                  child: Opacity(
-                                    opacity: 1 - change,
-                                    child: Transform.scale(
-                                      scale: 1 - .1 * shine,
-                                      alignment: Alignment.bottomCenter,
-                                      child: young,
+                                if (young != null && change < 1)
+                                  Positioned.fromRect(
+                                    rect: frame,
+                                    child: Opacity(
+                                      opacity: 1 - change,
+                                      child: Transform.scale(
+                                        scale: 1 - .1 * shine,
+                                        alignment: Alignment.bottomCenter,
+                                        child: young,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Positioned.fromRect(
-                                  rect: frame,
-                                  child: Opacity(
-                                    opacity: change,
-                                    child: Transform.scale(
-                                      scale:
-                                          .84 +
-                                          .16 *
-                                              easeMotion(
-                                                motionWindow(t, .46, .84),
-                                              ) +
-                                          .045 * pulse(t, .58, .88),
-                                      alignment: Alignment.bottomCenter,
-                                      child: grown,
+                                if (folded != null && opened < 1 && change > 0)
+                                  Positioned.fromRect(
+                                    rect: frame,
+                                    child: Opacity(
+                                      opacity: change * (1 - opened),
+                                      child: Transform.scale(
+                                        scale: grownScale,
+                                        alignment: Alignment.bottomCenter,
+                                        child: folded,
+                                      ),
                                     ),
                                   ),
-                                ),
+                                if (opened > 0 && change > 0)
+                                  Positioned.fromRect(
+                                    rect: frame,
+                                    child: Opacity(
+                                      opacity: change * opened,
+                                      child: Transform.scale(
+                                        scale: grownScale,
+                                        alignment: Alignment.bottomCenter,
+                                        child: grown,
+                                      ),
+                                    ),
+                                  ),
                                 if (t < 1)
                                   Positioned.fill(
                                     child: CustomPaint(
@@ -215,7 +255,11 @@ class _EvolutionMomentState extends State<EvolutionMoment>
                     Padding(
                       padding: const EdgeInsets.fromLTRB(15, 16, 15, 0),
                       child: Text(
-                        widget.preview ? '进化预演' : '${widget.pet.nickname}长大了',
+                        widget.preview
+                            ? '进化预演'
+                            : widget.replay
+                            ? widget.pet.nickname
+                            : '${widget.pet.nickname}长大了',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
@@ -225,7 +269,9 @@ class _EvolutionMomentState extends State<EvolutionMoment>
                         horizontal: 12,
                       ),
                       child: Text(
-                        '${stageNames[widget.from - 1]}  →  ${stageNames[widget.to - 1]}',
+                        widget.from == widget.to
+                            ? stageNames[widget.to - 1]
+                            : '${stageNames[widget.from - 1]}  →  ${stageNames[widget.to - 1]}',
                       ),
                     ),
                     if (widget.receipt case final message?)
@@ -288,6 +334,8 @@ class _EvolutionLight extends CustomPainter {
       Companion.fox => const Color(0xffffcf6c),
       Companion.rabbit => const Color(0xffdfd7ff),
       Companion.cat => const Color(0xffbcf0ff),
+      Companion.otter => const Color(0xffade2cf),
+      Companion.hedgehog => const Color(0xffebc08e),
     };
     c.drawCircle(
       center,
@@ -361,6 +409,16 @@ class _EvolutionPetals extends CustomPainter {
           CompanionEffects.moon(c, p, size, a * .19, k);
         case Companion.cat:
           CompanionEffects.wisp(c, p, size, a * .14, k);
+        case Companion.otter:
+          CompanionEffects.wisp(c, p, size * .7, a * .12, k);
+        case Companion.hedgehog:
+          CompanionEffects.ginkgo(
+            c,
+            p,
+            size * .75,
+            a,
+            const Color(0xffe2ad6b).withValues(alpha: k),
+          );
       }
     }
   }

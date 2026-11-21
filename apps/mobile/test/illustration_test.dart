@@ -72,6 +72,8 @@ void main() {
             Companion.fox => '奶油摇了摇尾巴',
             Companion.rabbit => '桃桃轻轻跳了一下',
             Companion.cat => '团团舒展了云翼',
+            Companion.otter => '小溪抬起小圆耳',
+            Companion.hedgehog => '栗栗动了动鼻尖',
           }),
           findsOneWidget,
         );

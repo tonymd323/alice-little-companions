@@ -1,6 +1,6 @@
 # 小小伙伴家庭安装说明
 
-当前 Android 家庭候选版是 **0.24.0+25**，构建提交为 `6fc48ec`，沿用原家庭签名。0.18 及后续家庭版可在家长入口检查更新，也可在手机浏览器登录私有仓库，下载通用 APK 后选择「更新」。[下载 0.24.0 家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.24.0-android.apk?raw=true) · [下载目录及旧版](https://github.com/tonymd323/alice-little-companions/tree/android-downloads/downloads)
+当前可下载的 Android 家庭版是 **0.24.0+25**，构建提交为 `6fc48ec`，沿用原家庭签名。0.18 及后续家庭版可在家长入口检查更新，也可在手机浏览器下载通用 APK 后选择「更新」。[下载 0.24.0 家庭 APK](https://github.com/tonymd323/alice-little-companions/blob/android-downloads/downloads/alice-0.24.0-android.apk?raw=true) · [下载目录及旧版](https://github.com/tonymd323/alice-little-companions/tree/android-downloads/downloads)
 
 0.14.1 和 0.15.0 家庭包的签名指纹一致。安卓 9 云端模拟器在飞行模式下覆盖后冷启动，测试家庭与已修好的彩窗均保留。早期候选 `alice-0.15.0-cat-preview.apk` 使用另一张测试证书，仅供单独试装。[双包摘要](evidence/cat-walk/family-package.json) · [覆盖与重启实测](evidence/cat-walk/family-upgrade.json)
 
@@ -23,12 +23,12 @@
 ### App 内更新
 
 1. 打开「家长入口 → 应用更新 → 检查更新」。应用先按当前的访问配置检查。公开 GitHub 仓库可直接读取版本和安装包。
-2. 当前下载仓库是私有的。GitHub 若提示需要授权，在 GitHub 的 Fine-grained tokens 页面为 `tonymd323/alice-little-companions` 创建能读取仓库内容的令牌，选 **Contents: Read-only**。将它填到这台设备的「应用更新」。令牌保存在设备安全存储里，可在该页移除，不随家庭备份迁移。也可使用页面上的「在浏览器下载」。[GitHub 令牌设置](https://github.com/settings/personal-access-tokens/new)
+2. 下载仓库若设为私有，在 GitHub 的 Fine-grained tokens 页面为该仓库创建能读取内容的令牌，选 **Contents: Read-only**。将它填到这台设备的「应用更新」。令牌保存在设备安全存储里，可在该页移除，不随家庭备份迁移。也可使用页面上的「在浏览器下载」。[GitHub 令牌设置](https://github.com/settings/personal-access-tokens/new)
 3. 发现新版本时点「下载并安装」。下载完成后，App 验证文件大小、SHA-256、包名、递增版本和签名。初次安装来源授权可能会打开安卓设置。开启对应权限，回到 App 解锁家长入口，点「安装更新」，在系统界面确认。
 
 版本查询和下载由家长主动触发。建家、账本、剧情、备份和恢复仍可在飞行模式下使用。iPad 的更新沿用 Apple 签名安装方式。
 
-后续签发用下列命令从原签名 APK 生成 `latest.json`。在私有 `android-downloads` 分支的同一个提交发布 `downloads/latest.json`、对应 APK 和 `SHA256SUMS.txt`，让应用检查一次即可获得完整的一版。核对 GitHub 取回的包与本地摘要一致。
+后续签发用下列命令从原签名 APK 生成 `latest.json`。在获授权的更新渠道以同一个提交发布 `downloads/latest.json`、对应 APK 和 `SHA256SUMS.txt`，让应用检查一次即可获得完整的一版。核对渠道取回的包与本地摘要一致。现有 GitHub 仓库公开可见，沿用该渠道须另行确认。
 
 ```sh
 python3 tools/android_update_manifest.py app-release.apk --build-tools "$ANDROID_HOME/build-tools/36.0.0" > latest.json

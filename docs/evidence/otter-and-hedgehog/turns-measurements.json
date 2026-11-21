@@ -1,0 +1,131 @@
+{
+  "previous_source": "0c8edcf",
+  "viewport": [
+    480,
+    374
+  ],
+  "recording_fps": 25,
+  "alpha_threshold": 128,
+  "companions": {
+    "otter": {
+      "stage": 6,
+      "outfit": "外套、耳结、眼镜、领巾",
+      "before": {
+        "first_turn": {
+          "frames": [
+            45,
+            46
+          ],
+          "intersection_over_union": 0.3652,
+          "ink_width_px": [
+            285,
+            284
+          ]
+        },
+        "settling": {
+          "frames": [
+            205,
+            206
+          ],
+          "intersection_over_union": 0.9588,
+          "ink_width_px": [
+            286,
+            286
+          ]
+        },
+        "last_foot": [
+          180.0,
+          238.4
+        ]
+      },
+      "after": {
+        "first_turn": {
+          "frames": [
+            45,
+            46
+          ],
+          "intersection_over_union": 0.9082,
+          "ink_width_px": [
+            149,
+            148
+          ]
+        },
+        "settling": {
+          "frames": [
+            205,
+            206
+          ],
+          "intersection_over_union": 0.6198,
+          "ink_width_px": [
+            163,
+            231
+          ]
+        },
+        "last_foot": [
+          180.0,
+          238.4
+        ]
+      }
+    },
+    "hedgehog": {
+      "stage": 6,
+      "outfit": "围裙、耳结、眼镜、领巾",
+      "before": {
+        "first_turn": {
+          "frames": [
+            45,
+            46
+          ],
+          "intersection_over_union": 0.6829,
+          "ink_width_px": [
+            281,
+            282
+          ]
+        },
+        "settling": {
+          "frames": [
+            242,
+            243
+          ],
+          "intersection_over_union": 0.9944,
+          "ink_width_px": [
+            281,
+            281
+          ]
+        },
+        "last_foot": [
+          254.4,
+          238.4
+        ]
+      },
+      "after": {
+        "first_turn": {
+          "frames": [
+            45,
+            46
+          ],
+          "intersection_over_union": 0.8821,
+          "ink_width_px": [
+            185,
+            185
+          ]
+        },
+        "settling": {
+          "frames": [
+            242,
+            243
+          ],
+          "intersection_over_union": 0.9897,
+          "ink_width_px": [
+            227,
+            227
+          ]
+        },
+        "last_foot": [
+          254.4,
+          238.4
+        ]
+      }
+    }
+  }
+}

@@ -56,6 +56,7 @@ void main() {
         legacy.execute(
           '${dropCompanionTables}DROP TABLE rain_map_runs; DROP TABLE companion_memories; PRAGMA user_version = 6',
         );
+        restoreLegacyCompanionChecks(legacy);
       } finally {
         legacy.close();
       }
@@ -863,11 +864,20 @@ void main() {
     await tester.runAsync(() async {
       await stock.service.saveWindowMathBookmark(WindowPage.finished, {1, 3});
       await stock.service.beginRainMap();
-      await stock.service.stepRainMapStone(run: 1, group: 0, stone: 0);
+      for (var stone = 0; stone < RainMapProgress.groupSize; stone++) {
+        await stock.service.stepRainMapStone(run: 1, group: 0, stone: stone);
+      }
+      await stock.service.stampRainMap(run: 1, group: 0);
+      await stock.service.stepRainMapStone(run: 1, group: 1, stone: 0);
       await controller.refresh();
     });
     await tester.pumpWidget(CompanionsApp(controller: controller));
     await tester.pump(const Duration(milliseconds: 80));
+    final rainCourtyard = find.byKey(const ValueKey('rain-courtyard-base'));
+    final courtyard = find.text('庭院').hitTestable();
+    await tester.tap(courtyard);
+    await tester.pump();
+    expect(rainCourtyard, findsNothing);
     await tester.tap(find.text('主线').hitTestable());
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
@@ -878,6 +888,9 @@ void main() {
     final next = find.byKey(const ValueKey('rain-map-stone-1'));
     await waitFor(tester, next);
     expect(find.text('和奶油出发'), findsNothing);
+    expect(find.byKey(const ValueKey('rain-map-art-paper')), findsOneWidget);
+    expect(find.byKey(const ValueKey('rain-map-art-ink-1')), findsOneWidget);
+    expect(find.byKey(const ValueKey('rain-map-art-ink-2')), findsNothing);
     await tester.pump(const Duration(milliseconds: 400));
     await tester.ensureVisible(next);
     await tester.runAsync(() => tester.tap(next.hitTestable()));
@@ -889,7 +902,51 @@ void main() {
       }
       return value;
     });
-    expect(progress?.totalStones, 2);
+    expect(progress?.totalStones, 5);
+    expect((controller.family?.balance, controller.family?.experience), (0, 0));
+
+    await tester.pumpWidget(const SizedBox());
+    await tester.runAsync(() async {
+      for (var group = 1; group < RainMapProgress.groupCount; group++) {
+        for (
+          var stone = group == 1 ? 2 : 0;
+          stone < RainMapProgress.groupSize;
+          stone++
+        ) {
+          await stock.service.stepRainMapStone(
+            run: 1,
+            group: group,
+            stone: stone,
+          );
+        }
+        await stock.service.stampRainMap(run: 1, group: group);
+      }
+      await stock.reopen();
+      controller.service = stock.service;
+      await controller.refresh();
+    });
+    await tester.pumpWidget(CompanionsApp(controller: controller));
+    await tester.pump(const Duration(milliseconds: 80));
+    expect(controller.family?.rainMapCleared, isTrue);
+    await tester.tap(courtyard);
+    await tester.pump();
+    expect(rainCourtyard, findsOneWidget);
+    await tester.tap(find.text('暖廊').hitTestable());
+    await tester.pump();
+    expect(rainCourtyard, findsNothing);
+    final growth = find.text('成长').hitTestable();
+    await waitFor(tester, growth);
+    await tester.tap(growth);
+    await tester.pump(const Duration(milliseconds: 150));
+    final memories = find.text('伙伴回忆');
+    await tester.ensureVisible(memories);
+    await tester.tap(memories.hitTestable());
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    final lastPrint = find.byKey(const ValueKey('rain-map-art-ink-4'));
+    await waitFor(tester, lastPrint);
+    expect(find.text(rainMapTitle), findsOneWidget);
+    expect((controller.family?.balance, controller.family?.experience), (0, 0));
     await tester.pumpWidget(const SizedBox());
   });
 }

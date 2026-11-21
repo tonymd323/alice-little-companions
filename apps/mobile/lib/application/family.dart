@@ -235,6 +235,9 @@ class FamilyService implements RainMapCommands {
     if (await device.activeGeneration() != null) {
       throw const UserError('这台设备已有一个小家。');
     }
+    if (!Companion.starters.contains(companion)) {
+      throw const UserError('请先选一位首宠。');
+    }
     final name = textValue(nickname, 30, requiredLabel: '孩子称呼');
     final generation = device.newGeneration();
     final service = await load(device, generation, rules, clock: clock);
@@ -305,9 +308,7 @@ class FamilyService implements RainMapCommands {
       "i.state IN ('OPEN', 'RETURNED', 'SUBMITTED', 'WAITING')";
 
   static String _taskFields({bool includeClosedDetails = true}) {
-    final details = includeClosedDetails
-        ? '1'
-        : _currentTaskStates;
+    final details = includeClosedDetails ? '1' : _currentTaskStates;
     return '''
       SELECT i.id, i.state, i.planned_day, i.due_day, i.actual_date,
         COALESCE(s.title, v.title) AS title,
@@ -335,8 +336,7 @@ class FamilyService implements RainMapCommands {
   Future<List<TaskEntry>> _listTasks({
     bool includeClosedDetails = true,
     bool currentOnly = false,
-  }) async =>
-      (await db.rows('''
+  }) async => (await db.rows('''
         ${_taskFields(includeClosedDetails: includeClosedDetails)}
         ${currentOnly ? 'WHERE $_currentTaskStates' : ''}
         ORDER BY COALESCE(i.actual_date, i.planned_day) DESC, COALESCE(i.approved_at, 0) DESC,

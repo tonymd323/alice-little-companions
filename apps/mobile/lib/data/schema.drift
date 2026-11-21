@@ -13,7 +13,7 @@ CREATE TABLE child_profiles (
   id TEXT NOT NULL PRIMARY KEY,
   family_id TEXT NOT NULL UNIQUE REFERENCES households(id),
   nickname TEXT NOT NULL,
-  active_pet_id TEXT NOT NULL CHECK (active_pet_id IN ('fox', 'rabbit', 'cat'))
+  active_pet_id TEXT NOT NULL CHECK (active_pet_id IN ('fox', 'rabbit', 'cat', 'otter', 'hedgehog'))
 );
 
 CREATE TABLE window_math_bookmarks (
@@ -200,7 +200,7 @@ CREATE TABLE placements (
 );
 
 CREATE TABLE pet_state (
-  pet_id TEXT NOT NULL CHECK (pet_id IN ('fox', 'rabbit', 'cat')),
+  pet_id TEXT NOT NULL CHECK (pet_id IN ('fox', 'rabbit', 'cat', 'otter', 'hedgehog')),
   slot TEXT NOT NULL CHECK (slot IN ('head', 'face', 'neck', 'body')),
   entitlement_id TEXT NOT NULL REFERENCES entitlements(id),
   PRIMARY KEY (pet_id, slot)
@@ -268,14 +268,14 @@ CREATE TABLE rain_map_runs (
 
 CREATE TABLE companion_memories (
   child_id TEXT NOT NULL REFERENCES child_profiles(id),
-  pet_id TEXT NOT NULL CHECK (pet_id IN ('fox', 'rabbit', 'cat')),
+  pet_id TEXT NOT NULL CHECK (pet_id IN ('fox', 'rabbit', 'cat', 'otter', 'hedgehog')),
   moment TEXT NOT NULL CHECK (moment IN ('touch', 'call')),
   PRIMARY KEY (child_id, pet_id, moment)
 );
 
 CREATE TABLE owned_companions (
   child_id TEXT NOT NULL REFERENCES child_profiles(id),
-  pet_id TEXT NOT NULL CHECK (pet_id IN ('fox', 'rabbit', 'cat')),
+  pet_id TEXT NOT NULL CHECK (pet_id IN ('fox', 'rabbit', 'cat', 'otter', 'hedgehog')),
   purchase_id TEXT UNIQUE REFERENCES purchases(id),
   retained_stage INTEGER NOT NULL DEFAULT 1 CHECK (retained_stage BETWEEN 1 AND 6),
   PRIMARY KEY (child_id, pet_id)

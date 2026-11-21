@@ -5,7 +5,9 @@ import '../application/family.dart';
 import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/rules.dart';
+import '../illustration/tailoring.dart';
 import 'common.dart';
+import 'florist_workbench.dart';
 import 'garden.dart';
 import 'rewards.dart';
 
@@ -110,6 +112,17 @@ class SpacePage extends StatefulWidget {
 class _SpacePageState extends State<SpacePage> {
   FamilyService get service => widget.controller.service!;
   late Future<(Json?, List<Json>, List<Json>)> data = load();
+  final _flowers = ValueNotifier<Set<int>>(const {});
+
+  @override
+  void dispose() {
+    _flowers.dispose();
+    super.dispose();
+  }
+
+  void _openFlorist() {
+    openPage(context, FloristWorkbench(flowers: _flowers));
+  }
 
   Future<(Json?, List<Json>, List<Json>)> load() async => (
     (await service.spaces())
@@ -149,6 +162,12 @@ class _SpacePageState extends State<SpacePage> {
       final values = snapshot.data;
       final space = values?.$1;
       final family = widget.controller.family!;
+      final pieces = values?.$2.map(ScenePiece.fromRow).toList() ?? [];
+      final showFlorist =
+          space?['scene_id'] == 'flower_shop' &&
+          furnishedRooms['flower_shop']!.every(
+            (asset) => pieces.any((piece) => piece.asset == asset),
+          );
       return Scaffold(
         appBar: AppBar(title: Text(space?['name'] as String? ?? '我的空间')),
         body: PageBody(
@@ -164,6 +183,7 @@ class _SpacePageState extends State<SpacePage> {
                       playable: true,
                       view: HomeView.veranda,
                       label: space['name'] as String,
+                      showLabel: !showFlorist,
                       companion: family.companion,
                       stage: family.stage,
                       rules: service.rules,
@@ -171,8 +191,21 @@ class _SpacePageState extends State<SpacePage> {
                         service.rules,
                         space['scene_id'] as String,
                       ),
-                      pieces: values.$2.map(ScenePiece.fromRow).toList(),
+                      pieces: pieces,
                       outfit: outfitFiles(values.$3),
+                      floristWorktop: showFlorist
+                          ? (flowers: _flowers, open: _openFlorist)
+                          : null,
+                      chapterButton: showFlorist
+                          ? TextButton.icon(
+                              onPressed: _openFlorist,
+                              icon: const Icon(
+                                Icons.local_florist_outlined,
+                                size: 17,
+                              ),
+                              label: const Text('分束'),
+                            )
+                          : null,
                     ),
                     const SizedBox(height: 12),
                     if (!service.frozen)
@@ -287,6 +320,7 @@ class _WardrobePageState extends State<WardrobePage> {
               return const Center(child: CircularProgressIndicator());
             }
             final (items, progress) = stock.data!;
+            final stage = progress[pet]?.stage ?? 1;
             final clothes = items
                 .where((item) => item['slot'] != null)
                 .toList();
@@ -304,7 +338,7 @@ class _WardrobePageState extends State<WardrobePage> {
               children: [
                 GardenScene(
                   companion: pet,
-                  stage: progress[pet]?.stage ?? 1,
+                  stage: stage,
                   rules: service.rules,
                   label: '试衣间',
                   focus: true,
@@ -326,11 +360,15 @@ class _WardrobePageState extends State<WardrobePage> {
                         controller: widget.controller,
                         section: CatalogSection.clothes,
                         model: pet,
+                        modelStage: stage,
                       ),
                     );
                     if (!mounted) return;
                     setState(() {
-                      inventory = (service.items(), service.companionProgress()).wait;
+                      inventory = (
+                        service.items(),
+                        service.companionProgress(),
+                      ).wait;
                       current = service.wardrobe(pet);
                       revision = widget.controller.family!.revision;
                       draft = null;
@@ -340,7 +378,9 @@ class _WardrobePageState extends State<WardrobePage> {
                 const SizedBox(height: 12),
                 CompanionPicker(
                   selected: pet,
-                  stages: progress.map((pet, state) => MapEntry(pet, state.stage)),
+                  stages: progress.map(
+                    (pet, state) => MapEntry(pet, state.stage),
+                  ),
                   onSelected: (value) => setState(() {
                     pet = value;
                     draft = null;
@@ -379,7 +419,14 @@ class _WardrobePageState extends State<WardrobePage> {
                                 ))
                                   DropdownMenuItem(
                                     value: outfit['id'] as String,
-                                    child: Text(outfit['name'] as String),
+                                    child: Text(
+                                      fittedCoat(
+                                            pet,
+                                            stage,
+                                            outfit['asset_id'] as String,
+                                          )?.nameInWardrobe ??
+                                          outfit['name'] as String,
+                                    ),
                                   ),
                               ],
                               onChanged: (value) => setState(() {

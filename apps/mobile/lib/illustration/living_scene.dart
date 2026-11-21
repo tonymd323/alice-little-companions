@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -8,8 +9,14 @@ import '../domain/layout_rules.dart';
 import '../domain/rules.dart';
 import 'puppet.dart';
 import 'animated_backdrop.dart';
+import 'companion_hops.dart';
 import 'companion_walk.dart';
 import 'companion_motion.dart';
+import 'companion_turns.dart';
+import 'florist_art.dart';
+import 'painted_walk.dart';
+import 'rain_courtyard.dart';
+import 'reading_veranda.dart';
 
 import 'room_painting.dart';
 export 'room_painting.dart';
@@ -84,13 +91,20 @@ class GardenScene extends StatefulWidget {
     this.onViewChanged,
     this.playable = false,
     this.chapterButton,
+    this.floristWorktop,
+    this.readingVeranda,
     this.windowsLit = false,
+    this.afterRain = false,
     this.onTouched,
     this.onCalled,
   });
   final Companion companion;
   final Widget? chapterButton;
+  final ({ValueListenable<Set<int>> flowers, VoidCallback open})?
+  floristWorktop;
+  final ({bool mapOnStool, VoidCallback? openMap})? readingVeranda;
   final bool windowsLit;
+  final bool afterRain;
   final int stage;
   final String label;
   final bool reveal, immersive, focus, showLabel, playable;
@@ -121,23 +135,63 @@ class _GardenSceneState extends State<GardenScene>
   late final Ticker _ticker;
   Duration? _last;
   bool _still = false, _active = true, _route = true;
-  double _pan = 0, _hello = -20, _walkStart = -20, _walkDuration = 1;
-  Offset _start = const Offset(.47, .932), _end = const Offset(.47, .932);
+  double _pan = 0, _hello = -20;
+  late Offset _ground;
   bool _stroking = false, _left = false;
   PetAction _action = PetAction.rest;
   WalkPlan? _walkPlan;
   WalkPose? _walkPose;
+  CompanionHopPlan? _hop;
+  ({double at, Offset? target})? _hopThen;
+  ({double start, double end, double from, double to})? _landingSkill;
   double _actionStart = -20, _actionLength = 1, _nextIdle = 5.8;
   int _idleTurn = 0;
   bool get _playable => widget.playable || widget.onViewChanged != null;
-  WalkRig? get _walkRig => _playable
-      ? WalkRig.forPet(widget.companion, widget.stage, widget.reveal)
+  bool get _walkable => _playable || !widget.focus;
+  PaintedWalk? get _paintedWalk =>
+      _walkable ? PaintedWalk.forPose(widget.companion, widget.stage) : null;
+  HopStyle? get _hopStyle => HopStyle.forPose(widget.companion, widget.stage);
+  WalkRig? get _walkRig => _walkable
+      ? _paintedWalk?.rig ?? WalkRig.forPet(widget.companion, widget.stage)
       : null;
   bool get _hasWalk => _walkRig != null;
   PetMotion get _motion {
     if (_still || _time.seconds < _actionStart) return const PetMotion.rest();
     final k = ((_time.seconds - _actionStart) / _actionLength).clamp(0.0, 1.0);
     return k >= 1 ? const PetMotion.rest() : PetMotion(_action, k);
+  }
+
+  double get _canLeaveAt => math.max(_time.seconds, _landingSkill?.end ?? 0);
+
+  PetMotion get _drawnMotion {
+    if (_landingSkill case final landing? when _time.seconds < landing.end) {
+      final t = motionWindow(_time.seconds, landing.start, landing.end);
+      return PetMotion(
+        PetAction.skill,
+        landing.from + (landing.to - landing.from) * t,
+      );
+    }
+    return _motion;
+  }
+
+  void _finishSkillLanding() {
+    final motion = _motion;
+    if (motion.action != PetAction.skill || _landingSkill != null) return;
+    final pet = widget.companion;
+    if (motion.height(pet) <= 0 && motion.travel(pet) <= 0) return;
+    final end = switch (pet) {
+      Companion.cat => .85,
+      Companion.fox => .84,
+      Companion.rabbit => motion.progress < .445 ? .519 : .932,
+      Companion.otter || Companion.hedgehog => 1.0,
+    };
+    if (motion.progress >= end) return;
+    _landingSkill = (
+      start: _time.seconds,
+      end: _time.seconds + ((end - motion.progress) * 1.6).clamp(.14, .36),
+      from: motion.progress,
+      to: end,
+    );
   }
 
   void _play(PetAction action, double seconds, {double? after}) {
@@ -151,6 +205,7 @@ class _GardenSceneState extends State<GardenScene>
     if (!_playable ||
         _stroking ||
         _walkPlan != null ||
+        _hop != null ||
         _time.seconds < _nextIdle) {
       return;
     }
@@ -219,11 +274,10 @@ class _GardenSceneState extends State<GardenScene>
   double get _reaction => _time.seconds < _hello
       ? 1
       : ((_time.seconds - _hello) / 1.35).clamp(0, 1);
-  double get _step =>
-      ((_time.seconds - _walkStart) / _walkDuration).clamp(0, 1);
-  Offset get _foot => _walkPose != null
-      ? _walkNormalized(_walkPose!.root)
-      : Offset.lerp(_start, _end, Curves.easeInOut.transform(_step))!;
+  CompanionHopFrame? get _hopFrame => _hop?.at(_time.seconds);
+  Offset get _foot =>
+      _hopFrame?.ground ??
+      (_walkPose != null ? _walkNormalized(_walkPose!.root) : _ground);
 
   Offset _walkWorldPoint(Offset point) =>
       Offset(point.dx * walkWorld.width, point.dy * walkWorld.height);
@@ -232,6 +286,32 @@ class _GardenSceneState extends State<GardenScene>
       Offset(point.dx / walkWorld.width, point.dy / walkWorld.height);
 
   void _advanceWalk(double time) {
+    if (_landingSkill case final landing? when time >= landing.end) {
+      _landingSkill = null;
+    }
+    if (_hop case final hop?) {
+      final next = _hopThen;
+      final stop = next?.at ?? hop.end;
+      if (time < stop) {
+        _left = hop.at(time).left;
+      } else {
+        final landing = hop.at(stop);
+        _ground = landing.ground;
+        _left = landing.left;
+        _hop = null;
+        _hopThen = null;
+        if (next?.target case final target? when target != landing.ground) {
+          _hop = CompanionHopPlan(
+            hop.style,
+            stop,
+            landing.ground,
+            target,
+            landing.left,
+            wasAway: landing.pose.facesAway,
+          );
+        }
+      }
+    }
     final plan = _walkPlan;
     if (plan == null) return;
     final pose = plan.at(time);
@@ -245,15 +325,20 @@ class _GardenSceneState extends State<GardenScene>
   }
 
   double _stopWalking() {
-    _start = _end = _foot;
-    _walkStart = -20;
+    _finishSkillLanding();
+    if (_hop case final hop?) {
+      final ground = hop.nextRest(_time.seconds);
+      _hopThen = (at: ground, target: null);
+      return ground;
+    }
+    _ground = _foot;
     if (_walkPose case final pose?) {
-      final plan = WalkPlan.stop(_time.seconds, pose);
+      final plan = WalkPlan.stop(_canLeaveAt, pose);
       _walkPlan = plan;
       _advanceWalk(_time.seconds);
       return plan.end;
     }
-    return _time.seconds;
+    return _canLeaveAt;
   }
 
   Offset get _rest => widget.focus
@@ -270,27 +355,30 @@ class _GardenSceneState extends State<GardenScene>
     Companion.fox => '奶油摇了摇尾巴',
     Companion.rabbit => '桃桃轻轻跳了一下',
     Companion.cat => widget.stage >= 4 ? '团团舒展了云翼' : '团团晃了晃小尾巴',
+    Companion.otter => '小溪抬起小圆耳',
+    Companion.hedgehog => '栗栗动了动鼻尖',
   };
 
   @override
   void initState() {
     super.initState();
-    _start = _end = _rest;
+    _ground = _rest;
+    _left = _paintedWalk?.facesLeft ?? false;
     WidgetsBinding.instance.addObserver(this);
     _active =
         WidgetsBinding.instance.lifecycleState == null ||
         WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
     _ticker = createTicker((elapsed) {
       final previous = _last;
-      if (previous != null && (elapsed - previous).inMicroseconds < 33000) {
+      if (previous != null && (elapsed - previous).inMicroseconds < 15500) {
         return;
       }
       _last = elapsed;
-      if (!_stroking) _gaze *= .81;
-      _restRoutine();
       final dt = previous == null
           ? 0.0
           : math.min(.35, (elapsed - previous).inMicroseconds / 1e6);
+      if (!_stroking) _gaze *= math.pow(.81, dt * 30);
+      _restRoutine();
       _advanceWalk(_time.seconds + dt);
       _time.tick(dt);
     });
@@ -306,15 +394,18 @@ class _GardenSceneState extends State<GardenScene>
         old.focus != widget.focus ||
         old.reveal != widget.reveal ||
         (old.playable || old.onViewChanged != null) != _playable) {
-      _start = _end = _rest;
-      _hello = _walkStart = -20;
+      _ground = _rest;
+      _hello = -20;
       _pan = 0;
       _stroking = false;
       _gaze = 0;
       _action = PetAction.rest;
-      _left = false;
+      _left = _paintedWalk?.facesLeft ?? false;
       _walkPlan = null;
       _walkPose = null;
+      _hop = null;
+      _hopThen = null;
+      _landingSkill = null;
       _idleTurn = 0;
       _nextIdle = _time.seconds + 5.8;
     }
@@ -333,6 +424,18 @@ class _GardenSceneState extends State<GardenScene>
 
   void _sync() {
     final run = !_still && _active && _route;
+    if (_still) _landingSkill = null;
+    if (_hop case final hop? when _still) {
+      final next = _hopThen;
+      final target = next == null
+          ? hop.destination
+          : next.target ?? hop.at(next.at).ground;
+      final dx = target.dx - hop.at(_time.seconds).ground.dx;
+      if (dx.abs() > .01) _left = dx < 0;
+      _ground = target;
+      _hop = null;
+      _hopThen = null;
+    }
     if (_still && _walkPlan != null) {
       _walkPlan = null;
       _walkPose = null;
@@ -343,7 +446,6 @@ class _GardenSceneState extends State<GardenScene>
     } else if (!run && _ticker.isActive) {
       _ticker.stop();
       _last = null;
-      if (!_hasWalk) _start = _end;
     }
   }
 
@@ -379,6 +481,7 @@ class _GardenSceneState extends State<GardenScene>
   }
 
   bool _walk(Offset p) {
+    if (!_walkable) return false;
     final floor = _base && !_veranda
         ? (widget.scene?.floor ??
               const [
@@ -393,12 +496,20 @@ class _GardenSceneState extends State<GardenScene>
     final onFloor = floor == null
         ? p.dx > .09 && p.dx < .91 && p.dy > .66 && p.dy < .965
         : contains(floor, p.dx, p.dy);
-    if (!onFloor) return false;
+    final hop = _hop;
+    final launch = hop == null
+        ? _foot
+        : hop.at(hop.nextRest(_time.seconds)).ground;
+    if (!onFloor ||
+        (widget.floristWorktop != null && FloristRack.blocksWalk(launch, p))) {
+      return false;
+    }
+    _finishSkillLanding();
     _action = PetAction.rest;
     _hello = -20;
     _nextIdle = _time.seconds + 7;
     if (_walkRig case final rig?) {
-      if (_walkPlan != null && p == _end) return true;
+      if (_walkPlan != null && p == _ground) return true;
       final world = _walkWorldPoint(p);
       final from =
           _walkPose ??
@@ -409,24 +520,31 @@ class _GardenSceneState extends State<GardenScene>
             walkWorld.height * _petFactor / walkOrigin.dy,
           );
       if ((world - from.root).distance < 1) return true;
-      _start = _end = p;
+      _ground = p;
       if (_still) {
         _left = p.dx < _walkNormalized(from.root).dx;
       } else {
-        _walkPlan = WalkPlan.to(_time.seconds, from, world);
+        _walkPlan = WalkPlan.to(_canLeaveAt, from, world);
         _advanceWalk(_time.seconds);
       }
       _time.tick(0);
       return true;
     }
-    _start = _foot;
-    _left = p.dx < _start.dx;
-    _end = p;
-    _walkStart = _time.seconds;
-    _walkDuration = (.63 + (_end - _start).distance * 3.6).clamp(.63, 1.8);
-    if (_still) _start = _end;
-    _time.tick(0);
-    return true;
+    if (_hopStyle case final style?) {
+      if (_still) {
+        _left = p.dx < _foot.dx;
+        _ground = p;
+      } else if (hop != null) {
+        if (p != hop.destination || _hopThen != null) {
+          _hopThen = (at: hop.nextRest(_time.seconds), target: p);
+        }
+      } else if ((_foot - p).distance > .004) {
+        _hop = CompanionHopPlan(style, _canLeaveAt, _foot, p, _left);
+      }
+      _time.tick(0);
+      return true;
+    }
+    return false;
   }
 
   double get _petFactor =>
@@ -445,7 +563,10 @@ class _GardenSceneState extends State<GardenScene>
 
   bool _touchesPet(Offset point, SceneProjection map, {double padding = 0}) {
     final box = _petBox(map);
-    if (!_hasWalk) return box.inflate(padding).contains(point);
+    final low = widget.companion.hasGroundSkill;
+    if (!low && (!_hasWalk || _paintedWalk != null)) {
+      return box.inflate(padding).contains(point);
+    }
     // Let taps outside the painted head, body and tail reach the grass.
     final p = (point - box.topLeft) / box.width;
     final margin = padding / box.width;
@@ -457,6 +578,22 @@ class _GardenSceneState extends State<GardenScene>
       final dx = (p.dx - x) / (rx + margin);
       final dy = (p.dy - y) / (ry + margin);
       return dx * dx + dy * dy <= 1;
+    }
+
+    if (low) {
+      // Keep the empty grass above the low tail or haunch tappable.
+      final height = 1 / widget.companion.aspect(widget.stage);
+      if (_paintedView(pose)?.axial == true) {
+        final width = widget.companion == Companion.otter ? .24 : .33;
+        return oval(.5, 1 - height * .51, width, height * .53);
+      }
+      if (widget.companion == Companion.otter) {
+        return oval(.5 + side * .25, 1 - height * .73, .20, height * .25) ||
+            oval(.5 - side * .06, 1 - height * .32, .33, height * .31) ||
+            oval(.5 - side * .36, 1 - height * .13, .16, height * .12);
+      }
+      return oval(.5 + side * .26, 1 - height * .40, .23, height * .24) ||
+          oval(.5 - side * .08, 1 - height * .48, .34, height * .46);
     }
 
     return oval(
@@ -474,9 +611,26 @@ class _GardenSceneState extends State<GardenScene>
         );
   }
 
+  TurnView? _paintedView(WalkPose? pose) =>
+      pose != null &&
+          pose.ink > 0 &&
+          turnFits(widget.companion, widget.stage).isNotEmpty
+      ? TurnView.at(pose.yaw, widget.companion)
+      : null;
+
   void _tap(Offset point, SceneProjection map) {
     if (_touchesPet(point, map) || widget.focus) {
       _greet();
+      return;
+    }
+    final openMap = _veranda ? widget.readingVeranda?.openMap : null;
+    if (openMap != null &&
+        Rect.fromCenter(
+          center: map.screen(ReadingVeranda.mapCenter),
+          width: 48,
+          height: 48,
+        ).contains(point)) {
+      openMap();
       return;
     }
     _walk(map.normalized(point));
@@ -510,11 +664,45 @@ class _GardenSceneState extends State<GardenScene>
         );
         map = SceneProjection(size, world, Offset(dx, dy), _veranda);
       }
+      final florist = widget.floristWorktop;
       final painting = RoomPainting(
         widget.scene?.id ?? 'base_room',
         _base && !_veranda ? const [] : widget.pieces,
+        floristWorktop: florist != null,
       );
       final frame = map.origin & map.world;
+      final rainCourtyard = widget.afterRain && _base && !_veranda;
+      final reading = _veranda ? widget.readingVeranda : null;
+      if (reading?.openMap != null) {
+        painting.layers.addAll([
+          ReadingVeranda.stoolShadow,
+          ReadingVeranda.stool,
+          if (reading!.mapOnStool) ReadingVeranda.rolledMap,
+        ]);
+        painting.layers.sort((a, b) => a.depth.compareTo(b.depth));
+      }
+      final backdrop = reading != null
+          ? ReadingVeranda.room
+          : florist != null
+          ? FloristTray.roomBackground
+          : painting.background ?? _back;
+      Widget verandaArt(String art, Rect area, {String? label}) =>
+          Positioned.fromRect(
+            rect: Rect.fromPoints(
+              map.screen(area.topLeft),
+              map.screen(area.bottomRight),
+            ),
+            child: IgnorePointer(
+              child: Image.asset(
+                art,
+                key: ValueKey(art),
+                fit: BoxFit.fill,
+                filterQuality: FilterQuality.medium,
+                semanticLabel: label,
+                excludeFromSemantics: label == null,
+              ),
+            ),
+          );
       final pet = IllustratedPet(
         pet: widget.companion,
         stage: widget.stage,
@@ -524,20 +712,28 @@ class _GardenSceneState extends State<GardenScene>
         seconds: () => _time.seconds,
         reaction: () => _reaction,
         gaze: () => _gaze,
-        walking: () =>
-            _hasWalk ? (_walkPose == null ? 0 : 1) : (_step < 1 ? 1 : 0),
+        walking: () => _walkPose != null || _hop != null ? 1 : 0,
         still: _still,
-        actionPoses: _playable,
+        actionPoses: _walkable,
         motion: () => _motion,
+        drawnMotion: () => _drawnMotion,
+        hop: _hopStyle == null || !_walkable ? null : () => _hopFrame?.pose,
+        paintedWalk: _paintedWalk,
         walkPose: _hasWalk ? () => _walkPose : null,
-        walkFacesLeft: _hasWalk ? () => _left : null,
+        walkFacesLeft: _walkable ? () => _left : null,
       );
       final back = Positioned.fromRect(
         rect: frame,
         child: RepaintBoundary(
-          child: _playable && !_still
+          child: rainCourtyard
+              ? RainCourtyardArt(
+                  clock: _time,
+                  seconds: () => _time.seconds,
+                  still: _still,
+                )
+              : _playable && !_still
               ? AnimatedBackdrop(
-                  asset: painting.background ?? _back,
+                  asset: backdrop,
                   place: _base
                       ? (_veranda ? 'veranda' : 'courtyard')
                       : widget.scene!.id,
@@ -545,7 +741,7 @@ class _GardenSceneState extends State<GardenScene>
                   seconds: () => _time.seconds,
                 )
               : Image.asset(
-                  painting.background ?? _back,
+                  backdrop,
                   fit: BoxFit.fill,
                   excludeFromSemantics: true,
                   filterQuality: FilterQuality.medium,
@@ -553,8 +749,19 @@ class _GardenSceneState extends State<GardenScene>
                 ),
         ),
       );
-      final foreground =
-          widget.scene != null && !_veranda && painting.background == null
+      final foreground = rainCourtyard
+          ? Positioned.fromRect(
+              rect: frame,
+              child: RepaintBoundary(
+                child: RainCourtyardArt(
+                  clock: _time,
+                  seconds: () => _time.seconds,
+                  still: _still,
+                  foreground: true,
+                ),
+              ),
+            )
+          : widget.scene != null && !_veranda && painting.background == null
           ? Positioned.fromRect(
               rect: frame,
               child: IgnorePointer(
@@ -583,7 +790,30 @@ class _GardenSceneState extends State<GardenScene>
             clipBehavior: Clip.hardEdge,
             children: [
               back,
-              if (widget.windowsLit && _veranda)
+              if (reading != null)
+                verandaArt(
+                  widget.windowsLit
+                      ? ReadingVeranda.stained
+                      : ReadingVeranda.gold,
+                  ReadingVeranda.lightFrame,
+                ),
+              if (reading != null && widget.windowsLit)
+                verandaArt(
+                  ReadingVeranda.windows,
+                  ReadingVeranda.windowFrame,
+                  label: '三扇彩窗已经点亮',
+                ),
+              if (florist != null)
+                Positioned.fromRect(
+                  rect: Rect.fromPoints(
+                    map.screen(FloristTray.roomFrame.topLeft),
+                    map.screen(FloristTray.roomFrame.bottomRight),
+                  ),
+                  child: RepaintBoundary(
+                    child: FloristTray(flowers: florist.flowers, inRoom: true),
+                  ),
+                ),
+              if (widget.windowsLit && _veranda && reading == null)
                 Positioned.fromRect(
                   rect: frame,
                   child: IgnorePointer(
@@ -606,15 +836,26 @@ class _GardenSceneState extends State<GardenScene>
                   final rect = _petBox(map), foot = map.screen(_foot);
                   bool behind(RoomLayer layer) =>
                       layer.depth <= _foot.dy + .015;
-                  final motion = _motion;
-                  final lift = motion.height(widget.companion),
+                  final motion = _drawnMotion;
+                  final lift =
+                          motion.height(widget.companion) +
+                          (_hopFrame?.pose.lift ?? 0),
                       travel =
                           motion.travel(widget.companion) * (_left ? -1 : 1);
                   final actorRect = rect.shift(
                     Offset(rect.width * travel, -rect.height * lift),
                   );
                   final walkPose = _walkPose;
-                  final showSkill = motion.action == PetAction.skill;
+                  final turn = turnFits(
+                    widget.companion,
+                    widget.stage,
+                  )[_paintedView(walkPose)];
+                  final showSkill = _motion.action == PetAction.skill;
+                  final showBurr =
+                      showSkill &&
+                      widget.companion == Companion.hedgehog &&
+                      motion.progress > .14 &&
+                      motion.progress < .84;
                   Widget effects(bool front) => Positioned.fill(
                     child: IgnorePointer(
                       child: CustomPaint(
@@ -652,41 +893,61 @@ class _GardenSceneState extends State<GardenScene>
                         ),
                       ),
                       if (walkPose != null && walkPose.ink > 0)
-                        for (final paw in walkPose.paws)
-                          Positioned.fromRect(
-                            rect: Rect.fromCenter(
-                              center: map.screen(_walkNormalized(paw.ground)),
-                              width: rect.width * .082,
-                              height: rect.height * .031,
-                            ),
-                            child: Opacity(
-                              opacity:
-                                  walkPose.ink *
-                                  (1 - paw.lift / walkPose.scale / 30).clamp(
-                                    0.0,
-                                    1.0,
+                        for (final (index, paw) in walkPose.paws.indexed)
+                          if (turn == null
+                              ? (_paintedWalk?.legs[index].visible ?? true)
+                              : turn.pads[index] != null)
+                            Positioned.fromRect(
+                              rect: Rect.fromCenter(
+                                center: map.screen(_walkNormalized(paw.ground)),
+                                width: rect.width * .082,
+                                height: rect.height * .031,
+                              ),
+                              child: Opacity(
+                                opacity:
+                                    walkPose.ink *
+                                    (1 - paw.lift / walkPose.scale / 30).clamp(
+                                      0.0,
+                                      1.0,
+                                    ),
+                                child: CustomPaint(
+                                  painter: _ContactShadow(
+                                    _outdoor
+                                        ? const Color(0x9c313C26)
+                                        : const Color(0x94573B2C),
                                   ),
-                              child: CustomPaint(
-                                painter: _ContactShadow(
-                                  _outdoor
-                                      ? const Color(0x9c313C26)
-                                      : const Color(0x94573B2C),
                                 ),
                               ),
                             ),
+                      if (showSkill && !widget.companion.hasGroundSkill)
+                        effects(false),
+                      if (showBurr)
+                        Positioned.fromRect(
+                          rect: Rect.fromCenter(
+                            center: Offset(
+                              foot.dx + rect.width * (_left ? -.57 : .57),
+                              foot.dy - rect.height * .060,
+                            ),
+                            width: rect.width * .19,
+                            height: rect.height * .14,
                           ),
-                      if (showSkill) effects(false),
+                          child: IgnorePointer(
+                            child: Image.asset(
+                              'assets/art/hedgehog-chestnut.webp',
+                              fit: BoxFit.contain,
+                              excludeFromSemantics: true,
+                            ),
+                          ),
+                        ),
                       Positioned.fromRect(
                         key: const ValueKey('home-companion'),
                         rect: _hasWalk
                             ? actorRect.inflate(rect.width / 4)
                             : actorRect,
-                        child: Transform.flip(
-                          flipX: !_hasWalk && _left,
-                          child: child!,
-                        ),
+                        child: child!,
                       ),
-                      if (showSkill) effects(true),
+                      if (showSkill && !widget.companion.hasGroundSkill)
+                        effects(true),
                       for (final layer in painting.layers.where(
                         (p) => !behind(p),
                       ))
@@ -705,22 +966,24 @@ class _GardenSceneState extends State<GardenScene>
                 },
               ),
               ?foreground,
-              Positioned.fill(
-                child: IgnorePointer(
-                  child: RepaintBoundary(
-                    child: CustomPaint(
-                      painter: _Air(
-                        _time,
-                        map,
-                        _outdoor,
-                        _still,
-                        _base && !_veranda,
-                        _playable,
+              if (!rainCourtyard)
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: _Air(
+                          _time,
+                          map,
+                          _outdoor,
+                          _still,
+                          _base && !_veranda,
+                          _playable,
+                          reading == null,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
               Positioned.fill(
                 child: Semantics(
                   label: actorLabel,
@@ -765,6 +1028,20 @@ class _GardenSceneState extends State<GardenScene>
                   ),
                 ),
               ),
+              if (florist != null)
+                Positioned.fromRect(
+                  rect: Rect.fromCenter(
+                    center: map.screen(FloristTray.trayCenter),
+                    width: math.max(48, map.world.width * .23),
+                    height: 48,
+                  ),
+                  child: GestureDetector(
+                    key: const ValueKey('florist-worktop'),
+                    behavior: HitTestBehavior.opaque,
+                    excludeFromSemantics: true,
+                    onTap: florist.open,
+                  ),
+                ),
               if (widget.onViewChanged != null)
                 Positioned(
                   top: 12,
@@ -819,6 +1096,8 @@ class _GardenSceneState extends State<GardenScene>
                   spacing: 4,
                   children: [
                     ?widget.chapterButton,
+                    if (reading?.openMap case final openMap?)
+                      _PlayButton('看地图', Icons.map_outlined, openMap),
                     _PlayButton('过来', Icons.pets_outlined, () => _call(map)),
                     _PlayButton(
                       widget.companion.skillName,
@@ -841,7 +1120,8 @@ class _GardenSceneState extends State<GardenScene>
       layer.art,
       alignment: Alignment.bottomCenter,
       fit: layer.flat ? BoxFit.fill : BoxFit.contain,
-      semanticLabel: layer.name,
+      semanticLabel: layer.name.isEmpty ? null : layer.name,
+      excludeFromSemantics: layer.name.isEmpty,
       filterQuality: FilterQuality.medium,
       gaplessPlayback: true,
     );
@@ -1035,10 +1315,11 @@ class _Air extends CustomPainter {
     this.still,
     this.river,
     this.playable,
+    this.windowRay,
   ) : super(repaint: clock);
   final _SceneTime clock;
   final SceneProjection map;
-  final bool outdoor, still, river, playable;
+  final bool outdoor, still, river, playable, windowRay;
   static final _leaf = Path()
     ..moveTo(0, 2)
     ..quadraticBezierTo(-3.8, 1, -4.4, -1.7)
@@ -1051,7 +1332,7 @@ class _Air extends CustomPainter {
   void paint(Canvas c, Size size) {
     if (still) return;
     final t = clock.seconds;
-    if (playable && !outdoor) {
+    if (windowRay && playable && !outdoor) {
       // Drifting light through the open right window across the veranda floor.
       final start = map.screen(Offset(.79 + .012 * math.sin(t * .47), .15));
       final end = map.screen(Offset(.43 + .035 * math.sin(t * .48), .95));

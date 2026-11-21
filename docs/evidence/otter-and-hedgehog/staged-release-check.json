@@ -1,0 +1,32 @@
+{
+  "verified_asset_ids": 259,
+  "verified_runtime_images": 642,
+  "by_kind": {
+    "scene_background": 5,
+    "scene_foreground": 5,
+    "decoration": 4,
+    "accessory": 4,
+    "furniture": 2,
+    "garment": 2,
+    "bundle": 2,
+    "included_item": 18,
+    "zone": 2,
+    "shop": 2,
+    "free_base_item": 2,
+    "pet": 31,
+    "room_layer": 8,
+    "furnished_scene": 4,
+    "wearable_texture": 4,
+    "costumed_pet": 38,
+    "pet_action": 54,
+    "fitted_accessory": 18,
+    "cat_walk": 27,
+    "fox_walk": 27
+  },
+  "alpha_verified_for_all_new_paintings": true,
+  "reencoded_webps": 338,
+  "projected_apk_bytes_before": 135148333,
+  "projected_apk_bytes_after": 102898641,
+  "baseline": "6fc48ecf5c9904e4d897c5074947681348413b08",
+  "estimation_scope": "Published 0.24.0 package with this Flutter asset byte delta. Native code, ZIP alignment and signing may change actual size."
+}

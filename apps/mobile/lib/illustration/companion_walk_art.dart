@@ -5,495 +5,849 @@ import 'dart:ui' as ui;
 import 'package:flutter/widgets.dart';
 
 import '../domain/companions.dart';
-import 'companion_walk.dart';
+import 'accessory_poses.dart';
 import 'companion_motion.dart';
+import 'companion_walk.dart';
 import 'tailoring.dart';
 
-String _walkFolder(Companion pet) => 'assets/${pet.name}_walk/';
+enum _View {
+  brace,
+  stand,
+  reach,
+  follow,
+  gather,
+  front,
+  back,
+  turnFront,
+  turnBack,
+  frontReach,
+  frontFollow,
+  backReach,
+  backFollow,
+  nearBackLeft;
 
-String _clothes(String? garment) => switch (garment) {
-  'item_single_coat' => '-coat',
-  'item_single_apron' => '-apron',
-  _ => '',
+  bool get frontView =>
+      this == front || this == frontReach || this == frontFollow;
+  bool get backView =>
+      this == back ||
+      this == backReach ||
+      this == backFollow ||
+      this == nearBackLeft;
+  bool get side => !frontView && !backView;
+  bool get backOfHead => backView || this == turnBack;
+}
+
+Iterable<_View> _views(Companion pet, String? garment) {
+  if (pet == Companion.fox) {
+    return garment == 'item_single_apron'
+        ? _View.values.take(_View.nearBackLeft.index)
+        : _View.values;
+  }
+  final end = pet.hasGroundSkill ? _View.turnBack : _View.back;
+  return _View.values.take(end.index + 1);
+}
+
+String _folder(Companion pet) => 'assets/${pet.name}_walk/';
+String _path(Companion pet, _View view) {
+  final pose = pet.hasGroundSkill && view == _View.gather ? _View.brace : view;
+  return '${_folder(pet)}full-${pose.name}.webp';
+}
+
+String? _style(String? garment) => switch (garment) {
+  'item_single_coat' => 'coat',
+  'item_single_apron' => 'apron',
+  _ => null,
 };
 
-List<String> walkAssets(Companion pet, String? garment) {
-  final outfit = _clothes(garment);
+List<String> walkAssets(
+  Companion pet,
+  String? garment, {
+  bool paintedScarf = false,
+}) {
+  final coat = fittedCoat(pet, 1, garment);
   return [
-    'head',
-    'head-front',
-    'head-away',
-    'tail',
-    'torso$outfit',
-    'torso-front$outfit',
-    'torso-away$outfit',
-    if (outfit.isNotEmpty) 'trim$outfit',
-    for (final leg in WalkLeg.values) ...[
-      'leg-${leg.asset}-upper',
-      'leg-${leg.asset}-lower',
-      'paw-${leg.asset}',
+    for (final view in _views(pet, garment)) ...[
+      _walkArtwork(pet, view, garment, coat, paintedScarf),
+      if (coat == FittedCoat.mapVest && view.side)
+        FittedCoat.mapVest.on(
+          _path(pet, view),
+          facesLeft: true,
+          paintedScarf: paintedScarf,
+        ),
     ],
-  ].map((name) => '${_walkFolder(pet)}$name.webp').toList();
+    if (!pet.hasGroundSkill && coat == null && _style(garment) != null)
+      for (final view in ['side', 'front', 'away'])
+        '${_folder(pet)}cloth-$view-${_style(garment)}.webp',
+  ];
+}
+
+String _walkArtwork(
+  Companion pet,
+  _View view,
+  String? garment,
+  FittedCoat? coat,
+  bool paintedScarf,
+) {
+  final original = _path(pet, view);
+  if (_style(garment) case final cloth? when pet.hasGroundSkill) {
+    return original.replaceFirst('.webp', '-$cloth.webp');
+  }
+  return coat?.on(original, paintedScarf: paintedScarf) ??
+      (paintedScarf ? foxScarfArtwork(original) : original);
 }
 
 class WalkArt {
   WalkArt(
     this.pet,
-    this._images,
+    Map<String, ui.Image> images,
     String? garment,
-    Map<String, ui.Image> clothes,
-    String? headAsset,
-  ) : _coat = _clothes(garment) {
-    if (clothes.isEmpty) return;
-    _sideHead = _dress(_Head.side, clothes, headAsset);
-    _frontHead = _dress(_Head.front, clothes, headAsset);
-    final foxBow = pet == Companion.fox && headAsset == 'item_accessory_bow';
-    if (foxBow) {
-      // The right ear is the far ear when the painted profile is mirrored.
-      _leftHead = _dress(
-        _Head.side,
-        clothes,
+    Map<AccessoryPose, AccessoryTextures> clothes,
+    String? headAsset, {
+    bool paintedScarf = false,
+  }) {
+    final coat = fittedCoat(pet, 1, garment);
+    final fabric = coat == null && !pet.hasGroundSkill ? _style(garment) : null;
+    for (final view in _views(pet, garment)) {
+      final fit = _fits[pet]![view.index];
+      final profile = view.frontView
+          ? 'front'
+          : view.backOfHead
+          ? 'away'
+          : 'side';
+      final material = images['${_folder(pet)}cloth-$profile-$fabric.webp'];
+      final pose = view.frontView
+          ? AccessoryPose.walkFront
+          : view.backOfHead
+          ? AccessoryPose.walkBack
+          : AccessoryPose.walkSide;
+      final path = _path(pet, view);
+      final original =
+          images[_walkArtwork(pet, view, garment, coat, paintedScarf)]!;
+      final originalFitting = _headFrames[pet]?[profile] ?? fit;
+      _cards[view] = _assemble(
+        original,
+        pet,
+        view,
+        fit,
+        material,
+        clothes[pose],
         headAsset,
-        bowFit: (center: const Offset(439, 95), width: .35, angle: .14),
+        originalFitting,
       );
-    }
-    final rearClothes = Map.of(clothes)..remove('face');
-    if (rearClothes.isNotEmpty) {
-      _awayHead = _dress(
-        _Head.away,
-        rearClothes,
-        headAsset,
-        bowFit: foxBow
-            ? (center: const Offset(344, 118), width: .44, angle: .14)
-            : null,
-      );
+      final leftBody =
+          images[coat?.on(path, facesLeft: true, paintedScarf: paintedScarf)];
+      final leftClothes = view == _View.turnBack
+          ? clothes[pose]
+          : clothes[AccessoryPose.walkLeft];
+      if (view.side && (leftBody != null || leftClothes != null)) {
+        _leftCards[view] = _assemble(
+          leftBody ?? original,
+          pet,
+          view,
+          fit,
+          material,
+          leftClothes ?? clothes[pose],
+          headAsset,
+          originalFitting,
+          left: true,
+        );
+      }
     }
   }
 
   final Companion pet;
-  final Map<String, ui.Image> _images;
-  final String _coat;
-  late final _WalkFitting _fit = _fittings[pet]!;
-  DressedPortrait? _sideHead, _leftHead, _frontHead, _awayHead;
+  final _cards = <_View, _PaintedCard>{};
+  final _leftCards = <_View, _PaintedCard>{};
 
-  ui.Image _image(String name) => _images['${_walkFolder(pet)}$name.webp']!;
+  void dispose() {
+    for (final card in [..._cards.values, ..._leftCards.values]) {
+      card.dispose();
+    }
+  }
 
-  DressedPortrait _dress(
-    _Head view,
-    Map<String, ui.Image> clothes,
-    String? headAsset, {
-    BowFit? bowFit,
-  }) {
-    Offset normalized(Offset p) =>
-        Offset(p.dx / walkCanvas.width, p.dy / walkCanvas.height);
-    final fitting = _fit.heads[view.index];
-    return applyAccessories(
-      _image(view.asset),
-      pet,
-      1,
-      false,
-      normalized(fitting.nearEye),
-      normalized(fitting.farEye),
-      clothes,
-      headAsset,
-      bowFit: bowFit == null
-          ? null
-          : (
-              center: normalized(bowFit.center),
-              width: bowFit.width,
-              angle: bowFit.angle,
-            ),
-      fit: (
-        crown: normalized(fitting.crown),
-        ear: normalized(fitting.ear),
-        neck: normalized(fitting.neck),
-        width: fitting.width / walkCanvas.width,
+  void paint(Canvas canvas, Rect box, WalkPose pose) {
+    final side = math.cos(pose.yaw);
+    final depth = math.sin(pose.yaw);
+    final facing = side.abs();
+    final frontOrBack = depth < 0 ? _View.back : _View.front;
+    final quarter = depth < 0 ? _View.turnBack : _View.turnFront;
+    final phase = pose.phase % 1;
+    bool swinging(WalkLeg leg) => pose.paws[leg.index].lift > 4 * pose.scale;
+    // The low silhouettes lift different paws in their authored step poses.
+    final (reach, follow) = switch (pet) {
+      Companion.otter => (
+        swinging(WalkLeg.nearFront),
+        swinging(WalkLeg.farFront),
       ),
+      Companion.hedgehog => (
+        swinging(WalkLeg.farFront),
+        swinging(WalkLeg.nearHind),
+      ),
+      _ => (phase >= .09 && phase < .37, phase >= .57 && phase < .82),
+    };
+    final fox = pet == Companion.fox;
+    final view = switch (pose.stage) {
+      WalkStage.turn || WalkStage.gather
+          when _cards.containsKey(_View.nearBackLeft) &&
+              depth < 0 &&
+              side < -.32 &&
+              side > -.62 =>
+        _View.nearBackLeft,
+      WalkStage.walk when fox && facing < .58 => switch ((
+        depth < 0,
+        reach,
+        follow,
+      )) {
+        (true, true, _) => _View.backReach,
+        (true, _, true) => _View.backFollow,
+        (false, true, _) => _View.frontReach,
+        (false, _, true) => _View.frontFollow,
+        _ => frontOrBack,
+      },
+      WalkStage.turn ||
+      WalkStage.gather ||
+      WalkStage.walk when facing < .58 => frontOrBack,
+      WalkStage.turn || WalkStage.gather
+          when (fox || pet.hasGroundSkill) && facing < .83 =>
+        quarter,
+      WalkStage.rise when pose.crouch > .90 => _View.gather,
+      WalkStage.rise when pose.crouch > .74 => _View.brace,
+      WalkStage.sit when pose.crouch > .35 => _View.gather,
+      WalkStage.walk when reach => _View.reach,
+      WalkStage.walk when follow => _View.follow,
+      _ => _View.stand,
+    };
+    final lateral = view.side;
+    final mirror = lateral && side < 0;
+    final card = (mirror ? _leftCards[view] : null) ?? _cards[view]!;
+    // Keep the intermediate painting registered to the hips as the head
+    // swings from the rear quarter to the centre of the back view.
+    final rearPivotX = view == _View.nearBackLeft ? (.43 - facing) * 180 : 0.0;
+    _place(canvas, box);
+    card.paint(canvas, pose, mirror, rearPivotX: rearPivotX);
+    canvas.restore();
+  }
+
+  void paintSkillSupport(Canvas canvas, Rect box, bool left, double progress) {
+    final view = switch (progress) {
+      < .18 => _View.gather,
+      < .5 => _View.brace,
+      < .84 => _View.reach,
+      < .89 => _View.stand,
+      _ => _View.gather,
+    };
+    final card = (left ? _leftCards[view] : null) ?? _cards[view]!;
+    _place(canvas, box);
+    card.paintStill(canvas, left);
+    canvas.restore();
+  }
+
+  void _place(Canvas canvas, Rect box) {
+    canvas.save();
+    canvas.translate(box.center.dx, box.bottom);
+    canvas.scale(box.height / walkOrigin.dy);
+    canvas.translate(-walkOrigin.dx, -walkOrigin.dy);
+  }
+}
+
+class _Fit {
+  const _Fit(this.near, this.far, this.ear, this.pads);
+  final Offset near, far, ear;
+  final List<Offset> pads;
+
+  Offset get eyes => (near + far) / 2;
+}
+
+final _fits = {
+  Companion.cat: [
+    _Fit(Offset(274, 192), Offset(367, 172), Offset(155, 154), [
+      Offset(218, 436),
+      Offset(283, 438),
+      Offset(242, 422),
+      Offset(347, 435),
+    ]),
+    _Fit(Offset(309, 193), Offset(402, 173), Offset(180, 153), [
+      Offset(176, 436),
+      Offset(304, 438),
+      Offset(223, 419),
+      Offset(363, 435),
+    ]),
+    _Fit(Offset(320, 193), Offset(418, 165), Offset(192, 152), [
+      Offset(137, 435),
+      Offset(306, 438),
+      Offset(222, 422),
+      Offset(403, 406),
+    ]),
+    _Fit(Offset(348, 193), Offset(447, 168), Offset(211, 151), [
+      Offset(149, 438),
+      Offset(357, 438),
+      Offset(251, 420),
+      Offset(446, 406),
+    ]),
+    _Fit(Offset(296, 198), Offset(392, 179), Offset(161, 159), [
+      Offset(192, 434),
+      Offset(293, 438),
+      Offset(232, 421),
+      Offset(351, 434),
+    ]),
+    _Fit(Offset(260, 210), Offset(364, 199), Offset(172, 148), [
+      Offset(139, 428),
+      Offset(272, 438),
+      Offset(207, 426),
+      Offset(344, 428),
+    ]),
+    _Fit(Offset(204, 195), Offset(302, 195), Offset(336, 150), [
+      Offset(193, 435),
+      Offset(144, 423),
+      Offset(339, 436),
+      Offset(264, 425),
+    ]),
+  ],
+  Companion.fox: [
+    _Fit(Offset(335, 267), Offset(416, 274), Offset(248, 216), [
+      Offset(202, 436),
+      Offset(274, 438),
+      Offset(222, 421),
+      Offset(324, 433),
+    ]),
+    _Fit(Offset(368, 265), Offset(470, 265), Offset(246, 212), [
+      Offset(164, 435),
+      Offset(275, 438),
+      Offset(231, 416),
+      Offset(364, 431),
+    ]),
+    _Fit(Offset(379, 266), Offset(474, 266), Offset(246, 213), [
+      Offset(134, 433),
+      Offset(286, 438),
+      Offset(221, 419),
+      Offset(395, 409),
+    ]),
+    _Fit(Offset(382, 260), Offset(473, 260), Offset(245, 208), [
+      Offset(162, 431),
+      Offset(335, 438),
+      Offset(266, 419),
+      Offset(408, 400),
+    ]),
+    _Fit(Offset(348, 229), Offset(436, 219), Offset(233, 183), [
+      Offset(203, 432),
+      Offset(268, 438),
+      Offset(236, 419),
+      Offset(338, 432),
+    ]),
+    _Fit(Offset(242, 211), Offset(349, 201), Offset(147, 165), [
+      Offset(167, 433),
+      Offset(267, 439),
+      Offset(204, 421),
+      Offset(343, 434),
+    ]),
+    _Fit(Offset(204, 195), Offset(302, 195), Offset(339, 167), [
+      Offset(231, 437),
+      Offset(182, 427),
+      Offset(352, 433),
+      Offset(295, 418),
+    ]),
+    _Fit(Offset(354, 239), Offset(427, 236), Offset(245, 209), [
+      Offset(171, 434),
+      Offset(300, 438),
+      Offset(242, 420),
+      Offset(360, 432),
+    ]),
+    _Fit(Offset(287, 213), Offset(381, 210), Offset(390, 206), [
+      Offset(192, 438),
+      Offset(343, 437),
+      Offset(163, 421),
+      Offset(258, 424),
+    ]),
+    _Fit(Offset(249, 215), Offset(351, 213), Offset(168, 181), [
+      Offset(206, 420),
+      Offset(259, 406),
+      Offset(321, 414),
+      Offset(320, 437),
+    ]),
+    _Fit(Offset(251, 215), Offset(353, 213), Offset(169, 181), [
+      Offset(203, 418),
+      Offset(257, 437),
+      Offset(289, 418),
+      Offset(325, 407),
+    ]),
+    _Fit(Offset(204, 180), Offset(302, 181), Offset(329, 161), [
+      Offset(212, 437),
+      Offset(169, 404),
+      Offset(276, 416),
+      Offset(338, 421),
+    ]),
+    _Fit(Offset(204, 180), Offset(302, 181), Offset(329, 161), [
+      Offset(198, 412),
+      Offset(155, 403),
+      Offset(259, 437),
+      Offset(337, 422),
+    ]),
+    _Fit(Offset(177, 185), Offset(277, 186), Offset(314, 153), [
+      Offset(201, 438),
+      Offset(145, 416),
+      Offset(282, 426),
+      Offset(232, 415),
+    ]),
+  ],
+  Companion.otter: [
+    _Fit(Offset(397, 282), Offset(443, 275), Offset(321, 270), [
+      Offset(193, 436),
+      Offset(343, 439),
+      Offset(230, 430),
+      Offset(375, 436),
+    ]),
+    _Fit(
+      Offset(406, 238),
+      Offset(448, 242),
+      Offset(332, 219),
+      WalkRig.otter.standingPads,
+    ),
+    _Fit(Offset(400, 232), Offset(444, 234), Offset(326, 223), [
+      Offset(166, 439),
+      Offset(398, 415),
+      Offset(225, 427),
+      Offset(339, 438),
+    ]),
+    _Fit(Offset(406, 235), Offset(448, 238), Offset(330, 226), [
+      Offset(169, 438),
+      Offset(343, 438),
+      Offset(234, 431),
+      Offset(403, 414),
+    ]),
+    _Fit(Offset(397, 282), Offset(443, 275), Offset(321, 270), [
+      Offset(193, 436),
+      Offset(343, 439),
+      Offset(230, 430),
+      Offset(375, 436),
+    ]),
+    _Fit(
+      Offset(227, 219),
+      Offset(308, 218),
+      Offset(187, 185),
+      WalkRig.otter.front!,
+    ),
+    _Fit(
+      Offset(187, 209),
+      Offset(329, 209),
+      Offset(328, 197),
+      WalkRig.otter.away!,
+    ),
+    _Fit(
+      Offset(341, 219),
+      Offset(407, 209),
+      Offset(271, 207),
+      WalkRig.otter.standingPads,
+    ),
+    _Fit(Offset(292, 200), Offset(393, 190), Offset(391, 202), [
+      Offset(179, 438),
+      Offset(380, 438),
+      Offset(256, 430),
+      Offset(364, 430),
+    ]),
+  ],
+  Companion.hedgehog: [
+    _Fit(Offset(374, 307), Offset(420, 290), Offset(299, 254), [
+      Offset(116, 435),
+      Offset(292, 439),
+      Offset(168, 428),
+      Offset(361, 435),
+    ]),
+    _Fit(
+      Offset(373, 277),
+      Offset(421, 272),
+      Offset(298, 239),
+      WalkRig.hedgehog.standingPads,
+    ),
+    _Fit(Offset(369, 271), Offset(411, 264), Offset(290, 235), [
+      Offset(111, 438),
+      Offset(284, 439),
+      Offset(173, 434),
+      Offset(390, 407),
+    ]),
+    _Fit(Offset(364, 279), Offset(411, 262), Offset(298, 243), [
+      Offset(128, 416),
+      Offset(278, 439),
+      Offset(181, 434),
+      Offset(339, 437),
+    ]),
+    _Fit(Offset(374, 307), Offset(420, 290), Offset(299, 254), [
+      Offset(116, 435),
+      Offset(292, 439),
+      Offset(168, 428),
+      Offset(361, 435),
+    ]),
+    _Fit(
+      Offset(222, 281),
+      Offset(299, 280),
+      Offset(184, 242),
+      WalkRig.hedgehog.front!,
+    ),
+    _Fit(
+      Offset(173, 224),
+      Offset(329, 224),
+      Offset(329, 231),
+      WalkRig.hedgehog.away!,
+    ),
+    _Fit(
+      Offset(357, 276),
+      Offset(412, 261),
+      Offset(293, 230),
+      WalkRig.hedgehog.standingPads,
+    ),
+    _Fit(Offset(297, 237), Offset(382, 235), Offset(353, 235), [
+      Offset(120, 437),
+      Offset(363, 439),
+      Offset(166, 428),
+      Offset(338, 433),
+    ]),
+  ],
+};
+
+const _foxFarEar = {
+  _View.brace: Offset(397, 159),
+  _View.stand: Offset(439, 155),
+  _View.reach: Offset(443, 152),
+  _View.follow: Offset(447, 150),
+  _View.gather: Offset(410, 136),
+  _View.turnFront: Offset(408, 165),
+  _View.turnBack: Offset(252, 165),
+};
+
+const _headFrames = {
+  Companion.cat: {
+    'side': _Fit(Offset(338, 166), Offset(431, 142), Offset(274, 134), []),
+    'front': _Fit(Offset(207, 179), Offset(306, 179), Offset(161, 111), []),
+    'away': _Fit(Offset(207, 179), Offset(306, 179), Offset(161, 111), []),
+  },
+  Companion.fox: {
+    'side': _Fit(Offset(358, 190), Offset(448, 176), Offset(257, 135), []),
+    'front': _Fit(Offset(210, 192), Offset(301, 190), Offset(171, 133), []),
+    'away': _Fit(Offset(210, 192), Offset(301, 190), Offset(337, 122), []),
+  },
+};
+
+Offset _normalized(Offset point) =>
+    Offset(point.dx / walkCanvas.width, point.dy / walkCanvas.height);
+
+_PaintedCard _assemble(
+  ui.Image original,
+  Companion pet,
+  _View view,
+  _Fit fit,
+  ui.Image? cloth,
+  AccessoryTextures? clothes,
+  String? headAsset,
+  _Fit old, {
+  bool left = false,
+}) {
+  if (cloth == null && (clothes == null || !hasAccessories(clothes))) {
+    return _PaintedCard(original.clone(), fit, Offset.zero);
+  }
+  final recorder = ui.PictureRecorder();
+  final canvas = Canvas(recorder);
+  final brush = Paint()..filterQuality = FilterQuality.medium;
+  canvas.drawImage(original, Offset.zero, brush);
+  if (cloth != null) {
+    final rear = fit.pads[0].dx, chest = fit.pads[1].dx;
+    final frontal = view == _View.front || view == _View.back;
+    final frame = Rect.fromCenter(
+      center: Offset(
+        frontal ? (fit.pads[0].dx + fit.pads[3].dx) / 2 : (rear + chest) / 2,
+        356,
+      ),
+      width: frontal ? 114 : (chest - rear).abs() * 1.02,
+      height: view == _View.brace || view == _View.gather ? 82 : 91,
     );
+    canvas.drawImageRect(
+      cloth,
+      Offset.zero & Size(cloth.width.toDouble(), cloth.height.toDouble()),
+      frame,
+      brush,
+    );
+  }
+  if (clothes != null) {
+    for (final entry in clothes.registered.entries) {
+      final head = entry.key == 'head';
+      final farBow = head && left && pet == Companion.fox
+          ? _foxFarEar[view]
+          : null;
+      final target = head ? farBow ?? fit.ear : fit.eyes;
+      final anchor = head
+          ? farBow != null && view != _View.turnBack
+                ? const Offset(447, 108)
+                : old.ear
+          : old.eyes;
+      final drawnAxis = fit.far - fit.near;
+      final originalAxis = old.far - old.near;
+      final zoom = (drawnAxis.distance / originalAxis.distance).clamp(
+        .78,
+        1.17,
+      );
+      canvas.save();
+      canvas.translate(target.dx, target.dy);
+      if (!head) {
+        canvas.rotate(
+          math.atan2(drawnAxis.dy, drawnAxis.dx) -
+              math.atan2(originalAxis.dy, originalAxis.dx),
+        );
+      }
+      final bowScale = switch (view) {
+        _View.turnBack when farBow != null => .57,
+        _View.nearBackLeft when head => .78,
+        _ => 1.0,
+      };
+      canvas.scale(zoom * bowScale);
+      canvas.drawImage(entry.value, -anchor, brush);
+      canvas.restore();
+    }
+  }
+  final picture = recorder.endRecording();
+  final body = picture.toImageSync(
+    walkCanvas.width.toInt(),
+    walkCanvas.height.toInt(),
+  );
+  picture.dispose();
+  if (clothes == null || clothes.generic.isEmpty) {
+    return _PaintedCard(body, fit, Offset.zero);
+  }
+  final groundSpecies = pet.hasGroundSkill;
+  final neck = groundSpecies
+      ? view.frontView || view.backOfHead
+            ? fit.eyes + const Offset(0, 83)
+            : fit.near + const Offset(-34, 76)
+      : fit.eyes + const Offset(0, 100);
+  final headWidth = groundSpecies
+      ? (pet == Companion.otter ? 139.0 : 125.0)
+      : (fit.far - fit.near).distance * 1.9;
+  final fitted = applyAccessories(
+    body,
+    pet,
+    1,
+    false,
+    _normalized(fit.near),
+    _normalized(fit.far),
+    clothes.generic,
+    headAsset,
+    scarfFit: groundSpecies
+        ? (
+            center: _normalized(neck),
+            span: headWidth * .82 / walkCanvas.width,
+            back: view.backOfHead,
+          )
+        : _foxScarf(pet, view),
+    rearTemples: switch (view) {
+      _View.back when pet == Companion.fox => (
+        _normalized(const Offset(164, 198)),
+        _normalized(const Offset(347, 201)),
+      ),
+      _View.nearBackLeft => (
+        _normalized(const Offset(126, 200)),
+        _normalized(const Offset(321, 203)),
+      ),
+      _View.turnBack => (
+        _normalized(const Offset(228, 211)),
+        _normalized(const Offset(417, 235)),
+      ),
+      _View.backReach || _View.backFollow => (
+        _normalized(const Offset(123, 195)),
+        _normalized(const Offset(326, 196)),
+      ),
+      _ => null,
+    },
+    fit: (
+      crown: _normalized(
+        groundSpecies
+            ? fit.near - const Offset(26, 54)
+            : fit.eyes - const Offset(8, 115),
+      ),
+      ear: _normalized(fit.ear),
+      neck: _normalized(neck),
+      width: headWidth / walkCanvas.width,
+    ),
+  );
+  body.dispose();
+  return _PaintedCard(fitted.image, fit, fitted.padding);
+}
+
+ScarfFit? _foxScarf(Companion pet, _View view) {
+  if (pet != Companion.fox) return null;
+  final (center, width) = switch (view) {
+    _View.brace => (const Offset(275, 319), 118.0),
+    _View.stand => (const Offset(317, 311), 123.0),
+    _View.reach => (const Offset(337, 310), 124.0),
+    _View.follow => (const Offset(360, 307), 119.0),
+    _View.gather => (const Offset(310, 299), 124.0),
+    _View.front => (const Offset(262, 311), 140.0),
+    _View.back => (const Offset(243, 294), 111.0),
+    _View.turnFront => (const Offset(328, 323), 128.0),
+    _View.turnBack => (const Offset(316, 304), 139.0),
+    _View.frontReach || _View.frontFollow => (const Offset(288, 300), 135.0),
+    _View.backReach || _View.backFollow => (const Offset(230, 264), 119.0),
+    _View.nearBackLeft => (const Offset(220, 296), 119.0),
+  };
+  return (
+    center: _normalized(center),
+    span: width / walkCanvas.width,
+    back: view.backOfHead,
+  );
+}
+
+class _PaintedCard {
+  _PaintedCard(this.image, this.fit, this.padding) {
+    shader = ui.ImageShader(
+      image,
+      ui.TileMode.clamp,
+      ui.TileMode.clamp,
+      Matrix4.identity().storage,
+      filterQuality: ui.FilterQuality.medium,
+    );
+    for (var row = 0; row <= rows; row++) {
+      for (var col = 0; col <= cols; col++) {
+        final i = row * (cols + 1) + col;
+        final x = col * image.width / cols;
+        final y = row * image.height / rows;
+        uv[2 * i] = x;
+        uv[2 * i + 1] = y;
+        final point = Offset(x, y) - padding;
+        points.add(point);
+        final distances = [
+          for (final pad in fit.pads) (point - pad).distanceSquared,
+        ];
+        final proximity = [
+          for (final distance in distances)
+            1 / ((distance + 100) * (distance + 100)),
+        ];
+        final total = proximity.reduce((a, b) => a + b);
+        final closest = math.sqrt(distances.reduce(math.min));
+        final support = easeMotion(((79 - closest) / 64).clamp(0.0, 1.0));
+        for (final (leg, pad) in fit.pads.indexed) {
+          final down = ((point.dy - 372) / math.max(36, pad.dy - 372)).clamp(
+            0.0,
+            1.0,
+          );
+          weights[leg][i] = proximity[leg] / total * support * easeMotion(down);
+        }
+      }
+    }
+  }
+
+  static const cols = 29, rows = 30, count = (cols + 1) * (rows + 1);
+  static final triangles = Uint16List.fromList([
+    for (var y = 0; y < rows; y++)
+      for (var x = 0; x < cols; x++) ...[
+        y * (cols + 1) + x,
+        (y + 1) * (cols + 1) + x,
+        y * (cols + 1) + x + 1,
+        y * (cols + 1) + x + 1,
+        (y + 1) * (cols + 1) + x,
+        (y + 1) * (cols + 1) + x + 1,
+      ],
+  ]);
+
+  final ui.Image image;
+  final _Fit fit;
+  final Offset padding;
+  late final ui.ImageShader shader;
+  final points = <Offset>[];
+  final uv = Float32List(count * 2), xy = Float32List(count * 2);
+  final weights = List.generate(4, (_) => Float32List(count));
+
+  void paintStill(Canvas canvas, bool mirror, [Offset shift = Offset.zero]) {
+    canvas.save();
+    if (mirror) {
+      canvas.translate(walkOrigin.dx * 2, 0);
+      canvas.scale(-1, 1);
+    }
+    canvas.drawImage(
+      image,
+      shift - padding,
+      Paint()..filterQuality = FilterQuality.medium,
+    );
+    canvas.restore();
+  }
+
+  void paint(
+    Canvas canvas,
+    WalkPose pose,
+    bool mirror, {
+    double rearPivotX = 0,
+  }) {
+    final facing = mirror ? -1.0 : 1.0;
+    final offsets = <Offset>[];
+    var supported = Offset.zero;
+    var weight = 0.0;
+    for (final (leg, point) in fit.pads.indexed) {
+      final paw = pose.paws[leg];
+      final target =
+          (paw.ground - pose.root - Offset(0, paw.lift)) / pose.scale;
+      final from = point - walkOrigin;
+      final delta = Offset(target.dx * facing - from.dx, target.dy - from.dy);
+      final pressure =
+          (WalkLeg.values[leg].near ? 2.0 : .6) /
+          (1 + paw.lift / pose.scale * .5);
+      supported += delta * pressure;
+      weight += pressure;
+      offsets.add(delta);
+    }
+    // Move the painted torso as one piece. Only the soles have local
+    // corrections, small enough to preserve the ankle and the sleeve.
+    final sideWalk =
+        pose.stage == WalkStage.walk && math.cos(pose.yaw).abs() > .83;
+    final fore = WalkLeg.nearFront.index;
+    final footPressure = sideWalk
+        ? 1 -
+              easeMotion(
+                (pose.paws[fore].lift / (18 * pose.scale)).clamp(0.0, 1.0),
+              )
+        : 0.0;
+    final adjustment = Offset.lerp(
+      supported / weight,
+      offsets[fore],
+      .74 * footPressure * pose.effort,
+    )!;
+    final strideRoom = 20 + 24 * footPressure;
+    final shift = Offset(
+      adjustment.dx.clamp(-strideRoom, strideRoom) +
+          pose.load.dx * .14 +
+          rearPivotX,
+      adjustment.dy.clamp(-7, 8) + pose.load.dy * .10,
+    );
+    for (var leg = 0; leg < offsets.length; leg++) {
+      final residual = offsets[leg] - shift;
+      offsets[leg] = Offset(
+        residual.dx.clamp(-11, 11),
+        residual.dy.clamp(-9, 9),
+      );
+    }
+    for (var i = 0; i < count; i++) {
+      final point = points[i];
+      var dx = point.dx - walkOrigin.dx + shift.dx;
+      var dy = point.dy + shift.dy;
+      for (var leg = 0; leg < offsets.length; leg++) {
+        final w = weights[leg][i];
+        dx += offsets[leg].dx * w;
+        dy += offsets[leg].dy * w;
+      }
+      xy[i * 2] = walkOrigin.dx + facing * dx;
+      xy[i * 2 + 1] = dy;
+    }
+    final areaFloor = image.width * image.height / (cols * rows) * .30;
+    if (!meshKeepsShape(xy, triangles, areaFloor, facing: facing)) {
+      paintStill(canvas, mirror, shift);
+      return;
+    }
+    final posed = ui.Vertices.raw(
+      ui.VertexMode.triangles,
+      xy,
+      textureCoordinates: uv,
+      indices: triangles,
+    );
+    canvas.drawVertices(posed, BlendMode.srcOver, Paint()..shader = shader);
+    posed.dispose();
   }
 
   void dispose() {
-    _sideHead?.image.dispose();
-    _leftHead?.image.dispose();
-    _frontHead?.image.dispose();
-    _awayHead?.image.dispose();
+    shader.dispose();
+    image.dispose();
   }
-
-  void paint(Canvas canvas, Rect box, WalkPose pose, PetMotion motion) {
-    final artScale = box.height / walkOrigin.dy;
-    canvas.save();
-    canvas.translate(box.center.dx, box.bottom);
-    canvas.scale(artScale);
-    canvas.translate(-walkOrigin.dx, -walkOrigin.dy);
-    _WalkPainting(canvas, this, pose, motion).paint();
-    canvas.restore();
-  }
-}
-
-enum _Head {
-  side('head'),
-  front('head-front'),
-  away('head-away');
-
-  const _Head(this.asset);
-  final String asset;
-}
-
-class _HeadFitting {
-  const _HeadFitting(
-    this.pivot,
-    this.nearEye,
-    this.farEye,
-    this.crown,
-    this.ear,
-    this.neck,
-    this.width,
-  );
-  final Offset pivot, nearEye, farEye, crown, ear, neck;
-  final double width;
-}
-
-class _WalkFitting {
-  const _WalkFitting({
-    required this.heads,
-    required this.seatedEyeShift,
-    required this.seatedHeadScale,
-    required this.tailPivot,
-    this.tailSweep = 0,
-  });
-  final List<_HeadFitting> heads;
-  final Offset seatedEyeShift, tailPivot;
-  final double seatedHeadScale, tailSweep;
-}
-
-// The middle of the eyes registers the three views through an in-place turn.
-const _fittings = {
-  Companion.cat: _WalkFitting(
-    heads: [
-      _HeadFitting(
-        Offset(384, 154),
-        Offset(338, 166),
-        Offset(431, 142),
-        Offset(365, 88),
-        Offset(274, 134),
-        Offset(383, 247),
-        191,
-      ),
-      _HeadFitting(
-        Offset(256, 179),
-        Offset(207, 179),
-        Offset(306, 179),
-        Offset(256, 112),
-        Offset(161, 111),
-        Offset(256, 275),
-        213,
-      ),
-      _HeadFitting(
-        Offset(256, 179),
-        Offset(207, 179),
-        Offset(306, 179),
-        Offset(256, 112),
-        Offset(161, 111),
-        Offset(256, 278),
-        213,
-      ),
-    ],
-    seatedEyeShift: Offset(-58.3, 9.05),
-    seatedHeadScale: 1 / .92,
-    tailPivot: Offset(149, 298),
-  ),
-  Companion.fox: _WalkFitting(
-    heads: [
-      _HeadFitting(
-        Offset(403, 183),
-        Offset(358, 190),
-        Offset(448, 176),
-        Offset(391, 130),
-        Offset(257, 135),
-        Offset(410, 260),
-        215,
-      ),
-      _HeadFitting(
-        Offset(256, 191),
-        Offset(210, 192),
-        Offset(301, 190),
-        Offset(256, 132),
-        Offset(171, 133),
-        Offset(256, 269),
-        229,
-      ),
-      _HeadFitting(
-        Offset(256, 191),
-        Offset(210, 192),
-        Offset(301, 190),
-        Offset(256, 132),
-        Offset(171, 128),
-        Offset(256, 268),
-        229,
-      ),
-    ],
-    seatedEyeShift: Offset(-72, -3),
-    seatedHeadScale: 440 / (451 * .88),
-    tailPivot: Offset(152, 322),
-    tailSweep: .18,
-  ),
-};
-
-class _WalkPainting {
-  _WalkPainting(this.canvas, this.art, this.pose, this.motion);
-
-  final Canvas canvas;
-  final WalkArt art;
-  final WalkPose pose;
-  final PetMotion motion;
-  final brush = Paint()..filterQuality = FilterQuality.medium;
-
-  late final double side = math.cos(pose.yaw), depth = math.sin(pose.yaw);
-  late final double facing = side < 0 ? -1 : 1;
-  late final double profile = _fade((side.abs() - .22) / .42);
-  late final bool sideView = profile >= .5;
-  late final double width = (.53 + side.abs() * .47) * (1 - pose.crouch * .48);
-  late final _WeightShift shift = _weightShift(
-    art.pet,
-    pose.phase,
-    pose.effort,
-  );
-  late final double drop = 32 * pose.crouch + shift.body.dy;
-  late final double slope = depth * .18 - pose.crouch * .21 + shift.tilt;
-
-  void paint() {
-    final legs = WalkLeg.values.toList()
-      ..sort((a, b) => _depthOf(a).compareTo(_depthOf(b)));
-    _tail();
-    _leg(legs[0]);
-    _leg(legs[1]);
-    _crossSection('torso');
-    _leg(legs[2]);
-    _leg(legs[3]);
-    if (art._coat.isNotEmpty) _crossSection('trim');
-    _head();
-  }
-
-  double _depthOf(WalkLeg leg) => pose.rig.groundOffset(leg, side, depth).dy;
-
-  Offset _bodyPoint(Offset p) {
-    final dx = p.dx - walkOrigin.dx;
-    return Offset(
-      walkOrigin.dx + (dx * width - 10 * pose.crouch + shift.body.dx) * facing,
-      p.dy + drop + dx * slope,
-    );
-  }
-
-  void _tail() {
-    final fitting = art._fit;
-    final away = art.pet == Companion.fox && depth < 0
-        ? (1 - profile) * -depth
-        : 0.0;
-    final root = Offset.lerp(
-      _bodyPoint(fitting.tailPivot),
-      Offset(walkOrigin.dx, fitting.tailPivot.dy + drop),
-      away,
-    )!;
-    final transition = switch (pose.stage) {
-      WalkStage.rise => 1.0,
-      WalkStage.sit => -1.0,
-      _ => 0.0,
-    };
-    final delayedSwing = fitting.tailSweep == 0
-        ? 0.0
-        : fitting.tailSweep *
-              (math.sin((pose.phase - .18) * math.pi * 2) * pose.effort +
-                  .65 * transition * math.sin(pose.crouch * math.pi));
-    canvas.save();
-    canvas.translate(root.dx, root.dy);
-    canvas.rotate(facing * (.14 * pose.crouch + shift.tilt * 2 + delayedSwing));
-    final sideWidth = side.abs() < .22
-        ? side / .22 * .64
-        : .64 * facing + side * .36;
-    canvas.scale(ui.lerpDouble(sideWidth, .46, away)!, 1);
-    canvas.drawImage(art._image('tail'), -fitting.tailPivot, brush);
-    canvas.restore();
-  }
-
-  void _crossSection(String name) {
-    if (name == 'torso' && !sideView) {
-      canvas.save();
-      canvas.translate(walkOrigin.dx, walkOrigin.dy + drop + depth * 4);
-      canvas.scale(1 - pose.crouch * .22, 1);
-      canvas.drawImage(
-        art._image('torso-${depth < 0 ? 'away' : 'front'}${art._coat}'),
-        -walkOrigin,
-        brush,
-      );
-      canvas.restore();
-    }
-    if (sideView) {
-      final root = _bodyPoint(walkOrigin);
-      canvas.save();
-      canvas.translate(root.dx, root.dy);
-      canvas.transform(
-        Float64List.fromList([
-          facing * width,
-          slope,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-        ]),
-      );
-      canvas.drawImage(art._image('$name${art._coat}'), -walkOrigin, brush);
-      canvas.restore();
-    }
-  }
-
-  void _leg(WalkLeg leg) {
-    final joints = pose.rig.joints[leg.index];
-    final step = pose.paws[leg.index];
-    final ground = walkOrigin + (step.ground - pose.root) / pose.scale;
-    final pad = ground - Offset(0, step.lift / pose.scale);
-    final ankle = pad - const Offset(0, 29);
-    final sideHip = _bodyPoint(joints.hip);
-    final depthArt = pose.rig.depthJoints(leg, depth);
-    final frontHip = depthArt == null
-        ? Offset(
-            walkOrigin.dx + (leg.near ? -31 : 31) * depth,
-            joints.hip.dy + drop + (leg.hind ? -10 : 12) * depth,
-          )
-        : depthArt.hip + Offset(0, drop + depth * 4);
-    final hip = Offset.lerp(frontHip, sideHip, profile)!;
-    final kneeRest =
-        joints.knee -
-        Offset.lerp(joints.hip, joints.pad - const Offset(0, 29), .49)!;
-    final flex =
-        (leg.hind ? 1 : -1) * (step.lift / pose.scale * .72).clamp(0.0, 22.0);
-    final knee =
-        Offset.lerp(hip, ankle, .49)! +
-        Offset((kneeRest.dx + flex) * side, kneeRest.dy);
-    _bone('leg-${leg.asset}-upper', hip, knee);
-    _bone('leg-${leg.asset}-lower', knee, ankle);
-    canvas.save();
-    canvas.translate(pad.dx, pad.dy);
-    canvas.scale(facing, 1);
-    canvas.drawImage(
-      art._image('paw-${leg.asset}'),
-      const Offset(-64, -84),
-      brush,
-    );
-    canvas.restore();
-  }
-
-  void _bone(String texture, Offset joint, Offset end) {
-    final axis = end - joint;
-    canvas.save();
-    canvas.translate(joint.dx, joint.dy);
-    canvas.rotate(math.atan2(axis.dy, axis.dx) - math.pi / 2);
-    canvas.scale(facing, axis.distance / 96);
-    canvas.drawImage(art._image(texture), const Offset(-64, -32), brush);
-    canvas.restore();
-  }
-
-  void _head() {
-    final nudge = motion.action == PetAction.nuzzle
-        ? motion.lean
-        : art.pet == Companion.fox && pose.stage == WalkStage.rise
-        ? pulse(1 - pose.crouch, 0, .75) * .9
-        : 0.0;
-    final fitting = art._fit;
-    final eyes = fitting.heads[_Head.side.index].pivot;
-    final center = Offset(
-      walkOrigin.dx +
-          side *
-              (eyes.dx -
-                  walkOrigin.dx +
-                  fitting.seatedEyeShift.dx * pose.crouch +
-                  nudge * 12),
-      eyes.dy +
-          fitting.seatedEyeShift.dy * pose.crouch +
-          shift.head.dy +
-          depth.abs() * 20 +
-          nudge.abs() * 8,
-    );
-    canvas.save();
-    canvas.translate(center.dx + shift.head.dx * facing, center.dy);
-    canvas.rotate(
-      facing * (shift.tilt - .12 * pose.crouch * (1 - pose.crouch)) * profile,
-    );
-    final scale = 1 + pose.crouch * (fitting.seatedHeadScale - 1);
-    canvas.scale(
-      sideView ? facing * (.83 + .17 * side.abs()) * scale : scale,
-      scale,
-    );
-    _drawHead(
-      sideView
-          ? _Head.side
-          : depth < 0
-          ? _Head.away
-          : _Head.front,
-    );
-    canvas.restore();
-  }
-
-  void _drawHead(_Head view) {
-    final dressed = switch (view) {
-      _Head.side => facing < 0 ? art._leftHead ?? art._sideHead : art._sideHead,
-      _Head.front => art._frontHead,
-      _Head.away => art._awayHead,
-    };
-    canvas.drawImage(
-      dressed?.image ?? art._image(view.asset),
-      -art._fit.heads[view.index].pivot - (dressed?.padding ?? Offset.zero),
-      brush,
-    );
-  }
-}
-
-double _fade(double t) {
-  final k = t.clamp(0.0, 1.0);
-  return k * k * (3 - 2 * k);
-}
-
-typedef _WeightShift = ({Offset body, Offset head, double tilt});
-
-_WeightShift _weightShift(Companion pet, double phase, double effort) {
-  // Two authored poses per beat: step down, then pass over the support.
-  final poses = pet == Companion.fox
-      ? const [
-          (Offset(-1, 2), Offset(-3, 2), -5),
-          (Offset(2, -3), Offset(5, -1), -1),
-          (Offset(1, 3), Offset(4, 5), 5),
-          (Offset(3, -2), Offset(3, -1), 1),
-          (Offset(-1, 2), Offset(-4, 3), -3),
-          (Offset(0, -3), Offset(3, -3), -2),
-          (Offset(-1, 3), Offset(0, 5), 3),
-          (Offset(-3, -3), Offset(-4, 1), 3),
-        ]
-      : const [
-          (Offset(-1, 2), Offset(-3, 4), -3),
-          (Offset(2, -3), Offset(4, -2), -1),
-          (Offset(1, 2), Offset(3, 5), 4),
-          (Offset(3, -2), Offset(5, 0), 3),
-          (Offset(-1, 2), Offset(-4, 3), -3),
-          (Offset(0, -3), Offset(3, -2), -1),
-          (Offset(-1, 3), Offset(1, 5), 3),
-          (Offset(-3, -2), Offset(-5, 1), 2),
-        ];
-  final point = phase % 1 * poses.length;
-  final before = poses[point.floor()];
-  final after = poses[(point.floor() + 1) % poses.length];
-  final mix = _fade(point % 1);
-  return (
-    body: Offset.lerp(before.$1, after.$1, mix)! * effort,
-    head: Offset.lerp(before.$2, after.$2, mix)! * effort,
-    tilt: ui.lerpDouble(before.$3, after.$3, mix)! * effort / 187,
-  );
 }

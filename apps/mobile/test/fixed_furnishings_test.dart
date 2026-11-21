@@ -140,7 +140,7 @@ void main() {
     await s.verifyAccounting();
   });
 
-  test('38 fitted portraits and an accessory are resolved through the same 19 animated poses', () async {
+  test('each stage has two painted outfits and room for a scarf', () async {
     Future<ui.Image> decode(String path) async {
       final codec = await ui.instantiateImageCodec(
         await File(path).readAsBytes(),
@@ -223,6 +223,6 @@ void main() {
         }
       }
     }
-    expect(resolved, hasLength(38));
+    expect(resolved, hasLength((Companion.values.length * 6 + 1) * 2));
   });
 }

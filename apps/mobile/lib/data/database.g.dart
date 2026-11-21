@@ -581,8 +581,7 @@ class ChildProfiles extends Table with TableInfo<ChildProfiles, ChildProfile> {
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    $customConstraints:
-        'NOT NULL CHECK (active_pet_id IN (\'fox\', \'rabbit\', \'cat\'))',
+    $customConstraints: 'NOT NULL CHECK (active_pet_id IN (\'fox\', \'rabbit\', \'cat\', \'otter\', \'hedgehog\'))',
   );
   @override
   List<GeneratedColumn> get $columns => [id, familyId, nickname, activePetId];
@@ -8514,8 +8513,7 @@ class PetState extends Table with TableInfo<PetState, PetStateData> {
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    $customConstraints:
-        'NOT NULL CHECK (pet_id IN (\'fox\', \'rabbit\', \'cat\'))',
+    $customConstraints: 'NOT NULL CHECK (pet_id IN (\'fox\', \'rabbit\', \'cat\', \'otter\', \'hedgehog\'))',
   );
   static const VerificationMeta _slotMeta = const VerificationMeta('slot');
   late final GeneratedColumn<String> slot = GeneratedColumn<String>(
@@ -11188,8 +11186,7 @@ class CompanionMemories extends Table
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    $customConstraints:
-        'NOT NULL CHECK (pet_id IN (\'fox\', \'rabbit\', \'cat\'))',
+    $customConstraints: 'NOT NULL CHECK (pet_id IN (\'fox\', \'rabbit\', \'cat\', \'otter\', \'hedgehog\'))',
   );
   static const VerificationMeta _momentMeta = const VerificationMeta('moment');
   late final GeneratedColumn<String> moment = GeneratedColumn<String>(
@@ -11458,8 +11455,7 @@ class OwnedCompanions extends Table
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    $customConstraints:
-        'NOT NULL CHECK (pet_id IN (\'fox\', \'rabbit\', \'cat\'))',
+    $customConstraints: 'NOT NULL CHECK (pet_id IN (\'fox\', \'rabbit\', \'cat\', \'otter\', \'hedgehog\'))',
   );
   static const VerificationMeta _purchaseIdMeta = const VerificationMeta(
     'purchaseId',

@@ -22,7 +22,8 @@ class RainMapChapter extends StatefulWidget {
   State<RainMapChapter> createState() => _RainMapChapterState();
 }
 
-class _RainMapChapterState extends State<RainMapChapter> {
+class _RainMapChapterState extends State<RainMapChapter>
+    with SingleTickerProviderStateMixin {
   static const _legLines = [
     '奶油：先穿过浅滩。第一块石板离我们最近。',
     '奶油：沿着树影往前，再踩过这一段石板。',
@@ -34,21 +35,49 @@ class _RainMapChapterState extends State<RainMapChapter> {
       RainMapProgress.groupSize * RainMapProgress.groupCount;
 
   late RainMapProgress _progress = widget.initial;
+  late final AnimationController _stampEffect = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 360),
+    value: 1,
+  );
   bool _saving = false;
+  int? _pressingPrint;
   bool _onShortcut = false;
   int _shortcutStones = 0;
   String? _hint;
 
   bool get _onTrail => _progress.started && !_progress.complete;
+  bool get _busy => _saving || _pressingPrint != null;
 
-  Future<void> _save(Future<RainMapProgress> Function() action) async {
-    if (_saving) return;
+  @override
+  void dispose() {
+    _stampEffect.dispose();
+    super.dispose();
+  }
+
+  Future<void> _save(
+    Future<RainMapProgress> Function() action, {
+    bool stamping = false,
+  }) async {
+    if (_busy) return;
     setState(() => _saving = true);
     try {
       final saved = await action();
       if (!mounted) return;
+      if (stamping &&
+          saved.stamps > _progress.stamps &&
+          !MediaQuery.disableAnimationsOf(context)) {
+        // Finish pressing on this section before showing the next three stones.
+        setState(() {
+          _pressingPrint = saved.stamps;
+          _saving = false;
+        });
+        await _stampEffect.forward(from: 0).orCancel;
+        if (!mounted) return;
+      }
       setState(() {
         _progress = saved;
+        _pressingPrint = null;
         _hint = null;
         if (saved.challengeSolved) _onShortcut = false;
       });
@@ -57,12 +86,12 @@ class _RainMapChapterState extends State<RainMapChapter> {
     } catch (_) {
       if (mounted) setState(() => _hint = '这一步没存好。再试一次吧。');
     } finally {
-      if (mounted) setState(() => _saving = false);
+      if (mounted && _saving) setState(() => _saving = false);
     }
   }
 
   void _stepStone(int stone) {
-    if (_saving || !_onTrail) return;
+    if (_busy || !_onTrail) return;
     if (_progress.canStamp) {
       setState(() => _hint = '三块都踩过了。在地图上盖下这段的爪印吧。');
       return;
@@ -85,7 +114,7 @@ class _RainMapChapterState extends State<RainMapChapter> {
   }
 
   void _stamp() {
-    if (_saving || !_onTrail) return;
+    if (_busy || !_onTrail) return;
     if (!_progress.canStamp) {
       final remaining = RainMapProgress.groupSize - _progress.stones;
       setState(() => _hint = '还差$remaining块石板。踩完这一段，再盖爪印。');
@@ -96,6 +125,7 @@ class _RainMapChapterState extends State<RainMapChapter> {
         run: _progress.run,
         group: _progress.stamps,
       ),
+      stamping: true,
     );
   }
 
@@ -174,7 +204,12 @@ class _RainMapChapterState extends State<RainMapChapter> {
   Widget _buildRoute() {
     final scene = _RainScene(
       progress: _progress,
-      onStone: _onTrail && !_saving ? _stepStone : null,
+      onStone: _onTrail && !_busy ? _stepStone : null,
+    );
+    final paper = RainMapPaper(
+      stamps: _pressingPrint ?? _progress.stamps,
+      onTargetTap: _progress.canStamp && !_busy ? _stamp : null,
+      stampEffect: _stampEffect,
     );
     final story = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -182,16 +217,28 @@ class _RainMapChapterState extends State<RainMapChapter> {
         _ChapterLine(line: _line, hint: _hint, saving: _saving),
         const SizedBox(height: 12),
         if (!_progress.started)
-          FilledButton(
+          FilledButton.icon(
             onPressed: _saving
                 ? null
                 : () => _save(widget.service.beginRainMap),
-            child: const Text('和奶油出发'),
+            icon: Image.asset(
+              'assets/art/rain-map-folded.webp',
+              height: 28,
+              excludeFromSemantics: true,
+            ),
+            label: const Text('和奶油出发'),
           )
-        else if (_onTrail)
-          _StampButton(progress: _progress, onPressed: _saving ? null : _stamp)
-        else ...[
-          RainMapPaper(stamps: _progress.stamps),
+        else if (_onTrail) ...[
+          paper,
+          Center(
+            child: TextButton(
+              key: const ValueKey('rain-map-stamp'),
+              onPressed: _busy ? null : _stamp,
+              child: const Text('盖爪印'),
+            ),
+          ),
+        ] else ...[
+          paper,
           const SizedBox(height: 12),
           if (!_progress.challengeSolved) ...[
             FilledButton(
@@ -258,10 +305,7 @@ class _RainMapChapterState extends State<RainMapChapter> {
           child: AspectRatio(
             aspectRatio: 2.25,
             child: CustomPaint(
-              painter: _PaperTrail(
-                stamps: RainMapProgress.challengeStamps,
-                laidStones: _shortcutStones,
-              ),
+              painter: _ShortcutTrail(laidStones: _shortcutStones),
             ),
           ),
         ),
@@ -593,73 +637,142 @@ class _StoneShape extends CustomPainter {
       crossed != oldDelegate.crossed || next != oldDelegate.next;
 }
 
-class _StampButton extends StatelessWidget {
-  const _StampButton({required this.progress, required this.onPressed});
+/// The trail drawn in the rain chapter and retained in the growth journal.
+class RainMapPaper extends StatelessWidget {
+  const RainMapPaper({
+    super.key,
+    required this.stamps,
+    this.onTargetTap,
+    this.stampEffect,
+  }) : assert(stamps >= 0 && stamps <= RainMapProgress.groupCount);
 
-  final RainMapProgress progress;
-  final VoidCallback? onPressed;
+  final int stamps;
+  final VoidCallback? onTargetTap;
+  final Animation<double>? stampEffect;
 
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: '地图上有${progress.stamps}个爪印，共${RainMapProgress.groupCount}个。盖爪印',
-      button: true,
-      enabled: onPressed != null,
-      onTap: onPressed,
-      excludeSemantics: true,
-      child: Material(
-        key: const ValueKey('rain-map-stamp'),
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(18),
-          onTap: onPressed,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              RainMapPaper(stamps: progress.stamps),
-              Padding(
-                padding: const EdgeInsets.only(top: 5, bottom: 4),
-                child: Text(
-                  '盖爪印',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: progress.canStamp ? terracotta : mutedInk,
+  // Registered to the exported paper crop on the PR-01 1024 × 768 master.
+  // The crop starts at (54, 116). Each mark retains its own painted pixels.
+  static const _width = 916.0;
+  static const _height = 513.0;
+  static const _prints = [
+    Rect.fromLTWH(108, 348, 76, 72),
+    Rect.fromLTWH(316, 348, 76, 72),
+    Rect.fromLTWH(521, 348, 76, 72),
+    Rect.fromLTWH(730, 349, 76, 72),
+  ];
+
+  Rect _scaled(Rect area, double scale) => Rect.fromLTRB(
+    area.left * scale,
+    area.top * scale,
+    area.right * scale,
+    area.bottom * scale,
+  );
+
+  Widget _art(String part) => Image.asset(
+    'assets/art/rain-map-$part.webp',
+    key: ValueKey('rain-map-art-$part'),
+    fit: BoxFit.fill,
+    excludeFromSemantics: true,
+  );
+
+  Widget _layers(double scale, double press) => Stack(
+    fit: StackFit.expand,
+    children: [
+      _art('paper'),
+      for (var i = 0; i < stamps; i++)
+        if (i < stamps - 1 || press >= .38)
+          Positioned.fromRect(
+            rect: _scaled(_prints[i], scale),
+            child: _art('ink-${i + 1}'),
+          ),
+      if (onTargetTap != null && stamps < _prints.length) _targetAt(scale),
+      if (stamps > 0 && press < 1)
+        _stampAt(_prints[stamps - 1].center, scale, press),
+    ],
+  );
+
+  Widget _targetAt(double scale) {
+    final ring = _scaled(_prints[stamps].inflate(13), scale);
+    return Positioned.fromRect(
+      rect: Rect.fromCenter(
+        center: ring.center,
+        width: math.max(48, ring.width),
+        height: math.max(48, ring.height),
+      ),
+      child: Semantics(
+        label: '在第${stamps + 1}个位置盖爪印',
+        button: true,
+        child: GestureDetector(
+          key: const ValueKey('rain-map-stamp-target'),
+          behavior: HitTestBehavior.opaque,
+          onTap: onTargetTap,
+          child: Center(
+            child: SizedBox.fromSize(
+              size: ring.size,
+              child: const DecoratedBox(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.fromBorderSide(
+                    BorderSide(color: terracotta, width: 2),
                   ),
                 ),
               ),
-            ],
+            ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _stampAt(Offset center, double scale, double press) {
+    final lift = press < .38
+        ? 1 - Curves.easeOut.transform(press / .38)
+        : press > .62
+        ? Curves.easeIn.transform((press - .62) / .38)
+        : 0.0;
+    final box = Rect.fromLTWH(
+      center.dx - 76,
+      center.dy - 155 - 44 * lift,
+      136,
+      161,
+    );
+    return Positioned.fromRect(
+      rect: _scaled(box, scale),
+      child: Opacity(
+        opacity: press < .75 ? 1 : (1 - press) * 4,
+        child: _art('stamp'),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final effect = MediaQuery.disableAnimationsOf(context) ? null : stampEffect;
+    return Semantics(
+      label: '地图上有$stamps个爪印，共${RainMapProgress.groupCount}个',
+      image: true,
+      child: AspectRatio(
+        aspectRatio: _width / _height,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final scale = constraints.maxWidth / _width;
+            return effect == null
+                ? _layers(scale, 1)
+                : AnimatedBuilder(
+                    animation: effect,
+                    builder: (context, _) => _layers(scale, effect.value),
+                  );
+          },
         ),
       ),
     );
   }
 }
 
-/// The trail drawn in the rain chapter and retained in the growth journal.
-class RainMapPaper extends StatelessWidget {
-  const RainMapPaper({super.key, required this.stamps})
-    : assert(stamps >= 0 && stamps <= RainMapProgress.groupCount);
+class _ShortcutTrail extends CustomPainter {
+  const _ShortcutTrail({required this.laidStones});
 
-  final int stamps;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: '地图上有$stamps个爪印，共${RainMapProgress.groupCount}个',
-      image: true,
-      child: AspectRatio(
-        aspectRatio: 3.15,
-        child: CustomPaint(painter: _PaperTrail(stamps: stamps)),
-      ),
-    );
-  }
-}
-
-class _PaperTrail extends CustomPainter {
-  const _PaperTrail({required this.stamps, this.laidStones});
-
-  final int stamps;
-  final int? laidStones;
+  final int laidStones;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -682,11 +795,8 @@ class _PaperTrail extends CustomPainter {
         ..style = PaintingStyle.stroke,
     );
     final w = size.width;
-    final stones = laidStones;
-    final h = size.height * (stones == null ? 1 : .66);
-    final stops = stones == null
-        ? RainMapProgress.groupCount
-        : RainMapProgress.challengeStamps;
+    final h = size.height * .66;
+    const stops = RainMapProgress.challengeStamps;
     final centers = [
       for (int i = 0; i < stops; i++)
         Offset(w * (.16 + .68 * i / (stops - 1)), h * (i.isEven ? .59 : .42)),
@@ -719,13 +829,11 @@ class _PaperTrail extends CustomPainter {
     }
     final radius = math.min(w / 12, h * .26);
     for (var i = 0; i < centers.length; i++) {
-      final filled = i < stamps;
       final center = centers[i];
       canvas.drawCircle(
         center,
         radius,
-        Paint()
-          ..color = filled ? const Color(0xFFDDB07B) : const Color(0xFFFAECCD),
+        Paint()..color = const Color(0xFFDDB07B),
       );
       canvas.drawCircle(
         center,
@@ -734,11 +842,9 @@ class _PaperTrail extends CustomPainter {
           ..color = const Color(0xFFAA845C)
           ..style = PaintingStyle.stroke,
       );
-      if (filled) _drawPaw(canvas, center, radius / 2.4);
+      _drawPaw(canvas, center, radius / 2.4);
     }
-    if (stones != null) {
-      _drawShortcutStones(canvas, size, centers, radius, stones);
-    }
+    _drawShortcutStones(canvas, size, centers, radius, laidStones);
   }
 
   void _drawPaw(Canvas canvas, Offset center, double span) {
@@ -832,6 +938,6 @@ class _PaperTrail extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_PaperTrail oldDelegate) =>
-      stamps != oldDelegate.stamps || laidStones != oldDelegate.laidStones;
+  bool shouldRepaint(_ShortcutTrail oldDelegate) =>
+      laidStones != oldDelegate.laidStones;
 }

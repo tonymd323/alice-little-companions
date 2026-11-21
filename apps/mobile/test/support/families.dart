@@ -6,12 +6,32 @@ import 'package:alice_companions/data/device.dart';
 import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/domain/pin.dart';
 import 'package:alice_companions/domain/rules.dart';
+import 'package:sqlite3/sqlite3.dart';
 
 const dropAffinityTables =
     'DROP TABLE companion_candies; DROP TABLE companion_affinity_days; '
     'DROP INDEX purchased_once; $legacyPurchaseIndexSql; ';
 const dropCompanionTables =
     '${dropAffinityTables}DROP TABLE companion_completions; DROP TABLE owned_companions; ';
+
+// These tests construct older fixtures by dropping tables from a fresh save.
+// Restore the old checks on the remaining tables before the file is reopened.
+void restoreLegacyCompanionChecks(Database fixture) {
+  fixture.execute('PRAGMA writable_schema = ON');
+  try {
+    fixture.execute(
+      '''
+      UPDATE sqlite_schema SET sql = replace(sql, ?, ?)
+      WHERE type = 'table'
+        AND name IN ('child_profiles', 'pet_state',
+                     'companion_memories', 'owned_companions')
+      ''',
+      [expandedCompanionCheck, originalCompanionCheck],
+    );
+  } finally {
+    fixture.execute('PRAGMA writable_schema = OFF');
+  }
+}
 
 class MemorySecureValues implements SecureValues {
   final data = <String, String>{};
