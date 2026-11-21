@@ -39,7 +39,8 @@ final assets =
         .toSet();
 final pin = 739184.toString();
 const fixtureDraft = TaskDraft('测试任务A', '测试内容', '测试标准A', 'focus');
-const dropV7AndLater = '${dropCompanionTables}DROP TABLE companion_memories; DROP TABLE rain_map_runs; ';
+const dropV7AndLater =
+    '${dropCompanionTables}DROP TABLE companion_memories; DROP TABLE rain_map_runs; ';
 
 TransferService transfers(TestFamily fixture, {Set<String>? withAssets}) =>
     TransferService(
@@ -237,6 +238,7 @@ void main() {
       '${dropV7AndLater}DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; '
       'INSERT INTO growth_awards SELECT id, 3, 2, 0 FROM child_profiles; PRAGMA user_version=3',
     );
+    restoreLegacyCompanionChecks(legacySql);
     legacySql.close();
     final legacyInfo = await checkSnapshot(
       oldDb.path,
@@ -248,7 +250,12 @@ void main() {
     final legacyArchive = File(p.join(targetDir.path, 'legacy.alicebackup'));
     await codec.write(
       oldDb,
-      {...preview.manifest, 'schema_version': 3, 'summary': legacyInfo.summary},
+      {
+        ...preview.manifest,
+        'schema_version': 3,
+        'summary': legacyInfo.summary,
+        'required_asset_ids': legacyInfo.assets.toList()..sort(),
+      },
       password,
       legacyArchive,
     );
@@ -350,35 +357,37 @@ void main() {
     expect((await source.service.overview())!.balance, 37);
   }, timeout: const Timeout(Duration(minutes: 4)));
 
-  test('snapshot rejects a balanced reward without a matching completion', () async {
-    final stock = await TestFamily.create();
-    addTearDown(stock.dispose);
-    final owner = await stock.service.pin.unlock(TestFamily.pin);
-    await stock.service.backfill(
-      fixtureDraft,
-      stock.service.today,
-      '',
-      session: owner,
-    );
-    final snapshot = p.join(stock.root.path, 'stray-credit.sqlite');
-    await vacuumFile(
-      stock.device.databaseFile(stock.service.pin.generation).path,
-      snapshot,
-    );
-    final schema = await expectedSchema();
-    final valid = await checkSnapshot(snapshot, schema, stock.rules, assets);
-    expect(valid.summary['ledger_count'], 1);
-    final exportInfo = await validateSnapshot(
-      snapshot,
-      schema,
-      stock.rules,
-      assets,
-    );
-    expect(exportInfo.summary, valid.summary);
+  test(
+    'snapshot rejects a balanced reward without a matching completion',
+    () async {
+      final stock = await TestFamily.create();
+      addTearDown(stock.dispose);
+      final owner = await stock.service.pin.unlock(TestFamily.pin);
+      await stock.service.backfill(
+        fixtureDraft,
+        stock.service.today,
+        '',
+        session: owner,
+      );
+      final snapshot = p.join(stock.root.path, 'stray-credit.sqlite');
+      await vacuumFile(
+        stock.device.databaseFile(stock.service.pin.generation).path,
+        snapshot,
+      );
+      final schema = await expectedSchema();
+      final valid = await checkSnapshot(snapshot, schema, stock.rules, assets);
+      expect(valid.summary['ledger_count'], 1);
+      final exportInfo = await validateSnapshot(
+        snapshot,
+        schema,
+        stock.rules,
+        assets,
+      );
+      expect(exportInfo.summary, valid.summary);
 
-    final db = sqlite3.open(snapshot);
-    try {
-      db.execute('''
+      final db = sqlite3.open(snapshot);
+      try {
+        db.execute('''
         INSERT INTO ledger_entries (
           id, account_id, delta, balance_after, kind, source_key, actual_date,
           posted_day, created_at, command_id
@@ -389,26 +398,27 @@ void main() {
         FROM ledger_entries WHERE kind = 'reward';
         UPDATE accounts SET balance = balance * 2;
       ''');
-    } finally {
-      db.close();
-    }
+      } finally {
+        db.close();
+      }
 
-    final invalidLinks = throwsA(
-      isA<UserError>().having(
-        (error) => error.message,
-        'message',
-        '存档的成果、兑换或布置关联校验失败。',
-      ),
-    );
-    await expectLater(
-      checkSnapshot(snapshot, schema, stock.rules, assets),
-      invalidLinks,
-    );
-    await expectLater(
-      validateSnapshot(snapshot, schema, stock.rules, assets),
-      invalidLinks,
-    );
-  });
+      final invalidLinks = throwsA(
+        isA<UserError>().having(
+          (error) => error.message,
+          'message',
+          '存档的成果、兑换或布置关联校验失败。',
+        ),
+      );
+      await expectLater(
+        checkSnapshot(snapshot, schema, stock.rules, assets),
+        invalidLinks,
+      );
+      await expectLater(
+        validateSnapshot(snapshot, schema, stock.rules, assets),
+        invalidLinks,
+      );
+    },
+  );
 
   test('0.10 family upgrades with an empty chapter, keeps its ledger and restores the bookmark on restart', () async {
     final stock = await TestFamily.create();
@@ -427,16 +437,27 @@ void main() {
     legacy.execute(
       '${dropV7AndLater}DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; PRAGMA user_version = 2',
     );
+    restoreLegacyCompanionChecks(legacy);
     legacy.close();
     final schema = await expectedSchema();
     final before = await checkSnapshot(file.path, schema, stock.rules, assets);
     expect(before.schemaVersion, 2);
     stock.service = await FamilyService.load(stock.device, id, stock.rules);
     final service = stock.service;
-    final after = await checkSnapshot(file.path, schema, stock.rules, assets, compareWithSchemaVersion: before.schemaVersion);
+    final after = await checkSnapshot(
+      file.path,
+      schema,
+      stock.rules,
+      assets,
+      compareWithSchemaVersion: before.schemaVersion,
+    );
     expect(after.schemaVersion, currentSchemaVersion);
     expect(after.businessDigest, before.businessDigest);
-    expect(after.summary, {...before.summary, 'owned_companion_count': 1, 'active_companion_experience': 1});
+    expect(after.summary, {
+      ...before.summary,
+      'owned_companion_count': 1,
+      'active_companion_experience': 1,
+    });
     expect(await CheckpointStore(stock.device).files(), hasLength(1));
     final first = await service.windowMathBookmark();
     expect(first.page, WindowPage.count);
@@ -450,7 +471,13 @@ void main() {
     expect(saved.pattern, {1, 3});
     expect((await stock.service.overview())!.balance, 3);
     expect(await stock.service.ledger(), hasLength(1));
-    final current = await checkSnapshot(file.path, schema, stock.rules, assets, compareWithSchemaVersion: before.schemaVersion);
+    final current = await checkSnapshot(
+      file.path,
+      schema,
+      stock.rules,
+      assets,
+      compareWithSchemaVersion: before.schemaVersion,
+    );
     expect(current.businessDigest, isNot(after.businessDigest));
     expect(current.summary, after.summary);
   });
@@ -487,6 +514,7 @@ void main() {
       sql.execute(
         "${dropAffinityTables}DELETE FROM processed_commands WHERE id LIKE 'affinity/%'; PRAGMA user_version=8",
       );
+      restoreLegacyCompanionChecks(sql);
     } finally {
       sql.close();
     }
@@ -504,6 +532,7 @@ void main() {
         ...current.manifest,
         'schema_version': oldInfo.schemaVersion,
         'summary': oldInfo.summary,
+        'required_asset_ids': oldInfo.assets.toList()..sort(),
       },
       password,
       archive,
@@ -633,6 +662,7 @@ void main() {
         $candyPurchaseIndexSql;
         PRAGMA user_version = 9;
         ''');
+        restoreLegacyCompanionChecks(sql);
       } finally {
         sql.close();
       }
@@ -646,7 +676,12 @@ void main() {
       final archive = File(p.join(stock.root.path, 'v9.alicebackup'));
       await codec.write(
         oldDb,
-        {...current.manifest, 'schema_version': 9, 'summary': oldInfo.summary},
+        {
+          ...current.manifest,
+          'schema_version': 9,
+          'summary': oldInfo.summary,
+          'required_asset_ids': oldInfo.assets.toList()..sort(),
+        },
         password,
         archive,
       );
@@ -667,7 +702,7 @@ void main() {
         assets,
         compareWithSchemaVersion: 9,
       );
-      expect(upgraded.schemaVersion, foodSchemaVersion);
+      expect(upgraded.schemaVersion, currentSchemaVersion);
       expect(upgraded.businessDigest, oldInfo.businessDigest);
       final progress = await restored.companionProgress();
       expect(
@@ -825,7 +860,7 @@ void main() {
     );
     final preview = await incoming.inspect(ticket.file, password, null);
     addTearDown(preview.close);
-    expect(preview.manifest['schema_version'], foodSchemaVersion);
+    expect(preview.manifest['schema_version'], currentSchemaVersion);
     final restored = (await incoming.activate(
       preview,
       pin,
@@ -865,6 +900,7 @@ void main() {
     legacy.execute(
       '${dropV7AndLater}DROP TABLE wind_story_runs; PRAGMA user_version=5',
     );
+    restoreLegacyCompanionChecks(legacy);
     legacy.close();
     final schema = await expectedSchema();
     final old = await checkSnapshot(file.path, schema, stock.rules, assets);
@@ -883,7 +919,11 @@ void main() {
       compareWithSchemaVersion: old.schemaVersion,
     );
     expect(upgraded.businessDigest, old.businessDigest);
-    expect(upgraded.summary, {...old.summary, 'owned_companion_count': 1, 'active_companion_experience': 0});
+    expect(upgraded.summary, {
+      ...old.summary,
+      'owned_companion_count': 1,
+      'active_companion_experience': 0,
+    });
     expect((await stock.service.overview())!.windowsLit, isTrue);
     expect((await stock.service.windProgress()).started, isFalse);
     expect((await stock.service.windowMathBookmark()).pattern, {0, 4});
@@ -921,6 +961,7 @@ void main() {
         'schema_version': 5,
         'summary': old.summary,
         'snapshot_revision': old.revision,
+        'required_asset_ids': old.assets.toList()..sort(),
       },
       password,
       oldArchive,
@@ -1034,7 +1075,9 @@ void main() {
     await fails(safe.inspect(invalid, password, parent));
 
     final differentHash = utf8.encode(
-      jsonEncode({'database_sha256': sha256.convert([1]).toString()}),
+      jsonEncode({
+        'database_sha256': sha256.convert([1]).toString(),
+      }),
     );
     final differentSnapshotZip = ZipEncoder().encodeBytes(
       Archive()
@@ -1138,6 +1181,7 @@ void main() {
     old.execute(
       '${dropV7AndLater}DROP TABLE wind_story_runs; DROP TABLE window_story_milestones; DROP TABLE window_math_bookmarks; DROP TABLE base_furnishings; DROP INDEX ledger_day_kind_idx; DROP INDEX purchase_ledger_idx; PRAGMA user_version = 1',
     );
+    restoreLegacyCompanionChecks(old);
     old.close();
     stock.service = await FamilyService.load(stock.device, id, stock.rules);
     expect(

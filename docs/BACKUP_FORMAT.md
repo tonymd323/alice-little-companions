@@ -95,3 +95,5 @@ UI必须区分“内部恢复点”与“已导出的备份”。没有外部备
 结构 9 增加 `companion_affinity_days` 和 `companion_candies`，继续使用 ALICEBK1。亲密度按伙伴累计每日首次互动和已喂食糖果。旧档中已拥有伙伴的首次回忆迁为起始亲密度，日期字段留空。糖果按兑换流水逐颗保存，未喂食、已喂食和已退回可核对。旧档激活前核对升级前已有的业务表，新档的完整摘要包含两张新表。结构 9 的备份需要 0.22 或更新的兼容版本。
 
 结构 10 更新 `purchased_once` 部分唯一索引，允许 `affinity_candy`、`affinity_cookie`、`affinity_pudding` 重复兑换。每份食物关联原有 `purchases` 及 `companion_candies` 表，商品类型由 `purchases.item_id` 决定。升级结构 9 时只重建该索引，业务行与摘要保留。结构 10 的备份需要 0.24 或更新的兼容版本。
+
+结构 11 扩展四张伙伴表的可用物种，加入 `otter` 和 `hedgehog`。结构 10 升级时在同一事务中保留业务行并核对外键。ALICEBK1 保持原容器格式，结构 11 的备份由支持五位伙伴的版本读回。

@@ -9,27 +9,17 @@ const walkOrigin = Offset(256, 440);
 const walkWorld = Size(1536, 1024);
 
 enum WalkLeg {
-  nearHind('near-hind'),
-  nearFront('near-front'),
-  farHind('far-hind'),
-  farFront('far-front');
+  nearHind,
+  nearFront,
+  farHind,
+  farFront;
 
-  const WalkLeg(this.asset);
-  final String asset;
   bool get near => this == nearHind || this == nearFront;
-  bool get hind => this == nearHind || this == farHind;
 }
-
-class WalkJoints {
-  const WalkJoints(this.hip, this.knee, this.pad);
-  final Offset hip, knee, pad;
-}
-
-typedef WalkDepthJoints = ({Offset hip, Offset pad});
 
 class WalkRig {
   const WalkRig._({
-    required this.joints,
+    required this.standingPads,
     required this.seatedPads,
     required this.sideStride,
     required this.depthStride,
@@ -39,43 +29,60 @@ class WalkRig {
     this.front,
     this.away,
     this.turnArc = 0,
+    this.usesPortrait = false,
   });
 
-  final List<WalkJoints> joints;
-  final List<Offset> seatedPads;
-  final List<WalkDepthJoints>? front, away;
-  final double sideStride, depthStride, speed, rise, sit, turnArc;
+  factory WalkRig.painted(
+    List<Offset> pads, {
+    required double sideStride,
+    required double depthStride,
+    required double speed,
+  }) => WalkRig._(
+    standingPads: pads,
+    seatedPads: pads,
+    sideStride: sideStride,
+    depthStride: depthStride,
+    speed: speed,
+    rise: .34,
+    sit: .36,
+    turnArc: 9,
+    usesPortrait: true,
+  );
 
-  WalkDepthJoints? depthJoints(WalkLeg leg, double depth) =>
-      (depth < 0 ? away : front)?[leg.index];
+  final List<Offset> standingPads, seatedPads;
+  final List<Offset>? front, away;
+  final double sideStride, depthStride, speed, rise, sit, turnArc;
+  final bool usesPortrait;
 
   Offset groundOffset(WalkLeg leg, double side, double depth) {
-    final pad = joints[leg.index].pad - walkOrigin;
-    if (depthJoints(leg, depth) case final view?) {
-      final angled = view.pad - walkOrigin;
-      return Offset(pad.dx * side, pad.dy * side.abs()) + angled * depth.abs();
+    final pad = standingPads[leg.index] - walkOrigin;
+    if (usesPortrait) {
+      return Offset(
+        pad.dx * side + (leg.near ? -24 : 24) * depth,
+        pad.dy + pad.dx * depth * .18,
+      );
     }
-    return Offset(
-      pad.dx * side + (leg.near ? -35 : 35) * depth,
-      pad.dy * side.abs() + pad.dx * depth * .33,
-    );
+    final angled = (depth < 0 ? away! : front!)[leg.index] - walkOrigin;
+    return Offset(pad.dx * side, pad.dy * side.abs()) + angled * depth.abs();
   }
 
-  static WalkRig? forPet(Companion pet, int stage, bool reveal) {
-    if (stage != 1 || reveal) return null;
+  static WalkRig? forPet(Companion pet, int stage) {
+    if (stage != 1) return null;
     return switch (pet) {
       Companion.cat => cat,
       Companion.fox => fox,
       Companion.rabbit => null,
+      Companion.otter => otter,
+      Companion.hedgehog => hedgehog,
     };
   }
 
   static const cat = WalkRig._(
-    joints: [
-      WalkJoints(Offset(157, 301), Offset(177, 356), Offset(166, 440)),
-      WalkJoints(Offset(344, 305), Offset(338, 358), Offset(358, 440)),
-      WalkJoints(Offset(195, 291), Offset(216, 343), Offset(206, 423)),
-      WalkJoints(Offset(372, 296), Offset(372, 345), Offset(397, 423)),
+    standingPads: [
+      Offset(176, 436),
+      Offset(304, 438),
+      Offset(223, 419),
+      Offset(363, 435),
     ],
     seatedPads: [
       Offset(218, 439),
@@ -83,19 +90,32 @@ class WalkRig {
       Offset(244, 422),
       Offset(348, 432),
     ],
-    sideStride: 132,
-    depthStride: 90,
+    front: [
+      Offset(139, 428),
+      Offset(272, 438),
+      Offset(207, 426),
+      Offset(344, 428),
+    ],
+    away: [
+      Offset(193, 435),
+      Offset(144, 423),
+      Offset(339, 436),
+      Offset(264, 425),
+    ],
+    sideStride: 114,
+    depthStride: 80,
     speed: 210,
-    rise: .30,
-    sit: .33,
+    rise: .41,
+    sit: .38,
+    turnArc: 10,
   );
 
   static const fox = WalkRig._(
-    joints: [
-      WalkJoints(Offset(153, 316), Offset(180, 367), Offset(151, 440)),
-      WalkJoints(Offset(359, 301), Offset(351, 357), Offset(372, 440)),
-      WalkJoints(Offset(189, 304), Offset(210, 351), Offset(193, 420)),
-      WalkJoints(Offset(388, 291), Offset(397, 344), Offset(412, 420)),
+    standingPads: [
+      Offset(164, 435),
+      Offset(275, 438),
+      Offset(231, 416),
+      Offset(364, 431),
     ],
     seatedPads: [
       Offset(232, 432),
@@ -104,23 +124,89 @@ class WalkRig {
       Offset(342, 430),
     ],
     front: [
-      (hip: Offset(201, 296), pad: Offset(184, 407)),
-      (hip: Offset(222, 311), pad: Offset(214, 440)),
-      (hip: Offset(312, 293), pad: Offset(328, 407)),
-      (hip: Offset(294, 309), pad: Offset(296, 438)),
+      Offset(167, 433),
+      Offset(267, 439),
+      Offset(204, 421),
+      Offset(343, 434),
     ],
     away: [
-      (hip: Offset(214, 316), pad: Offset(210, 439)),
-      (hip: Offset(202, 292), pad: Offset(184, 406)),
-      (hip: Offset(298, 315), pad: Offset(304, 439)),
-      (hip: Offset(311, 293), pad: Offset(329, 405)),
+      Offset(231, 437),
+      Offset(182, 427),
+      Offset(352, 433),
+      Offset(295, 418),
     ],
-    sideStride: 144,
-    depthStride: 96,
+    sideStride: 126,
+    depthStride: 86,
     speed: 214,
-    rise: .41,
-    sit: .39,
+    rise: .48,
+    sit: .43,
     turnArc: 16,
+  );
+
+  static const otter = WalkRig._(
+    standingPads: [
+      Offset(182, 438),
+      Offset(358, 438),
+      Offset(212, 424),
+      Offset(385, 435),
+    ],
+    seatedPads: [
+      Offset(173, 434),
+      Offset(316, 440),
+      Offset(222, 425),
+      Offset(410, 434),
+    ],
+    front: [
+      Offset(175, 432),
+      Offset(220, 439),
+      Offset(322, 432),
+      Offset(293, 438),
+    ],
+    away: [
+      Offset(173, 436),
+      Offset(199, 430),
+      Offset(344, 436),
+      Offset(312, 430),
+    ],
+    sideStride: 99,
+    depthStride: 64,
+    speed: 186,
+    rise: .30,
+    sit: .32,
+    turnArc: 7,
+  );
+
+  static const hedgehog = WalkRig._(
+    standingPads: [
+      Offset(111, 436),
+      Offset(289, 438),
+      Offset(177, 432),
+      Offset(348, 436),
+    ],
+    seatedPads: [
+      Offset(110, 434),
+      Offset(277, 439),
+      Offset(180, 429),
+      Offset(371, 435),
+    ],
+    front: [
+      Offset(154, 431),
+      Offset(206, 438),
+      Offset(361, 431),
+      Offset(310, 438),
+    ],
+    away: [
+      Offset(174, 439),
+      Offset(201, 431),
+      Offset(340, 437),
+      Offset(312, 431),
+    ],
+    sideStride: 72,
+    depthStride: 51,
+    speed: 157,
+    rise: .24,
+    sit: .26,
+    turnArc: 5,
   );
 }
 
@@ -145,12 +231,16 @@ class WalkPose {
     this.ink = 1,
     this.phase = 0,
     this.effort = 0,
+    this.headYaw,
+    this.load = Offset.zero,
   });
 
   /// Root and paws live in the original 1536 × 1024 painting, before any crop.
   final WalkRig rig;
   final Offset root;
   final double yaw, scale, crouch, ink, phase, effort;
+  final double? headYaw;
+  final Offset load;
   final List<WalkPaw> paws;
   final WalkStage stage;
   bool get left => math.cos(yaw) < 0;
@@ -165,7 +255,11 @@ class WalkPose {
         for (final pad in rig.seatedPads)
           WalkPaw(
             root +
-                Offset((pad.dx - 256) * (left ? -1 : 1), pad.dy - 440) * scale,
+                Offset(
+                      (pad.dx - walkOrigin.dx) * (left ? -1 : 1),
+                      pad.dy - walkOrigin.dy,
+                    ) *
+                    scale,
           ),
       ],
       stage: WalkStage.sit,
@@ -202,7 +296,7 @@ class WalkPlan {
       final duration = turning
           ? .21 + .32 * (turn.abs() / math.pi).clamp(0.0, 1.0)
           : .25;
-      if (rig == WalkRig.fox && turn.abs() > 1.65) {
+      if (turn.abs() > 1.65) {
         // Set all four paws in the middle view before swinging the shoulders
         // through a reversal. The longer front legs can stay under the chest.
         final middle = _standing(
@@ -242,11 +336,20 @@ class WalkPlan {
 
   static void _settle(List<_Segment> segments, WalkPose from) {
     final rig = from.rig;
-    final seated = WalkPose.seated(rig, from.root, from.left, from.scale);
+    // The fox's rear drawing carries the tail to the right. It turns back
+    // over that shoulder before sitting so the tail follows the same arc.
+    final turnBack = rig == WalkRig.fox && math.sin(from.yaw) < -.815;
+    final seated = WalkPose.seated(
+      rig,
+      from.root,
+      turnBack || from.left,
+      from.scale,
+    );
     final turn = _turnAngle(from.yaw, seated.yaw);
     final stand = _standing(rig, from.root, from.yaw + turn, from.scale);
     if (_differentPaws(from, stand) && from.crouch < .2) {
-      segments.add(_Transition(from, stand, WalkStage.gather, .28));
+      final duration = .32 + (turnBack ? .13 * turn.abs() : 0);
+      segments.add(_Transition(from, stand, WalkStage.gather, duration));
       from = stand;
     }
     segments.add(_Transition(from, seated, WalkStage.sit, rig.sit));
@@ -267,10 +370,13 @@ class WalkPlan {
 double _turnAngle(double from, double to) {
   final delta = to - from;
   final turn = math.atan2(math.sin(delta), math.cos(delta));
-  // When changing sides as we set out or sit down, show the face through
-  // the turn. A companion already pointed into depth can turn the nearer way.
+  // A lateral reversal presents the face. When setting out into depth,
+  // turn directly towards the destination.
   final side = math.cos(from);
-  if (side.abs() > .97 && side * math.cos(to) < -.22 && side * turn < 0) {
+  if (math.sin(to) > -.38 &&
+      side.abs() > .97 &&
+      side * math.cos(to) < -.22 &&
+      side * turn < 0) {
     return turn + 2 * math.pi * side.sign;
   }
   return turn;
@@ -318,25 +424,53 @@ class _Transition extends _Segment {
 
   @override
   WalkPose at(double progress) {
-    final shift = _ease(progress);
+    final bracing = stage == WalkStage.rise && from.ink == 0;
+    final action = bracing
+        ? ((progress - .22) / .78).clamp(0.0, 1.0)
+        : progress;
+    final shift = _ease(action);
     final scale = from.scale;
+    final angle = _turnAngle(from.yaw, to.yaw);
+    final yaw = from.yaw + angle * shift;
+    final headLead = stage == WalkStage.turn
+        ? angle * (_ease((action * 1.26).clamp(0.0, 1.0)) - shift)
+        : 0.0;
+    final load = switch (stage) {
+      WalkStage.rise when from.rig == WalkRig.cat => _catRiseLoad(
+        progress,
+        shift,
+      ),
+      WalkStage.rise => Offset(
+        -5 * _arc(progress) + 12 * _arc(action),
+        9 * _arc(progress) - 11 * _arc(action),
+      ),
+      WalkStage.turn => Offset(4 * _arc(action), 5 * _arc(action)),
+      WalkStage.gather => Offset(-5 * _arc(action), 6 * _arc(action)),
+      WalkStage.sit => Offset(-11 * _arc(action), 7 * _arc(action)),
+      WalkStage.walk => Offset.zero,
+    };
     return WalkPose(
       rig: from.rig,
       root: from.root,
       scale: scale,
       stage: stage,
-      yaw: from.yaw + _turnAngle(from.yaw, to.yaw) * shift,
+      yaw: yaw,
+      headYaw:
+          yaw +
+          headLead +
+          ((from.headYaw ?? from.yaw) - from.yaw) * (1 - shift),
       crouch: lerpDouble(from.crouch, to.crouch, shift)!,
       // Hold a single drawing across the cut. Blending the seated and
       // standing silhouettes would create a second face, tail, and paws.
       ink: switch (stage) {
-        WalkStage.rise when progress < .075 => from.ink,
-        WalkStage.sit when progress >= .94 || from.ink == 0 => 0,
+        WalkStage.rise when action <= .075 => from.ink,
+        WalkStage.sit when action >= .94 || from.ink == 0 => 0,
         _ => 1,
       },
       phase: from.phase,
       effort: from.effort * (1 - shift),
-      paws: [for (final leg in WalkLeg.values) _paw(leg, progress)],
+      load: Offset.lerp(from.load, to.load, shift)! + load,
+      paws: [for (final leg in WalkLeg.values) _paw(leg, action)],
     );
   }
 
@@ -363,6 +497,27 @@ class _Transition extends _Segment {
       a.lift * (1 - t) + height * _arc(t),
     );
   }
+}
+
+// MO-01 production-v3, frames 0, 7, 14, 20 and 27. These are the means of
+// the shoulder and haunch displacements with the path translation removed.
+const _catRiseKeys = [
+  (0.0, Offset.zero),
+  (7 / 27, Offset(0, 2.405)),
+  (14 / 27, Offset(-.940, -5.610)),
+  (20 / 27, Offset(-4.100, -28.710)),
+  (1.0, Offset(-5.995, -41.945)),
+];
+
+Offset _catRiseLoad(double time, double rise) {
+  for (var i = 1; i < _catRiseKeys.length; i++) {
+    final (to, high) = _catRiseKeys[i];
+    if (time > to) continue;
+    final (from, low) = _catRiseKeys[i - 1];
+    final paint = Offset.lerp(low, high, _ease((time - from) / (to - from)))!;
+    return (paint - _catRiseKeys.last.$2 * rise) * .55;
+  }
+  return Offset.zero;
 }
 
 typedef _Footfall = ({double begin, double end, Offset from, Offset to});

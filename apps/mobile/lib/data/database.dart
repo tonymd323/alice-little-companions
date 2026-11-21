@@ -9,7 +9,10 @@ part 'database.g.dart';
 const companionSchemaVersion = 8;
 const affinitySchemaVersion = 9;
 const foodSchemaVersion = 10;
-const currentSchemaVersion = foodSchemaVersion;
+const expandedRosterSchemaVersion = 11;
+const currentSchemaVersion = expandedRosterSchemaVersion;
+const originalCompanionCheck = "('fox', 'rabbit', 'cat')";
+const expandedCompanionCheck = "('fox', 'rabbit', 'cat', 'otter', 'hedgehog')";
 const legacyPurchaseIndexSql =
     'CREATE UNIQUE INDEX purchased_once ON purchases (item_id) WHERE refunded_at IS NULL';
 const candyPurchaseIndexSql =
@@ -38,56 +41,77 @@ class FamilyDatabase extends _$FamilyDatabase {
       if (from < 1 || from >= to || to != currentSchemaVersion) {
         throw StateError('Unsupported SQLite upgrade');
       }
-      await transaction(() async {
-        if (from == 1) {
-          await migrator.createIndex(ledgerDayKindIdx);
-          await migrator.createIndex(purchaseLedgerIdx);
-          await migrator.createTable(baseFurnishings);
-        }
-        if (from < 3) await migrator.createTable(windowMathBookmarks);
-        // Version 4 derives experience from existing, verified completions.
-        if (from < 5) await migrator.createTable(windowStoryMilestones);
-        if (from < 6) await migrator.createTable(windStoryRuns);
-        if (from < 7) {
-          await migrator.createTable(rainMapRuns);
-          await migrator.createTable(companionMemories);
-        }
-        if (from < companionSchemaVersion) {
-          await migrator.createTable(ownedCompanions);
-          await migrator.createIndex(oneStarterCompanion);
-          await migrator.createTable(companionCompletions);
-          await migrator.createIndex(companionCompletionPetIdx);
-          // Old saves share one progress record. Keep it with the active pet.
-          await customStatement('''
+      // The child and ownership tables are referenced by other tables. Change
+      // their checks as one transaction and validate every reference before
+      // committing. The family loader already preserves the original file.
+      await customStatement('PRAGMA foreign_keys = OFF');
+      try {
+        await transaction(() async {
+          if (from == 1) {
+            await migrator.createIndex(ledgerDayKindIdx);
+            await migrator.createIndex(purchaseLedgerIdx);
+            await migrator.createTable(baseFurnishings);
+          }
+          if (from < 3) await migrator.createTable(windowMathBookmarks);
+          // Version 4 derives experience from existing, verified completions.
+          if (from < 5) await migrator.createTable(windowStoryMilestones);
+          if (from < 6) await migrator.createTable(windStoryRuns);
+          if (from < 7) {
+            await migrator.createTable(rainMapRuns);
+            await migrator.createTable(companionMemories);
+          }
+          if (from < companionSchemaVersion) {
+            await migrator.createTable(ownedCompanions);
+            await migrator.createIndex(oneStarterCompanion);
+            await migrator.createTable(companionCompletions);
+            await migrator.createIndex(companionCompletionPetIdx);
+            // Old saves share one progress record. Keep it with the active pet.
+            await customStatement('''
             INSERT INTO owned_companions(child_id, pet_id, retained_stage)
             SELECT c.id, c.active_pet_id, COALESCE(MAX(g.stage), 1)
             FROM child_profiles c LEFT JOIN growth_awards g ON g.child_id = c.id
             GROUP BY c.id
             ''');
-          await customStatement('''
+            await customStatement('''
             INSERT INTO companion_completions(completion_id, child_id, pet_id)
             SELECT x.id, c.id, c.active_pet_id FROM completions x
             JOIN task_instances i ON i.id = x.instance_id
             JOIN task_templates t ON t.id = i.template_id
             JOIN child_profiles c ON c.family_id = t.family_id
             ''');
-        }
-        if (from < affinitySchemaVersion) {
-          await migrator.createTable(companionAffinityDays);
-          await migrator.createTable(companionCandies);
-          await migrator.createIndex(candyRecipientIdx);
-          // Preserve the starting value from first memories without dating them.
-          await customStatement('''
-            INSERT INTO companion_affinity_days(child_id, pet_id, moment, local_day)
-            SELECT m.child_id, m.pet_id, m.moment, '' FROM companion_memories m
-            JOIN owned_companions p ON p.child_id = m.child_id AND p.pet_id = m.pet_id
-            ''');
-        }
-        if (from < foodSchemaVersion) {
-          await customStatement('DROP INDEX purchased_once');
-          await migrator.createIndex(purchasedOnce);
-        }
-      });
+          }
+          if (from < affinitySchemaVersion) {
+            await migrator.createTable(companionAffinityDays);
+            await migrator.createTable(companionCandies);
+            await migrator.createIndex(candyRecipientIdx);
+            // Preserve the starting value from first memories without dating them.
+            await customStatement('''
+              INSERT INTO companion_affinity_days(child_id, pet_id, moment, local_day)
+              SELECT m.child_id, m.pet_id, m.moment, '' FROM companion_memories m
+              JOIN owned_companions p ON p.child_id = m.child_id AND p.pet_id = m.pet_id
+              ''');
+          }
+          if (from < foodSchemaVersion) {
+            await customStatement('DROP INDEX purchased_once');
+            await migrator.createIndex(purchasedOnce);
+          }
+          if (from < expandedRosterSchemaVersion) {
+            await migrator.alterTable(TableMigration(childProfiles));
+            await migrator.alterTable(TableMigration(petState));
+            if (from >= 7) {
+              await migrator.alterTable(TableMigration(companionMemories));
+            }
+            if (from >= companionSchemaVersion) {
+              await migrator.alterTable(TableMigration(ownedCompanions));
+            }
+          }
+          if ((await rows('PRAGMA foreign_key_check')).isNotEmpty) {
+            throw StateError('SQLite upgrade left an invalid reference');
+          }
+        });
+      } finally {
+        await customStatement('PRAGMA foreign_keys = ON');
+      }
     },
     beforeOpen: (_) async {
       await customStatement('PRAGMA foreign_keys = ON');

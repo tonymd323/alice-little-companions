@@ -65,6 +65,7 @@ class _FirstRunPageState extends State<FirstRunPage> {
           const SizedBox(height: 12),
           CompanionPicker(
             selected: pet,
+            choices: Companion.starters,
             onSelected: (p) => setState(() => pet = p),
           ),
           const SizedBox(height: 8),

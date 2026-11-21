@@ -164,7 +164,7 @@ void main() {
     },
   );
 
-  test('AC-35 all catalog assets, 19 companion poses and five layered scenes are bundled', () {
+  test('AC-35 catalog, companion and layered scene assets are bundled', () {
     final packaged = jsonDecode(
       File('assets/config/runtime_assets.json').readAsStringSync(),
     ) as Json;
@@ -172,11 +172,35 @@ void main() {
       File('../../design/asset_manifest.json').readAsStringSync(),
     ) as Json;
     final production = (manifest['production_assets'] as List).cast<Json>();
-    expect(packaged, hasLength(production.length));
-    for (final item in production) {
-      final file = File(packaged[item['id']] as String);
-      expect(file.existsSync(), isTrue, reason: item['id'] as String);
-      expect(sha256.convert(file.readAsBytesSync()).toString(), item['sha256']);
+    final rosterManifest = manifest['otter_and_hedgehog'] as Json;
+    final roster = (rosterManifest['runtime'] as List).cast<Json>();
+    final indexed = [
+      ...production,
+      ...roster.where((item) => item['id'] != null),
+    ];
+    expect(packaged.keys, unorderedEquals(indexed.map((item) => item['id'])));
+    for (final item in indexed) {
+      final path = packaged[item['id']] as String;
+      if (item['runtime_path'] case final String source) {
+        expect('apps/mobile/$path', source);
+      }
+      final file = File(path);
+      expect(file.existsSync(), isTrue, reason: path);
+      expect(
+        sha256.convert(file.readAsBytesSync()).toString(),
+        item['sha256'],
+        reason: path,
+      );
+    }
+    for (final item in roster.where((item) => item['id'] == null)) {
+      final path = item['runtime_path'] as String;
+      final file = File('../../$path');
+      expect(file.existsSync(), isTrue, reason: path);
+      expect(
+        sha256.convert(file.readAsBytesSync()).toString(),
+        item['sha256'],
+        reason: path,
+      );
     }
     expect(Companion.cat.artwork(4), endsWith('cat-4-rest.webp'));
     expect(Companion.cat.artwork(4, reveal: true), endsWith('cat-4.webp'));

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import '../domain/layout_rules.dart';
 import '../domain/rules.dart';
+import 'florist_art.dart';
 
 class ScenePiece {
   const ScenePiece(this.asset, this.name);
@@ -66,7 +67,11 @@ const _suites = {
 };
 
 class RoomPainting {
-  RoomPainting(String scene, List<ScenePiece> pieces) {
+  RoomPainting(
+    String scene,
+    List<ScenePiece> pieces, {
+    bool floristWorktop = false,
+  }) {
     final owned = {for (final piece in pieces) piece.asset: piece.name};
     final builtIn = furnishedRooms[scene];
     if (builtIn != null && builtIn.every(owned.containsKey)) {
@@ -74,6 +79,12 @@ class RoomPainting {
       for (final part in builtIn) {
         owned.remove(part);
       }
+    }
+    if (floristWorktop) {
+      layers.addAll(const [
+        RoomLayer(FloristRack.shadow, '', FloristRack.frame, 0),
+        RoomLayer(FloristRack.art, '晾花架', FloristRack.frame, FloristRack.depth),
+      ]);
     }
     for (final entry in _suites.entries) {
       if (entry.value.every(owned.containsKey)) {
@@ -85,7 +96,10 @@ class RoomPainting {
     }
     for (final entry in owned.entries) {
       final id = entry.key;
-      final s = _roomMounts[scene]?[id] ?? _positions[id];
+      final s =
+          (floristWorktop ? _floristMounts[id] : null) ??
+          _roomMounts[scene]?[id] ??
+          _positions[id];
       if (s == null) continue;
       var (x, y, w, h) = s;
       // Move the larger vignettes apart when a family owns both individual
@@ -94,7 +108,11 @@ class RoomPainting {
         x = scene == 'base_room' ? .36 : .34;
       }
       if (id == 'item_single_bed' && owned.containsKey('suite_starlight')) {
-        x = scene == 'base_room' ? .59 : .61;
+        if (floristWorktop) {
+          y = .755;
+        } else {
+          x = scene == 'base_room' ? .59 : .61;
+        }
       }
       if (id == 'base_bed' && owned.containsKey('item_single_bed')) continue;
       if (id == 'base_bed' && owned.containsKey('suite_starlight')) x = .59;
@@ -132,6 +150,14 @@ class RoomPainting {
     return layers.where((p) => names.contains(p.name)).firstOrNull?.frame;
   }
 }
+
+// Fixed display sites for existing furniture in a store with a drying rack.
+// The entitlements and any restored layout data keep their original values.
+const _floristMounts = <String, (double, double, double, double)>{
+  'item_decor_plant': (.073, .832, .078, .140),
+  'item_single_bed': (.588, .822, .145, .164),
+  'suite_starlight': (.519, .922, .200, .219),
+};
 
 // Bottom-center x/y and silhouette width/height in normalized canvas units.
 const _positions = <String, (double, double, double, double)>{

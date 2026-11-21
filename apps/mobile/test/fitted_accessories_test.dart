@@ -198,6 +198,6 @@ void main() {
         }
       }
     }
-    expect(renders, 74);
+    expect(renders, (Companion.values.length * 12 + 1) * 2);
   }, timeout: const Timeout(Duration(minutes: 3)));
 }

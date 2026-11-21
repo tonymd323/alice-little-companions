@@ -1,0 +1,4 @@
+125 frames sampled 40 ms apart; 5 s loop endpoint compared
+7919 protected wood samples per frame; changed 0
+Peak changed pixels for canopy, ladder leaves, ripples, foreground: [3056, 1129, 1216, 10652]
+Reduced-motion capture also remained unchanged

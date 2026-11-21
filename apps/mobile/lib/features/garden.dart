@@ -92,6 +92,7 @@ class CompanionPicker extends StatelessWidget {
     this.stage = 1,
     this.stages = const {},
     this.reveal = false,
+    this.choices = Companion.values,
   });
 
   final Companion selected;
@@ -99,51 +100,52 @@ class CompanionPicker extends StatelessWidget {
   final int stage;
   final Map<Companion, int> stages;
   final bool reveal;
+  final List<Companion> choices;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, bounds) => Wrap(
+      spacing: 8,
+      runSpacing: 8,
       children: [
-        for (final pet in Companion.values)
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(right: pet == Companion.cat ? 0 : 8),
-              child: Semantics(
-                selected: selected == pet,
-                button: true,
-                child: Material(
-                  color: selected == pet ? wheat : cream,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(
-                      color: selected == pet ? terracotta : outline,
-                    ),
+        for (final pet in choices)
+          SizedBox(
+            width: (bounds.maxWidth - 16) / 3,
+            child: Semantics(
+              selected: selected == pet,
+              button: true,
+              child: Material(
+                color: selected == pet ? wheat : cream,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(
+                    color: selected == pet ? terracotta : outline,
                   ),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    onTap: () => onSelected(pet),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(4, 10, 4, 8),
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            pet.artwork(stages[pet] ?? stage, reveal: reveal),
-                            filterQuality: FilterQuality.medium,
-                            height: 53,
-                            width: 65,
-                            excludeFromSemantics: true,
+                ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => onSelected(pet),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 10, 4, 8),
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          pet.artwork(stages[pet] ?? stage, reveal: reveal),
+                          filterQuality: FilterQuality.medium,
+                          height: 53,
+                          width: 65,
+                          excludeFromSemantics: true,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          pet.label,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            pet.label,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -151,8 +153,8 @@ class CompanionPicker extends StatelessWidget {
             ),
           ),
       ],
-    );
-  }
+    ),
+  );
 }
 
 class AppearancePreview extends StatefulWidget {

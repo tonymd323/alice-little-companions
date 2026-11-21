@@ -10,6 +10,7 @@ import '../domain/companions.dart';
 import '../domain/layout_rules.dart';
 import '../domain/pin.dart';
 import '../domain/rain_map.dart';
+import '../illustration/growth_portrait.dart';
 import '../illustration/wind_sound.dart';
 import 'achievements.dart';
 import 'common.dart';
@@ -38,6 +39,7 @@ class FamilyHome extends StatefulWidget {
 class _FamilyHomeState extends State<FamilyHome> {
   int tab = 0;
   bool openingChapter = false;
+  bool readingMap = false;
   final _remembering = <(FamilyService, Companion, CompanionMoment)>{};
   late HomeView view = widget.controller.homeLayout.isEmpty
       ? HomeView.courtyard
@@ -113,6 +115,13 @@ class _FamilyHomeState extends State<FamilyHome> {
     rules: controller.rules,
     scene: SceneDefinition(controller.rules, 'base_room'),
     windowsLit: family.windowsLit,
+    afterRain: family.rainMapCleared,
+    readingVeranda: (
+      mapOnStool: !readingMap,
+      openMap: family.rainMapCleared && changeView != null
+          ? _openReadingMap
+          : null,
+    ),
     pieces: controller.homeLayout.map(ScenePiece.fromRow).toList(),
     outfit: outfitFiles(controller.outfit),
     view: location,
@@ -128,6 +137,31 @@ class _FamilyHomeState extends State<FamilyHome> {
     immersive: true,
     height: height,
   );
+
+  Future<void> _openReadingMap() async {
+    if (readingMap || !family.rainMapCleared) return;
+    setState(() => readingMap = true);
+    try {
+      await showModalBottomSheet<void>(
+        context: context,
+        showDragHandle: true,
+        builder: (context) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 22),
+            child: Center(
+              heightFactor: 1,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 540),
+                child: const RainMapPaper(stamps: RainMapProgress.groupCount),
+              ),
+            ),
+          ),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => readingMap = false);
+    }
+  }
 
   Future<void> _openMainline() async {
     final service = controller.service!;
@@ -322,7 +356,9 @@ class _FamilyHomeState extends State<FamilyHome> {
   );
 
   Widget garden() {
-    final pending = controller.currentTasks.where((task) => task.canSubmit).length;
+    final pending = controller.currentTasks
+        .where((task) => task.canSubmit)
+        .length;
     final waiting = controller.currentTasks
         .where((task) => task.state == 'SUBMITTED')
         .length;
@@ -595,6 +631,15 @@ class GrowthPage extends StatelessWidget {
       (task) => task.state == 'APPROVED' || task.state == 'CORRECTED',
     );
     final history = records.toList(growable: false);
+    void replay(int stage) => showEvolution(
+      context,
+      family.companion,
+      stage == 1 ? 1 : stage - 1,
+      stage,
+      outfit: stage == family.stage ? outfitFiles(controller.outfit) : const {},
+      replay: true,
+    );
+
     return SafeArea(
       top: false,
       child: Center(
@@ -622,14 +667,18 @@ class GrowthPage extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Image.asset(
-                              family.companion.artwork(family.stage),
-                              height: 74,
-                              width: 74,
-                              filterQuality: FilterQuality.medium,
-                              excludeFromSemantics: true,
-                            ),
-                            const SizedBox(width: 14),
+                            if (family.stage == 1) ...[
+                              SizedBox.square(
+                                dimension: 74,
+                                child: _GrowthTile(
+                                  pet: family.companion,
+                                  stage: 1,
+                                  current: true,
+                                  onTap: () => replay(1),
+                                ),
+                              ),
+                              const SizedBox(width: 14),
+                            ],
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -655,6 +704,14 @@ class GrowthPage extends StatelessWidget {
                           thresholds: controller.rules.thresholds,
                           bond: family.bond,
                         ),
+                        if (family.stage > 1) ...[
+                          const SizedBox(height: 12),
+                          _GrowthStages(
+                            pet: family.companion,
+                            attained: family.stage,
+                            onReplay: replay,
+                          ),
+                        ],
                         const SizedBox(height: 8),
                         Wrap(
                           spacing: 8,
@@ -686,13 +743,7 @@ class GrowthPage extends StatelessWidget {
                             ),
                             if (family.stage > 1)
                               TextButton.icon(
-                                onPressed: () => showEvolution(
-                                  context,
-                                  family.companion,
-                                  family.stage - 1,
-                                  family.stage,
-                                  outfit: outfitFiles(controller.outfit),
-                                ),
+                                onPressed: () => replay(family.stage),
                                 icon: const Icon(Icons.replay),
                                 label: const Text('回看进化'),
                               ),
@@ -731,12 +782,15 @@ class GrowthPage extends StatelessWidget {
                         title: const Text('银杏家园手记'),
                         trailing: const Icon(Icons.chevron_right),
                         onTap: () async {
-                          final progress = await controller.service!.companionProgress();
+                          final progress = await controller.service!
+                              .companionProgress();
                           if (!context.mounted) return;
                           await openPage(
                             context,
                             GardenStorybook(
-                              stages: progress.map((pet, state) => MapEntry(pet, state.stage)),
+                              stages: progress.map(
+                                (pet, state) => MapEntry(pet, state.stage),
+                              ),
                             ),
                           );
                         },
@@ -756,6 +810,76 @@ class GrowthPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class _GrowthStages extends StatelessWidget {
+  const _GrowthStages({
+    required this.pet,
+    required this.attained,
+    required this.onReplay,
+  });
+
+  final Companion pet;
+  final int attained;
+  final ValueChanged<int> onReplay;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, box) => GridView.count(
+      primary: false,
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisCount: box.maxWidth >= 540 ? 6 : 3,
+      crossAxisSpacing: 6,
+      mainAxisSpacing: 6,
+      children: [
+        for (var stage = 1; stage <= attained; stage++)
+          _GrowthTile(
+            pet: pet,
+            stage: stage,
+            current: stage == attained,
+            onTap: () => onReplay(stage),
+          ),
+      ],
+    ),
+  );
+}
+
+class _GrowthTile extends StatelessWidget {
+  const _GrowthTile({
+    required this.pet,
+    required this.stage,
+    required this.current,
+    required this.onTap,
+  });
+
+  final Companion pet;
+  final int stage;
+  final bool current;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    label: '第 $stage 阶段 · ${stageNames[stage - 1]}',
+    selected: current,
+    button: true,
+    child: Material(
+      color: current ? wheat : paper,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: current ? terracotta : outline),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child: GrowthPortrait(pet: pet, stage: stage),
+        ),
+      ),
+    ),
+  );
 }
 
 class _MemoriesPage extends StatelessWidget {

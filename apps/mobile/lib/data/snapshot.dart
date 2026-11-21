@@ -144,17 +144,29 @@ T _check<T>(
         .where(
           (row) => version >= 3 || row['tbl_name'] != 'window_math_bookmarks',
         )
-        .map(
-          (row) =>
-              version < foodSchemaVersion && row['name'] == 'purchased_once'
-              ? {
-                  ...row,
-                  'sql': version < affinitySchemaVersion
-                      ? legacyPurchaseIndexSql
-                      : candyPurchaseIndexSql,
-                }
-              : row,
-        )
+        .map((row) {
+          if (version < foodSchemaVersion && row['name'] == 'purchased_once') {
+            return {
+              ...row,
+              'sql': version < affinitySchemaVersion
+                  ? legacyPurchaseIndexSql
+                  : candyPurchaseIndexSql,
+            };
+          }
+          final sql = row['sql'];
+          if (version >= expandedRosterSchemaVersion ||
+              sql is! String ||
+              !sql.contains(expandedCompanionCheck)) {
+            return row;
+          }
+          return {
+            ...row,
+            'sql': sql.replaceAll(
+              expandedCompanionCheck,
+              originalCompanionCheck,
+            ),
+          };
+        })
         .toList();
     final actual = db
         .select(schemaQuery)
@@ -324,7 +336,10 @@ T _check<T>(
     }
 
     final assets = <String>{
-      for (final pet in Companion.values)
+      for (final pet
+          in version >= expandedRosterSchemaVersion
+              ? Companion.values
+              : Companion.starters)
         for (var stage = 1; stage <= 6; stage++) 'pet_${pet.name}_$stage',
       'pet_cat_4_rest',
     };
@@ -473,6 +488,9 @@ T _check<T>(
         (count, pet) => count + (pet['assigned'] as int),
       );
       if (starters.length != 1 ||
+          !Companion.starters.contains(
+            rules.companion(starters.single['pet_id'] as String),
+          ) ||
           active == null ||
           assigned != scalar('SELECT COUNT(*) FROM completions') ||
           starters.single['retained_stage'] as int < recordedStage ||

@@ -1,0 +1,41 @@
+{
+  "rain_courtyard": {
+    "frames": 127,
+    "alpha_channels_equal": 127,
+    "largest_frame_mean_rgb_difference": 2.0113,
+    "largest_difference_frame": "loop-074.png"
+  },
+  "reading_veranda": {
+    "frames": 5,
+    "alpha_channels_equal": 5,
+    "largest_frame_mean_rgb_difference": 0.6389,
+    "largest_difference_frame": "tablet-unrolled.png"
+  },
+  "florist": {
+    "frames": 10,
+    "alpha_channels_equal": 10,
+    "largest_frame_mean_rgb_difference": 1.1512,
+    "largest_difference_frame": "tablet-shop-with-legacy-furniture.png"
+  },
+  "actor_fox": {
+    "frames": 137,
+    "alpha_channels_equal": 137,
+    "largest_frame_mean_rgb_difference": 2.4575,
+    "largest_difference_frame": "frame-0033.png",
+    "walk_timeline_equal": true
+  },
+  "actor_otter": {
+    "frames": 247,
+    "alpha_channels_equal": 247,
+    "largest_frame_mean_rgb_difference": 1.4823,
+    "largest_difference_frame": "frame-0090.png",
+    "walk_timeline_equal": true
+  },
+  "actor_hedgehog": {
+    "frames": 283,
+    "alpha_channels_equal": 283,
+    "largest_frame_mean_rgb_difference": 1.3418,
+    "largest_difference_frame": "frame-0104.png",
+    "walk_timeline_equal": true
+  }
+}

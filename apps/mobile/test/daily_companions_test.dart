@@ -73,7 +73,7 @@ void main() {
     );
     expect(await f.service.db.value('SELECT retained_stage FROM owned_companions'), 2);
   });
-  test('every pet, stage and tailored outfit has an individual airborne silhouette', () {
+  test('every pet, stage and tailored outfit has an individual action painting', () {
     final paths = <String>{};
     for (final pet in Companion.values) {
       for (var stage = 1; stage <= 6; stage++) {
@@ -84,7 +84,7 @@ void main() {
         }
       }
     }
-    expect(paths, hasLength(54));
+    expect(paths, hasLength(Companion.values.length * 6 * 3));
   });
   testWidgets(
     'all three signature moves charge, take a painted airborne pose and land; calling and nuzzling interrupt the motion',
@@ -95,7 +95,7 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
       IllustratedPet actor() =>
           tester.widget<IllustratedPet>(find.byType(IllustratedPet));
-      for (final pet in Companion.values) {
+      for (final pet in Companion.starters) {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -120,7 +120,11 @@ void main() {
         expect(flight.action, PetAction.skill);
         expect(flight.keyPose, 1);
         expect(flight.height(pet), greaterThan(.15));
+        final inAir = tester.getRect(find.byType(IllustratedPet));
         await tester.tap(find.text('过来'));
+        await tester.pump();
+        expect(tester.getRect(find.byType(IllustratedPet)), inAir);
+        expect(actor().drawnMotion!().height(pet), flight.height(pet));
         await tester.pump(const Duration(milliseconds: 60));
         expect(actor().walking(), 1);
         expect(actor().motion!().action, PetAction.rest);

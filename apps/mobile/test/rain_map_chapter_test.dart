@@ -8,7 +8,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
 final _stamp = find.byKey(const ValueKey('rain-map-stamp'));
+final _target = find.byKey(const ValueKey('rain-map-stamp-target'));
 Finder _stone(int index) => find.byKey(ValueKey('rain-map-stone-$index'));
+Finder _ink(int mark) => find.byKey(ValueKey('rain-map-art-ink-$mark'));
+final _stampArt = find.byKey(const ValueKey('rain-map-art-stamp'));
 
 Future<void> _press(WidgetTester tester, Finder target) async {
   await tester.ensureVisible(target);
@@ -19,8 +22,9 @@ Future<void> _press(WidgetTester tester, Finder target) async {
 Future<void> _mount(
   WidgetTester tester,
   _SavedMap service,
-  Size viewport,
-) async {
+  Size viewport, {
+  bool reduceMotion = false,
+}) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = viewport;
   addTearDown(tester.view.resetDevicePixelRatio);
@@ -29,8 +33,10 @@ Future<void> _mount(
     MaterialApp(
       theme: gardenTheme(),
       builder: (context, child) => MediaQuery(
-        data: MediaQuery.of(context)
-            .copyWith(textScaler: const TextScaler.linear(1.3)),
+        data: MediaQuery.of(context).copyWith(
+          textScaler: const TextScaler.linear(1.3),
+          disableAnimations: reduceMotion,
+        ),
         child: child!,
       ),
       home: Scaffold(
@@ -66,6 +72,7 @@ void main() {
 
       await _press(tester, _stamp);
       expect(find.textContaining('还差3块石板'), findsOneWidget);
+      expect(_ink(1), findsNothing);
       await _press(tester, _stone(2));
       expect(find.textContaining('先踩第一块石板'), findsOneWidget);
       expect(service.actions, ['begin']);
@@ -101,7 +108,25 @@ void main() {
       expect(find.bySemanticsLabel('第2块石板，已踩过'), findsOneWidget);
       expect(find.bySemanticsLabel('第3块石板，下一块'), findsOneWidget);
       await _press(tester, _stone(2));
-      await _press(tester, _stamp);
+      await tester.ensureVisible(_target);
+      final paper = tester.getRect(
+        find.byKey(const ValueKey('rain-map-art-paper')),
+      );
+      await tester.tapAt(
+        Offset(paper.left + paper.width * .84, tester.getCenter(_target).dy),
+      );
+      await tester.pump();
+      expect(service.progress.stamps, 0);
+      await tester.tap(_target);
+      await tester.pump();
+      expect(_stampArt, findsOneWidget);
+      expect(_ink(1), findsNothing);
+      await tester.pump(const Duration(milliseconds: 145));
+      expect(_ink(1), findsOneWidget);
+      expect(find.textContaining('三块都走过了'), findsOneWidget);
+      await tester.pumpAndSettle();
+      expect(_stampArt, findsNothing);
+      expect(_ink(2), findsNothing);
       expect(tester.widget<RainMapPaper>(find.byType(RainMapPaper)).stamps, 1);
       expect(find.bySemanticsLabel('第1块石板，下一块'), findsOneWidget);
       expect(service.progress.totalStones, 3);
@@ -113,13 +138,18 @@ void main() {
     'four sections reunite the companions, then the child can build the optional shortcut',
     (tester) async {
       final service = _SavedMap();
-      await _mount(tester, service, const Size(1024, 768));
+      await _mount(tester, service, const Size(1024, 768), reduceMotion: true);
       await _press(tester, find.text('和奶油出发'));
       for (var group = 0; group < RainMapProgress.groupCount; group++) {
         for (var stone = 0; stone < RainMapProgress.groupSize; stone++) {
           await _press(tester, _stone(stone));
         }
-        await _press(tester, _stamp);
+        await tester.ensureVisible(_stamp);
+        await tester.tap(_stamp);
+        await tester.pump();
+        expect(_stampArt, findsNothing);
+        expect(_ink(group + 1), findsOneWidget);
+        await tester.pumpAndSettle();
       }
       expect(service.progress.totalStones, 12);
       expect(service.progress.cleared, isTrue);
@@ -151,6 +181,7 @@ void main() {
       await _press(tester, find.text('再走一遍'));
       expect(service.progress.run, 2);
       expect(service.progress.totalStones, 0);
+      expect(_ink(1), findsNothing);
       expect(
         service.progress.cleared && service.progress.challengeSolved,
         isTrue,

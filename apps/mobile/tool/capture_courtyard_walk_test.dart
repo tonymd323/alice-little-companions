@@ -5,8 +5,14 @@ import 'package:alice_companions/domain/companions.dart';
 import 'package:alice_companions/domain/layout_rules.dart';
 import 'package:alice_companions/domain/rules.dart';
 import 'package:alice_companions/features/garden.dart' show gardenTheme;
+import 'package:alice_companions/illustration/action_poses.dart';
+import 'package:alice_companions/illustration/companion_hops.dart';
+import 'package:alice_companions/illustration/companion_motion.dart';
+import 'package:alice_companions/illustration/companion_turns.dart';
+import 'package:alice_companions/illustration/companion_walk_art.dart';
 import 'package:alice_companions/illustration/living_scene.dart';
 import 'package:alice_companions/illustration/puppet.dart';
+import 'package:alice_companions/illustration/tailoring.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -34,14 +40,40 @@ void main() {
     const font = String.fromEnvironment('ALICE_CJK_FONT');
     const compare = bool.fromEnvironment('COURTYARD_COMPARE_GAIT');
     const gait = bool.fromEnvironment('COURTYARD_RECORD_CONTACTS');
+    const deep = bool.fromEnvironment('COURTYARD_DEEP_APPROACH');
+    const short = deep || bool.fromEnvironment('COURTYARD_SHORT_APPROACH');
+    const skill = bool.fromEnvironment('COURTYARD_RECORD_SKILL');
+    const shortCall = bool.fromEnvironment('COURTYARD_SHORT_CALL');
+    const backTurn = bool.fromEnvironment('COURTYARD_TURN_BACK');
+    const veranda = bool.fromEnvironment('COURTYARD_VERANDA');
+    const returnForward =
+        backTurn && bool.fromEnvironment('COURTYARD_RETURN_FORWARD');
+    const single = short || skill || shortCall || backTurn;
+    const stageNumber = int.fromEnvironment('COURTYARD_STAGE', defaultValue: 1);
     const companionName = String.fromEnvironment(
       'COURTYARD_COMPANION',
       defaultValue: 'cat',
     );
     final companion = Companion.values.byName(companionName);
     final name = companion.name;
+    final wideHedgehog = stageNumber == 6 && companion == Companion.hedgehog;
+    final rearTarget = wideHedgehog ? .53 : .375;
+    final rearStop = wideHedgehog ? 282 : 246;
+    final turnBackTowardsUs = rearStop + 6;
     const wardrobe = String.fromEnvironment('COURTYARD_OUTFIT');
     final outfit = switch (wardrobe) {
+      'vest-alone' => {'body': 'item_single_coat'},
+      'scarf-alone' => {'neck': 'item_accessory_scarf'},
+      'coat-with-scarf' => {
+        'body': 'item_single_coat',
+        'neck': 'item_accessory_scarf',
+      },
+      'coat-with-bow' => {
+        'body': 'item_single_coat',
+        'head': 'item_accessory_bow',
+        'face': 'item_accessory_glasses',
+        'neck': 'item_accessory_scarf',
+      },
       'coat' => {
         'body': 'item_single_coat',
         'head': 'item_accessory_hat',
@@ -56,8 +88,24 @@ void main() {
       },
       _ => <String, String>{},
     };
+    final coat = fittedCoat(companion, stageNumber, outfit['body']);
+    final paintedScarf =
+        companion == Companion.fox &&
+        stageNumber == 1 &&
+        outfit['neck'] == 'item_accessory_scarf' &&
+        (outfit['body'] == null || coat == FittedCoat.mapVest);
     const callFrame = compare ? 145 : 100;
-    const lastFrame = compare ? 590 : 510;
+    final lastFrame = returnForward
+        ? turnBackTowardsUs + 103
+        : backTurn
+        ? rearStop
+        : skill
+        ? 112
+        : short || shortCall
+        ? 136
+        : compare
+        ? 590
+        : 510;
     const family = 'Courtyard Review';
     await tester.runAsync(() async {
       final bytes = await File(font).readAsBytes();
@@ -96,9 +144,10 @@ void main() {
               key: screen,
               child: GardenScene(
                 companion: companion,
-                stage: 1,
+                stage: stageNumber,
                 rules: rules,
                 scene: scene,
+                view: veranda ? HomeView.veranda : HomeView.courtyard,
                 outfit: outfit,
                 immersive: true,
                 showLabel: false,
@@ -116,13 +165,54 @@ void main() {
       if (!context.mounted) throw StateError('The courtyard was removed');
       await Future.wait([
         for (final path in [
-          scene.background,
+          if (veranda) 'assets/art/veranda.webp' else scene.background,
           scene.foreground,
-          'assets/art/$name-1.webp',
-          'assets/art/leap-$name-1.webp',
+          portraitArtwork(
+            companion,
+            stageNumber,
+            false,
+            outfit['body'],
+            paintedScarf: paintedScarf,
+          ),
+          actionArtwork(
+            companion,
+            stageNumber,
+            outfit['body'],
+            paintedScarf: paintedScarf,
+          ),
+          if (companion == Companion.rabbit && stageNumber == 1) ...[
+            rabbitShortHopArt,
+            rabbitLandingArt,
+          ],
+          if (companion == Companion.cat && stageNumber == 4) ...[
+            for (final picture in [
+              cloudBraceArt,
+              cloudFlightArt,
+              cloudLandingArt,
+              cloudRearBraceArt,
+              cloudRearFlightArt,
+              cloudRearLandingArt,
+            ])
+              coat?.on(picture) ?? picture,
+          ],
+          if (stageNumber == 1 &&
+              (companion == Companion.fox ||
+                  companion == Companion.cat ||
+                  companion.hasGroundSkill))
+            ...walkAssets(
+              companion,
+              outfit['body'],
+              paintedScarf: paintedScarf,
+            ),
+          for (final view in turnFits(companion, stageNumber).keys)
+            turnArtwork(companion, stageNumber, view, outfit['body']),
+          for (final item in outfit.entries)
+            if (item.key != 'body') ...[
+              fittedAccessory(item.value, companion),
+              fittedAccessory(item.value, companion, airborne: true),
+            ],
           ...manifest.listAssets().where(
             (path) =>
-                path.startsWith('assets/${name}_walk/') ||
                 path.contains('fitted-') && path.contains('-$name-') ||
                 path.contains('worn_item_accessory_glasses') ||
                 path.contains('$name-1-'),
@@ -140,17 +230,36 @@ void main() {
       find.descendant(of: actor, matching: find.byType(RepaintBoundary)).first,
     );
     final positions = StringBuffer(
-      'frame,time,rootX,rootY,spriteLeft,facing,walking,stage,phase,ink\n',
+      'frame,time,rootX,rootY,spriteLeft,facing,walking,stage,phase,ink,lift,away,yaw\n',
     );
     final contacts = StringBuffer('frame,leg,x,y,lift,planted\n');
     final destinations = <int, double>{};
     final walkStarts = <int>[];
     var wasWalking = false;
+    var rearFlight = false;
     for (var frame = 0; frame <= lastFrame; frame++) {
       if (frame == 30) {
-        await tester.tapAt(const Offset(_width * .23, _gardenHeight * .83));
+        if (skill) {
+          await tester.tap(find.text(companion.skillName));
+        } else if (shortCall) {
+          await tester.tap(find.text('过来'));
+        } else if (short || backTurn) {
+          await tester.tapAt(
+            const Offset(_width * .30, _gardenHeight * (deep ? .745 : .92)),
+          );
+        } else {
+          await tester.tapAt(const Offset(_width * .23, _gardenHeight * .83));
+        }
       }
-      if (frame == callFrame) await tester.tap(find.text('过来'));
+      if (backTurn && frame == 143) {
+        await tester.tapAt(Offset(_width * rearTarget, _gardenHeight * .745));
+      }
+      if (returnForward && frame == turnBackTowardsUs) {
+        await tester.tapAt(Offset(_width * rearTarget, _gardenHeight * .92));
+      }
+      if (!single && frame == callFrame) {
+        await tester.tap(find.text('过来'));
+      }
       await tester.pump(_interval);
       final pet = tester.widget<IllustratedPet>(actor);
       final walking = pet.walking() > 0;
@@ -162,26 +271,31 @@ void main() {
         ancestor: picture,
       );
       final center = tester.getCenter(actor);
-      final padding = gait ? sprite.size.width / 6 : 0;
+      final padding = pet.walkPose != null ? sprite.size.width / 6 : 0;
       final footY = origin.dy + sprite.size.height - padding;
-      // Dynamic only in this tool so the identical camera and input script
-      // can also compile against a snapshot before this companion walked.
-      final dynamic candidate = pet;
-      final dynamic pose = gait ? candidate.walkPose?.call() : null;
-      final stage = pose?.stage as Enum?;
-      final facing = gait
-          ? (candidate.walkFacesLeft?.call() == true ? -1 : 1)
-          : (right.dx > origin.dx ? 1 : -1);
+      final pose = gait ? pet.walkPose?.call() : null;
+      final hop = pet.hop?.call();
+      final away = hop?.facesAway == true;
+      rearFlight |= away && hop?.airborne == true;
+      final stage =
+          pose?.stage.name ??
+          (hop == null
+              ? ''
+              : hop.airborne
+              ? 'flight'
+              : 'support');
+      final facing = (pet.walkFacesLeft?.call() ?? right.dx < origin.dx)
+          ? -1
+          : 1;
+      final lift =
+          (hop?.lift ?? 0) + (pet.motion?.call().height(companion) ?? 0);
       positions.writeln(
         '$frame,${pet.seconds()},${center.dx},$footY,${origin.dx},$facing,$walking,'
-        '${stage?.name ?? ''},${pose?.phase ?? ''},${pose?.ink ?? ''}',
+        '$stage,${pose?.phase ?? ''},${pose?.ink ?? ''},$lift,$away,${pose?.yaw ?? ''}',
       );
       if (pose != null) {
-        final worldRoot = pose.root as Offset;
-        final paws = pose.paws as List<dynamic>;
-        for (final (index, paw) in paws.indexed) {
-          final point = paw.ground as Offset;
-          final relative = (point - worldRoot) * (_width / 1536);
+        for (final (index, paw) in pose.paws.indexed) {
+          final relative = (paw.ground - pose.root) * (_width / 1536);
           contacts.writeln(
             '$frame,$index,${(center.dx + relative.dx) * _pixelRatio},'
             '${(footY + relative.dy) * _pixelRatio},${paw.lift},${paw.planted}',
@@ -192,7 +306,8 @@ void main() {
         destinations[frame] = center.dx;
       }
       // Keep the clock running through the unsampled idle wait.
-      if (compare ? frame > 395 && frame < 470 : frame > 285 && frame < 425) {
+      if (!single &&
+          (compare ? frame > 395 && frame < 470 : frame > 285 && frame < 425)) {
         continue;
       }
       final suffix = frame.toString().padLeft(4, '0');
@@ -208,6 +323,34 @@ void main() {
           File('$output/contacts.csv').writeAsString(contacts.toString()),
       ]),
     );
+    if (single) {
+      if (deep) expect(rearFlight, isTrue);
+      expect(
+        tester.getCenter(actor).dx,
+        closeTo(
+          _width *
+              (skill
+                  ? (veranda ? .58 : .47)
+                  : shortCall
+                  ? .56
+                  : backTurn
+                  ? rearTarget
+                  : .30),
+          .01,
+        ),
+      );
+      if (backTurn) {
+        expect(walkStarts, [30, 143, if (returnForward) turnBackTowardsUs]);
+        expect(
+          sprite.localToGlobal(Offset.zero, ancestor: picture).dy +
+              sprite.size.height -
+              sprite.size.width / 6,
+          closeTo(_gardenHeight * (returnForward ? .92 : .745), .01),
+        );
+      }
+      expect(tester.widget<IllustratedPet>(actor).walking(), 0);
+      return;
+    }
     expect(walkStarts, hasLength(3));
     expect(walkStarts.take(2), [30, callFrame]);
     expect(walkStarts.last, inInclusiveRange(callFrame + 345, callFrame + 380));
